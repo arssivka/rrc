@@ -1,0 +1,64 @@
+#!/bin/sh
+
+MESSAGE=$(git log -1 HEAD --pretty=format:%s)
+CMAKE_PATH=`git rev-parse --show-toplevel`"/CMakeLists.txt"
+
+PROJECT_REGEX='^project(\([a-zA-Z0-9_]\+\) VERSION \([0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\))$'
+NAME_STR=$(sed -n "s:$PROJECT_REGEX:\1:p" $CMAKE_PATH)
+VER_STR=$(sed -n "s:$PROJECT_REGEX:\2:p" $CMAKE_PATH)
+
+VER_REGEX='^\([0-9]\+\)\.\([0-9]\+\)\.\([0-9]\+\)\.\([0-9]\+\)$'
+VER_MAJ=$(echo $VER_STR | sed -n "s/$VER_REGEX/\1/p")
+VER_MIN=$(echo $VER_STR | sed -n "s/$VER_REGEX/\2/p")
+VER_PAT=$(echo $VER_STR | sed -n "s/$VER_REGEX/\3/p")
+VER_TWE=$(echo $VER_STR | sed -n "s/$VER_REGEX/\4/p")
+
+applyVersion()
+{
+  VER_STR="$VER_MAJ.$VER_MIN.$VER_PAT.$VER_TWE"
+  VER_LINE='project('$NAME_STR' VERSION '$VER_STR')'
+  sed -i "s:$PROJECT_REGEX:$VER_LINE:" $CMAKE_PATH
+  NEW_MESSAGE=$(echo $MESSAGE | sed "s:#vmaj++|#vmin++|#vpat++|#vtwe++:$VER_STR:g")
+  git add $CMAKE_PATH
+  git commit --amend -m "version update: "$VER_STR
+}
+
+onVMAJ()
+{
+  let VER_MAJ++
+  VER_MIN=0
+  VER_PAT=0
+  VER_TWE=0
+  applyVersion
+}
+
+onVMIN()
+{
+  let VER_MIN++
+  VER_PAT=0
+  VER_TWE=0
+  applyVersion
+}
+
+onVPAT()
+{
+  let VER_PAT++
+  VER_TWE=0
+  applyVersion
+}
+
+onVTWE()
+{
+  let VER_TWE++
+  applyVersion
+}
+
+case "$MESSAGE" in
+  *#vmaj++* ) onVMAJ;;
+  *#vmin++* ) onVMIN;;
+  *#vpat++* ) onVPAT;;
+  *#vtwe++* ) onVTWE;;
+  * );;
+esac
+
+exit
