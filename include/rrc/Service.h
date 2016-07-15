@@ -14,6 +14,9 @@
 namespace rrc {
     template <class Request, class Responce>
     class Service : private NonCopyable {
+        typedef Request Request;
+        typedef Responce Responce;
+
         Service(const ID& id, const std::string& name, Scheduler& scheduler);
 
         template <class Func>
