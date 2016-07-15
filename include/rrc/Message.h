@@ -19,7 +19,9 @@ namespace rrc {
             return std::make_shared<T>(std::forward<Args>(args)...);
         }
 
-        T& getData();
+        T& getData() {
+            return mData;
+        }
 
     private:
         T mData;

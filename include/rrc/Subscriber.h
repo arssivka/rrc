@@ -14,7 +14,7 @@ namespace rrc {
     template <typename T>
     class Subscriber : private NonCopyable {
     public:
-        typedef T type;
+        typedef T Type;
 
         Subscriber(const ID& id, const std::string& topic, size_t queueSize);
 

@@ -14,6 +14,8 @@ namespace rrc {
     template <class T>
     class Responce {
     public:
+        typedef T Type;
+
         Responce() : mDataSetted(ATOMIC_FLAG_INIT), mData(nullptr) { }
 
         Message<T>::Ptr get() const noexcept {
