@@ -1,0 +1,13 @@
+/**
+ *  @autor arssivka
+ *  @date 7/8/16
+ */
+
+#pragma once
+
+
+#define RRC_VERSION_MAJOR @rrc_VERSION_MAJOR@
+#define RRC_VERSION_MINOR @rrc_VERSION_MINOR@
+#define RRC_VERSION_PATCH @rrc_VERSION_PATCH@
+#define RRC_VERSION_TWEAK @rrc_VERSION_TWEAK@
+#define RRC_VERSION "@rrc_VERSION_MAJOR@.@rrc_VERSION_MINOR@.@rrc_VERSION_PATCH@.@rrc_VERSION_TWEAK@"
