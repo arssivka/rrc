@@ -12,11 +12,11 @@
 
 namespace rrc {
     template <class T>
-    class Responce {
+    class Response {
     public:
         typedef T Type;
 
-        Responce() : mDataSetted(ATOMIC_FLAG_INIT), mData(nullptr) { }
+        Response() : mDataSetted(ATOMIC_FLAG_INIT), mData(nullptr) { }
 
         Message<T>::Ptr get() const noexcept {
             return mData;
