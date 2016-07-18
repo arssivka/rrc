@@ -8,6 +8,9 @@
 
 namespace rrc {
     class NonCopyable {
+    public:
+        NonCopyable() = default;
+
     private:
         NonCopyable(const NonCopyable& other) = delete;
 
