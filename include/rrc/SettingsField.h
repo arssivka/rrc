@@ -5,6 +5,7 @@
 #pragma once
 
 #include <string>
+#include "mapbox/variant.hpp"
 
 namespace rrc {
     class SettingsField {

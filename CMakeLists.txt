@@ -9,6 +9,8 @@ option(USE_TCMALLOC "Use full version of tcmalloc library" ON)
 find_package(Protobuf REQUIRED)
 find_package(TCMalloc REQUIRED)
 
+add_subdirectory(lib)
+
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(SRCS
         src/rrc/Core.cpp
@@ -46,5 +48,5 @@ configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
         "${PROJECT_BINARY_DIR}/VersionDefines.h")
 
 add_library(rrc ${SRCS})
-target_link_libraries(rrc ${PROTOBUF_LIBRARIES} ${TCMalloc_LIBRARIES})
+target_link_libraries(rrc ${PROTOBUF_LIBRARIES} ${TCMalloc_LIBRARIES} variant)
 target_include_directories(rrc PUBLIC include ${PROTOBUF_INCLUDE_DIRS} ${TCMalloc_INCLUDE_DIRS})
