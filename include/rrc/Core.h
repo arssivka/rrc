@@ -11,11 +11,13 @@
 #include <memory>
 #include "Settings.h"
 #include "Scheduler.h"
+#include "MessageListener.h"
 
 namespace rrc {
     class Core {
     public:
-        Core(int argc, char** argv) : mArgs(&argv[0], &argv[argc]) {}
+        Core(size_t threadsNum, int argc, char** argv)
+                : mArgs(&argv[0], &argv[argc]), mScheduler(threadsNum) {}
 
         int run() {
             return mScheduler.run();
@@ -29,6 +31,13 @@ namespace rrc {
 
         Settings* getSettings();
 
+        void addTopicListener(const std::string& topic, MessageListener* listener);
+
+        void removeTopicListener(const MessageListener* topicListener);
+
+        void addServiceListener(const std::string& service, MessageListener* serviceListener);
+
+        void removeServiceListener(const MessageListener* serviceListener);
 
     private:
         static Core* sInstance;
