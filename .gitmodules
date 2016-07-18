@@ -1,6 +1,0 @@
-[submodule "googletest"]
-	path = lib/googletest
-	url = https://github.com/google/googletest.git
-[submodule "lib/variant"]
-	path = lib/variant
-	url = https://github.com/mapbox/variant
