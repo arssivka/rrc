@@ -20,5 +20,6 @@ namespace rrc {
                 m_string.~string();
             }
         };
+        float_bool_str m_settings;
     };
 }
