@@ -32,7 +32,7 @@ namespace rrc {
             return get_bucket(key).valueFor(key, default_value);
         }
 
-        void getOrUpdate(K const &key, D const &value) {
+        void addOrUpdate(K const &key, D const &value) {
             get_bucket(key).addOrUpdate(key, value);
         }
 
