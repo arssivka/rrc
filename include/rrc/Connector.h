@@ -7,21 +7,21 @@
 
 
 #include <google/protobuf/descriptor.h>
-#include "TopicListener.h"
+#include "MessageListener.h"
 
 namespace {
     namespace pb = google::protobuf;
 }
 
 namespace rrc {
-    class Topic {
-        Topic(const pb::Descriptor& descriptor);
+    class Connector {
+        Connector(const pb::Descriptor& descriptor);
 
         bool checkDescriptor(const pb::Descriptor& descriptor);
 
-        bool addListener(TopicListener* listener, const pb::Descriptor& descriptor);
+        bool addListener(MessageListener* listener, const pb::Descriptor& descriptor);
 
-        bool detachListener(TopicListener* listener);
+        bool detachListener(MessageListener* listener);
 
     };
 }

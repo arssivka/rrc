@@ -18,11 +18,11 @@ namespace rrc {
 
         Response() : mDataSetted(ATOMIC_FLAG_INIT), mData(nullptr) { }
 
-        Message<T>::Ptr get() const noexcept {
+        Message<T> get() const noexcept {
             return mData;
         }
 
-        bool set(Message<T>::Ptr data) noexcept {
+        bool set(Message<T> data) noexcept {
             // TODO Check memory order
             if (mDataSetted.test_and_set(std::memory_order_acq_rel)) {
                 mData = data;
@@ -33,7 +33,7 @@ namespace rrc {
 
     private:
         std::atomic_flag mDataSetted;
-        Message<T>::Ptr mData;
+        Message<T> mData;
     };
 }
 

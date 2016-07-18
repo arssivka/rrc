@@ -20,13 +20,13 @@ namespace rrc {
 
         bool isConnected() const;
 
-        void push(Message<T>::Ptr msg);
+        void push(Message<T> msg, bool updateTimestamp);
 
         template <class Func>
         void setCallback(Func&& callback);
 
     private:
-        std::function<void(Message<T>::Ptr)> mCallback;
+        std::function<void(Message<T>)> mCallback;
     };
 }
 

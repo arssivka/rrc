@@ -7,7 +7,7 @@
 
 
 #include "ID.h"
-#include "Responce.h"
+#include "Response.h"
 #include "Scheduler.h"
 
 namespace rrc {
@@ -31,7 +31,7 @@ namespace rrc {
 
         bool reconnect();
 
-        Responce<ResponceType> query(Message<RequestType>::Ptr request);
+        Response<ResponceType> query(Message<RequestType> request, bool updateTimestamp = true);
 
     private:
         bool mAutoReconnect;

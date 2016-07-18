@@ -14,8 +14,8 @@ namespace {
 }
 
 namespace rrc {
-    class TopicListener {
+    class MessageListener {
     public:
-        virtual void onMessage(Message<pb::Message>::Ptr msg) = 0;
+        virtual void onMessage(Message<pb::Message> msg) = 0;
     };
 }

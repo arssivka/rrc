@@ -7,25 +7,48 @@
 
 
 #include <memory>
+#include <chrono>
+#include "Clock.h"
+#include "CopyOnWrite.h"
 
 namespace rrc {
     template <class T>
     class Message {
     public:
-        typedef std::shared_ptr<Message<T>> Ptr;
+        Message() = default;
 
-        template <typename... Args>
-        static Ptr create(Args... args) {
-            return std::make_shared<T>(std::forward<Args>(args)...);
+        template <class D>
+        Message(D&& data) {
+            mData->second = std::forward<D>(data);
         }
 
-        T& getData() {
-            return mData;
+        template <class D>
+        Message(TimePoint time, D&& data) {
+            mData->second = std::forward<D>(data);
+            mData->first = time;
+        }
+
+        const T& getData() const {
+            return mData->second;
+        }
+
+        const TimePoint& getTimestamp() const {
+            return mData->first;
+        }
+
+        template <class D>
+        void setData(D&& data) {
+            mData->second = std::forward<D>(data);
+        }
+
+        void setTimestamp(TimePoint time) {
+            mData->first = time;
         }
 
     private:
-        T mData;
+        typedef std::pair<TimePoint, T> Bucket;
 
+        CopyOnWrite<Bucket> mData;
     };
 }
 

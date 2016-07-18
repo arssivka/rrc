@@ -18,7 +18,7 @@ namespace rrc {
 
         bool isConnected() const;
 
-        void send(Message<MessageType>::Ptr msg);
+        void send(Message<MessageType> msg, bool updateTimestamp = true);
     private:
     };
 }
