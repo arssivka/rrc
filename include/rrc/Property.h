@@ -10,12 +10,12 @@
 
 namespace rrc {
     typename <class T>
-    class SettingsField {
+    class Property {
     public:
         typedef mapbox::util::variant<std::string, float, bool, int> SettingsType;
 
         template <class D>
-        SettingsField(D&& data) {
+        Property(D&& data) {
             mField = std::forward<D>(data);
         }
 

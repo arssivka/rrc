@@ -6,7 +6,7 @@
 #pragma once
 
 #include "rrc/TSLookUp.h"
-#include "rrc/SettingsField.h"
+#include "rrc/Property.h"
 #include <string>
 
 namespace rrc {
@@ -17,7 +17,7 @@ namespace rrc {
 
         Settings() {}
 
-        void addOrUpdate(const std::string& key, SettingsField&& data) {
+        void addOrUpdate(const std::string& key, Property&& data) {
             mSettings.addOrUpdate(key, std::move(data));
         }
 
@@ -37,7 +37,7 @@ namespace rrc {
 
 
     private:
-        TSLookUp<std::string, SettingsField> mSettings;
+        TSLookUp<std::string, Property> mSettings;
     };
 }
 

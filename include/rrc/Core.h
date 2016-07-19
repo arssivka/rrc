@@ -12,6 +12,10 @@
 #include "Settings.h"
 #include "Scheduler.h"
 #include "MessageListener.h"
+#include "MessageSender.h"
+#include "TSLookUp.h"
+#include "TopicConnector.h"
+#include "ServiceConnector.h"
 
 namespace rrc {
     class Core {
@@ -31,19 +35,41 @@ namespace rrc {
 
         Settings* getSettings();
 
-        void addTopicListener(const std::string& topic, MessageListener* listener);
+        bool addTopicListener(const ID& id, const std::string& topic,
+                              MessageListener* listener, bool directCallEnabled);
 
-        void removeTopicListener(const MessageListener* topicListener);
+        bool detachTopicListener(const MessageListener* listener);
 
-        void addServiceListener(const std::string& service, MessageListener* serviceListener);
+        bool addTopicSender(const std::string& topic, MessageSender* sender);
 
-        void removeServiceListener(const MessageListener* serviceListener);
+        bool detachTopicSender(const MessageSender* sender);
+
+        bool addServiceStuff(const ID& id, const std::string& service, MessageStuff* stuff, bool directCallEnabled);
+
+        bool detachServiceStuff(const MessageStuff* stuff);
+
+        bool addClientStuff(const std::string& service, MessageStuff* stuff);
+
+        bool detachClientStuff(const MessageStuff* stuff);
+
+        void setDirectCallEnabled(bool state) {
+            mDirectCallEnabled = true;
+        }
+
+        bool isDirectCallEnabled() const {
+            return  mDirectCallEnabled;
+        }
 
     private:
         static Core* sInstance;
         std::vector<std::string> mArgs;
         Scheduler mScheduler;
         Settings mSettings;
+
+        TSLookUp<std::string, TopicConnector> mTopics;
+        TSLookUp<std::string, ServiceConnector> mServices;
+
+        bool mDirectCallEnabled;
     };
 }
 

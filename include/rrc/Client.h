@@ -16,16 +16,13 @@ namespace rrc {
     public:
         Client(const ID& id, const std::string& service, Scheduler& scheduler);
 
-
         bool isAutoReconnect() const {
             return mAutoReconnect;
         }
 
-
         void setAutoReconnect(bool autoReconnect) {
             mAutoReconnect = autoReconnect;
         }
-
 
         bool isConnected() const;
 
