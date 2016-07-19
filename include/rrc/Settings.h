@@ -5,10 +5,39 @@
 
 #pragma once
 
+#include "rrc/TSLookUp.h"
+#include "rrc/SettingsField.h"
+#include <string>
 
 namespace rrc {
     class Settings {
+    public:
 
+        Settings(unsigned num) : mSettings(num) { }
+
+        Settings() {}
+
+        void addOrUpdate(const std::string& key, SettingsField&& data) {
+            mSettings.addOrUpdate(key, std::move(data));
+        }
+
+        template <class D>
+        void addOrUpdate(const std::string& key, D&& data) {
+            mSettings.get(key)->setSetting(std::forward<D>(data));
+        }
+
+        void remove(const std::string& key) {
+            mSettings.remove(key);
+        }
+
+        template <class T>
+        T get(const std::string& key) {
+            return mSettings.get(key)->getSetting();
+        }
+
+
+    private:
+        TSLookUp<std::string, SettingsField> mSettings;
     };
 }
 

@@ -22,13 +22,13 @@ namespace rrc {
 
         TSLookUp(
                 unsigned num_buckets = 19, Hash const &hasher_ = Hash()) :
-                m_buckets(num_buckets), m_hasher(hasher_) {
+                mBuckets(num_buckets), mHasher(hasher_) {
             for (unsigned i = 0; i < num_buckets; ++i) {
-                m_buckets[i].reset(new BucketType);
+                mBuckets[i].reset(new BucketType);
             }
         }
 
-        D get(K const &key, D const &default_value = D()) const {
+        std::shared_ptr<D> get(K const &key, D const &default_value = D()) const {
             return get_bucket(key).valueFor(key, default_value);
         }
 
@@ -43,11 +43,11 @@ namespace rrc {
     private:
         class BucketType {
         public:
-            D valueFor(K const &key, D const &default_value) const {
+            std::shared_ptr<D> valueFor(K const &key, D const &default_value) const {
                 std::lock_guard<std::mutex> lock(m_mutex);
                 BucketIterator const found_entry = this->findEntryFor(key);
                 return (found_entry == m_name.end()) ?
-                       default_value : found_entry->second;
+                       std::make_shared<D>(default_value) : std::make_shared<D>(found_entry->second);
             }
 
             void addOrUpdate(K const &key, D const &value) {
@@ -85,11 +85,11 @@ namespace rrc {
         };
 
         BucketType &get_bucket(K const &key) const {
-            std::size_t const bucket_index = m_hasher(key) % m_buckets.size();
-            return *m_buckets[bucket_index];
+            std::size_t const bucket_index = mHasher(key) % mBuckets.size();
+            return *mBuckets[bucket_index];
         }
 
-        std::vector<std::unique_ptr<BucketType> > m_buckets;
-        Hash m_hasher;
+        std::vector<std::unique_ptr<BucketType> > mBuckets;
+        Hash mHasher;
     };
 }

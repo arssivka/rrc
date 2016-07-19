@@ -16,16 +16,16 @@ namespace rrc {
 
         template <class D>
         SettingsField(D&& data) {
-            m_field = std::forward<D>(data);
+            mField = std::forward<D>(data);
         }
 
         const T& getSetting() {
-            return m_field->get();
+            return mField->get();
         }
 
         template <class D>
         void setSetting(D&& data) {
-            m_field = std::forward<D>(data);
+            mField = std::forward<D>(data);
         }
 
     private:
@@ -40,6 +40,6 @@ namespace rrc {
 //                m_string.~string();
 //            }
 //        };
-    CopyOnWrite<SettingsType> m_field;
+    CopyOnWrite<SettingsType> mField;
     };
 }
