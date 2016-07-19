@@ -11,18 +11,14 @@
 #include "ID.h"
 #include "MessageSender.h"
 
-namespace {
-    namespace pb = google::protobuf;
-}
-
 namespace rrc {
     class TopicConnector {
+    public:
         TopicConnector(const pb::Descriptor& descriptor);
 
         bool checkDescriptor(const pb::Descriptor& descriptor);
 
-        bool addListener(const ID& id, MessageListener* listener,
-                         const pb::Descriptor& descriptor, bool directCallEnabled);
+        bool addListener(const ID& id, MessageListener* listener, bool directCallEnabled);
 
         bool detachListener(const MessageListener* listener);
 

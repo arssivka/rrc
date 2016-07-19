@@ -18,61 +18,95 @@ namespace rrc {
     public:
         typedef K Key;
         typedef D Data;
+        typedef std::shared_ptr<D> SPtr;
         typedef Hash Hash;
 
         TSLookUp(
-                unsigned num_buckets = 19, Hash const &hasher_ = Hash()) :
-                mBuckets(num_buckets), mHasher(hasher_) {
-            for (unsigned i = 0; i < num_buckets; ++i) {
+                unsigned numBuckets = 19, const Hash& hasher = Hash()) :
+                mBuckets(numBuckets), mHasher(hasher) {
+            for (unsigned i = 0; i < numBuckets; ++i) {
                 mBuckets[i].reset(new BucketType);
             }
         }
 
-        std::shared_ptr<D> get(K const &key, D const &default_value = D()) const {
-            return get_bucket(key).valueFor(key, default_value);
+        template <class D1>
+        SPtr get(const K& key, D1&& defaultValue) const {
+            return this->getBucket(key).valueFor(key, std::forward(defaultValue));
         }
 
-        void addOrUpdate(K const &key, D const &value) {
-            get_bucket(key).addOrUpdate(key, value);
+        SPtr get(const K& key) const {
+            return this->getBucket(key).valueFor(key);
         }
 
-        void remove(K const &key) {
-            get_bucket(key).remove(key);
+        D detach(const K& key) const {
+            return this->getBucket(key).detachFor(key);
+        }
+
+        template <class D1>
+        void set(const K& key, D1&& value) {
+            this->getBucket(key).addOrUpdate(key, std::forward(value));
+        }
+
+        bool remove(const K & key) {
+            return this->getBucket(key).remove(key);
         }
 
     private:
         class BucketType {
         public:
-            std::shared_ptr<D> valueFor(K const &key, D const &default_value) const {
-                std::lock_guard<std::mutex> lock(m_mutex);
-                BucketIterator const found_entry = this->findEntryFor(key);
-                return (found_entry == m_name.end()) ?
-                       std::make_shared<D>(default_value) : std::make_shared<D>(found_entry->second);
-            }
-
-            void addOrUpdate(K const &key, D const &value) {
-                std::unique_lock<std::mutex> lock(m_mutex);
-                BucketIterator const found_entry = this->findEntryFor(key);
-                if (found_entry == m_name.end()) {
-                    m_name.push_back(BucketValue(key, value));
-                }
-                else {
-                    found_entry->second = value;
+            template <class D1>
+            SPtr valueFor(const K& key, D1&& defaultValue) const {
+                std::lock_guard<std::mutex> lock(mMutex);
+                BucketIterator const foundEntry = this->findEntryFor(key);
+                if (foundEntry == mName.end()) {
+                    mName.emplace_back(BucketValue(key, std::forward(defaultValue)));
+                    return std::make_shared<D>(defaultValue);
+                } else {
+                    return std::make_shared<D>(foundEntry->second);
                 }
             }
 
-            void remove(K const &key) {
-                std::unique_lock<std::mutex> lock(m_mutex);
-                BucketIterator const found_entry = this->findEntryFor(key);
-                if (found_entry != m_name.end()) {
-                    m_name.erase(found_entry);
+            SPtr valueFor(const K& key) const {
+                std::lock_guard<std::mutex> lock(mMutex);
+                BucketIterator const foundEntry = this->findEntryFor(key);
+                return (foundEntry == mName.end())
+                       ? nullptr
+                       : std::make_shared<D>(foundEntry->second);
+            }
+
+            D detachFor(const K& key) {
+                std::lock_guard<std::mutex> lock(mMutex);
+                BucketIterator const foundEntry = this->findEntryFor(key);
+                return (foundEntry == mName.end())
+                       ? D()
+                       : std::move(foundEntry->second);
+            }
+
+            template <class D1>
+            void addOrUpdate(const K& key, D1&& value) {
+                std::lock_guard<std::mutex> lock(mMutex);
+                const BucketIterator found = this->findEntryFor(key);
+                if (found == mName.end()) {
+                    mName.emplace_back(BucketValue(key, std::forward(value)));
+                } else {
+                    found->second = std::forward(value);
                 }
+            }
+
+            bool remove(K const &key) {
+                std::unique_lock<std::mutex> lock(mMutex);
+                const BucketIterator found = this->findEntryFor(key);
+                if (found != mName.end()) {
+                    mName.erase(found);
+                    return true;
+                }
+                return false;
             }
 
         private:
             BucketIterator findEntryFor(K const &key) const {
-                return std::find_if(m_name.begin(), m_name.end(),
-                                    [&](BucketValue const &item) {
+                return std::find_if(mName.begin(), mName.end(),
+                                    [&](const BucketValue& item) {
                                         return item.first == key;
                                     });
             }
@@ -80,11 +114,11 @@ namespace rrc {
             typedef std::pair<K, D> BucketValue;
             typedef std::list<BucketValue> BucketData;
             typedef typename BucketData::iterator BucketIterator;
-            mutable BucketData m_name;
-            mutable std::mutex m_mutex;
+            mutable BucketData mName;
+            mutable std::mutex mMutex;
         };
 
-        BucketType &get_bucket(K const &key) const {
+        BucketType &getBucket(K const& key) const {
             std::size_t const bucket_index = mHasher(key) % mBuckets.size();
             return *mBuckets[bucket_index];
         }

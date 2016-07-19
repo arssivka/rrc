@@ -12,7 +12,8 @@
 namespace rrc {
     class ServiceConnector {
     public:
-        ServiceConnector() = default;
+        ServiceConnector(const pb::Descriptor& paramDscr,
+                         const pb::Descriptor& resultDscr);
 
         bool setServiceStuff(const ID& id, MessageStuff* stuff, bool directCallEnabled);
 
@@ -20,7 +21,7 @@ namespace rrc {
 
         bool addClientStuff(const ID& id, MessageStuff* stuff);
 
-        bool detachClient(const MessageStuff* stuff);
+        bool detachClientStuff(const MessageStuff* stuff);
 
     private:
 

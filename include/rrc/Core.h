@@ -20,6 +20,8 @@
 namespace rrc {
     class Core {
     public:
+        typedef std::string Key;
+
         Core(size_t threadsNum, int argc, char** argv)
                 : mArgs(&argv[0], &argv[argc]), mScheduler(threadsNum) {}
 
@@ -35,39 +37,39 @@ namespace rrc {
 
         Settings* getSettings();
 
-        bool addTopicListener(const ID& id, const std::string& topic,
-                              MessageListener* listener, bool directCallEnabled);
+        bool addTopicListener(const ID& id, const Key& topic, MessageListener* listener, bool directCallEnabled);
 
-        bool detachTopicListener(const MessageListener* listener);
+        bool detachTopicListener(const Key& topic, const MessageListener* listener);
 
-        bool addTopicSender(const std::string& topic, MessageSender* sender);
+        bool addTopicSender(const Key& topic, MessageSender* sender);
 
-        bool detachTopicSender(const MessageSender* sender);
+        bool detachTopicSender(const Key& topic, const MessageSender* sender);
 
-        bool addServiceStuff(const ID& id, const std::string& service, MessageStuff* stuff, bool directCallEnabled);
+        bool setServiceStuff(const ID& id, const Key& service, MessageStuff* stuff, bool directCallEnabled);
 
-        bool detachServiceStuff(const MessageStuff* stuff);
+        bool detachServiceStuff(const Key& service, const MessageStuff* stuff);
 
-        bool addClientStuff(const std::string& service, MessageStuff* stuff);
+        bool addClientStuff(const ID& id, const Key& service, MessageStuff* stuff);
 
-        bool detachClientStuff(const MessageStuff* stuff);
+        bool detachClientStuff(const Key& service, const MessageStuff* stuff);
 
-        void setDirectCallEnabled(bool state) {
-            mDirectCallEnabled = true;
-        }
+        void setDirectCallEnabled(bool state);
 
-        bool isDirectCallEnabled() const {
-            return  mDirectCallEnabled;
-        }
+        bool isDirectCallEnabled() const;
 
     private:
+        typedef TSLookUp<Key, TopicConnector> TopicsContainer;
+        typedef TSLookUp<Key, ServiceConnector> ServicesContainer;
+
         static Core* sInstance;
         std::vector<std::string> mArgs;
         Scheduler mScheduler;
         Settings mSettings;
 
-        TSLookUp<std::string, TopicConnector> mTopics;
-        TSLookUp<std::string, ServiceConnector> mServices;
+        TopicsContainer mTopics;
+        ServicesContainer mServices;
+
+
 
         bool mDirectCallEnabled;
     };

@@ -17,6 +17,8 @@ namespace rrc {
     class MessageSender {
     public:
         bool send(Message<pb::Message> msg);
+
+        const pb::Descriptor& getDescriptor() const;
     };
 }
 

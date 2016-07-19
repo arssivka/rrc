@@ -17,5 +17,7 @@ namespace rrc {
     class MessageListener {
     public:
         virtual void onMessage(Message<pb::Message> msg) = 0;
+
+        const pb::Descriptor& getDescriptor() const;
     };
 }

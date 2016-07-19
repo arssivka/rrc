@@ -9,6 +9,10 @@
 #include "MessageListener.h"
 #include "MessageSender.h"
 
+namespace {
+    namespace pb = google::protobuf;
+}
+
 namespace rrc {
     class MessageStuff {
     public:
@@ -23,6 +27,10 @@ namespace rrc {
         MessageSender* getSender() const;
 
         void setSender(MessageSender* sender);
+
+        const pb::Descriptor& getSenderDescriptor() const;
+
+        const pb::Descriptor& getListenerDescriptor() const;
 
     private:
         MessageListener* mListener;

@@ -31,3 +31,13 @@ MessageSender* rrc::MessageStuff::getSender() const {
 void rrc::MessageStuff::setSender(MessageSender* sender) {
     mSender = sender;
 }
+
+
+const pb::Descriptor& rrc::MessageStuff::getSenderDescriptor() const {
+    return mSender->getDescriptor();
+}
+
+
+const pb::Descriptor& rrc::MessageStuff::getListenerDescriptor() const {
+    return mListener->getDescriptor();
+}

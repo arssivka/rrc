@@ -18,7 +18,7 @@ namespace rrc {
         Settings() {}
 
         void addOrUpdate(const std::string& key, Property&& data) {
-            mSettings.addOrUpdate(key, std::move(data));
+            mSettings.set(key, std::move(data));
         }
 
         template <class D>
