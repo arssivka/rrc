@@ -23,7 +23,7 @@ namespace rrc {
 
         template <class D>
         void addOrUpdate(const std::string& key, D&& data) {
-            mSettings.get(key)->setSetting(std::forward<D>(data));
+            mSettings.get(key)->set(std::forward<D>(data));
         }
 
         void remove(const std::string& key) {
@@ -32,7 +32,7 @@ namespace rrc {
 
         template <class T>
         T get(const std::string& key) {
-            return mSettings.get(key)->getSetting();
+            return mSettings.get(key)->get();
         }
 
 

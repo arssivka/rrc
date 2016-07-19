@@ -9,7 +9,6 @@
 #include "mapbox/variant.hpp"
 
 namespace rrc {
-    typename <class T>
     class Property {
     public:
         typedef mapbox::util::variant<std::string, float, bool, int> SettingsType;
@@ -19,12 +18,13 @@ namespace rrc {
             mField = std::forward<D>(data);
         }
 
-        const T& getSetting() {
-            return mField->get();
+        template <class T>
+        T& get() const {
+            return mField->get().get();
         }
 
         template <class D>
-        void setSetting(D&& data) {
+        void set(D &&data) {
             mField = std::forward<D>(data);
         }
 
@@ -40,6 +40,7 @@ namespace rrc {
 //                m_string.~string();
 //            }
 //        };
-    CopyOnWrite<SettingsType> mField;
+        CopyOnWrite<SettingsType> mField;
+        SettingsType test;
     };
 }
