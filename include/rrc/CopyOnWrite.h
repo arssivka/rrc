@@ -7,30 +7,46 @@
 
 
 #include <memory>
-
+#include <iostream>
 namespace rrc {
     template <class T>
     class CopyOnWrite
     {
     public:
         typedef T Data;
+        typedef std::shared_ptr<T> sPtr;
 
         CopyOnWrite(T* data = nullptr)
                 : mData(data) {
         }
 
+        CopyOnWrite(const sPtr& sptr)
+                : mData(sptr) {
+        }
+
         const T* operator->() const {
+            this->ensureInitialized();
             return mData.get();
         }
 
         T* operator->() {
-            if (!mData.unique())
-                mData.reset(new T(*mData));
+            ensureUnique();
             return mData.get();
         }
 
     private:
-        std::shared_ptr<T> mData;
+        mutable sPtr mData;
+        void ensureInitialized() const {
+            if(!mData) {
+                mData.reset(new T);
+            }
+        }
+        void ensureUnique() {
+            this->ensureInitialized();
+            if(!mData.unique()) {
+                mData.reset(new T(*mData));
+            }
+        }
 
     };
 }
