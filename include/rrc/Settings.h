@@ -23,16 +23,15 @@ namespace rrc {
 
         template <class D>
         void addOrUpdate(const std::string& key, D&& data) {
-            mSettings.get(key)->set(std::forward<D>(data));
+            mSettings.get(key)->set<D>(std::forward<D>(data));
         }
 
         void remove(const std::string& key) {
             mSettings.remove(key);
         }
 
-        template <class T>
-        T get(const std::string& key) {
-            return mSettings.get(key)->get();
+        Property get(const std::string& key) const {
+            return mSettings.get(key);
         }
 
 
