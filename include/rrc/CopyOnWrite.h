@@ -30,7 +30,7 @@ namespace rrc {
         }
 
         T* operator->() {
-            ensureUnique();
+            this->ensureUnique();
             return mData.get();
         }
 
