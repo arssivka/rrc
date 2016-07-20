@@ -27,6 +27,11 @@ namespace rrc {
             mQueue.push(std::move(ptr));
         }
 
+        void push(SPtr data) {
+            std::lock_guard<std::mutex> lock(mMutex);
+            mQueue.push(std::move(data));
+        }
+
         SPtr pop() {
             SPtr res = nullptr;
             {

@@ -16,6 +16,8 @@
 #include "TSLookUp.h"
 #include "TopicConnector.h"
 #include "ServiceConnector.h"
+#include "TSQueue.h"
+#include "TaskQueue.h"
 
 namespace rrc {
     class Core {
@@ -37,29 +39,30 @@ namespace rrc {
 
         Settings* getSettings();
 
-        bool addTopicListener(const ID& id, const Key& topic, MessageListener* listener, bool directCallEnabled);
+        bool addTopicListener(const ID& id, const Key& topic, MessageListener::SPtr listener);
 
-        bool detachTopicListener(const Key& topic, const MessageListener* listener);
+        bool detachTopicListener(const Key& topic, const MessageListener::SPtr listener);
 
-        bool addTopicSender(const Key& topic, MessageSender* sender);
+        bool addTopicSender(const ID& id, const Key& topic, MessageSender::SPtr sender);
 
-        bool detachTopicSender(const Key& topic, const MessageSender* sender);
+        bool detachTopicSender(const Key& topic, const MessageSender::SPtr sender);
 
-        bool setServiceStuff(const ID& id, const Key& service, MessageStuff* stuff, bool directCallEnabled);
+        bool setServiceStuff(const ID& id, const Key& service, MessageStuff::SPtr stuff);
 
-        bool detachServiceStuff(const Key& service, const MessageStuff* stuff);
+        bool detachServiceStuff(const Key& service, const MessageStuff::SPtr stuff);
 
-        bool addClientStuff(const ID& id, const Key& service, MessageStuff* stuff);
+        bool addClientStuff(const ID& id, const Key& service, MessageStuff::SPtr stuff);
 
-        bool detachClientStuff(const Key& service, const MessageStuff* stuff);
+        bool detachClientStuff(const Key& service, const MessageStuff::SPtr stuff);
 
-        void setDirectCallEnabled(bool state);
+        TaskQueue::SPtr getTaskQueue(const ID& id) const;
 
-        bool isDirectCallEnabled() const;
+        bool deleteTaskQueue(const ID& id);
 
     private:
         typedef TSLookUp<Key, TopicConnector> TopicsContainer;
         typedef TSLookUp<Key, ServiceConnector> ServicesContainer;
+        typedef TSLookUp<ID, TaskQueue> TaskQueueContainer;
 
         static Core* sInstance;
         std::vector<std::string> mArgs;
@@ -68,10 +71,8 @@ namespace rrc {
 
         TopicsContainer mTopics;
         ServicesContainer mServices;
+        mutable TaskQueueContainer mTasks;
 
-
-
-        bool mDirectCallEnabled;
     };
 }
 

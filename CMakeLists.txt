@@ -48,7 +48,10 @@ set(SRCS
         include/rrc/ServiceConnector.h
         include/rrc/TSList.h
         include/rrc/MessageStuff.h
-        src/rrc/MessageStuff.cpp)
+        src/rrc/MessageStuff.cpp
+        src/rrc/TaskQueue.cpp
+        include/rrc/TaskQueue.h
+        src/rrc/TopicConnector.cpp)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
         "${PROJECT_BINARY_DIR}/VersionDefines.h")

@@ -27,6 +27,13 @@ namespace rrc {
             mHead.mNext = std::move(newNode);
         }
 
+        void pushFront(SPtr data) {
+            UPtrNode newNode = std::make_unique(std::forward(data));
+            std::lock_guard<std::mutex> lockGuard(mHead.mMutex);
+            newNode->mNext = std::move(mHead.mNext);
+            mHead.mNext = std::move(newNode);
+        }
+
         SPtr popFront() {
             std::lock_guard<std::mutex> lockGuard(mHead.mMutex);
             SPtr retData = std::move(mHead.mNext->mData);
@@ -80,7 +87,9 @@ namespace rrc {
 
             node() : mNext() {}
 
-            node(T&& value) : mData(std::make_shared<T>(std::forward(value))) {}
+            node(SPtr value) : mData(value) { }
+
+            node(T&& value) : mData(std::make_shared<T>(std::forward(value))) { }
 
         };
 

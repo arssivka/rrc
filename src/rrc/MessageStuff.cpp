@@ -9,26 +9,26 @@
 rrc::MessageStuff::MessageStuff() : mListener(nullptr), mSender(nullptr) { }
 
 
-rrc::MessageStuff::MessageStuff(MessageListener* listener, MessageSender* sender)
+rrc::MessageStuff::MessageStuff(MessageListener::SPtr listener, MessageSender::SPtr sender)
         : mListener(listener), mSender(sender) { }
 
 
-MessageListener* rrc::MessageStuff::getListener() const {
+MessageListener::SPtr rrc::MessageStuff::getListener() const {
     return mListener;
 }
 
 
-void rrc::MessageStuff::setListener(MessageListener* listener) {
+void rrc::MessageStuff::setListener(MessageListener::SPtr listener) {
     mListener = listener;
 }
 
 
-MessageSender* rrc::MessageStuff::getSender() const {
+MessageSender::SPtr rrc::MessageStuff::getSender() const {
     return mSender;
 }
 
 
-void rrc::MessageStuff::setSender(MessageSender* sender) {
+void rrc::MessageStuff::setSender(MessageSender::SPtr sender) {
     mSender = sender;
 }
 

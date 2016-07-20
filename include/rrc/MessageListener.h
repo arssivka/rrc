@@ -16,8 +16,37 @@ namespace {
 namespace rrc {
     class MessageListener {
     public:
-        virtual void onMessage(Message<pb::Message> msg) = 0;
+        typedef std::shared_ptr<MessageListener> SPtr;
 
-        const pb::Descriptor& getDescriptor() const;
+        void setId(const ID& id) {
+            mId = id;
+        }
+
+        const ID& getId() const {
+            return mId;
+        }
+
+        void setDescriptor(const google::protobuf::Descriptor& descriptor) {
+            mDescriptor = &descriptor;
+        }
+
+        bool isDirectCallEnabled() const {
+            return mDirectCallEnabled;
+        }
+
+        void setDirectCallEnabled(bool directCallEnabled) {
+            mDirectCallEnabled = directCallEnabled;
+        }
+
+        virtual void onMessage(const ID& id, Message<pb::Message> msg, bool directCall) = 0;
+
+        const pb::Descriptor& getDescriptor() const {
+            return *mDescriptor;
+        }
+
+    private:
+        const pb::Descriptor* mDescriptor;
+        ID mId;
+        bool mDirectCallEnabled;
     };
 }

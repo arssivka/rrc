@@ -16,25 +16,27 @@ namespace {
 namespace rrc {
     class MessageStuff {
     public:
+        typedef std::shared_ptr<MessageStuff> SPtr;
+
         MessageStuff();
 
-        MessageStuff(MessageListener* listener, MessageSender* sender);
+        MessageStuff(MessageListener::SPtr listener, MessageSender::SPtr sender);
 
-        MessageListener* getListener() const;
+        MessageListener::SPtr getListener() const;
 
-        void setListener(MessageListener* listener);
+        void setListener(MessageListener::SPtr listener);
 
-        MessageSender* getSender() const;
+        MessageSender::SPtr getSender() const;
 
-        void setSender(MessageSender* sender);
+        void setSender(MessageSender::SPtr sender);
 
         const pb::Descriptor& getSenderDescriptor() const;
 
         const pb::Descriptor& getListenerDescriptor() const;
 
     private:
-        MessageListener* mListener;
-        MessageSender* mSender;
+        MessageListener::SPtr mListener;
+        MessageSender::SPtr mSender;
 
     };
 }

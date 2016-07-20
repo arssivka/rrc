@@ -10,6 +10,9 @@
 #include <vector>
 #include "ID.h"
 #include "NonCopyable.h"
+#include "TSQueue.h"
+#include "Subscriber.h"
+#include "Pipe.h"
 
 namespace rrc {
     class Node : private NonCopyable {
@@ -38,10 +41,22 @@ namespace rrc {
     protected:
         Node(const std::string& name);
 
+        virtual void entry() { }
+
+        void pollEvent();
+
+        void pollEvents();
+
+        Subscriber createSubscriber(const std::string& topic);
+
+        Pipe createPipe(const std::string& topic);
+
+
     private:
         const ID mID;
         Node* mParent;
         std::vector<Node::Ptr> mChildren;
+
     };
 }
 

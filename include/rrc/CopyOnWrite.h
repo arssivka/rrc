@@ -14,13 +14,13 @@ namespace rrc {
     {
     public:
         typedef T Data;
-        typedef std::shared_ptr<T> sPtr;
+        typedef std::shared_ptr<T> SPtr;
 
         CopyOnWrite(T* data = nullptr)
                 : mData(data) {
         }
 
-        CopyOnWrite(const sPtr& sptr)
+        CopyOnWrite(const SPtr& sptr)
                 : mData(sptr) {
         }
 
@@ -49,6 +49,6 @@ namespace rrc {
             }
         }
 
-        mutable sPtr mData;
+        mutable SPtr mData;
     };
 }
