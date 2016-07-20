@@ -35,12 +35,13 @@ namespace rrc {
         }
 
     private:
-        mutable sPtr mData;
+
         void ensureInitialized() const {
             if(!mData) {
                 mData.reset(new T);
             }
         }
+
         void ensureUnique() {
             this->ensureInitialized();
             if(!mData.unique()) {
@@ -48,5 +49,6 @@ namespace rrc {
             }
         }
 
+        mutable sPtr mData;
     };
 }
