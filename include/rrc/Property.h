@@ -21,7 +21,7 @@ namespace rrc {
         Property(D&& data) {
             mField = std::forward<D>(data);
         }
-        //TODO:: get is template. Do something!!!
+
         template <typename T>
         T& get() const {
             switch(mField->which()) {
