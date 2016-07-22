@@ -5,8 +5,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++14 -Wall")
 
 option(USE_TCMALLOC "Use full version of tcmalloc library" ON)
-
-option(test "Build tests." OFF)
+option(BUILD_TEST "Build tests." OFF)
 
 find_package(Protobuf REQUIRED)
 find_package(TCMalloc REQUIRED)
@@ -62,6 +61,6 @@ add_library(rrc ${SRCS})
 target_link_libraries(rrc ${PROTOBUF_LIBRARIES} ${TCMalloc_LIBRARIES} variant)
 target_include_directories(rrc PUBLIC include ${PROTOBUF_INCLUDE_DIRS} ${TCMalloc_INCLUDE_DIRS})
 
-if(test)
-    add_subdirectory(tests)
+if(BUILD_TEST)
+    add_subdirectory(test)
 endif()
