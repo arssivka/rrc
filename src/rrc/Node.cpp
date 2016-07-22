@@ -60,4 +60,10 @@ const std::vector<Ptr>& rrc::Node::getChildren() const {
 }
 
 
-rrc::Node::Node(const std::string& name) : mID(name) {}
+rrc::Node::Node(const std::string& name)
+        : mID(name) {
+    auto core = Core::instance();
+    core->setEntryForID(mID, this->entry);
+}
+
+void rrc::Node::entry() { }

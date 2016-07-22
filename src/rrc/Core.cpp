@@ -26,10 +26,10 @@ Core* rrc::Core::instance() {
 }
 
 
-bool rrc::Core::addTopicListener(const ID& id, const Key& topic, MessageListener::SPtr listener) {
+bool rrc::Core::addTopicListener(const Key& topic, MessageListener::SPtr listener) {
     auto connector = TopicConnector(listener->getDescriptor());
     TopicsContainer::SPtr tptr = mTopics.get(topic);
-    return tptr->addListener(id, listener);
+    return tptr->addListener(listener);
 }
 
 
@@ -42,10 +42,10 @@ bool rrc::Core::detachTopicListener(const Key& topic, const MessageListener::SPt
 }
 
 
-bool rrc::Core::addTopicSender(const ID& id, const Key& topic, MessageSender::SPtr sender) {
+bool rrc::Core::addTopicSender(const Key& topic, MessageSender::SPtr sender) {
     auto connector = TopicConnector(sender->getDescriptor());
     TopicsContainer::SPtr tptr = mTopics.get(topic);
-    return tptr->addSender(id, sender);
+    return tptr->addSender(sender);
 }
 
 
@@ -55,9 +55,9 @@ bool rrc::Core::detachTopicSender(const Key& topic, const MessageSender::SPtr se
 }
 
 
-bool rrc::Core::setServiceStuff(const ID& id, const Key& service, MessageStuff::SPtr stuff) {
+bool rrc::Core::setServiceStuff(const Key& service, MessageStuff::SPtr stuff) {
     ServicesContainer::SPtr sptr = mServices.get(service);
-    return sptr->setServiceStuff(id, stuff);
+    return sptr->setServiceStuff(stuff);
 }
 
 
@@ -70,11 +70,11 @@ bool rrc::Core::detachServiceStuff(const Key& service, const MessageStuff::SPtr 
 }
 
 
-bool rrc::Core::addClientStuff(const ID& id, const Key& service, MessageStuff::SPtr stuff) {
+bool rrc::Core::addClientStuff(const Key& service, MessageStuff::SPtr stuff) {
     auto connector = ServiceConnector(stuff->getListenerDescriptor(),
                                       stuff->getListenerDescriptor());
     ServicesContainer::SPtr sptr = mServices.get(service);
-    return sptr->addClientStuff(id, stuff);
+    return sptr->addClientStuff(stuff);
 }
 
 
@@ -86,14 +86,48 @@ bool rrc::Core::detachClientStuff(const Key& service, const MessageStuff::SPtr s
     return false;
 }
 
-
-TaskQueue::SPtr rrc::Core::getTaskQueue(const ID& id) const {
-    return TaskQueueContainer.get(id);
+bool rrc::Core::setCallDurationForID(const rrc::ID &id, std::chrono::duration duration) {
+    auto env = mEnvironments.get(id);
+    env->setCallDuration(duration);
+    return true;
 }
 
-
-bool rrc::Core::deleteTaskQueue(const ID& id) {
-    auto queue = this->getTaskQueue(id);
+bool rrc::Core::detachEntryForID(const rrc::ID &id) {
+    auto env = mEnvironments.detach(id);
+    auto queue = env->getTaskQueue();
     queue->disable();
-    mTasks.remove(id);
+    return true;
+}
+
+rrc::TaskQueue::SPtr rrc::Core::getTaskQueue(const rrc::ID &id) const {
+    auto env = mEnvironments.get(id);
+    return env->getTaskQueue();
+}
+
+constexpr std::chrono::duration rrc::Core::ModuleEnvironment::getDefaultDuration() {
+    return std::chrono::milliseconds(10);
+}
+
+void rrc::Core::ModuleEnvironment::setCallDuration(std::chrono::duration duration) {
+    mCallDuration.store(duration, std::memory_order_release);
+}
+
+rrc::Clock::duration rrc::Core::ModuleEnvironment::getCallDuration() const {
+    return mCallDuration.load(std::memory_order_acquire);
+}
+
+rrc::TaskQueue::SPtr rrc::Core::ModuleEnvironment::getTaskQueue() const {
+    return mTaskQueue;
+}
+
+void rrc::Core::ModuleEnvironment::setTaskQueue(rrc::TaskQueue::SPtr mTaskQueue) {
+    ModuleEnvironment::mTaskQueue = std::move(mTaskQueue);
+}
+
+rrc::Core::ModuleEnvironment::~ModuleEnvironment() {
+    if (mWorker.joinable()) {
+        mFinished.clear(std::memory_order_release);
+        mExceptionHolder.get();
+        mWorker.join();
+    }
 }

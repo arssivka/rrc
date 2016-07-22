@@ -8,11 +8,14 @@
 
 #include <string>
 #include <atomic>
+#include <ostream>
 
 namespace rrc {
     class ID {
     public:
-        static unsigned getCounter();
+        typedef unsigned int Counter;
+
+        static Counter getCounter();
 
         ID(const ID& other) = default;
 
@@ -24,7 +27,7 @@ namespace rrc {
 
         void setName(const std::string& name);
 
-        unsigned int getCode() const;
+        Counter getCode() const;
 
         void setCode(unsigned code);
 
@@ -38,19 +41,33 @@ namespace rrc {
 
         bool operator!=(const std::string& other) const;
 
-        bool operator==(unsigned code) const;
+        bool operator==(Counter code) const;
 
-        bool operator!=(unsigned code) const;
+        bool operator!=(Counter code) const;
 
         operator std::string() const;
 
-        operator unsigned() const;
+        operator Counter() const;
 
     private:
-        static std::atomic<unsigned> sCounter = {0};
+        static std::atomic<Counter> sCounter = {0};
 
         std::string mName;
-        unsigned mCode;
+        Counter mCode;
+    };
+
+    std::ostream &rrc::operator<<(std::ostream &os, const ID &id) {
+        os << "#" << id.getCode() << ":" << id.getName();
+        return os;
+    }
+}
+
+namespace std {
+    template <>
+    struct hash<rrc::ID> {
+        std::size_t operator()(const rrc::ID& id) const {
+            return hash<decltype(id.getCode())>()(id.getCode());
+        }
     };
 }
 

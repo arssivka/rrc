@@ -33,11 +33,11 @@ namespace rrc {
 
         bool checkDescriptor(const pb::Descriptor& descriptor);
 
-        bool addListener(const ID& id, MessageListener::SPtr listener);
+        bool addListener(MessageListener::SPtr listener);
 
         bool detachListener(const MessageListener::SPtr listener);
 
-        bool addSender(const ID& id, MessageSender::SPtr sender);
+        bool addSender(MessageSender::SPtr sender);
 
         bool detachSender(MessageSender::SPtr sender);
 

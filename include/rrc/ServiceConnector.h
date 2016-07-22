@@ -50,11 +50,11 @@ namespace rrc {
         }
 
 
-        bool setServiceStuff(const ID& id, MessageStuff::SPtr stuff);
+        bool setServiceStuff(MessageStuff::SPtr stuff);
 
         bool detachServiceStuff(const MessageStuff::SPtr stuff);
 
-        bool addClientStuff(const ID& id, MessageStuff::SPtr stuff);
+        bool addClientStuff(MessageStuff::SPtr stuff);
 
         bool detachClientStuff(const MessageStuff::SPtr stuff);
 

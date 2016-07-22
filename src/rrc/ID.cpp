@@ -19,12 +19,12 @@ void rrc::ID::setName(const std::string& name) {
 }
 
 
-unsigned int rrc::ID::getCode() const {
+rrc::ID::Counter rrc::ID::getCode() const {
     return mCode;
 }
 
 
-void rrc::ID::setCode(unsigned code) {
+void rrc::ID::setCode(Counter code) {
     mCode = code;
 }
 
@@ -50,16 +50,16 @@ bool rrc::ID::operator==(const std::string& name) const {
 
 
 bool rrc::ID::operator!=(const std::string& other) const {
-    return mName != name;
+    return mName != other;
 }
 
 
-bool rrc::ID::operator==(unsigned code) const {
+bool rrc::ID::operator==(Counter code) const {
     return mCode == code;
 }
 
 
-bool rrc::ID::operator!=(unsigned code) const {
+bool rrc::ID::operator!=(Counter code) const {
     return mCode != code;
 }
 
@@ -69,11 +69,11 @@ rrc::ID::operator std::string() const {
 }
 
 
-rrc::ID::operator unsigned() const {
+rrc::ID::operator Counter() const {
     return mCode;
 }
 
 
-unsigned static rrc::ID::getCounter() {
+rrc::ID::Counter static rrc::ID::getCounter() {
     return sCounter;
 }

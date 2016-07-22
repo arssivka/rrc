@@ -26,7 +26,7 @@ bool rrc::TopicConnector::checkDescriptor(const pb::Descriptor& descriptor) {
 }
 
 
-bool rrc::TopicConnector::addListener(const ID& id, MessageListener::SPtr listener) {
+bool rrc::TopicConnector::addListener(MessageListener::SPtr listener) {
     ListenersList.pushFront(std::move(listener));
     return true;
 }
@@ -43,7 +43,7 @@ bool rrc::TopicConnector::detachListener(const MessageListener::SPtr listener) {
 }
 
 
-bool rrc::TopicConnector::addSender(const ID& id, MessageSender::SPtr sender) {
+bool rrc::TopicConnector::addSender(MessageSender::SPtr sender) {
     sender->setCallback(std::bind(TopicConnector::sendMessage, this));
     SendersList.pushFront(sender);
 }

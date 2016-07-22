@@ -20,7 +20,6 @@ namespace rrc {
             mTaskQueue.push(std::bind(std::forward<Func>(func), std::forward<Args>(args)));
         }
 
-
         void execOnce();
 
         void execAll();

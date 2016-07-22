@@ -22,8 +22,6 @@ set(SRCS
         include/rrc/Node.h
         src/rrc/Settings.cpp
         include/rrc/Settings.h
-        src/rrc/Scheduler.cpp
-        include/rrc/Scheduler.h
         include/rrc/Advertiser.h
         include/rrc/Subscriber.h
         include/rrc/Message.h

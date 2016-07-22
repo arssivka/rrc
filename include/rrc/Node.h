@@ -13,6 +13,8 @@
 #include "TSQueue.h"
 #include "Subscriber.h"
 #include "Pipe.h"
+#include "TaskQueue.h"
+#include "Core.h"
 
 namespace rrc {
     class Node : private NonCopyable {
@@ -38,14 +40,23 @@ namespace rrc {
 
         const std::vector<Ptr>& getChildren() const;
 
+        virtual ~Node() {
+            auto core = Core::instance();
+            core->detachEntryForID(mID);
+        }
+
     protected:
         Node(const std::string& name);
 
-        virtual void entry() { }
+        virtual void entry();
 
-        void pollEvent();
+        void pollEvent() {
+            mTaskQueue->execOnce();
+        }
 
-        void pollEvents();
+        void pollEvents() {
+            mTaskQueue->execAll();
+        }
 
         Subscriber createSubscriber(const std::string& topic);
 
@@ -56,7 +67,7 @@ namespace rrc {
         const ID mID;
         Node* mParent;
         std::vector<Node::Ptr> mChildren;
-
+        TaskQueue::SPtr mTaskQueue;
     };
 }
 
