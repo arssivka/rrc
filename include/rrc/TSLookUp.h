@@ -50,11 +50,11 @@ namespace rrc {
             this->getBucket(key).addOrUpdate(key, std::make_shared<D>(std::forward<Value>(value)));
         }
         
-        bool contains(const K& key) {
+        bool contains(const K& key) const {
             return this->getBucket(key).contains(key);
         }
 
-        bool remove(const K& key) const {
+        bool remove(const K& key) {
             return this->getBucket(key).remove(key);
         }
 

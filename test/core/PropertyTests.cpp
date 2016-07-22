@@ -80,3 +80,89 @@ TEST(set_get_check, non_template_getter_string) {
     p.set("SorokDva");
     EXPECT_EQ("SorokDva", p.getString());
 }
+
+TEST(cast_check, bool_to_float) {
+    rrc::Property p;
+    p.set(true);
+    float t = p.get<float>();
+    EXPECT_EQ(float(1), t);
+
+}
+
+TEST(cast_check, bool_to_int) {
+    rrc::Property p;
+    p.set(true);
+    int t = p.get<int>();
+    EXPECT_EQ(1, t);
+}
+
+
+TEST(cast_check, bool_to_string) {
+    rrc::Property p;
+    p.set(true);
+    std::string t = p.get<std::string>();
+    EXPECT_EQ("1", t);
+}
+
+TEST(cast_check, float_to_int) {
+    rrc::Property p;
+    p.set((float)42.42);
+    int t = p.get<int>();
+    EXPECT_EQ(42, t);
+}
+
+TEST(cast_check, float_to_bool) {
+    rrc::Property p;
+    p.set((float)42.42);
+    bool t = p.get<bool>();
+    EXPECT_EQ(true, t);
+}
+
+TEST(cast_check, float_to_string) {
+    rrc::Property p;
+    p.set((float)42.42);
+    std::string t = p.get<std::string>();
+    EXPECT_EQ("42.419998", t); //because of float
+}
+
+TEST(cast_check, int_to_bool) {
+    rrc::Property p;
+    p.set(42);
+    bool t = p.get<bool>();
+    EXPECT_EQ(true, t);
+}
+
+TEST(cast_check, int_to_float) {
+    rrc::Property p;
+    p.set(42);
+    float t = p.get<float>();
+    EXPECT_EQ((float)42, t);
+}
+
+TEST(cast_check, int_to_string) {
+    rrc::Property p;
+    p.set(42);
+    std::string t = p.get<std::string>();
+    EXPECT_EQ("42", t);
+}
+
+TEST(cast_check, string_to_bool) {
+    rrc::Property p;
+    p.set("true");
+    bool t = p.get<bool>();
+    EXPECT_EQ(true, t);
+}
+
+TEST(cast_check, string_to_float) {
+    rrc::Property p;
+    p.set("42");
+    float t = p.get<float>();
+    EXPECT_EQ((float)42, t);
+}
+
+TEST(cast_check, string_to_int) {
+    rrc::Property p;
+    p.set("42");
+    int t = p.get<int>();
+    EXPECT_EQ(42, t);
+}

@@ -2,6 +2,7 @@
 
     set(SRCS
             core/PropertyTests.cpp
+            core/SettingsTests.cpp
             modules/BigTests.cpp)
 
     add_executable(tests ${SRCS})

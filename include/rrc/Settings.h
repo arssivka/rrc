@@ -34,6 +34,10 @@ namespace rrc {
             return mSettings.get(key);
         }
 
+        bool contains(const std::string& key) const {
+            return mSettings.contains(key);
+        }
+
 
     private:
         TSLookUp<std::string, Property> mSettings;
