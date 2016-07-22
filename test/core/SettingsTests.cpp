@@ -16,3 +16,42 @@ TEST(add_or_update_test, add_test) {
     sts.addOrUpdate("test_key", prp);
     EXPECT_EQ(true, sts.contains("test_key"));
 }
+
+TEST(add_or_update_test, add_get_test) {
+    rrc::Settings sts;
+    rrc::Property prp;
+    prp.set("testprp");
+    sts.addOrUpdate("test_key", prp);
+    rrc::Property prp1;
+    prp1 = sts.get("test_key");
+    EXPECT_EQ(prp.getString(), prp1.getString());
+}
+
+TEST(add_or_update_test, update_test) {
+    rrc::Settings sts;
+    rrc::Property prp;
+    prp.set("testprp");
+    sts.addOrUpdate("test_key", prp);
+    sts.addOrUpdate("test_key", "test2");
+    EXPECT_EQ("test2", sts.get("test_key").getString());
+}
+
+TEST(add_or_update_test, update_new_property_test) {
+    rrc::Settings sts;
+    rrc::Property prp;
+    prp.set("testprp");
+    rrc::Property prp1;
+    prp.set("42");
+    sts.addOrUpdate("test_key", prp);
+    sts.addOrUpdate("test_key", prp1);
+    EXPECT_EQ("42", sts.get("test_key").getString());
+}
+
+TEST(remove_test, rem_test) {
+    rrc::Settings sts;
+    rrc::Property prp;
+    prp.set("testprp");
+    sts.addOrUpdate("test_key", prp);
+    sts.remove("test_key");
+    EXPECT_EQ(false, sts.contains("test_key"));
+}
