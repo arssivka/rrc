@@ -6,10 +6,8 @@
 
 #include <string>
 #include <stdlib.h>
-#include <iostream>
 #include <sstream>
-#include <type_traits>
-#include "rrc/CopyOnWrite.h"
+#include "CopyOnWrite.h"
 #include "mapbox/variant.hpp"
 
 namespace rrc {
@@ -17,137 +15,134 @@ namespace rrc {
     public:
         typedef mapbox::util::variant<std::string, float, bool, int> SettingsType;
 
+        Property(const char* str) {
+            mField->set<std::string>(str);
+        }
+
+        Property(std::string str) {
+            mField->set<std::string>(str);
+        }
+
         template <class D>
         Property(D&& data) {
-            mField = std::forward<D>(data);
+            mField->set<D>(std::forward<D>(data));
         }
-        //TODO:: get is template. Do something!!!
+
+        Property() {
+
+        }
+
         template <typename T>
-        T& get() const {
-            switch(mField->which()) {
-                case 0:
-                    return getCast<T>(mField->get<std::string>());
-                case 1:
-                    return getCast<T>(mField->get<float>());
-                case 2:
-                    return getCast<T>(mField->get<bool>());
-                case 3:
-                    return getCast<T>(mField->get<int>());
-
-            }
+        T get() const {
         }
 
-        int getInt() const {
-            switch(mField->which()) {
-                case 0:
-                    return getCast<int>(mField->get<std::string>());
-                case 1:
-                    return getCast<int>(mField->get<float>());
-                case 2:
-                    return getCast<int>(mField->get<bool>());
-                case 3:
-                    return getCast<int>(mField->get<int>());
+        int getInt();
 
-            }
+        float getFloat();
+
+        bool getBool();
+
+        std::string getString();
+
+        void set(const char* str) {
+            mField->set<std::string>(str);
         }
 
-        float getFloat() const {
-            switch(mField->which()) {
-                case 0:
-                    return getCast<float>(mField->get<std::string>());
-                case 1:
-                    return getCast<float>(mField->get<float>());
-                case 2:
-                    return getCast<float>(mField->get<bool>());
-                case 3:
-                    return getCast<float>(mField->get<int>());
-
-            }
+        void set(std::string str) {
+            mField->set<std::string>(str);
         }
 
-        bool getBool() const {
-            switch(mField->which()) {
-                case 0:
-                    return getCast<bool>(mField->get<std::string>());
-                case 1:
-                    return getCast<bool>(mField->get<float>());
-                case 2:
-                    return getCast<bool>(mField->get<bool>());
-                case 3:
-                    return getCast<bool>(mField->get<int>());
-
-            }
-        }
-
-        std::string getString() const {
-            switch(mField->which()) {
-                case 0:
-                    return getCast<std::string>(mField->get<std::string>());
-                case 1:
-                    return getCast<std::string>(mField->get<float>());
-                case 2:
-                    return getCast<std::string>(mField->get<bool>());
-                case 3:
-                    return getCast<std::string>(mField->get<int>());
-
-            }
-        }
-
-        template <class D>
+        template <typename D>
         void set(D &&data) {
             if(std::is_same<D, bool>::value || std::is_same<D, int>::value ||
-                    std::is_same<D, float>::value || std::is_same<D, std::string>::value) {
+               std::is_same<D, float>::value || std::is_same<D, std::string>::value) {
                 mField->set<D>(std::forward<D>(data));
             }
             else {
-                throw stderr("Unsupported type");
+                std::cerr << "Unsupported type\n";
             };
         }
 
     private:
-        template <typename T>
-        T& getCast(T const &s) const {
-            return s;
-        }
-
-//        template<>
-        int getCast<int>(std::string const &s) const {
-            return atoi(s);
-        }
-
-//        template<>
-        float getCast<float>(std::string const &s) const {
-            return std::stof(s);
-        }
-
-//        template<>
-        bool getCast<bool>(std::string const &s) const {
-            bool res;
-            std::istringstream(s) >> std::boolalpha >> res;
-            return res;
-        }
-
-        template<typename, typename D, class = typename std::enable_if<std::is_arithmetic<D>::value>::type>
-        std::string getCast<std::string>(D &const n) const {
-            return std::to_string(n);
-        };
-
-        template <typename T, class = typename std::enable_if<std::is_arithmetic<T>::value>::type,
-                typename D, class = typename std::enable_if<std::is_arithmetic<D>::value>::type>
-        std::string getCast<T>(D &const n) const {
-            return T(n);
-        };
-//        union float_bool_str {
-//            std::string m_string;
-//            float mfloat;
-//            bool m_bool;
-//            float_bool_str(std::string str) {
-//                new (&m_string) std::string(str);
-//            }
-//            ~float_bool_str() {
-//                m_string.~string();
-//            }
-//        };
         CopyOnWrite<SettingsType> mField;
     };
+
+    template<>
+    int Property::get<int>() const {
+        int id = mField->which();
+        switch(id){
+            case 0:
+                return std::stoi(mField->get<std::string>());
+            case 1:
+                return (int)mField->get<float>();
+            case 2:
+                return (int)mField->get<bool>();
+            case 3:
+                return mField->get<int>();
+        }
+
+    }
+
+    template<>
+    float Property::get<float>() const {
+        int id = mField->which();
+        switch(id){
+            case 0:
+                return std::stof(mField->get<std::string>());
+            case 1:
+                return mField->get<float>();
+            case 2:
+                return (float)mField->get<bool>();
+            case 3:
+                return (float)mField->get<int>();
+        }
+    }
+
+    template<>
+    bool Property::get<bool>() const {
+        int id = mField->which();
+        switch(id){
+            case 0:
+                bool res;
+                std::istringstream(mField->get<std::string>()) >> std::boolalpha >> res;
+                return res;
+            case 1:
+                return (bool)mField->get<float>();
+            case 2:
+                return mField->get<bool>();
+            case 3:
+                return (bool)mField->get<int>();
+        }
+    }
+
+    template<>
+    std::string Property::get<std::string>() const {
+        int id = mField->which();
+        switch(id){
+            case 0:
+                return mField->get<std::string>();
+            case 1:
+                return std::to_string(mField->get<float>());
+            case 2:
+                return std::to_string(mField->get<bool>());
+            case 3:
+                return std::to_string(mField->get<int>());
+        }
+    }
+
+    int Property::getInt() {
+        this->get<int>();
+    }
+
+    float Property::getFloat() {
+        this->get<float>();
+    }
+    bool Property::getBool() {
+        this->get<bool>();
+    }
+
+    std::string Property::getString() {
+        this->get<std::string>();
+    }
 }
+
