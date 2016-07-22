@@ -104,6 +104,35 @@ rrc::TaskQueue::SPtr rrc::Core::getTaskQueue(const rrc::ID &id) const {
     return env->getTaskQueue();
 }
 
+int rrc::Core::run() {
+    mStartedFlag.store(true, std::memory_order_release);
+    mFinishedFlag.wait([](const AtomicWithNotifications<bool>::Atomic& data) -> bool {
+        return data.load(std::memory_order_acquire);
+    });
+    return EXIT_SUCCESS;
+}
+
+rrc::Core::~Core() {
+    sInstance = nullptr;
+}
+
+rrc::Core::Core(size_t threadsNum, int argc, char** argv)
+        : mArgs(&argv[0], &argv[argc]), mStartedFlag(false), mFinishedFlag(false) { }
+
+bool rrc::Core::isFinished() const {
+    return mFinishedFlag.load(std::memory_order_acquire);
+}
+
+void rrc::Core::finish() {
+    mFinishedFlag.store(true, std::memory_order_release);
+}
+
+void rrc::Core::waitForStart() {
+    mStartedFlag.wait([](const AtomicWithNotifications<bool>::Atomic& data) -> bool {
+        return data.load(std::memory_order_acquire);
+    });
+}
+
 constexpr std::chrono::duration rrc::Core::ModuleEnvironment::getDefaultDuration() {
     return std::chrono::milliseconds(10);
 }

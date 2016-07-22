@@ -50,7 +50,7 @@ set(SRCS
         src/rrc/MessageStuff.cpp
         src/rrc/TaskQueue.cpp
         include/rrc/TaskQueue.h
-        src/rrc/TopicConnector.cpp)
+        src/rrc/TopicConnector.cpp include/rrc/AtomicWithNotifications.h)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
         "${PROJECT_BINARY_DIR}/VersionDefines.h")

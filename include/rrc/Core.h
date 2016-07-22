@@ -20,27 +20,18 @@
 #include "ServiceConnector.h"
 #include "TSQueue.h"
 #include "TaskQueue.h"
+#include "AtomicWithNotifications.h"
 
 namespace rrc {
     class Core {
     public:
         typedef std::string Key;
 
-        Core(size_t threadsNum, int argc, char** argv)
-                : mArgs(&argv[0], &argv[argc]), mStartFlag(false), mFinished(false) { }
+        Core(size_t threadsNum, int argc, char** argv);
 
-        ~Core() {
-            sInstance = nullptr;
-        }
+        ~Core();
 
-        int run() {
-            {
-                std::lock_guard<std::mutex> lock(mStartMutex);
-                mStartFlag = true;
-            }
-            mStartCV.notify_all();
-            return EXIT_SUCCESS;
-        }
+        int run();
 
         static Core* instance();
 
@@ -84,19 +75,12 @@ namespace rrc {
 
         TaskQueue::SPtr getTaskQueue(const ID& id) const;
 
-        bool isFinished() const {
-            return mFinished.load(std::memory_order_acquire);
-        }
+        bool isFinished() const;
 
-        void finish() {
-            mFinished.store(true, std::memory_order_release);
-        }
+        void finish();
 
     private:
-        void waitForStart() {
-            std::unique_lock<std::mutex> lock(mStartMutex);
-            mStartCV.wait(lock, []() -> bool { return mStartFlag; });
-        }
+        void waitForStart();
 
     private:
         typedef TSLookUp<Key, TopicConnector> TopicsContainer;
@@ -119,7 +103,7 @@ namespace rrc {
                     Func callback = std::forward<Func>(func);
                     Core *core = Core::instance();
                     core->waitForStart();
-                    while (mFinished.test_and_set(std::memory_order_acquire)) {
+                    while (mFinished.test_and_set(std::memory_order_acquire) && !core->isFinished()) {
                         auto start = rrc::Clock::now();
                         callback();
                         auto end = rrc::Clock::now();
@@ -155,14 +139,12 @@ namespace rrc {
         static Core* sInstance;
         std::vector<std::string> mArgs;
         Settings mSettings;
-        bool mStartFlag;
-        std::mutex mStartMutex;
-        std::condition_variable<std::mutex> mStartCV;
         TopicsContainer mTopics;
         ServicesContainer mServices;
         ModuleEnvironmentsContainer mEnvironments;
 
-        std::atomic<bool> mFinished;
+        AtomicWithNotifications<bool> mStartedFlag;
+        AtomicWithNotifications<bool> mFinishedFlag;
     };
 }
 
