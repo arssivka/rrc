@@ -44,8 +44,9 @@ endif()
 # as ${gtest_SOURCE_DIR} and to the root binary directory as
 # ${gtest_BINARY_DIR}.
 # Language "C" is required for find_package(Threads).
-project(gtest CXX C)
 cmake_minimum_required(VERSION 2.6.2)
+cmake_policy(SET CMP0048 OLD)
+project(gtest CXX C)
 
 if (COMMAND set_up_hermetic_build)
   set_up_hermetic_build()
