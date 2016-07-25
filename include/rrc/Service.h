@@ -10,19 +10,20 @@
 #include "Message.h"
 #include "NonCopyable.h"
 #include "Scheduler.h"
+#include "Response.h"
 
 namespace rrc {
-    template <class Request, class Responce>
+    template <class Req, class Res>
     class Service : private NonCopyable {
-        typedef Request Request;
-        typedef Responce Responce;
+        typedef Req Request;
+        typedef Res Response;
 
         Service(const ID& id, const std::string& name, Scheduler& scheduler);
 
         template <class Func>
         void setCallback(Func&& callback);
 
-        Responce<Responce> call(Message<Request>::Ptr data);
+        rrc::Response<Response> call(Message<Request> data);
     };
 }
 

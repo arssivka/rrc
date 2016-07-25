@@ -7,7 +7,7 @@
 
 
 #include "ID.h"
-#include "Responce.h"
+#include "Response.h"
 #include "Scheduler.h"
 
 namespace rrc {
@@ -16,22 +16,19 @@ namespace rrc {
     public:
         Client(const ID& id, const std::string& service, Scheduler& scheduler);
 
-
         bool isAutoReconnect() const {
             return mAutoReconnect;
         }
-
 
         void setAutoReconnect(bool autoReconnect) {
             mAutoReconnect = autoReconnect;
         }
 
-
         bool isConnected() const;
 
         bool reconnect();
 
-        Responce<ResponceType> query(Message<RequestType>::Ptr request);
+        Response<ResponceType> query(Message<RequestType> request, bool updateTimestamp = true);
 
     private:
         bool mAutoReconnect;

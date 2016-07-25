@@ -8,16 +8,15 @@
 
 #include <bits/allocator.h>
 
-template <class T>
-class Pool
-        : public std::allocator<T> {
-public:
-    Pool(size_t pageSize);
+namespace rrc {
+    template<class T>
+    class Pool
+            : public std::allocator<T> {
+    public:
 
-    allocate
+    private:
 
-private:
-
-};
+    };
+}
 
 

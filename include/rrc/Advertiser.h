@@ -14,11 +14,11 @@ namespace rrc {
     template <typename MessageType>
     class Advertiser {
     public:
-        Advertiser(const ID& moduleid, const std::string& topic, Scheduler& scheduler);
+        Advertiser(const ID& id, const std::string& topic, Scheduler& scheduler);
 
         bool isConnected() const;
 
-        void send(Message<MessageType>::Ptr msg);
+        void send(Message<MessageType> msg, bool updateTimestamp = true);
     private:
     };
 }

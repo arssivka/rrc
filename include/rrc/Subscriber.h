@@ -22,9 +22,9 @@ namespace rrc {
 
         bool isConnected() const;
 
-        void push(Message<T>::Ptr msg);
+        void push(Message<T> msg);
 
-        Message<T>::Ptr pop();
+        Message<T> pop();
 
     private:
 
