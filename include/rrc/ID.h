@@ -33,6 +33,8 @@ namespace rrc {
 
         bool initialized() const;
 
+        ID& operator=(const ID& other) = default;
+
         bool operator==(const ID& other) const;
 
         bool operator!=(const ID& other) const;
@@ -49,26 +51,25 @@ namespace rrc {
 
         operator Counter() const;
 
+        friend std::ostream& operator<<(std::ostream& os, const ID& id);
+
     private:
-        static std::atomic<Counter> sCounter = {0};
+        static std::atomic<Counter> sCounter;
 
         std::string mName;
         Counter mCode;
     };
-
-    std::ostream &rrc::operator<<(std::ostream &os, const ID &id) {
-        os << "#" << id.getCode() << ":" << id.getName();
-        return os;
-    }
 }
 
 namespace std {
     template <>
     struct hash<rrc::ID> {
-        std::size_t operator()(const rrc::ID& id) const {
+        size_t operator()(const rrc::ID& id) const {
             return hash<decltype(id.getCode())>()(id.getCode());
         }
     };
+
+    ostream& operator<<(ostream& os, const rrc::ID& id);
 }
 
 

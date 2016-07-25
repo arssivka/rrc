@@ -17,9 +17,16 @@ namespace rrc {
     public:
         Message() = default;
 
-        template <class D>
-        Message(D&& data) {
-            mData->second = std::forward<D>(data);
+        Message(const Message<T>& other) = default;
+
+        Message& operator=(const Message<T>& rhs) = default;
+
+        Message(T&& data) {
+            mData->second = std::move<T>(data);
+        }
+
+        Message(const T& data) {
+            mData->second = data;
         }
 
         template <class D>

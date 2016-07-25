@@ -16,7 +16,8 @@ namespace rrc {
     public:
         typedef T Type;
 
-        Response() : mDataSet(ATOMIC_FLAG_INIT), mData(nullptr) { }
+        Response()
+                : mDataSet(ATOMIC_FLAG_INIT), mData(nullptr) { }
 
         Message<T> get() const noexcept {
             return mData;

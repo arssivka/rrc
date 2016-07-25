@@ -6,17 +6,19 @@
 #include <algorithm>
 #include "include/rrc/Node.h"
 
-void rrc::Node::attachNode(Node::Ptr node) {
+void rrc::Node::attachNode(Node::UPtr node) {
     mChildren.push_back(std::move(node));
     if (node)
         node->mParent = this;
 }
 
 
-Node::Ptr rrc::Node::detachNode(Node* node) {
-    auto found = std::find(mChildren.begin(), mChildren.end(), node);
-    if (found != nullptr) {
-        Node::Ptr child = std::move(*found);
+rrc::Node::UPtr rrc::Node::detachNode(Node* node) {
+    auto found = std::find_if(mChildren.begin(), mChildren.end(), [=](UPtr& ptr) -> bool {
+        return ptr.get() == node;
+    });
+    if (found != mChildren.end()) {
+        Node::UPtr child = std::move(*found);
         mChildren.erase(found);
         return child;
     } else {
@@ -25,8 +27,8 @@ Node::Ptr rrc::Node::detachNode(Node* node) {
 }
 
 
-Node* rrc::Node::findChild(const std::string& name) const {
-    auto found = std::find_if(mChildren.begin(), mChildren.end(), [&](const Node::Ptr& node) {
+rrc::Node* rrc::Node::findChild(const std::string& name) const {
+    auto found = std::find_if(mChildren.begin(), mChildren.end(), [&](const Node::UPtr& node) {
         return node->getID() == name;
     });
     return (found != mChildren.end())
@@ -35,8 +37,8 @@ Node* rrc::Node::findChild(const std::string& name) const {
 }
 
 
-Node* rrc::Node::findChild(const ID& id) const {
-    auto found = std::find_if(mChildren.begin(), mChildren.end(), [&](const Node::Ptr& node) {
+rrc::Node* rrc::Node::findChild(const ID& id) const {
+    auto found = std::find_if(mChildren.begin(), mChildren.end(), [&](const Node::UPtr& node) {
         return node->getID() == id;
     });
     return (found != mChildren.end())
@@ -45,17 +47,17 @@ Node* rrc::Node::findChild(const ID& id) const {
 }
 
 
-const ID& rrc::Node::getID() const {
+const rrc::ID& rrc::Node::getID() const {
     return mID;
 }
 
 
-Node* rrc::Node::getParent() const {
+rrc::Node* rrc::Node::getParent() const {
     return mParent;
 }
 
 
-const std::vector<Ptr>& rrc::Node::getChildren() const {
+const std::vector<rrc::Node::UPtr>& rrc::Node::getChildren() const {
     return mChildren;
 }
 
@@ -63,7 +65,19 @@ const std::vector<Ptr>& rrc::Node::getChildren() const {
 rrc::Node::Node(const std::string& name)
         : mID(name) {
     auto core = Core::instance();
-    core->setEntryForID(mID, this->entry);
+    core->setEntryForID(mID,[this]() {
+        this->entry();
+    });
 }
 
-void rrc::Node::entry() { }
+void rrc::Node::entry() {
+    this->pollEvents();
+}
+
+void rrc::Node::pollEvent() {
+    mTaskQueue->execOnce();
+}
+
+void rrc::Node::pollEvents() {
+    mTaskQueue->execAll();
+}

@@ -15,20 +15,19 @@ namespace rrc {
     public:
         typedef T Data;
         typedef std::shared_ptr<T> SPtr;
-        typedef std::unique_ptr<node> UPtrNode;
 
         TSList() {}
 
-        template <class T1>
-        void pushFront(T1&& data) {
-            UPtrNode newNode = std::make_unique(std::forward(data));
+        void pushFront(SPtr data) {
+            std::unique_ptr<NodeType> newNode = std::make_unique<NodeType>(std::move(data));
             std::lock_guard<std::mutex> lockGuard(mHead.mMutex);
             newNode->mNext = std::move(mHead.mNext);
             mHead.mNext = std::move(newNode);
         }
 
-        void pushFront(SPtr data) {
-            UPtrNode newNode = std::make_unique(std::forward(data));
+        template <class T1>
+        void pushFront(T1&& data) {
+            std::unique_ptr<NodeType> newNode = std::make_unique<NodeType>(std::forward<T1>(data));
             std::lock_guard<std::mutex> lockGuard(mHead.mMutex);
             newNode->mNext = std::move(mHead.mNext);
             mHead.mNext = std::move(newNode);
@@ -43,13 +42,12 @@ namespace rrc {
 
         template <class Func>
         void removeIf(Func&& func) {
-            node* current = &mHead;
-            Func p = std::forward(func);
+            NodeType* current = &mHead;
             std::unique_lock<std::mutex> lk(mHead.mMutex);
-            while(node* const next = current->mNext.get()) {
+            while(NodeType* const next = current->mNext.get()) {
                 std::unique_lock<std::mutex> nextLk(next->mMutex);
-                if(p(*next->mData)) {
-                    UPtrNode oldNext = std::move(current->mNext);
+                if(func(next->mData)) {
+                    std::unique_ptr<NodeType> oldNext = std::move(current->mNext);
                     current->mNext=std::move(next->mNext);
                     nextLk.unlock();
                 }
@@ -63,13 +61,12 @@ namespace rrc {
 
         template <class Func>
         SPtr applyWhile(Func&& func) {
-            node* current = &mHead;
-            Func p = std::forward(func);
+            NodeType* current = &mHead;
             std::unique_lock<std::mutex> lk(mHead.mMutex);
-            while(node* const next = current->mNext.get()) {
+            while(NodeType* const next = current->mNext.get()) {
                 std::unique_lock<std::mutex> nextLk(next->mMutex);
                 lk.unlock();
-                if(p(*next->mData)) {
+                if(func(next->mData)) {
                     return next->mData;
                 }
                 current = next;
@@ -79,21 +76,20 @@ namespace rrc {
         }
 
     private:
-
-        struct node {
+        struct NodeType {
             std::mutex mMutex;
             SPtr mData;
-            UPtrNode mNext;
+            std::unique_ptr<NodeType> mNext;
 
-            node() : mNext() {}
+            NodeType() : mNext() {}
 
-            node(SPtr value) : mData(value) { }
+            NodeType(SPtr value) : mData(value) { }
 
-            node(T&& value) : mData(std::make_shared<T>(std::forward(value))) { }
+            NodeType(T&& value) : mData(std::make_shared<T>(std::forward<T>(value))) { }
 
         };
 
-        node mHead;
+        NodeType mHead;
 
     };
 }

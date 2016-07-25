@@ -21,11 +21,11 @@ namespace rrc {
 
         template <class Targ>
         AtomicWithNotifications(Targ&& arg)
-                : mAtomic(std::forward((arg))) { }
+                : mAtomic(std::forward<Targ>((arg))) { }
 
         template <class Targ>
         void store(Targ&& val, std::memory_order order = std::memory_order_seq_cst) {
-            mAtomic.store(std::forward(val), order);
+            mAtomic.store(std::forward<Targ>(val), order);
             mCv.notify_all();
         }
 
@@ -41,7 +41,10 @@ namespace rrc {
 
         template <class Predicate>
         std::unique_lock<Mut> wait(Predicate&& pred) {
-            auto bound = std::bind(std::forward<Predicate>(pred), mAtomic);
+            Predicate p = std::forward<Predicate>(pred);
+            auto bound = [&, this]() -> bool {
+                return p(mAtomic);
+            };
             std::unique_lock<Mut> lock(mMutex);
             mCv.wait(lock, bound);
             return std::move(lock);

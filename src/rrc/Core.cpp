@@ -7,27 +7,26 @@
 #include "VersionDefines.h"
 
 
-std::string static constexpr rrc::Core::getVersion() {
+std::string rrc::Core::getVersion() {
     return std::string(RRC_VERSION);
 }
 
 
-std::vector<std::string>& rrc::Core::getArs() const {
+const std::vector<std::string>& rrc::Core::getArs() const {
     return mArgs;
 }
 
 
-Settings* rrc::Core::getSettings() {
+rrc::Settings* rrc::Core::getSettings() {
     return &mSettings;
 }
 
-Core* rrc::Core::instance() {
+rrc::Core* rrc::Core::instance() {
     return sInstance;
 }
 
 
 bool rrc::Core::addTopicListener(const Key& topic, MessageListener::SPtr listener) {
-    auto connector = TopicConnector(listener->getDescriptor());
     TopicsContainer::SPtr tptr = mTopics.get(topic);
     return tptr->addListener(listener);
 }
@@ -43,7 +42,6 @@ bool rrc::Core::detachTopicListener(const Key& topic, const MessageListener::SPt
 
 
 bool rrc::Core::addTopicSender(const Key& topic, MessageSender::SPtr sender) {
-    auto connector = TopicConnector(sender->getDescriptor());
     TopicsContainer::SPtr tptr = mTopics.get(topic);
     return tptr->addSender(sender);
 }
@@ -55,38 +53,7 @@ bool rrc::Core::detachTopicSender(const Key& topic, const MessageSender::SPtr se
 }
 
 
-bool rrc::Core::setServiceStuff(const Key& service, MessageStuff::SPtr stuff) {
-    ServicesContainer::SPtr sptr = mServices.get(service);
-    return sptr->setServiceStuff(stuff);
-}
-
-
-bool rrc::Core::detachServiceStuff(const Key& service, const MessageStuff::SPtr stuff) {
-    ServicesContainer::SPtr sptr = mServices.get(service);
-    if (sptr != nullptr) {
-        return sptr->detachServiceStuff(stuff);
-    }
-    return false;
-}
-
-
-bool rrc::Core::addClientStuff(const Key& service, MessageStuff::SPtr stuff) {
-    auto connector = ServiceConnector(stuff->getListenerDescriptor(),
-                                      stuff->getListenerDescriptor());
-    ServicesContainer::SPtr sptr = mServices.get(service);
-    return sptr->addClientStuff(stuff);
-}
-
-
-bool rrc::Core::detachClientStuff(const Key& service, const MessageStuff::SPtr stuff) {
-    ServicesContainer::SPtr sptr = mServices.get(service);
-    if (sptr != nullptr) {
-        return sptr->detachClientStuff(stuff);
-    }
-    return false;
-}
-
-bool rrc::Core::setCallDurationForID(const rrc::ID &id, std::chrono::duration duration) {
+bool rrc::Core::setCallDurationForID(const rrc::ID &id, Duration duration) {
     auto env = mEnvironments.get(id);
     env->setCallDuration(duration);
     return true;
@@ -133,15 +100,15 @@ void rrc::Core::waitForStart() {
     });
 }
 
-constexpr std::chrono::duration rrc::Core::ModuleEnvironment::getDefaultDuration() {
+rrc::Duration rrc::Core::ModuleEnvironment::getDefaultDuration() {
     return std::chrono::milliseconds(10);
 }
 
-void rrc::Core::ModuleEnvironment::setCallDuration(std::chrono::duration duration) {
+void rrc::Core::ModuleEnvironment::setCallDuration(rrc::Duration duration) {
     mCallDuration.store(duration, std::memory_order_release);
 }
 
-rrc::Clock::duration rrc::Core::ModuleEnvironment::getCallDuration() const {
+rrc::Duration rrc::Core::ModuleEnvironment::getCallDuration() const {
     return mCallDuration.load(std::memory_order_acquire);
 }
 

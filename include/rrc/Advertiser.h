@@ -8,13 +8,12 @@
 
 #include "ID.h"
 #include "Message.h"
-#include "Scheduler.h"
 
 namespace rrc {
     template <typename MessageType>
     class Advertiser {
     public:
-        Advertiser(const ID& id, const std::string& topic, Scheduler& scheduler);
+        Advertiser(const ID& id, const std::string& topic);
 
         bool isConnected() const;
 

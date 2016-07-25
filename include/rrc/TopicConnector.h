@@ -42,15 +42,15 @@ namespace rrc {
         bool detachSender(MessageSender::SPtr sender);
 
     private:
-        void sendMessage(const ID& id, Message<pb::Message> message, bool directCall);
+        bool sendMessage(const ID& id, Message<pb::Message> message, bool directCall);
 
     private:
-        typedef TSList<MessageSender::SPtr> SendersList;
-        typedef TSList<MessageListener::SPtr> ListenersList;
+        typedef TSList<MessageSender> SendersList;
+        typedef TSList<MessageListener> ListenersList;
 
         const pb::Descriptor* mDescriptor;
-        SendersList mSenders;
-        ListenersList mListeners;
+        SendersList mSendersList;
+        ListenersList mListenersList;
 
     };
 }

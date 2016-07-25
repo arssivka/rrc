@@ -24,7 +24,7 @@ namespace rrc {
         }
 
         bool send(Message<pb::Message> msg) {
-            mCallback(mId, msg, mDirectCallEnabled);
+            return mCallback(mId, msg, mDirectCallEnabled);
         }
 
         void setDescriptor(const pb::Descriptor& descriptor) {
@@ -37,7 +37,7 @@ namespace rrc {
 
         template <class Func>
         void setCallback(Func&& callback) {
-            mCallback = std::forward(callback);
+            mCallback = std::forward<Func>(callback);
         }
 
         void disconnect() {
@@ -53,24 +53,30 @@ namespace rrc {
         }
 
         bool isDirectCallEnabled() const {
-            return mDirectCallEnabled;
+            return mDirectCallEnabled.load(std::memory_order_consume);
         }
 
         void setDirectCallEnabled(bool directCallEnabled) {
-            mDirectCallEnabled = directCallEnabled;
+            mDirectCallEnabled.store(directCallEnabled, std::memory_order_release);
         }
 
+        bool isDisabled() const {
+            return mDisabled.load(std::memory_order_consume);
+        }
+
+        void setDisabled(bool disabled) {
+            mDisabled.store(mDisabled, std::memory_order_release);
+        }
 
     private:
-        void reset() {
-            mCallback = [](Message<pb::Message> msg) { };
-        }
+        void reset();
 
     private:
         const pb::Descriptor* mDescriptor;
-        bool mDirectCallEnabled;
+        std::atomic<bool> mDirectCallEnabled;
+        std::atomic<bool> mDisabled;
         ID mId;
-        std::function<void(ID, Message<pb::Message>, bool)> mCallback;
+        std::function<bool(ID, Message<pb::Message>, bool)> mCallback;
     };
 }
 

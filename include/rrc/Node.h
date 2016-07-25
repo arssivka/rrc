@@ -19,16 +19,16 @@
 namespace rrc {
     class Node : private NonCopyable {
     public:
-        typedef std::unique_ptr<Node> Ptr;
+        typedef std::unique_ptr<Node> UPtr;
 
-        template <class NodeType, class Args...>
-        static Node::Ptr create(const std::string& name, Args... args) {
-            return Node::Ptr(new NodeType(name, std::forward<Args>(args)...));
+        template <class NodeType, class... Args>
+        static std::unique_ptr<NodeType> create(const std::string& name, Args... args) {
+            return std::make_unique<NodeType>(name, std::forward<Args>(args)...);
         }
 
-        void attachNode(Node::Ptr node);
+        void attachNode(Node::UPtr node);
 
-        Node::Ptr detachNode(Node* node);
+        Node::UPtr detachNode(Node* node);
 
         Node* findChild(const std::string& name) const;
 
@@ -38,7 +38,7 @@ namespace rrc {
 
         Node* getParent() const;
 
-        const std::vector<Ptr>& getChildren() const;
+        const std::vector<UPtr>& getChildren() const;
 
         virtual ~Node() {
             auto core = Core::instance();
@@ -50,23 +50,19 @@ namespace rrc {
 
         virtual void entry();
 
-        void pollEvent() {
-            mTaskQueue->execOnce();
-        }
+        void pollEvent();
 
-        void pollEvents() {
-            mTaskQueue->execAll();
-        }
+        void pollEvents();
 
-        Subscriber createSubscriber(const std::string& topic);
+//        Subscriber createSubscriber(const std::string& topic);
 
-        Pipe createPipe(const std::string& topic);
+//        Pipe createPipe(const std::string& topic);
 
 
     private:
         const ID mID;
         Node* mParent;
-        std::vector<Node::Ptr> mChildren;
+        std::vector<Node::UPtr> mChildren;
         TaskQueue::SPtr mTaskQueue;
     };
 }

@@ -79,6 +79,8 @@ namespace rrc {
                 return (int)mField->get<bool>();
             case 3:
                 return mField->get<int>();
+            default:
+                return 0;
         }
 
     }
@@ -92,9 +94,11 @@ namespace rrc {
             case 1:
                 return mField->get<float>();
             case 2:
-                return (float)mField->get<bool>();
+                return (float) mField->get<bool>();
             case 3:
-                return (float)mField->get<int>();
+                return (float) mField->get<int>();
+            default:
+                return 0.0;
         }
     }
 
@@ -112,6 +116,8 @@ namespace rrc {
                 return mField->get<bool>();
             case 3:
                 return (bool)mField->get<int>();
+            default:
+                return false;
         }
     }
 
@@ -127,22 +133,24 @@ namespace rrc {
                 return std::to_string(mField->get<bool>());
             case 3:
                 return std::to_string(mField->get<int>());
+            default:
+                return std::string();
         }
     }
 
     int Property::getInt() {
-        this->get<int>();
+        return this->get<int>();
     }
 
     float Property::getFloat() {
-        this->get<float>();
+        return this->get<float>();
     }
     bool Property::getBool() {
-        this->get<bool>();
+        return this->get<bool>();
     }
 
     std::string Property::getString() {
-        this->get<std::string>();
+        return this->get<std::string>();
     }
 }
 

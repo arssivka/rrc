@@ -17,7 +17,7 @@ namespace rrc {
         template <class Func, class... Args>
         void enqueue(Func&& func, Args... args) {
             if (this->isDisabled()) return;
-            mTaskQueue.push(std::bind(std::forward<Func>(func), std::forward<Args>(args)));
+            mTaskQueue.push(std::bind(std::forward<Func>(func), std::forward<Args>(args)...));
         }
 
         void execOnce();

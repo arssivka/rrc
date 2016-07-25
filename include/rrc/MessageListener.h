@@ -8,6 +8,7 @@
 
 #include <google/protobuf/message.h>
 #include "Message.h"
+#include "ID.h"
 
 namespace {
     namespace pb = google::protobuf;
@@ -26,16 +27,16 @@ namespace rrc {
             return mId;
         }
 
-        void setDescriptor(const google::protobuf::Descriptor& descriptor) {
+        void setDescriptor(const pb::Descriptor& descriptor) {
             mDescriptor = &descriptor;
         }
 
         bool isDirectCallEnabled() const {
-            return mDirectCallEnabled;
+            return mDirectCallEnabled.load(std::memory_order_release);
         }
 
         void setDirectCallEnabled(bool directCallEnabled) {
-            mDirectCallEnabled = directCallEnabled;
+            mDirectCallEnabled.store(directCallEnabled, std::memory_order_consume);
         }
 
         virtual void onMessage(const ID& id, Message<pb::Message> msg, bool directCall) = 0;
@@ -44,9 +45,19 @@ namespace rrc {
             return *mDescriptor;
         }
 
+        bool isDisabled() const {
+            return mDisabled.load(std::memory_order_release);
+        }
+
+        void setDisabled(bool disabled) {
+            mDisabled.store(disabled, std::memory_order_consume);
+        }
+
+
     private:
         const pb::Descriptor* mDescriptor;
         ID mId;
-        bool mDirectCallEnabled;
+        std::atomic<bool> mDirectCallEnabled;
+        std::atomic<bool> mDisabled;
     };
 }

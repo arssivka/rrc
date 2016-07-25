@@ -74,6 +74,11 @@ rrc::ID::operator Counter() const {
 }
 
 
-rrc::ID::Counter static rrc::ID::getCounter() {
+rrc::ID::Counter rrc::ID::getCounter() {
     return sCounter;
+}
+
+std::ostream& std::operator<<(std::ostream& os, const rrc::ID& id) {
+    os << "#" << id.getCode() << ":" << id.getName();
+    return os;
 }

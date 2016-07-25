@@ -5,38 +5,30 @@
 
 #pragma once
 
-#include "rrc/TSLookUp.h"
-#include "rrc/Property.h"
 #include <string>
+#include "TSLookUp.h"
+#include "Property.h"
 
 namespace rrc {
     class Settings {
     public:
 
-        Settings(unsigned num) : mSettings(num) { }
+        Settings(unsigned num);
 
-        Settings() {}
+        Settings();
 
-        void addOrUpdate(const std::string& key, Property&& data) {
-            mSettings.set(key, std::move(data));
-        }
+        void set(const std::string& key, Property&& data);
 
         template <class D>
-        void addOrUpdate(const std::string& key, D&& data) {
+        void set(const std::string& key, D&& data) {
             mSettings.get(key)->set<D>(std::forward<D>(data));
         }
 
-        void remove(const std::string& key) {
-            mSettings.remove(key);
-        }
+        void remove(const std::string& key);
 
-        Property get(const std::string& key) const {
-            return mSettings.get(key);
-        }
+        Property get(const std::string& key) const;
 
-        bool contains(const std::string& key) const {
-            return mSettings.contains(key);
-        }
+        bool contains(const std::string& key) const;
 
 
     private:

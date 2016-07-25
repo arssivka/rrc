@@ -7,7 +7,8 @@
 #include <rrc/TopicConnector.h>
 
 
-rrc::TopicConnector::TopicConnector(const pb::Descriptor& descriptor) : mDescriptor(&descriptor) { }
+rrc::TopicConnector::TopicConnector(const pb::Descriptor& descriptor)
+        : mDescriptor(&descriptor) { }
 
 
 const pb::Descriptor& rrc::TopicConnector::getDescriptor() const {
@@ -27,15 +28,15 @@ bool rrc::TopicConnector::checkDescriptor(const pb::Descriptor& descriptor) {
 
 
 bool rrc::TopicConnector::addListener(MessageListener::SPtr listener) {
-    ListenersList.pushFront(std::move(listener));
+    mListenersList.pushFront(std::move(listener));
     return true;
 }
 
 
 bool rrc::TopicConnector::detachListener(const MessageListener::SPtr listener) {
     bool deleted = false;
-    ListenersList.removeIf([&](MessageListener::SPtr other) -> bool {
-        bool toDelete = other == listener;
+    mListenersList.removeIf([&](MessageListener::SPtr other) -> bool {
+        bool toDelete = (other == listener);
         deleted |= toDelete;
         return toDelete;
     });
@@ -44,14 +45,16 @@ bool rrc::TopicConnector::detachListener(const MessageListener::SPtr listener) {
 
 
 bool rrc::TopicConnector::addSender(MessageSender::SPtr sender) {
-    sender->setCallback(std::bind(TopicConnector::sendMessage, this));
-    SendersList.pushFront(sender);
+    using namespace std::placeholders;
+    sender->setCallback(std::bind(&TopicConnector::sendMessage, this, _1, _2, _3));
+    mSendersList.pushFront(sender);
+    return true;
 }
 
 
 bool rrc::TopicConnector::detachSender(MessageSender::SPtr sender) {
     bool deleted = false;
-    SendersList.removeIf([](MessageSender::SPtr other) -> bool {
+    mSendersList.removeIf([&](MessageSender::SPtr other) -> bool {
         bool toDelete = other == sender;
         deleted |= toDelete;
         return toDelete;
@@ -61,9 +64,10 @@ bool rrc::TopicConnector::detachSender(MessageSender::SPtr sender) {
 }
 
 
-void rrc::TopicConnector::sendMessage(const ID& id, Message<pb::Message> message, bool directCall) {
-    ListenersList.applyWhile([&](MessageListener::SPtr listener) -> bool {
+bool rrc::TopicConnector::sendMessage(const ID& id, Message<pb::Message> message, bool directCall) {
+    mListenersList.applyWhile([&](MessageListener::SPtr listener) -> bool {
         listener->onMessage(id, message, directCall);
         return false;
     });
+    return true;
 }

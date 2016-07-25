@@ -28,8 +28,6 @@ set(SRCS
         include/rrc/Message.h
         include/rrc/MessageFactory.h
         include/rrc/Pool.h
-        include/rrc/Client.h
-        include/rrc/Service.h
         include/rrc/Pipe.h
         include/rrc/Response.h
         include/rrc/NonCopyable.h
@@ -43,15 +41,11 @@ set(SRCS
         include/rrc/CopyOnWrite.h
         src/rrc/MessageSender.cpp
         include/rrc/MessageSender.h
-        src/rrc/ServiceConnector.cpp
-        include/rrc/ServiceConnector.h
         include/rrc/TSList.h
-        include/rrc/MessageStuff.h
-        src/rrc/MessageStuff.cpp
         src/rrc/TaskQueue.cpp
         include/rrc/TaskQueue.h
         src/rrc/TopicConnector.cpp
-        include/rrc/AtomicWithNotifications.h)
+        include/rrc/AtomicWithNotifications.h src/rrc/MessageListener.cpp)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
         "${PROJECT_BINARY_DIR}/VersionDefines.h")
