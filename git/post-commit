@@ -6,8 +6,11 @@ import subprocess as sp
 
 
 def up_version(ver, idx):
+    vlen = len(ver)
+    if idx > vlen - 1:
+        ver += [0] * (idx + 1 - vlen)
     ver[idx] += 1
-    return ver[:idx + 1] + [0] * (3 - idx)
+    return ver[:idx + 1] + [0] * (vlen - 1 - idx)
 
 commands = {
     '#vtwe++': lambda ver: up_version(ver, 3),
@@ -39,11 +42,11 @@ for idx, line in enumerate(cmake_lines):
     project_found = re.search('^project\(.*\)', line)
     if project_found is None:
         continue
-    project_line = project_found.group(0)
-    version_found = re.search('VERSION \d+.\d+.\d+.\d+', project_line)
+    project_line = project_found.group()
+    version_found = re.search('VERSION ((\d+\.|\d+)+)', project_line)
     if version_found is None:
         continue
-    version_str = version_found.group(0).replace('VERSION ', '')
+    version_str = version_found.group().replace('VERSION ', '')
     project_line_idx = idx
     break
 
