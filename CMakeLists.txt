@@ -26,10 +26,7 @@ set(SRCS
         include/rrc/Advertiser.h
         include/rrc/Subscriber.h
         include/rrc/Message.h
-        include/rrc/MessageFactory.h
-        include/rrc/Pool.h
         include/rrc/Pipe.h
-        include/rrc/Response.h
         include/rrc/NonCopyable.h
         include/rrc/TopicConnector.h
         include/rrc/MessageListener.h
