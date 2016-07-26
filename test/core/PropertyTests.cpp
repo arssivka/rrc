@@ -23,13 +23,13 @@ TEST(set_get_check, test_int_type) {
 
 TEST(set_get_check, test_float_set_get) {
     rrc::Property p;
-    p.set(42.0);
+    p.set((float)42.0);
     EXPECT_EQ(42.0, p.get<float>());
 }
 
 TEST(set_get_check, test_float_type) {
     rrc::Property p;
-    p.set(42.0);
+    p.set((float)42.0);
     ASSERT_TRUE(typeid(float)== typeid(p.get<float>()));
 }
 
@@ -51,7 +51,7 @@ TEST(set_get_check, test_string_set_get) {
     EXPECT_EQ("SorokDva", p.get<std::string>());
 }
 
-TEST(set_get_check, test_int_type) {
+TEST(set_get_check, test_string_type) {
     rrc::Property p;
     p.set("SorokDva");
     ASSERT_TRUE(typeid(std::string)== typeid(p.get<std::string>()));
@@ -65,7 +65,7 @@ TEST(set_get_check, non_template_getter_int) {
 
 TEST(set_get_check, non_template_getter_float) {
     rrc::Property p;
-    p.set(42.0);
+    p.set((float)42.0);
     EXPECT_EQ(42.0, p.getFloat());
 }
 

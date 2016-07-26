@@ -5,7 +5,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++14 -Wall")
 
 option(USE_TCMALLOC "Use full version of tcmalloc library" ON)
-option(BUILD_TEST "Build tests." OFF)
+option(BUILD_TEST "Build tests." ON)
 
 find_package(Protobuf REQUIRED)
 find_package(TCMalloc REQUIRED)
@@ -42,7 +42,8 @@ set(SRCS
         src/rrc/TaskQueue.cpp
         include/rrc/TaskQueue.h
         src/rrc/TopicConnector.cpp
-        include/rrc/AtomicWithNotifications.h src/rrc/MessageListener.cpp)
+        include/rrc/AtomicWithNotifications.h
+        src/rrc/MessageListener.cpp)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
         "${PROJECT_BINARY_DIR}/VersionDefines.h")

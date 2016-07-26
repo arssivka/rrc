@@ -23,10 +23,12 @@ namespace rrc {
             mField->set<std::string>(str);
         }
 
-        template <class D>
-        Property(D&& data) {
-            mField->set<D>(std::forward<D>(data));
-        }
+        Property(const Property& p) = default;
+
+//        template <class D>
+//        Property(D&& data) {
+//            mField->set<D>(std::forward<D>(data));
+//        }
 
         Property() {
 
