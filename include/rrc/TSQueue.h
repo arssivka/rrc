@@ -18,10 +18,11 @@ namespace rrc {
         typedef T Data;
         typedef std::shared_ptr<T> SPtr;
 
-        TSQueue() {}
+        TSQueue() = default;
 
         template <class Type>
         void push(Type&& data) {
+
             SPtr ptr = std::make_shared<T>(std::forward<Type>(data));
             std::lock_guard<std::mutex> lock(mMutex);
             mQueue.push(std::move(ptr));
@@ -34,12 +35,10 @@ namespace rrc {
 
         SPtr pop() {
             SPtr res = nullptr;
-            {
-                std::lock_guard<std::mutex> lock(mMutex);
-                if (!mQueue.empty()) {
-                    res = std::move(mQueue.front());
-                    mQueue.pop();
-                }
+            std::lock_guard<std::mutex> lock(mMutex);
+            if (!mQueue.empty()) {
+                res = std::move(mQueue.front());
+                mQueue.pop();
             }
             return res;
         }
@@ -53,6 +52,13 @@ namespace rrc {
                 mQueue.pop();
             }
             return stat;
+        }
+
+        void clear() {
+            std::lock_guard<std::mutex> lock(mMutex);
+            while (!mQueue.empty()) {
+                mQueue.pop();
+            }
         }
 
     private:

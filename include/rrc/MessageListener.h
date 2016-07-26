@@ -19,6 +19,10 @@ namespace rrc {
     public:
         typedef std::shared_ptr<MessageListener> SPtr;
 
+        MessageListener() = default;
+
+        MessageListener(const ID& id) : mId(id) { }
+
         void setId(const ID& id) {
             mId = id;
         }

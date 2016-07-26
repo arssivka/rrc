@@ -4,7 +4,7 @@
  */
 
 #include <algorithm>
-#include "include/rrc/Node.h"
+#include <rrc/Node.h>
 
 void rrc::Node::attachNode(Node::UPtr node) {
     mChildren.push_back(std::move(node));

@@ -3,7 +3,7 @@
  *  @date 7/8/16
  */
 
-#include "include/rrc/Core.h"
+#include <rrc/Core.h>
 #include "VersionDefines.h"
 
 
