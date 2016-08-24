@@ -1,2 +1,3 @@
 add_subdirectory(googletest)
 add_subdirectory(variant)
+add_subdirectory(concurrentqueue)
