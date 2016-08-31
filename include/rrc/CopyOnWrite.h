@@ -14,13 +14,19 @@ namespace rrc {
     {
     public:
         typedef T Data;
-        typedef std::shared_ptr<T> SPtr;
+        typedef std::shared_ptr<T> Ptr;
+
+        template <class... Args>
+        static CopyOnWrite create(Args... args) {
+            Data data = std::make_shared<Data>(std::forward<Args>(args)...);
+            return CopyOnWrite(std::move(data));
+        }
 
         CopyOnWrite(T* data = nullptr)
                 : mData(data) {
         }
 
-        CopyOnWrite(const SPtr& sptr)
+        CopyOnWrite(const Ptr& sptr)
                 : mData(sptr) {
         }
 
@@ -49,6 +55,6 @@ namespace rrc {
             }
         }
 
-        mutable SPtr mData;
+        mutable Ptr mData;
     };
 }

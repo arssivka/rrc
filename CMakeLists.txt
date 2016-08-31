@@ -14,36 +14,40 @@ add_subdirectory(lib)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(SRCS
-        src/rrc/Core.cpp
-        include/rrc/Core.h
-        include/rrc/Clock.h
-        src/rrc/ID.cpp
-        include/rrc/ID.h
-        src/rrc/Node.cpp
-        include/rrc/Node.h
+        include/rrc/LauncherBase.h
+        include/rrc/NodeBase.h
         src/rrc/Settings.cpp
         include/rrc/Settings.h
         include/rrc/Advertiser.h
         include/rrc/Subscriber.h
         include/rrc/Message.h
-        include/rrc/Pipe.h
         include/rrc/NonCopyable.h
-        include/rrc/TopicConnector.h
         include/rrc/MessageListener.h
-        include/rrc/TSPriorityQueue.h
-        include/rrc/TSQueue.h
         src/rrc/Property.cpp
         include/rrc/Property.h
         include/rrc/TSLookUp.h
         include/rrc/CopyOnWrite.h
         src/rrc/MessageSender.cpp
         include/rrc/MessageSender.h
-        include/rrc/TSList.h
         src/rrc/TaskQueue.cpp
         include/rrc/TaskQueue.h
-        src/rrc/TopicConnector.cpp
-        include/rrc/AtomicWithNotifications.h
-        src/rrc/MessageListener.cpp)
+        src/rrc/MessageListener.cpp
+        include/rrc/Billboard.h
+        src/rrc/Topic.cpp include/rrc/Topic.h
+        src/rrc/MetaTable.cpp
+        include/rrc/MetaTable.h
+        src/rrc/RootNode.cpp
+        include/rrc/RootNode.h
+        src/rrc/Node.cpp
+        include/rrc/Node.h
+        src/rrc/LinearLauncher.cpp
+        include/rrc/LinearLauncher.h
+        src/rrc/UnregisteredTypeException.cpp
+        include/rrc/UnregisteredTypeException.h
+        include/rrc/SendGuard.h
+        include/rrc/ReceiveGuard.h
+        src/rrc/IncompatibleTypesException.cpp
+        include/rrc/IncompatibleTypesException.h)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
         "${PROJECT_BINARY_DIR}/VersionDefines.h")

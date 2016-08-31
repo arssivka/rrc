@@ -18,7 +18,7 @@ namespace rrc {
     public:
         typedef K Key;
         typedef D Data;
-        typedef std::shared_ptr<D> SPtr;
+        typedef std::shared_ptr<D> Ptr;
         typedef H Hash;
 
         TSLookUp(
@@ -29,19 +29,19 @@ namespace rrc {
             }
         }
 
-        const SPtr get(const K& key) const {
+        const Ptr get(const K& key) const {
             return this->getBucket(key).valueFor(key);
         }
 
-        SPtr get(const K& key) {
+        Ptr get(const K& key) {
             return this->getBucket(key).valueFor(key);
         }
 
-        SPtr detach(const K& key) const {
+        Ptr detach(const K& key) const {
             return this->getBucket(key).detachFor(key);
         }
 
-        void set(const K& key, SPtr value) {
+        void set(const K& key, Ptr value) {
             this->getBucket(key).addOrUpdate(key, std::move(value));
         }
 
@@ -61,7 +61,7 @@ namespace rrc {
     private:
         class Bucket {
         public:
-            const SPtr valueFor(const K& key) const {
+            const Ptr valueFor(const K& key) const {
                 std::lock_guard<std::mutex> lock(mMutex);
                 const BucketIterator found = this->findEntryFor(key);
                 if (found == mData.end()) {
@@ -72,7 +72,7 @@ namespace rrc {
                 }
             }
 
-            SPtr valueFor(const K& key) {
+            Ptr valueFor(const K& key) {
                 std::lock_guard<std::mutex> lock(mMutex);
                 const BucketIterator found = this->findEntryFor(key);
                 if (found == mData.end()) {
@@ -88,10 +88,10 @@ namespace rrc {
                 return this->findEntryFor(key) != mData.end();
             }
 
-            SPtr detachFor(const K& key) {
+            Ptr detachFor(const K& key) {
                 std::lock_guard<std::mutex> lock(mMutex);
                 BucketIterator const found = this->findEntryFor(key);
-                SPtr res = nullptr;
+                Ptr res = nullptr;
                 if (found != mData.end()) {
                     res = std::move(found->second);
                 }
@@ -99,7 +99,7 @@ namespace rrc {
                 return res;
             }
 
-            void addOrUpdate(const K& key, SPtr value) {
+            void addOrUpdate(const K& key, Ptr value) {
                 std::lock_guard<std::mutex> lock(mMutex);
                 const BucketIterator found = this->findEntryFor(key);
                 if (found == mData.end()) {
@@ -120,7 +120,7 @@ namespace rrc {
             }
 
         private:
-            typedef std::pair<K, SPtr> BucketValue;
+            typedef std::pair<K, Ptr> BucketValue;
             typedef std::list<BucketValue> BucketList;
             typedef typename BucketList::iterator BucketIterator;
 

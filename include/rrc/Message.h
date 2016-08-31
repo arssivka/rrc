@@ -8,54 +8,50 @@
 
 #include <memory>
 #include <chrono>
-#include "Clock.h"
-#include "CopyOnWrite.h"
+#include <google/protobuf/message_lite.h>
+#include "NonCopyable.h"
+#include "MetaTable.h"
+
+namespace {
+    namespace pb = google::protobuf;
+}
 
 namespace rrc {
-    template <class T>
-    class Message {
+    class Message : private NonCopyable {
     public:
-        Message() = default;
+        typedef std::shared_ptr<Message> Ptr;
 
-        Message(const Message<T>& other) = default;
+        Message(TypeId typeId,
+                std::chrono::steady_clock::time_point timestamp,
+                std::unique_ptr<pb::MessageLite> data)
+                : mTypeId(typeId), mTimestamp(timestamp), mDataPtr(std::move(data)) { }
 
-        Message& operator=(const Message<T>& rhs) = default;
 
-        Message(T&& data) {
-            mData->second = std::move<T>(data);
+        const pb::MessageLite* operator->() const {
+            return mDataPtr.get();
         }
 
-        Message(const T& data) {
-            mData->second = data;
+        const pb::MessageLite* getData() const {
+            return mDataPtr.get();
         }
 
-        template <class D>
-        Message(TimePoint time, D&& data) {
-            mData->second = std::forward<D>(data);
-            mData->first = time;
+        operator const pb::MessageLite*() const {
+            return mDataPtr.get();
         }
 
-        const T& getData() const {
-            return mData->second;
+        std::chrono::steady_clock::time_point getTimestamp() const noexcept {
+            return mTimestamp;
         }
 
-        const TimePoint& getTimestamp() const {
-            return mData->first;
-        }
-
-        template <class D>
-        void setData(D&& data) {
-            mData->second = std::forward<D>(data);
-        }
-
-        void setTimestamp(TimePoint time) {
-            mData->first = time;
+        TypeId getTypeId() const noexcept {
+            return mTypeId;
         }
 
     private:
-        typedef std::pair<TimePoint, T> Bucket;
+        TypeId mTypeId;
+        std::chrono::steady_clock::time_point mTimestamp;
+        std::unique_ptr<pb::MessageLite> mDataPtr;
 
-        CopyOnWrite<Bucket> mData;
     };
 }
 

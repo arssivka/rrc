@@ -6,59 +6,35 @@
 #pragma once
 
 
-#include "ID.h"
 #include "Message.h"
 #include "MessageSender.h"
-#include "Core.h"
+#include "LauncherBase.h"
+#include "UnregisteredTypeException.h"
+#include "SendGuard.h"
 
 namespace rrc {
-    template <typename MessageType>
-    class Advertiser {
+    template <typename T>
+    class Advertiser : private NonCopyable {
     public:
-        Advertiser(const ID& id, const std::string& topic) {
-            mTopic = topic;
-            mSender = std::make_shared<MessageSender>(id);
-            this->connect();
-        }
-
-        ~Advertiser() {
-            this->disconnect();
-        }
-
-
-        bool disconnect() {
-            if (mConnected) {
-                Core* core = Core::instance();
-                return core->detachTopicSender(mTopic, mSender);
+        Advertiser(RootNode::Ptr rootNode, const std::string& topicName) {
+            mTypeId = rootNode->getTypeId<T>();
+            if (mTypeId == MetaTable::UNKNOWN_TYPE_ID) {
+                throw rrc::UnregisteredTypeException();
             }
-            return false;
+            mTopicName = topicName;
+            mRootNode = rootNode;
         }
 
-        bool reconnect() {
-            this->disconnect();
-            this->connect();
+        SendGuard<T> createSendGuard() const {
+            return SendGuard(mRootNode, mTopicName, mTypeId);
         }
 
-        bool isConnected() const {
-            return mConnected;
-        }
-
-        void send(Message<MessageType> msg, bool updateTimestamp = true) {
-            if (updateTimestamp) msg.setTimestamp(Clock.now());
-            mSender->send(msg);
-        }
+        ~Advertiser() { }
 
     private:
-        void connect() {
-            Core* core = Core::instance();
-            mConnected = core->addTopicSender(mTopic, mSender);
-        }
-
-    private:
-
-        MessageSender::SPtr mSender;
-        std::string mTopic;
-        bool mConnected;
+        RootNode::Ptr mRootNode;
+        TypeId mTypeId;
+        std::string mTopicName;
     };
 }
 

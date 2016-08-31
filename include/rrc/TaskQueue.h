@@ -7,32 +7,32 @@
 
 
 #include <atomic>
-#include "TSQueue.h"
+#include <concurrentqueue.h>
 
 namespace rrc {
+    typedef std::function<void()> Task;
+
     class TaskQueue {
     public:
-        typedef std::shared_ptr<TaskQueue> SPtr;
-
         template <class Func, class... Args>
         void enqueue(Func&& func, Args... args) {
-            if (this->isDisabled()) return;
-            mTaskQueue.push(std::bind(std::forward<Func>(func), std::forward<Args>(args)...));
+            mTaskQueue.enqueue(std::bind(std::forward<Func>(func), std::forward<Args>(args)...));
         }
 
-        void execOnce();
+        template <class T>
+        void enqueue(T task) {
+            mTaskQueue.enqueue(std::forward(task));
+        }
+
+        bool tryDequeue(Task& task);
+
+        bool execOnce();
 
         void execAll();
 
-        void disable();
-
-        bool isDisabled() const;
-
     private:
-        typedef TSQueue<std::function<void()>> TSFunctionQueue;
+        moodycamel::ConcurrentQueue<Task> mTaskQueue;
 
-        TSFunctionQueue mTaskQueue;
-        std::atomic<bool> mDisabled;
     };
 }
 

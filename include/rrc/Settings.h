@@ -17,14 +17,6 @@ namespace rrc {
 
         Settings();
 
-//        void set(const std::string& key, const Property& data);
-//
-//        void set(const std::string& key, const char* str);
-//
-//        void set(const std::string& key, std::string str);
-//
-//        void set(const std::string& key, Property&& data);
-
         template <class D>
         void set(const std::string& key, D&& data) {
             mSettings.set(key, Property(std::forward<D>(data)));

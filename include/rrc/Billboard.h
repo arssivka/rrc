@@ -1,0 +1,58 @@
+/**
+ *  @autor arssivka
+ *  @date 8/24/16
+ */
+
+#pragma once
+
+
+#include <unordered_map>
+#include <set>
+#include "MessageListener.h"
+#include "Topic.h"
+
+namespace {
+    namespace pb = google::protobuf;
+}
+
+namespace rrc {
+    template <class Key>
+    class Billboard {
+    public:
+        Billboard() {
+            // TODO Check it!
+            mTopicHash.max_load_factor(0.8);
+        }
+
+        void createTopic(const Key& key, TypeId tid) {
+            mTopicHash.insert({key, Topic(tid)});
+        }
+
+        Topic::Ptr getTopic(const Key& key) {
+            auto found = mTopicHash.find(key);
+            if (found != mTopicHash.end()) {
+                return found->second;
+            } else {
+                return nullptr;
+            }
+        }
+
+        void removeTopic(const Key& key) {
+            mTopicHash.erase(key);
+        }
+
+        std::set<Key> getKeys() const {
+            std::set<Key> mKeysSet;
+            for (auto&& topic : mTopicHash) {
+                mKeysSet.insert(topic);
+            }
+            return mKeysSet;
+        }
+
+
+    private:
+        std::unordered_map<Key, Topic::Ptr> mTopicHash;
+    };
+}
+
+

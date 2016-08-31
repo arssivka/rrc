@@ -6,31 +6,24 @@
 #include <rrc/TaskQueue.h>
 
 
-void rrc::TaskQueue::execOnce() {
-    if (this->isDisabled()) return;
-    TSFunctionQueue::SPtr task = mTaskQueue.pop();
-    if (task != nullptr) {
-        auto& func = *task;
-        func();
+bool rrc::TaskQueue::tryDequeue(rrc::Task& task) {
+    return mTaskQueue.try_dequeue(task);
+}
+
+
+bool rrc::TaskQueue::execOnce() {
+    Task task;
+    if (mTaskQueue.try_dequeue(task)) {
+        task();
+        return true;
     }
+    return false;
 }
 
 
 void rrc::TaskQueue::execAll() {
-    if (this->isDisabled()) return;
-    TSFunctionQueue::SPtr task;
-    while ((task = mTaskQueue.pop()) != nullptr) {
-        auto& func = *task;
-        func();
+    Task task;
+    while (mTaskQueue.try_dequeue(task)) {
+        task();
     }
-}
-
-
-void rrc::TaskQueue::disable() {
-    mDisabled.store(true, std::memory_order_release);
-}
-
-
-bool rrc::TaskQueue::isDisabled() const {
-    return mDisabled.load(std::memory_order_acquire);
 }

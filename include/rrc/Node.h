@@ -1,69 +1,31 @@
 /**
  *  @autor arssivka
- *  @date 7/8/16
+ *  @date 8/25/16
  */
 
 #pragma once
 
-
-#include <memory>
-#include <vector>
-#include "ID.h"
-#include "NonCopyable.h"
-#include "TSQueue.h"
-#include "Subscriber.h"
-#include "Pipe.h"
-#include "TaskQueue.h"
-#include "Core.h"
+#include <chrono>
+#include "RootNode.h"
 
 namespace rrc {
-    class Node : private NonCopyable {
+    class Node : public NodeBase {
     public:
-        typedef std::unique_ptr<Node> UPtr;
+        typedef std::shared_ptr<Node> Ptr;
 
-        template <class NodeType, class... Args>
-        static std::unique_ptr<NodeType> create(const std::string& name, Args... args) {
-            return std::make_unique<NodeType>(name, std::forward<Args>(args)...);
-        }
+    public:
+        std::chrono::steady_clock::duration getMinDuration() const;
 
-        void attachNode(Node::UPtr node);
-
-        Node::UPtr detachNode(Node* node);
-
-        Node* findChild(const std::string& name) const;
-
-        Node* findChild(const ID& id) const;
-
-        const ID& getID() const;
-
-        Node* getParent() const;
-
-        const std::vector<UPtr>& getChildren() const;
-
-        virtual ~Node() {
-            auto core = Core::instance();
-            core->detachEntryForID(mID);
-        }
+        void setMinDuration(const std::chrono::steady_clock::duration& minDuration);
 
     protected:
-        Node(const std::string& name);
+        Node(RootNode::Ptr rootNode);
 
-        virtual void entry();
-
-        void pollEvent();
-
-        void pollEvents();
-
-//        Subscriber createSubscriber(const std::string& topic);
-
-//        Pipe createPipe(const std::string& topic);
-
+        RootNode::Ptr getRootNode() const;
 
     private:
-        const ID mID;
-        Node* mParent;
-        std::vector<Node::UPtr> mChildren;
-        TaskQueue::SPtr mTaskQueue;
+        RootNode::Ptr mRootNode;
+        std::chrono::steady_clock::duration mMinDuration;
     };
 }
 
