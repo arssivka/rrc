@@ -10,15 +10,15 @@ rrc::MessageListener::MessageListener(rrc::TypeId typeId)
         : mTypeId(typeId) { }
 
 
-void rrc::MessageListener::enqueueMessage(rrc::Message::Ptr msg) {
+void rrc::MessageListener::enqueueMessage(rrc::MessagePtr msg) {
     if (msg->getTypeId() == mTypeId) {
         mMessagesQueue.enqueue(std::move(msg));
     }
 }
 
 
-rrc::Message::Ptr rrc::MessageListener::tryDequeueMessage() {
-    Message::Ptr message;
+rrc::MessagePtr rrc::MessageListener::tryDequeueMessage() {
+    MessagePtr message;
     if (mMessagesQueue.try_dequeue(message)) {
         return message;
     } else {

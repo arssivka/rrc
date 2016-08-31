@@ -18,11 +18,11 @@ namespace rrc {
 
         virtual void stop() = 0;
 
-        virtual void setRootNode(RootNode::Ptr node) = 0;
+        virtual void setRootNode(RootNodePtr node) = 0;
 
-        virtual void addNode(Node::Ptr node) = 0;
+        virtual void addNode(NodePtr node) = 0;
 
-        virtual void removeNode(Node::Ptr node) = 0;
+        virtual void removeNode(NodePtr node) = 0;
     };
 
     typedef LauncherBase Launcher;

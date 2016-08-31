@@ -19,9 +19,9 @@ namespace rrc {
     public:
         typedef std::shared_ptr<MessageSender> Ptr;
 
-        MessageSender(RootNode::Ptr rootNode, const std::string& topicName);
+        MessageSender(RootNodePtr rootNode, const std::string& topicName);
 
-        void sendMessage(Message::Ptr message);
+        void sendMessage(MessagePtr message);
 
 
         const std::string& getTopicName() const;
@@ -30,14 +30,14 @@ namespace rrc {
         void setTopicName(const std::string& topicName);
 
 
-        RootNode::Ptr getRootNode() const;
+        RootNodePtr getRootNode() const;
 
 
-        void setRootNode(RootNode::Ptr rootNode);
+        void setRootNode(RootNodePtr rootNode);
 
 
     private:
-        RootNode::Ptr mRootNode;
+        RootNodePtr mRootNode;
         std::string mTopicName;
     };
 }

@@ -14,7 +14,7 @@ namespace rrc {
     template <class T>
     class SendGuard : private NonCopyable {
     public:
-        SendGuard(RootNode::Ptr rootNode, const std::string& topicName, TypeId typeId = MetaTable::UNKNOWN_TYPE_ID)
+        SendGuard(RootNodePtr rootNode, const std::string& topicName, TypeId typeId = MetaTable::UNKNOWN_TYPE_ID)
                 : mTopicName(topicName), mRootNode(rootNode) {
             mTypeId = (typeId == MetaTable::UNKNOWN_TYPE_ID)
                       ? mRootNode->getTypeId<T>()
@@ -34,7 +34,7 @@ namespace rrc {
             if (timestamp == std::chrono::steady_clock::time_point()) {
                 timestamp = std::chrono::steady_clock::now();
             }
-            Message::Ptr message = std::make_shared<Message>(mTypeId, timestamp, std::move(mData));
+            MessagePtr message = std::make_shared<Message>(mTypeId, timestamp, std::move(mData));
             mRootNode->sendMessage(mTopicName, std::move(message));
             return true;
         }
@@ -63,7 +63,7 @@ namespace rrc {
 
     private:
         std::string mTopicName;
-        RootNode::Ptr mRootNode;
+        RootNodePtr mRootNode;
         std::chrono::steady_clock::time_point mTimestamp;
         TypeId mTypeId;
         std::unique_ptr<T> mData;

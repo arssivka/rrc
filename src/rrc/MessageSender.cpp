@@ -6,11 +6,11 @@
 #include "include/rrc/MessageSender.h"
 
 
-rrc::MessageSender::MessageSender(rrc::RootNode::Ptr rootNode, const std::string& topicName)
+rrc::MessageSender::MessageSender(rrc::RootNodePtr rootNode, const std::string& topicName)
         : mRootNode(std::move(rootNode)), mTopicName(topicName) { }
 
 
-void rrc::MessageSender::sendMessage(rrc::Message::Ptr message) {
+void rrc::MessageSender::sendMessage(rrc::MessagePtr message) {
     mRootNode->sendMessage(mTopicName, std::move(message));
 }
 
@@ -25,11 +25,11 @@ void rrc::MessageSender::setTopicName(const std::string& topicName) {
 }
 
 
-rrc::RootNode::Ptr rrc::MessageSender::getRootNode() const {
+rrc::RootNodePtr rrc::MessageSender::getRootNode() const {
     return mRootNode;
 }
 
 
-void rrc::MessageSender::setRootNode(rrc::RootNode::Ptr rootNode) {
+void rrc::MessageSender::setRootNode(rrc::RootNodePtr rootNode) {
     mRootNode = std::move(rootNode);
 }

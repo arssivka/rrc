@@ -12,11 +12,11 @@
 namespace rrc {
     class NodeBase : private NonCopyable {
     public:
-        typedef std::shared_ptr<NodeBase> Ptr;
-
         virtual void entry() = 0;
 
     };
+
+    typedef std::shared_ptr<NodeBase> NodeBasePtr;
 }
 
 

@@ -17,19 +17,19 @@ namespace {
 namespace rrc {
     class MessageListener {
     public:
-        typedef std::shared_ptr<MessageListener> Ptr;
-
         MessageListener(TypeId typeId);
 
-        void enqueueMessage(Message::Ptr msg);
+        void enqueueMessage(MessagePtr msg);
 
-        Message::Ptr tryDequeueMessage();
+        MessagePtr tryDequeueMessage();
 
         TypeId getTypeId() const;
 
     private:
         TypeId mTypeId;
-        moodycamel::ConcurrentQueue<Message::Ptr> mMessagesQueue;
+        moodycamel::ConcurrentQueue<MessagePtr> mMessagesQueue;
 
     };
+
+    typedef std::shared_ptr<MessageListener> MessageListenerPtr;
 }

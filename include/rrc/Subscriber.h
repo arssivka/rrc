@@ -22,7 +22,7 @@ namespace rrc {
     template <typename T>
     class Subscriber : private NonCopyable {
     public:
-        Subscriber(RootNode::Ptr rootNode, const std::string& topicName) {
+        Subscriber(RootNodePtr rootNode, const std::string& topicName) {
             TypeId typeId = rootNode->getTypeId<T>();
             if (typeId == MetaTable::UNKNOWN_TYPE_ID) {
                 throw UnregisteredTypeException();
@@ -59,8 +59,8 @@ namespace rrc {
 
     private:
         bool mConnected;
-        RootNode::Ptr mRootNode;
+        RootNodePtr mRootNode;
         std::string mTopicName;
-        MessageListener::Ptr mListener;
+        MessageListenerPtr mListener;
     };
 }

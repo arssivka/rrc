@@ -18,7 +18,6 @@
 namespace rrc {
     class RootNode : public NodeBase {
     public:
-        typedef std::shared_ptr<RootNode> Ptr;
         typedef std::string Key;
 
     public:
@@ -26,15 +25,15 @@ namespace rrc {
 
         virtual void entry() override;
 
-        void sendMessage(const Key& topicName, Message::Ptr message);
+        void sendMessage(const Key& topicName, MessagePtr message);
 
-        void addNode(Node::Ptr node);
+        void addNode(NodePtr node);
 
-        void removeNode(Node::Ptr node);
+        void removeNode(NodePtr node);
 
-        void addListener(const Key& topic, MessageListener::Ptr listener);
+        void addListener(const Key& topic, MessageListenerPtr listener);
 
-        void removeListener(const Key& topicName, MessageListener::Ptr listener);
+        void removeListener(const Key& topicName, MessageListenerPtr listener);
 
         void stop();
 
@@ -52,6 +51,8 @@ namespace rrc {
         TaskQueue mListenersPendingListChanges;
         TaskQueue mSentMessages;
     };
+
+    typedef std::shared_ptr<RootNode> RootNodePtr;
 }
 
 

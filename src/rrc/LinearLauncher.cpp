@@ -39,22 +39,22 @@ void rrc::LinearLauncher::stop() {
 }
 
 
-void rrc::LinearLauncher::setRootNode(rrc::RootNode::Ptr node) {
+void rrc::LinearLauncher::setRootNode(rrc::RootNodePtr node) {
     mRootNode = node;
 }
 
 
-void rrc::LinearLauncher::addNode(rrc::Node::Ptr node) {
+void rrc::LinearLauncher::addNode(rrc::NodePtr node) {
     mNodesList.emplace_front(node);
 }
 
 
-void rrc::LinearLauncher::removeNode(rrc::Node::Ptr node) {
+void rrc::LinearLauncher::removeNode(rrc::NodePtr node) {
     mNodesList.remove_if([node](const NodeContainer& container) {
         container.node == node;
     });
 }
 
 
-rrc::LinearLauncher::NodeContainer::NodeContainer(rrc::Node::Ptr node)
+rrc::LinearLauncher::NodeContainer::NodeContainer(rrc::NodePtr node)
         : node(node) { }

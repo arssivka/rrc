@@ -17,15 +17,13 @@ namespace {
 namespace rrc {
     class Topic {
     public:
-        typedef std::shared_ptr<Topic> Ptr;
-
         Topic(TypeId id);
 
-        bool addListener(MessageListener::Ptr listener);
+        bool addListener(MessageListenerPtr listener);
 
-        void removeListener(MessageListener::Ptr listener);
+        void removeListener(MessageListenerPtr listener);
 
-        void sendMessage(Message::Ptr message);
+        void sendMessage(MessagePtr message);
 
         TypeId getTypeId() const noexcept;
 
@@ -35,9 +33,11 @@ namespace rrc {
 
     private:
         TypeId mTypeId;
-        std::forward_list<MessageListener::Ptr> mListenersList;
+        std::forward_list<MessageListenerPtr> mListenersList;
 
     };
+
+    typedef std::shared_ptr<Topic> TopicPtr;
 }
 
 

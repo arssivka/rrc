@@ -28,7 +28,7 @@ namespace rrc {
             mTopicHash.insert({key, Topic(tid)});
         }
 
-        Topic::Ptr getTopic(const Key& key) {
+        TopicPtr getTopic(const Key& key) {
             auto found = mTopicHash.find(key);
             if (found != mTopicHash.end()) {
                 return found->second;
@@ -51,7 +51,7 @@ namespace rrc {
 
 
     private:
-        std::unordered_map<Key, Topic::Ptr> mTopicHash;
+        std::unordered_map<Key, TopicPtr> mTopicHash;
     };
 }
 

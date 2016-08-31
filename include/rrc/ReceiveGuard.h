@@ -17,7 +17,7 @@ namespace rrc {
     template <class T>
     class ReceiveGuard {
     public:
-        ReceiveGuard(Message::Ptr message, TypeId typeId = MetaTable::UNKNOWN_TYPE_ID) {
+        ReceiveGuard(MessagePtr message, TypeId typeId = MetaTable::UNKNOWN_TYPE_ID) {
             static_assert(std::is_base_of<pb::MessageLite, T>::value,
                           "Template parameter of ReceiveGuard must be an instance of google::protobuf::MessageLite");
             if (message != nullptr
@@ -53,7 +53,7 @@ namespace rrc {
         }
 
     private:
-        Message::Ptr mMessage;
+        MessagePtr mMessage;
     };
 }
 

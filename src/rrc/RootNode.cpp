@@ -17,9 +17,9 @@ void rrc::RootNode::entry() {
 }
 
 
-void rrc::RootNode::sendMessage(const rrc::RootNode::Key& topicName, rrc::Message::Ptr message) {
+void rrc::RootNode::sendMessage(const rrc::RootNode::Key& topicName, rrc::MessagePtr message) {
     mSentMessages.enqueue([this, topicName, message]() {
-        Topic::Ptr t = mBillboard.getTopic(topicName);
+        TopicPtr t = mBillboard.getTopic(topicName);
         if (t != nullptr) {
             t->sendMessage(message);
         }
@@ -27,23 +27,23 @@ void rrc::RootNode::sendMessage(const rrc::RootNode::Key& topicName, rrc::Messag
 }
 
 
-void rrc::RootNode::addNode(rrc::Node::Ptr node) {
+void rrc::RootNode::addNode(rrc::NodePtr node) {
     mNodesListPendingChanges.enqueue([this, node]() {
         mLauncher->addNode(node);
     });
 }
 
 
-void rrc::RootNode::removeNode(rrc::Node::Ptr node) {
+void rrc::RootNode::removeNode(rrc::NodePtr node) {
     mNodesListPendingChanges.enqueue([this, node]() {
         mLauncher->removeNode(node);
     });
 }
 
 
-void rrc::RootNode::addListener(const rrc::RootNode::Key& topic, rrc::MessageListener::Ptr listener) {
+void rrc::RootNode::addListener(const rrc::RootNode::Key& topic, rrc::MessageListenerPtr listener) {
     mListenersPendingListChanges.enqueue([this, topic, listener]() {
-        Topic::Ptr t = mBillboard.getTopic(topic);
+        TopicPtr t = mBillboard.getTopic(topic);
         if (t == nullptr) {
             mBillboard.createTopic(topic, listener->getTypeId());
             t = mBillboard.getTopic(topic);
@@ -53,8 +53,8 @@ void rrc::RootNode::addListener(const rrc::RootNode::Key& topic, rrc::MessageLis
 }
 
 
-void rrc::RootNode::removeListener(const rrc::RootNode::Key& topicName, rrc::MessageListener::Ptr listener) {
-    Topic::Ptr t = mBillboard.getTopic(topicName);
+void rrc::RootNode::removeListener(const rrc::RootNode::Key& topicName, rrc::MessageListenerPtr listener) {
+    TopicPtr t = mBillboard.getTopic(topicName);
     if (t != nullptr) {
         t->removeListener(listener);
         if (t->empty()) {

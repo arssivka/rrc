@@ -19,23 +19,23 @@ namespace rrc {
 
         virtual void stop() override;
 
-        virtual void setRootNode(RootNode::Ptr node) override;
+        virtual void setRootNode(RootNodePtr node) override;
 
-        virtual void addNode(Node::Ptr node) override;
+        virtual void addNode(NodePtr node) override;
 
-        virtual void removeNode(Node::Ptr node) override;
+        virtual void removeNode(NodePtr node) override;
 
     private:
         struct NodeContainer {
-            NodeContainer(Node::Ptr node);
+            NodeContainer(NodePtr node);
 
-            Node::Ptr node;
+            NodePtr node;
             std::chrono::steady_clock::time_point timestamp;
         };
 
     private:
         bool mFinished;
-        RootNode::Ptr mRootNode;
+        RootNodePtr mRootNode;
         std::forward_list<NodeContainer> mNodesList;
     };
 }

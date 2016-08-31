@@ -16,7 +16,7 @@ namespace rrc {
     template <typename T>
     class Advertiser : private NonCopyable {
     public:
-        Advertiser(RootNode::Ptr rootNode, const std::string& topicName) {
+        Advertiser(RootNodePtr rootNode, const std::string& topicName) {
             mTypeId = rootNode->getTypeId<T>();
             if (mTypeId == MetaTable::UNKNOWN_TYPE_ID) {
                 throw rrc::UnregisteredTypeException();
@@ -32,7 +32,7 @@ namespace rrc {
         ~Advertiser() { }
 
     private:
-        RootNode::Ptr mRootNode;
+        RootNodePtr mRootNode;
         TypeId mTypeId;
         std::string mTopicName;
     };

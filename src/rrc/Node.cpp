@@ -16,9 +16,9 @@ void rrc::Node::setMinDuration(const std::chrono::steady_clock::duration& minDur
 }
 
 
-rrc::Node::Node(rrc::RootNode::Ptr rootNode) : mRootNode(rootNode) { }
+rrc::Node::Node(rrc::RootNodePtr rootNode) : mRootNode(rootNode) { }
 
 
-rrc::RootNode::Ptr rrc::Node::getRootNode() const {
+rrc::RootNodePtr rrc::Node::getRootNode() const {
     return mRootNode;
 }

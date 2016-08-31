@@ -10,7 +10,7 @@ rrc::Topic::Topic(TypeId tid)
         : mTypeId(tid) { }
 
 
-bool rrc::Topic::addListener(rrc::MessageListener::Ptr listener) {
+bool rrc::Topic::addListener(rrc::MessageListenerPtr listener) {
     if (!this->checkCapability(listener->getTypeId())) {
         return false;
     } else {
@@ -20,12 +20,12 @@ bool rrc::Topic::addListener(rrc::MessageListener::Ptr listener) {
 }
 
 
-void rrc::Topic::removeListener(rrc::MessageListener::Ptr listener) {
+void rrc::Topic::removeListener(rrc::MessageListenerPtr listener) {
     mListenersList.remove(listener);
 }
 
 
-void rrc::Topic::sendMessage(Message::Ptr message) {
+void rrc::Topic::sendMessage(MessagePtr message) {
     for (auto&& listener : mListenersList) {
         listener->enqueueMessage(message);
     }

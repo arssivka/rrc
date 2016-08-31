@@ -19,8 +19,6 @@ namespace {
 namespace rrc {
     class Message : private NonCopyable {
     public:
-        typedef std::shared_ptr<Message> Ptr;
-
         Message(TypeId typeId,
                 std::chrono::steady_clock::time_point timestamp,
                 std::unique_ptr<pb::MessageLite> data)
@@ -53,6 +51,8 @@ namespace rrc {
         std::unique_ptr<pb::MessageLite> mDataPtr;
 
     };
+
+    typedef std::shared_ptr<Message> MessagePtr;
 }
 
 
