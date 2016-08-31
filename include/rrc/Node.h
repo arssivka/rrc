@@ -6,9 +6,12 @@
 #pragma once
 
 #include <chrono>
-#include "RootNode.h"
+#include "NodeBase.h"
 
 namespace rrc {
+    class RootNode;
+    typedef std::shared_ptr<RootNode> RootNodePtr;
+
     class Node : public NodeBase {
     public:
         std::chrono::steady_clock::duration getMinDuration() const;

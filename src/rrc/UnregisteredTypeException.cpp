@@ -6,19 +6,9 @@
 #include "include/rrc/UnregisteredTypeException.h"
 
 
-rrc::UnregisteredTypeException::UnregisteredTypeException()
-        : mErrorString("Type was not registered in metatable") { }
+rrc::UnregisteredTypeException::UnregisteredTypeException(TypeId typeId)
+        : std::runtime_error("Type was not registered in metatable"), mTypeId(typeId) { }
 
-
-rrc::UnregisteredTypeException::UnregisteredTypeException(const std::string& typeName)
-        : mErrorString("Type was not registered in metatable: " + typeName) { }
-
-
-rrc::UnregisteredTypeException::~UnregisteredTypeException() {
-
-}
-
-
-const char* rrc::UnregisteredTypeException::what() const {
-    return mErrorString.c_str();
+rrc::TypeId rrc::UnregisteredTypeException::getTypeId() const {
+    return mTypeId;
 }

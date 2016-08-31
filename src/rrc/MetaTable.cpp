@@ -18,6 +18,7 @@ bool rrc::MetaTable::freeTypeId(rrc::TypeId typeId) {
                                  return typeId == pair.second;
                              });
     mTypeInfoHash.erase(found2);
+    return true;
 }
 
 
