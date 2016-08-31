@@ -3,7 +3,7 @@
  *  @date 8/25/16
  */
 
-#include "include/rrc/MetaTable.h"
+#include <rrc/MetaTable.h>
 
 
 bool rrc::MetaTable::freeTypeId(rrc::TypeId typeId) {

@@ -3,7 +3,7 @@
  *  @date 8/26/16
  */
 
-#include "include/rrc/LinearLauncher.h"
+#include <rrc/LinearLauncher.h>
 
 
 rrc::LinearLauncher::LinearLauncher()

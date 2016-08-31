@@ -3,7 +3,7 @@
  *  @date 8/25/16
  */
 
-#include "include/rrc/Node.h"
+#include <rrc/Node.h>
 
 
 std::chrono::steady_clock::duration rrc::Node::getMinDuration() const {

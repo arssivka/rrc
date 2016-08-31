@@ -3,7 +3,7 @@
  *  @date 8/29/16
  */
 
-#include "include/rrc/UnregisteredTypeException.h"
+#include <rrc/UnregisteredTypeException.h>
 
 
 rrc::UnregisteredTypeException::UnregisteredTypeException(TypeId typeId)
