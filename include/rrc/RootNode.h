@@ -13,9 +13,12 @@
 #include "Billboard.h"
 #include "TaskQueue.h"
 #include "MetaTable.h"
-#include "LauncherBase.h"
 
 namespace rrc {
+    class Node;
+    typedef std::shared_ptr<Node> NodePtr;
+    class LauncherBase;
+
     class RootNode : public NodeBase {
     public:
         typedef std::string Key;

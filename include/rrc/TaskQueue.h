@@ -19,9 +19,12 @@ namespace rrc {
             mTaskQueue.enqueue(std::bind(std::forward<Func>(func), std::forward<Args>(args)...));
         }
 
-        template <class T>
-        void enqueue(T task) {
-            mTaskQueue.enqueue(std::forward(task));
+        void enqueue(const Task& task) {
+            mTaskQueue.enqueue(task);
+        }
+
+        void enqueue(Task&& task) {
+            mTaskQueue.enqueue(std::move(task));
         }
 
         bool tryDequeue(Task& task);

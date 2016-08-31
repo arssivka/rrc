@@ -7,21 +7,18 @@
 
 
 #include <string>
-#include <exception>
+#include <stdexcept>
+#include "MetaTable.h"
 
 namespace rrc {
-    class UnregisteredTypeException : public std::exception {
+    class UnregisteredTypeException : public std::runtime_error {
     public:
-        UnregisteredTypeException();
+        UnregisteredTypeException(TypeId typeId = MetaTable::UNKNOWN_TYPE_ID);
 
-        UnregisteredTypeException(const std::string& typeName);
-
-        virtual ~UnregisteredTypeException() override;
-
-        virtual const char* what() const override;
+        TypeId getTypeId() const;
 
     private:
-        std::string mErrorString;
+        TypeId mTypeId;
     };
 }
 

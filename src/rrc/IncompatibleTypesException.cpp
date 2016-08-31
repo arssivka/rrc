@@ -8,22 +8,15 @@
 #include <sstream>
 
 
-rrc::IncompatibleTypesException::IncompatibleTypesException()
-        : mErrorString("Types are incompatible") { }
+rrc::IncompatibleTypesException::IncompatibleTypesException(TypeId firstTypeId,
+                                                            TypeId secondTypeId)
+        : std::runtime_error("Types are incompatible"), mFirstTypeId(firstTypeId), mSeconTypeId(secondTypeId) { }
 
-
-rrc::IncompatibleTypesException::IncompatibleTypesException(TypeId firstType, TypeId secondType) {
-    std::stringstream stringstream;
-    stringstream << "Types are incompatible: " << firstType << " " << secondType;
-    mErrorString = stringstream.str();
+rrc::TypeId rrc::IncompatibleTypesException::getFirstTypeId() const {
+    return mFirstTypeId;
 }
 
 
-rrc::IncompatibleTypesException::~IncompatibleTypesException() {
-
-}
-
-
-const char* rrc::IncompatibleTypesException::what() const {
-    return mErrorString.c_str();
+rrc::TypeId rrc::IncompatibleTypesException::getSeconTypeId() const {
+    return mSeconTypeId;
 }

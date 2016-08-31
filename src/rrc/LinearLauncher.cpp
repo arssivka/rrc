@@ -51,7 +51,7 @@ void rrc::LinearLauncher::addNode(rrc::NodePtr node) {
 
 void rrc::LinearLauncher::removeNode(rrc::NodePtr node) {
     mNodesList.remove_if([node](const NodeContainer& container) {
-        container.node == node;
+        return container.node == node;
     });
 }
 

@@ -10,18 +10,18 @@
 #include "MetaTable.h"
 
 namespace rrc {
-    class IncompatibleTypesException : public std::exception {
+    class IncompatibleTypesException : public std::runtime_error {
     public:
-        IncompatibleTypesException();
+        IncompatibleTypesException(TypeId firstType = MetaTable::UNKNOWN_TYPE_ID,
+                                   TypeId secondType = MetaTable::UNKNOWN_TYPE_ID);
 
-        IncompatibleTypesException(TypeId firstType, TypeId secondType);
+        TypeId getFirstTypeId() const;
 
-        virtual ~IncompatibleTypesException() override;
-
-        virtual const char* what() const override;
+        TypeId getSeconTypeId() const;
 
     private:
-        std::string mErrorString;
+        TypeId mFirstTypeId;
+        TypeId mSeconTypeId;
     };
 }
 

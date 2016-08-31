@@ -25,7 +25,7 @@ namespace rrc {
         }
 
         void createTopic(const Key& key, TypeId tid) {
-            mTopicHash.insert({key, Topic(tid)});
+            mTopicHash.insert({key, std::make_shared<Topic>(tid)});
         }
 
         TopicPtr getTopic(const Key& key) {
