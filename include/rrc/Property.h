@@ -36,9 +36,12 @@ namespace rrc {
 
         }
 
+        Property& operator= (const Property& other) = default;
+        Property& operator= (Property&& other) = default;
+
+
         template <typename T>
-        T get() const {
-        }
+        T get() const;
 
         int getInt();
 

@@ -5,11 +5,11 @@
 
 #include <iostream>
 #include <string>
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 #include "rrc/Settings.h"
 #include "rrc/Property.h"
 
-TEST(add_or_update_test, add_test) {
+TEST(SettingsTest, AddTest) {
     rrc::Settings sts;
     rrc::Property prp;
     prp.set("testprp");
@@ -17,7 +17,7 @@ TEST(add_or_update_test, add_test) {
     EXPECT_EQ(true, sts.contains("test_key"));
 }
 
-TEST(add_or_update_test, add_get_test) {
+TEST(SettingsTest, AddGetTest) {
     rrc::Settings sts;
     rrc::Property prp;
     prp.set("testprp");
@@ -27,7 +27,7 @@ TEST(add_or_update_test, add_get_test) {
     EXPECT_EQ(prp.getString(), prp1.getString());
 }
 
-TEST(add_or_update_test, update_test) {
+TEST(SettingsTest, UpdateTest) {
     rrc::Settings sts;
     rrc::Property prp;
     prp.set("testprp");
@@ -36,18 +36,18 @@ TEST(add_or_update_test, update_test) {
     EXPECT_EQ("test2", sts.get("test_key").getString());
 }
 
-TEST(add_or_update_test, update_new_property_test) {
+TEST(SettingsTest, UpdateNewPropertyTest) {
     rrc::Settings sts;
     rrc::Property prp;
     prp.set("testprp");
     rrc::Property prp1;
-    prp.set("42");
+    prp1.set("42");
     sts.set("test_key", prp);
     sts.set("test_key", prp1);
     EXPECT_EQ("42", sts.get("test_key").getString());
 }
 
-TEST(remove_test, rem_test) {
+TEST(SettingsTest, RemoveTest) {
     rrc::Settings sts;
     rrc::Property prp;
     prp.set("testprp");
