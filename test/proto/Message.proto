@@ -1,4 +1,5 @@
 package message;
+//TODO: Rename package to testing
 
 message TestMessage {
     required int32 id = 1;

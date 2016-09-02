@@ -9,14 +9,16 @@
 #include "rrc/TSLookUp.h"
 #include <thread>
 
+using namespace rrc;
+
 TEST(TSLookUpTest, ContainsTest) {
-    rrc::TSLookUp<std::string, bool> testlkp;
+    TSLookUp<std::string, bool> testlkp;
     testlkp.set("test", true);
     EXPECT_TRUE(testlkp.contains("test"));
 }
 
 TEST(TSLookUpTest, SetterTest) {
-    rrc::TSLookUp<std::string, int> testlkp;
+    TSLookUp<std::string, int> testlkp;
 
     std::thread nagrebator1([&]() {
         std::string names[] = {"first", "second"};
@@ -40,7 +42,7 @@ TEST(TSLookUpTest, SetterTest) {
 }
 
 TEST(TSLookUpTest, GetterTest) {
-    rrc::TSLookUp<std::string, int> testlkp;
+    TSLookUp<std::string, int> testlkp;
 
     std::string names[] = {"first", "second"};
 
@@ -74,7 +76,7 @@ TEST(TSLookUpTest, GetterTest) {
 }
 
 //TEST(set_get_test, getter_setter_test) {
-//    rrc::TSLookUp<std::string, int> testlkp;
+//    TSLookUp<std::string, int> testlkp;
 //
 //    std::string names[] = {"first", "second"};
 //
@@ -105,14 +107,14 @@ TEST(TSLookUpTest, GetterTest) {
 //}
 
 TEST(TSLookUpTest, OneRemover) {
-    rrc::TSLookUp<std::string, bool> testlkp;
+    TSLookUp<std::string, bool> testlkp;
     testlkp.set("test", true);
     testlkp.remove("test");
     EXPECT_FALSE(testlkp.contains("test"));
 }
 
 TEST(TSLookUpTest, TwoRemovers) {
-    rrc::TSLookUp<std::string, bool> testlkp;
+    TSLookUp<std::string, bool> testlkp;
     testlkp.set("test", true);
     testlkp.set("test2", true);
 
@@ -130,7 +132,7 @@ TEST(TSLookUpTest, TwoRemovers) {
 }
 
 TEST(TSLookUpTest, OneDetacher) {
-    rrc::TSLookUp<std::string, bool> testlkp;
+    TSLookUp<std::string, bool> testlkp;
     testlkp.set("test", true);
     bool tst = testlkp.detach("test").get();
     EXPECT_FALSE((testlkp.contains("test") && !tst));

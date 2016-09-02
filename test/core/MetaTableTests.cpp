@@ -25,7 +25,7 @@ TEST(MetaTableTest, GetTypeIdTest1) {
     EXPECT_EQ(mtbl.getTypeId<message::TestMessage>(), 1u);
 }
 
-TEST(MetatableTest, GetTypeIdTest2) {
+TEST(MetaTableTest, GetTypeIdTest2) {
     rrc::MetaTable metaTable;
     metaTable.registerTypeId<message::TestMessage>(1);
     metaTable.registerTypeId<message::TestMessageContainer>(2);
@@ -46,7 +46,7 @@ TEST(MetaTableTest, FreeIdReservedTest) {
     EXPECT_FALSE(mtbl.isIdReserved(1));
 }
 
-TEST(MetatableTest, ReplaceRegisteredId) {
+TEST(MetaTableTest, ReplaceRegisteredId) {
     rrc::MetaTable metaTable;
     metaTable.registerTypeId<message::TestMessage>(1u);
     EXPECT_FALSE(metaTable.registerTypeId<message::TestMessageContainer>(1u));
