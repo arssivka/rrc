@@ -14,7 +14,11 @@ set(SRCS
         core/TaskQueueTests.cpp
         core/RootNodeTest.cpp
         core/DummyNode.cpp
-        core/DummyNode.h)
+        core/DummyNode.h
+        modules/BigTests.cpp
+        core/MessageListenerTests.cpp
+        core/BillboardTests.cpp
+        core/RecieveGuardTests.cpp)
 
 set(PROTOS
         proto/Message.proto)
