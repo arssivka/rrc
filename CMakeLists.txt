@@ -14,40 +14,40 @@ add_subdirectory(lib)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(SRCS
-        include/rrc/LauncherBase.h
-        include/rrc/NodeBase.h
-        src/rrc/Settings.cpp
-        include/rrc/Settings.h
-        include/rrc/Advertiser.h
-        include/rrc/Subscriber.h
-        include/rrc/Message.h
-        include/rrc/NonCopyable.h
-        include/rrc/MessageListener.h
-        src/rrc/Property.cpp
-        include/rrc/Property.h
-        include/rrc/TSLookUp.h
-        include/rrc/CopyOnWrite.h
-        src/rrc/MessageSender.cpp
-        include/rrc/MessageSender.h
-        src/rrc/TaskQueue.cpp
-        include/rrc/TaskQueue.h
-        src/rrc/MessageListener.cpp
-        include/rrc/Billboard.h
-        src/rrc/Topic.cpp include/rrc/Topic.h
-        src/rrc/MetaTable.cpp
-        include/rrc/MetaTable.h
-        src/rrc/RootNode.cpp
-        include/rrc/RootNode.h
-        src/rrc/Node.cpp
-        include/rrc/Node.h
-        src/rrc/LinearLauncher.cpp
-        include/rrc/LinearLauncher.h
-        src/rrc/UnregisteredTypeException.cpp
-        include/rrc/UnregisteredTypeException.h
-        include/rrc/SendGuard.h
-        include/rrc/ReceiveGuard.h
-        src/rrc/IncompatibleTypesException.cpp
-        include/rrc/IncompatibleTypesException.h)
+        include/rrc/core/LauncherBase.h
+        include/rrc/core/NodeBase.h
+        src/rrc/core/Settings.cpp
+        include/rrc/core/Settings.h
+        include/rrc/core/Advertiser.h
+        include/rrc/core/Subscriber.h
+        include/rrc/core/Message.h
+        include/rrc/core/NonCopyable.h
+        include/rrc/core/MessageListener.h
+        src/rrc/core/Property.cpp
+        include/rrc/core/Property.h
+        include/rrc/core/TSLookUp.h
+        include/rrc/core/CopyOnWrite.h
+        src/rrc/core/MessageSender.cpp
+        include/rrc/core/MessageSender.h
+        src/rrc/core/TaskQueue.cpp
+        include/rrc/core/TaskQueue.h
+        src/rrc/core/MessageListener.cpp
+        include/rrc/core/Billboard.h
+        src/rrc/core/Topic.cpp include/rrc/core/Topic.h
+        src/rrc/core/MetaTable.cpp
+        include/rrc/core/MetaTable.h
+        src/rrc/core/RootNode.cpp
+        include/rrc/core/RootNode.h
+        src/rrc/core/Node.cpp
+        include/rrc/core/Node.h
+        src/rrc/core/LinearLauncher.cpp
+        include/rrc/core/LinearLauncher.h
+        src/rrc/core/UnregisteredTypeException.cpp
+        include/rrc/core/UnregisteredTypeException.h
+        include/rrc/core/SendGuard.h
+        include/rrc/core/ReceiveGuard.h
+        src/rrc/core/IncompatibleTypesException.cpp
+        include/rrc/core/IncompatibleTypesException.h include/core.h)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
                "${PROJECT_BINARY_DIR}/VersionDefines.h")
