@@ -44,7 +44,7 @@ namespace rrc {
         std::set<Key> getKeys() const {
             std::set<Key> mKeysSet;
             for (auto&& topic : mTopicHash) {
-                mKeysSet.insert(topic);
+                mKeysSet.insert(topic.first);
             }
             return mKeysSet;
         }
