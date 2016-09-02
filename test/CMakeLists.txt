@@ -1,24 +1,24 @@
 enable_testing()
 
+add_subdirectory(lib)
+
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(SRCS
-        core/PropertyTests.cpp
-        core/SettingsTests.cpp
-        core/TSLookUpTests.cpp
-        core/MessageTests.cpp
-        core/MetaTableTests.cpp
-        core/TopicTest.cpp
-        modules/BigTests.cpp
-        core/MessageListenerTests.cpp
-        core/TaskQueueTests.cpp
-        core/RootNodeTest.cpp
-        core/DummyNode.cpp
-        core/DummyNode.h
-        modules/BigTests.cpp
-        core/MessageListenerTests.cpp
-        core/BillboardTests.cpp
-        core/RecieveGuardTests.cpp)
+        src/PropertyTests.cpp
+        src/SettingsTests.cpp
+        src/TSLookUpTests.cpp
+        src/MessageTests.cpp
+        src/MetaTableTests.cpp
+        src/TopicTest.cpp
+        src/MessageListenerTests.cpp
+        src/TaskQueueTests.cpp
+        src/RootNodeTest.cpp
+        src/DummyNode.cpp
+        include/DummyNode.h
+        src/MessageListenerTests.cpp
+        src/BillboardTests.cpp
+        src/RecieveGuardTests.cpp)
 
 set(PROTOS
         proto/Message.proto)
