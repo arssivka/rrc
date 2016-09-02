@@ -12,3 +12,7 @@ message TestMessage {
         SUPER_CRIT = 3;
     }
 }
+
+message TestMessageContainer {
+    repeated TestMessage messages = 1;
+}
