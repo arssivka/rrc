@@ -17,6 +17,8 @@ namespace rrc {
 
         virtual int run() override;
 
+        virtual bool step() override;
+
         virtual void stop() override;
 
         virtual void setRootNode(RootNodePtr node) override;

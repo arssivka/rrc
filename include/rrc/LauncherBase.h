@@ -16,6 +16,8 @@ namespace rrc {
 
         virtual int run() = 0;
 
+        virtual bool step() = 0;
+
         virtual void stop() = 0;
 
         virtual void setRootNode(RootNodePtr node) = 0;
