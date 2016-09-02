@@ -9,7 +9,7 @@ set(SRCS
         core/MessageTests.cpp
         core/MetaTableTests.cpp
         core/TopicTest.cpp
-        modules/BigTests.cpp)
+        modules/BigTests.cpp core/MessageListenerTests.cpp)
 
 set(PROTOS
         proto/Message.proto)

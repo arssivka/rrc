@@ -6,6 +6,9 @@
 #include <rrc/MetaTable.h>
 
 
+const rrc::TypeId rrc::MetaTable::UNKNOWN_TYPE_ID = std::numeric_limits<rrc::TypeId>::max();
+
+
 bool rrc::MetaTable::freeTypeId(rrc::TypeId typeId) {
     auto found1 = mReservedIds.find(typeId);
     if (found1 == mReservedIds.end()) {

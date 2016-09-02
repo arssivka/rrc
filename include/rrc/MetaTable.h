@@ -23,13 +23,16 @@ namespace rrc {
 
     class MetaTable {
     public:
-        static const TypeId UNKNOWN_TYPE_ID = std::numeric_limits<TypeId>::max();
+        static const TypeId UNKNOWN_TYPE_ID;
 
         MetaTable() = default;
 
         template <class T>
         TypeId getTypeId() const {
-            std::type_index typeIndex = typeid(T);
+            using Type = typename std::remove_reference<T>::type;
+            static_assert(std::is_base_of<pb::MessageLite, Type>::value,
+                          "Type must be derived from google::protobuf::MessageLite");
+            std::type_index typeIndex = typeid(Type);
             auto found = mTypeInfoHash.find(typeIndex);
             return (found != mTypeInfoHash.end()) ? found->second : UNKNOWN_TYPE_ID;
         }
