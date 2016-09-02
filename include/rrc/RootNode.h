@@ -34,7 +34,7 @@ namespace rrc {
 
         void removeNode(NodePtr node);
 
-        void addListener(const Key& topic, MessageListenerPtr listener);
+        void addListener(const Key& topicName, MessageListenerPtr listener);
 
         void removeListener(const Key& topicName, MessageListenerPtr listener);
 

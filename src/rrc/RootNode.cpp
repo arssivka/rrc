@@ -42,12 +42,12 @@ void rrc::RootNode::removeNode(rrc::NodePtr node) {
 }
 
 
-void rrc::RootNode::addListener(const rrc::RootNode::Key& topic, rrc::MessageListenerPtr listener) {
-    mListenersPendingListChanges.enqueue([this, topic, listener]() {
-        TopicPtr t = mBillboard.getTopic(topic);
+void rrc::RootNode::addListener(const rrc::RootNode::Key& topicName, rrc::MessageListenerPtr listener) {
+    mListenersPendingListChanges.enqueue([this, topicName, listener]() {
+        TopicPtr t = mBillboard.getTopic(topicName);
         if (t == nullptr) {
-            mBillboard.createTopic(topic, listener->getTypeId());
-            t = mBillboard.getTopic(topic);
+            mBillboard.createTopic(topicName, listener->getTypeId());
+            t = mBillboard.getTopic(topicName);
         }
         t->addListener(listener);
     });
@@ -55,13 +55,15 @@ void rrc::RootNode::addListener(const rrc::RootNode::Key& topic, rrc::MessageLis
 
 
 void rrc::RootNode::removeListener(const rrc::RootNode::Key& topicName, rrc::MessageListenerPtr listener) {
-    TopicPtr t = mBillboard.getTopic(topicName);
-    if (t != nullptr) {
-        t->removeListener(listener);
-        if (t->empty()) {
-            mBillboard.removeTopic(topicName);
+    mListenersPendingListChanges.enqueue([this, topicName, listener]() {
+        TopicPtr t = mBillboard.getTopic(topicName);
+        if (t != nullptr) {
+            t->removeListener(listener);
+            if (t->empty()) {
+                mBillboard.removeTopic(topicName);
+            }
         }
-    }
+    });
 }
 
 
