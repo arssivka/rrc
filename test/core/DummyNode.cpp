@@ -1,0 +1,36 @@
+/**
+ *  @autor arssivka
+ *  @date 9/2/16
+ */
+
+#include <Message.pb.h>
+#include "DummyNode.h"
+
+
+DummyNode::DummyNode(rrc::RootNodePtr rootNode, const std::string& topicName)
+        : Node(rootNode), mRootNode(rootNode), mTopicName(topicName) {
+    this->resetCounter();
+    rrc::TypeId typeId = rootNode->getTypeId<message::TestMessage>();
+    mListener = std::make_shared<rrc::MessageListener>(typeId);
+    mRootNode->addListener(mTopicName, mListener);
+}
+
+
+void DummyNode::incrementCounter() {
+    ++mCounter;
+}
+
+
+void DummyNode::resetCounter() {
+    mCounter = 0;
+}
+
+
+rrc::MessagePtr DummyNode::tryGetMessage() {
+    return mListener->tryDequeueMessage();
+}
+
+
+DummyNode::~DummyNode() {
+    mRootNode->removeListener(mTopicName, mListener);
+}

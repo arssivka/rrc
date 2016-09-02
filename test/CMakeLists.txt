@@ -9,7 +9,12 @@ set(SRCS
         core/MessageTests.cpp
         core/MetaTableTests.cpp
         core/TopicTest.cpp
-        modules/BigTests.cpp core/MessageListenerTests.cpp)
+        modules/BigTests.cpp
+        core/MessageListenerTests.cpp
+        core/TaskQueueTests.cpp
+        core/RootNodeTest.cpp
+        core/DummyNode.cpp
+        core/DummyNode.h)
 
 set(PROTOS
         proto/Message.proto)

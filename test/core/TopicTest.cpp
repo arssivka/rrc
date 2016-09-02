@@ -65,9 +65,13 @@ TEST_F(TopicFixture, SendTest) {
     message::TestMessage tstMessage;
     tstMessage.set_id(42);
     tstMessage.set_txt("42");
-    std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
-    MessagePtr messagePtr = std::make_shared<Message>(mMetaTable.getTypeId<message::TestMessage>(), now,
-                                                                std::make_unique<message::TestMessage>(tstMessage));
+
+    MessagePtr messagePtr = std::make_shared<Message>(
+            mMetaTable.getTypeId<message::TestMessage>(),
+            std::chrono::steady_clock::now(),
+            std::make_unique<message::TestMessage>(std::move(tstMessage))
+    );
+
     tstTopic.sendMessage(messagePtr);
     EXPECT_NE(mRightMessageListenerPtr->tryDequeueMessage(), nullptr);
     EXPECT_EQ(mRightMessageListenerPtr->tryDequeueMessage(), nullptr);
