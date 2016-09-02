@@ -1,5 +1,7 @@
 enable_testing()
 
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
 set(SRCS
         core/PropertyTests.cpp
         core/SettingsTests.cpp
