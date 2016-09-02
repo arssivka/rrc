@@ -71,5 +71,9 @@ TEST_F(TopicFixture, SendTest) {
     tstTopic.sendMessage(messagePtr);
     EXPECT_NE(mRightMessageListenerPtr->tryDequeueMessage(), nullptr);
     EXPECT_EQ(mRightMessageListenerPtr->tryDequeueMessage(), nullptr);
+    MessagePtr messagePtr2 = std::make_shared<Message>(mMetaTable.getTypeId<message::TestMessageContainer>(), now,
+                                                      std::make_unique<message::TestMessage>(tstMessage));
+    tstTopic.sendMessage(messagePtr2);
+    EXPECT_EQ(mRightMessageListenerPtr->tryDequeueMessage(), nullptr);
 }
 
