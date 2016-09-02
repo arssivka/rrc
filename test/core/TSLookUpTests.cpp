@@ -129,7 +129,7 @@ TEST(TSLookUpTest, TwoRemovers) {
     EXPECT_FALSE((testlkp.contains("test") && testlkp.contains("test2")));
 }
 
-TEST(TSLookUpTest, OmeDetacher) {
+TEST(TSLookUpTest, OneDetacher) {
     rrc::TSLookUp<std::string, bool> testlkp;
     testlkp.set("test", true);
     bool tst = testlkp.detach("test").get();

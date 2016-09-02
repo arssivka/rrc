@@ -24,5 +24,5 @@ bool rrc::MetaTable::freeTypeId(rrc::TypeId typeId) {
 
 bool rrc::MetaTable::isIdReserved(rrc::TypeId tid) {
     auto found = mReservedIds.find(tid);
-    return found == mReservedIds.end();
+    return found != mReservedIds.end();
 }

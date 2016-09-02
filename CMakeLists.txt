@@ -50,9 +50,9 @@ set(SRCS
         include/rrc/IncompatibleTypesException.h)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
-        "${PROJECT_BINARY_DIR}/VersionDefines.h")
+               "${PROJECT_BINARY_DIR}/VersionDefines.h")
 
-add_library(rrc ${SRCS})
+add_library(rrc ${SRCS} ${PROTO_SRCS} ${PROTO_HDRS})
 target_link_libraries(rrc ${PROTOBUF_LIBRARIES} ${TCMalloc_LIBRARIES} variant concurrentqueue)
 target_include_directories(rrc PUBLIC include ${PROTOBUF_INCLUDE_DIRS} ${TCMalloc_INCLUDE_DIRS})
 
