@@ -25,12 +25,6 @@ TEST(MetaTableTest, GetTypeIdTest) {
     EXPECT_EQ(mtbl.getTypeId<message::TestMessage>(), (unsigned int) 1);
 }
 
-TEST(MetaTableTest, GetSizeByIdTest) {
-    rrc::MetaTable mtbl;
-    mtbl.registerTypeId<message::TestMessage>(1);
-    EXPECT_EQ(sizeof(message::TestMessage), mtbl.getTypeSizeById((unsigned int) 1));
-}
-
 TEST(MetaTableTest, FreeIdTest) {
     rrc::MetaTable mtbl;
     mtbl.registerTypeId<message::TestMessage>(1);

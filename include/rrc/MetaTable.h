@@ -34,14 +34,6 @@ namespace rrc {
             return (found != mTypeInfoHash.end()) ? found->second : UNKNOWN_TYPE_ID;
         }
 
-        size_t getTypeSizeById(TypeId tid) const {
-            auto found = mReservedIds.find(tid);
-            if (found != mReservedIds.end()) {
-                return found->second;
-            }
-            return 0;
-        }
-
         template <class T>
         bool registerTypeId(TypeId tid) {
             using Type = typename std::remove_reference<T>::type;
@@ -49,8 +41,7 @@ namespace rrc {
                           "Type must be derived from google::protobuf::MessageLite");
             if (this->isIdReserved(tid)) return false;
             std::type_index typeIndex = typeid(T);
-            size_t size = sizeof(T);
-            mReservedIds.insert({tid, size});
+            mReservedIds.insert(tid);
             mTypeInfoHash.insert({typeIndex, tid});
             return true;
         }
@@ -61,7 +52,7 @@ namespace rrc {
 
     private:
         std::unordered_map<std::type_index, TypeId> mTypeInfoHash;
-        std::unordered_map<TypeId, size_t> mReservedIds;
+        std::unordered_set<TypeId> mReservedIds;
 
     };
 }
