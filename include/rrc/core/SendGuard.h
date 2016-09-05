@@ -51,12 +51,12 @@ namespace rrc {
             return mData == nullptr;
         }
 
-        const std::chrono::time_point& getTimestamp() const {
+        const std::chrono::steady_clock::time_point& getTimestamp() const {
             return mTimestamp;
         }
 
 
-        void setTimestamp(const std::chrono::time_point& timePoint) {
+        void setTimestamp(const std::chrono::steady_clock::time_point& timePoint) {
             mTimestamp = timePoint;
         }
 

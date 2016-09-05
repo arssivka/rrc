@@ -7,6 +7,8 @@
 
 #include <chrono>
 #include "NodeBase.h"
+#include "Advertiser.h"
+#include "Subscriber.h"
 
 namespace rrc {
     class RootNode;
@@ -17,6 +19,16 @@ namespace rrc {
         std::chrono::steady_clock::duration getMinDuration() const;
 
         void setMinDuration(const std::chrono::steady_clock::duration& minDuration);
+
+        template <class T>
+        inline Advertiser<T> createAdvertiser(const std::string& topicName) const {
+            return Advertiser<T>(mRootNode, topicName);
+        }
+
+        template <class T>
+        inline Subscriber<T> createSubscriber(const std::string& topicName) {
+            return Subscriber<T>(mRootNode, topicName);
+        }
 
     protected:
         Node(RootNodePtr rootNode);

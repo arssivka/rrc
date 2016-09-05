@@ -25,8 +25,13 @@ namespace rrc {
             mRootNode = rootNode;
         }
 
+        Advertiser(Advertiser&& other)
+                : mRootNode(std::move(other.mRootNode)),
+                  mTypeId(other.mTypeId),
+                  mTopicName(std::move(other.mTopicName)) { }
+
         SendGuard<T> createSendGuard() const {
-            return SendGuard(mRootNode, mTopicName, mTypeId);
+            return SendGuard<T>(mRootNode, mTopicName, mTypeId);
         }
 
         ~Advertiser() { }
