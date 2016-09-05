@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <typeindex>
 #include <google/protobuf/message_lite.h>
+#include "MessageFactory.h"
 
 namespace {
     namespace pb = google::protobuf;
@@ -44,10 +45,12 @@ namespace rrc {
                           "Type must be derived from google::protobuf::MessageLite");
             if (this->isIdReserved(tid)) return false;
             std::type_index typeIndex = typeid(T);
-            mReservedIds.insert(tid);
+            mMessageFactoryHash.insert({tid, std::make_unique<MessageFactory<T>>()});
             mTypeInfoHash.insert({typeIndex, tid});
             return true;
         }
+
+        MessageFactoryPtr getMessageFactory(TypeId typeId);
 
         bool freeTypeId(TypeId typeId);
 
@@ -55,7 +58,7 @@ namespace rrc {
 
     private:
         std::unordered_map<std::type_index, TypeId> mTypeInfoHash;
-        std::unordered_set<TypeId> mReservedIds;
+        std::unordered_map<TypeId, MessageFactoryPtr> mMessageFactoryHash;
 
     };
 }

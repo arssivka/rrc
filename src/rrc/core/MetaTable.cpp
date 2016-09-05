@@ -10,12 +10,12 @@ const rrc::TypeId rrc::MetaTable::UNKNOWN_TYPE_ID = std::numeric_limits<rrc::Typ
 
 
 bool rrc::MetaTable::freeTypeId(rrc::TypeId typeId) {
-    auto found1 = mReservedIds.find(typeId);
-    if (found1 == mReservedIds.end()) {
+    auto found1 = mMessageFactoryHash.find(typeId);
+    if (found1 == mMessageFactoryHash.end()) {
         return false;
     }
 
-    mReservedIds.erase(typeId);
+    mMessageFactoryHash.erase(typeId);
     auto found2 = std::find_if(mTypeInfoHash.begin(), mTypeInfoHash.end(),
                              [typeId](const std::pair<std::type_index, TypeId>& pair) {
                                  return typeId == pair.second;
@@ -26,6 +26,14 @@ bool rrc::MetaTable::freeTypeId(rrc::TypeId typeId) {
 
 
 bool rrc::MetaTable::isIdReserved(rrc::TypeId tid) {
-    auto found = mReservedIds.find(tid);
-    return found != mReservedIds.end();
+    auto found = mMessageFactoryHash.find(tid);
+    return found != mMessageFactoryHash.end();
+}
+
+
+rrc::MessageFactoryPtr rrc::MetaTable::getMessageFactory(rrc::TypeId typeId) {
+    auto found = mMessageFactoryHash.find(typeId);
+    return (found != mMessageFactoryHash.end())
+           ? found->second
+           : nullptr;
 }

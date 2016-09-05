@@ -21,4 +21,6 @@ namespace rrc {
         virtual ~MessageFactoryBase() { }
 
     };
+
+    typedef std::shared_ptr<MessageFactoryBase> MessageFactoryPtr;
 }
