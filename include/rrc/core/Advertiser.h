@@ -8,7 +8,6 @@
 
 #include "Message.h"
 #include "MessageSender.h"
-#include "LauncherBase.h"
 #include "UnregisteredTypeException.h"
 #include "SendGuard.h"
 

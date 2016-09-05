@@ -22,8 +22,15 @@ namespace rrc {
             if (mTypeId == MetaTable::UNKNOWN_TYPE_ID) {
                 throw rrc::UnregisteredTypeException();
             }
-            mData.reset(T::NEW());
+            mData.reset(new T);
         }
+
+        SendGuard(SendGuard&& other)
+                : mTopicName(std::move(other.mTopicName)),
+                  mRootNode(std::move(other.mRootNode)),
+                  mTimestamp(other.mTimestamp),
+                  mTypeId(other.mTypeId),
+                  mData(std::move(other.mData)) { }
 
         bool send() {
             if (this->isSent()) {
@@ -39,11 +46,11 @@ namespace rrc {
             return true;
         }
 
-        const T& operator->() const {
+        const T* operator->() const {
             return *mData;
         }
 
-        T& operator->() {
+        T* operator->() {
             return *mData;
         }
 
