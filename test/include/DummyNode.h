@@ -16,6 +16,9 @@ public:
 
     virtual void entry() override {
         this->incrementCounter();
+        if (mCounter == 5) {
+            mRootNode->stop();
+        }
     }
 
     void incrementCounter();

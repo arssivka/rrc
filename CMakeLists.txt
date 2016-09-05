@@ -47,7 +47,8 @@ set(SRCS
         include/rrc/core/SendGuard.h
         include/rrc/core/ReceiveGuard.h
         src/rrc/core/IncompatibleTypesException.cpp
-        include/rrc/core/IncompatibleTypesException.h include/core.h)
+        include/rrc/core/IncompatibleTypesException.h
+        include/core.h)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
                "${PROJECT_BINARY_DIR}/VersionDefines.h")

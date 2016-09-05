@@ -16,6 +16,8 @@ namespace rrc {
 
     class Node : public NodeBase {
     public:
+        Node();
+
         std::chrono::steady_clock::duration getMinDuration() const;
 
         void setMinDuration(const std::chrono::steady_clock::duration& minDuration);

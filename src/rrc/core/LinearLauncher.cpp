@@ -3,7 +3,8 @@
  *  @date 8/26/16
  */
 
-#include <include/rrc/core/LinearLauncher.h>
+#include <rrc/core/LinearLauncher.h>
+#include <rrc/core/Node.h>
 
 
 rrc::LinearLauncher::LinearLauncher()
@@ -15,7 +16,7 @@ rrc::LinearLauncher::~LinearLauncher() {
 
 
 int rrc::LinearLauncher::run() {
-    mFinished = true;
+    mFinished = false;
     while (this->step());
     return 0;
 }
@@ -27,12 +28,12 @@ void rrc::LinearLauncher::stop() {
 
 
 void rrc::LinearLauncher::setRootNode(rrc::RootNodePtr node) {
-    mRootNode = node;
+    mRootNode = std::move(node);
 }
 
 
 void rrc::LinearLauncher::addNode(rrc::NodePtr node) {
-    mNodesList.emplace_front(node);
+    mNodesList.emplace_front(std::move(node));
 }
 
 
@@ -61,4 +62,4 @@ bool rrc::LinearLauncher::step() {
 
 
 rrc::LinearLauncher::NodeContainer::NodeContainer(rrc::NodePtr node)
-        : node(node) { }
+        : node(node), timestamp() { }

@@ -7,9 +7,11 @@
 
 
 #include "RootNode.h"
-#include "Node.h"
 
 namespace rrc {
+    class Node;
+    typedef std::shared_ptr<Node> NodePtr;
+
     class LauncherBase {
     public:
         virtual ~LauncherBase() { }

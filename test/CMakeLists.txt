@@ -16,9 +16,11 @@ set(SRCS
         src/RootNodeTest.cpp
         src/DummyNode.cpp
         include/DummyNode.h
-        src/MessageListenerTests.cpp
         src/BillboardTests.cpp
         src/RecieveGuardTests.cpp
+        src/NodeTest.cpp
+        src/SubscriberTest.cpp
+        src/LinearLauncherTest.cpp
         src/AdvertiserTests.cpp
         src/SendGuardTests.cpp)
 

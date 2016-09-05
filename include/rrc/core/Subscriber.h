@@ -35,6 +35,10 @@ namespace rrc {
             this->connect();
         }
 
+        Subscriber(Subscriber&& other)
+                : mConnected(std::move(other.mConnected)), mRootNode(std::move(other.mRootNode)),
+                  mTopicName(std::move(other.mTopicName)), mListener(std::move(other.mListener)) { }
+
         ~Subscriber() {
             this->disconnect();
         }
@@ -42,6 +46,8 @@ namespace rrc {
         ReceiveGuard<T> tryGetMessage() {
             return ReceiveGuard<T>(mListener->tryDequeueMessage());
         }
+
+        // TODO Getter with bool result
 
         void disconnect() const {
             if (mConnected) {

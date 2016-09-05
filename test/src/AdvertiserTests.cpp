@@ -11,6 +11,7 @@
 
 using namespace rrc;
 
+
 class AdvertiserFixture : public ::testing::Test {
 public:
     AdvertiserFixture() : mTopicName("test") {
@@ -31,9 +32,11 @@ protected:
     std::string mTopicName;
 };
 
+
 TEST_F(AdvertiserFixture, ExceptionTest) {
     EXPECT_THROW(Advertiser<message::TestMessageContainer> advertiser(mRootNode, mTopicName), UnregisteredTypeException);
 }
+
 
 TEST_F(AdvertiserFixture, SendGuardTest) {
     Advertiser<message::TestMessage> advertiser(mRootNode, mTopicName);

@@ -18,6 +18,9 @@ DummyNode::DummyNode(rrc::RootNodePtr rootNode, const std::string& topicName)
 
 void DummyNode::incrementCounter() {
     ++mCounter;
+    if (mCounter == 5) {
+        mRootNode->stop();
+    }
 }
 
 
