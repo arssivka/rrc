@@ -19,7 +19,8 @@ set(SRCS
         src/MessageListenerTests.cpp
         src/BillboardTests.cpp
         src/RecieveGuardTests.cpp
-        src/AdvertiserTests.cpp)
+        src/AdvertiserTests.cpp
+        src/SendGuardTests.cpp)
 
 set(PROTOS
         proto/Message.proto)

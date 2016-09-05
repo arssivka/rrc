@@ -11,15 +11,16 @@
 
 using namespace rrc;
 
-class AdvertiserFixture : public ::testing::Test {
+class SendGuardFixture : public ::testing::Test {
 public:
-    AdvertiserFixture() : mTopicName("test") {
+    SendGuardFixture() : mTopicName("test") {
         mMetaTable.registerTypeId<message::TestMessage>(1u);
         mRootNode = std::make_shared<RootNode>(&mLauncher, &mMetaTable);
         dummyNode1 = std::make_shared<DummyNode>(mRootNode, "test");
+        mTimePoint = std::chrono::steady_clock::now();
     }
 
-    ~AdvertiserFixture() {
+    ~SendGuardFixture() {
         //Destroy all the good members
     }
 
@@ -29,15 +30,15 @@ protected:
     LinearLauncher mLauncher;
     std::shared_ptr<DummyNode> dummyNode1;
     std::string mTopicName;
+    std::chrono::steady_clock::time_point mTimePoint;
 };
 
-TEST_F(AdvertiserFixture, ExceptionTest) {
-    EXPECT_THROW(Advertiser<message::TestMessageContainer> advertiser(mRootNode, mTopicName), UnregisteredTypeException);
+TEST_F(SendGuardFixture, ExceptionTest) {
+    EXPECT_THROW(SendGuard<message::TestMessageContainer> sendGuard(mRootNode, mTopicName), UnregisteredTypeException);
 }
 
-TEST_F(AdvertiserFixture, SendGuardTest) {
-    Advertiser<message::TestMessage> advertiser(mRootNode, mTopicName);
-    SendGuard<message::TestMessage> sendGuard = advertiser.createSendGuard();
+TEST_F(SendGuardFixture, SendTest) {
+    SendGuard<message::TestMessage>  sendGuard(mRootNode, mTopicName);
     sendGuard->set_id(42);
     sendGuard->set_txt("42");
     sendGuard.send();
@@ -46,4 +47,20 @@ TEST_F(AdvertiserFixture, SendGuardTest) {
     const message::TestMessage* testMessage = (message::TestMessage*)messagePtr->getData();
     EXPECT_EQ(testMessage->id(), 42);
     EXPECT_EQ(testMessage->txt(), "42");
+}
+
+TEST_F(SendGuardFixture, IsSentTest) {
+    SendGuard<message::TestMessage>  sendGuard(mRootNode, mTopicName);
+    sendGuard->set_id(42);
+    sendGuard->set_txt("42");
+    EXPECT_FALSE(sendGuard.isSent());
+    sendGuard.send();
+    mRootNode->entry();
+    EXPECT_TRUE(sendGuard.isSent());
+}
+
+TEST_F(SendGuardFixture, GetSetTest) {
+    SendGuard<message::TestMessage>  sendGuard(mRootNode, mTopicName);
+    sendGuard.setTimestamp(mTimePoint);
+    EXPECT_EQ(sendGuard.getTimestamp(), mTimePoint);
 }
