@@ -47,11 +47,11 @@ namespace rrc {
         }
 
         const T* operator->() const {
-            return *mData;
+            return mData.get();
         }
 
         T* operator->() {
-            return *mData;
+            return mData.get();
         }
 
         bool isSent() const noexcept {

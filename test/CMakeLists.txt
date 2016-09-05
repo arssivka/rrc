@@ -18,7 +18,8 @@ set(SRCS
         include/DummyNode.h
         src/MessageListenerTests.cpp
         src/BillboardTests.cpp
-        src/RecieveGuardTests.cpp)
+        src/RecieveGuardTests.cpp
+        src/AdvertiserTests.cpp)
 
 set(PROTOS
         proto/Message.proto)
