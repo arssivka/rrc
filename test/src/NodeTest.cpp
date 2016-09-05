@@ -16,7 +16,7 @@ class NodeFixture : public ::testing::Test {
 public:
     NodeFixture() {
         mMetaTable.registerTypeId<message::TestMessage>(0);
-        mRootNode = std::make_shared<RootNode>(&mLinearLauncher, &mMetaTable);
+        mRootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable);
     }
 
 protected:

@@ -7,8 +7,8 @@
 #include <include/rrc/core/RootNode.h>
 
 
-rrc::RootNode::RootNode(rrc::LauncherBase* launcher, const rrc::MetaTable* metaTable)
-        : mLauncher(launcher), mMetaTable(metaTable) { }
+rrc::RootNode::RootNode(LauncherBase &launcher, MetaTable &metaTable)
+        : mLauncher(&launcher), mMetaTable(&metaTable) { }
 
 
 void rrc::RootNode::entry() {

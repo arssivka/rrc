@@ -17,7 +17,7 @@ class SubscriberFixture : public ::testing::Test {
 public:
     SubscriberFixture() {
         mMetaTable.registerTypeId<message::TestMessage>(0);
-        mRootNode = std::make_shared<RootNode>(&mLauncher, &mMetaTable);
+        mRootNode = std::make_shared<RootNode>(mLauncher, mMetaTable);
     }
 
 protected:

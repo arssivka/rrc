@@ -27,7 +27,7 @@ protected:
 
 
 TEST_F(RootNodeFixture, AddAndRemoveListenerTest1) {
-    RootNodePtr rootNode = std::make_shared<RootNode>(&mLinearLauncher, &mMetaTable);
+    RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable);
     TypeId typeId = mMetaTable.getTypeId<message::TestMessage>();
     MessageListenerPtr listener = std::make_shared<MessageListener>(typeId);
     rootNode->addListener("test", listener);
@@ -41,7 +41,7 @@ TEST_F(RootNodeFixture, AddAndRemoveListenerTest1) {
 
 
 TEST_F(RootNodeFixture, AddAndRemoveListenerTest2) {
-    RootNodePtr rootNode = std::make_shared<RootNode>(&mLinearLauncher, &mMetaTable);
+    RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable);
     TypeId typeId = mMetaTable.getTypeId<message::TestMessage>();
     MessageListenerPtr listener = std::make_shared<MessageListener>(typeId);
     rootNode->addListener("test", listener);
@@ -54,7 +54,7 @@ TEST_F(RootNodeFixture, AddAndRemoveListenerTest2) {
 
 
 TEST_F(RootNodeFixture, AddAndRemoveNodeTest3) {
-    RootNodePtr rootNode = std::make_shared<RootNode>(&mLinearLauncher, &mMetaTable);
+    RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable);
     std::shared_ptr<DummyNode> dummyNode = std::make_shared<DummyNode>(rootNode, "test");
     rootNode->addNode(dummyNode);
     EXPECT_FALSE(dummyNode.unique());
@@ -68,14 +68,14 @@ TEST_F(RootNodeFixture, AddAndRemoveNodeTest3) {
 TEST_F(RootNodeFixture, GetTypeIdTest) {
     MetaTable metaTable;
     metaTable.registerTypeId<message::TestMessage>(0u);
-    RootNodePtr rootNode = std::make_shared<RootNode>(&mLinearLauncher, &metaTable);
+    RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, metaTable);
     EXPECT_EQ(rootNode->getTypeId<message::TestMessage>(), 0u);
     EXPECT_EQ(rootNode->getTypeId<message::TestMessageContainer>(), MetaTable::UNKNOWN_TYPE_ID);
 }
 
 
 TEST_F(RootNodeFixture, SendMessage1) {
-    RootNodePtr rootNode = std::make_shared<RootNode>(&mLinearLauncher, &mMetaTable);
+    RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable);
     std::shared_ptr<DummyNode> dummyNode1 = std::make_shared<DummyNode>(rootNode, "test");
     std::shared_ptr<DummyNode> dummyNode2 = std::make_shared<DummyNode>(rootNode, "test");
 

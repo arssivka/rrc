@@ -24,7 +24,7 @@ namespace rrc {
         typedef std::string Key;
 
     public:
-        RootNode(LauncherBase* launcher, const MetaTable* metaTable);
+        RootNode(LauncherBase& launcher, MetaTable& metaTable);
 
         virtual void entry() override;
 
