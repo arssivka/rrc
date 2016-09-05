@@ -15,7 +15,7 @@ using namespace rrc;
 class AdvertiserFixture : public ::testing::Test {
 public:
     AdvertiserFixture() : mTopicName("test") {
-        mMetaTable.registerTypeId<message::TestMessage>(1u);
+        mMetaTable.registerTypeId<testmessages::TestMessage>(1u);
         mRootNode = std::make_shared<RootNode>(mLauncher, mMetaTable);
         dummyNode1 = std::make_shared<DummyNode>(mRootNode, "test");
     }
@@ -34,19 +34,19 @@ protected:
 
 
 TEST_F(AdvertiserFixture, ExceptionTest) {
-    EXPECT_THROW(Advertiser<message::TestMessageContainer> advertiser(mRootNode, mTopicName), UnregisteredTypeException);
+    EXPECT_THROW(Advertiser<testmessages::TestMessageContainer> advertiser(mRootNode, mTopicName), UnregisteredTypeException);
 }
 
 
 TEST_F(AdvertiserFixture, SendGuardTest) {
-    Advertiser<message::TestMessage> advertiser(mRootNode, mTopicName);
-    SendGuard<message::TestMessage> sendGuard = advertiser.createSendGuard();
+    Advertiser<testmessages::TestMessage> advertiser(mRootNode, mTopicName);
+    SendGuard<testmessages::TestMessage> sendGuard = advertiser.createSendGuard();
     sendGuard->set_id(42);
     sendGuard->set_txt("42");
     sendGuard.send();
     mRootNode->entry();
     MessagePtr messagePtr= dummyNode1->tryGetMessage();
-    const message::TestMessage* testMessage = (message::TestMessage*)messagePtr->getData();
+    const testmessages::TestMessage* testMessage = (testmessages::TestMessage*)messagePtr->getData();
     EXPECT_EQ(testMessage->id(), 42);
     EXPECT_EQ(testMessage->txt(), "42");
 }

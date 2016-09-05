@@ -14,8 +14,8 @@ using namespace rrc;
 class ListenerFixture : public ::testing::Test {
 public:
     ListenerFixture() {
-        mMetaTable.registerTypeId<message::TestMessage>(1);
-        mMetaTable.registerTypeId<message::TestMessageContainer>(2);
+        mMetaTable.registerTypeId<testmessages::TestMessage>(1);
+        mMetaTable.registerTypeId<testmessages::TestMessageContainer>(2);
     }
 
     ~ListenerFixture() {
@@ -29,26 +29,26 @@ protected:
 
 
 TEST_F(ListenerFixture, GetTypeId) {
-    TypeId typeId = mMetaTable.getTypeId<message::TestMessage>();
+    TypeId typeId = mMetaTable.getTypeId<testmessages::TestMessage>();
     MessageListener listener(typeId);
     EXPECT_EQ(listener.getTypeId(), typeId);
 }
 
 
 TEST_F(ListenerFixture, GetMessageFromEmptyQueue) {
-    TypeId typeId = mMetaTable.getTypeId<message::TestMessage>();
+    TypeId typeId = mMetaTable.getTypeId<testmessages::TestMessage>();
     MessageListener listener(typeId);
     EXPECT_EQ(listener.tryDequeueMessage(), nullptr);
 }
 
 
 TEST_F(ListenerFixture, GetMessages1) {
-    TypeId typeId = mMetaTable.getTypeId<message::TestMessage>();
+    TypeId typeId = mMetaTable.getTypeId<testmessages::TestMessage>();
     MessageListener listener(typeId);
     MessagePtr message = std::make_shared<Message>(
             typeId,
             std::chrono::steady_clock::now(),
-            std::make_unique<message::TestMessage>()
+            std::make_unique<testmessages::TestMessage>()
     );
     listener.enqueueMessage(message);
     ASSERT_EQ(listener.tryDequeueMessage(), message);
@@ -57,12 +57,12 @@ TEST_F(ListenerFixture, GetMessages1) {
 
 
 TEST_F(ListenerFixture, GetMessages2) {
-    TypeId typeId = mMetaTable.getTypeId<message::TestMessage>();
+    TypeId typeId = mMetaTable.getTypeId<testmessages::TestMessage>();
     MessageListener listener(typeId);
     MessagePtr message = std::make_shared<Message>(
             typeId,
             std::chrono::steady_clock::now(),
-            std::make_unique<message::TestMessage>()
+            std::make_unique<testmessages::TestMessage>()
     );
     listener.enqueueMessage(message);
     listener.enqueueMessage(message);
@@ -73,20 +73,20 @@ TEST_F(ListenerFixture, GetMessages2) {
 
 
 TEST_F(ListenerFixture, GetMessages3) {
-    TypeId typeId1 = mMetaTable.getTypeId<message::TestMessage>();
-    TypeId typeId2 = mMetaTable.getTypeId<message::TestMessageContainer>();
+    TypeId typeId1 = mMetaTable.getTypeId<testmessages::TestMessage>();
+    TypeId typeId2 = mMetaTable.getTypeId<testmessages::TestMessageContainer>();
     MessageListener listener(typeId1);
 
     MessagePtr message1 = std::make_shared<Message>(
             typeId1,
             std::chrono::steady_clock::now(),
-            std::make_unique<message::TestMessage>()
+            std::make_unique<testmessages::TestMessage>()
     );
 
     MessagePtr message2 = std::make_shared<Message>(
             typeId2,
             std::chrono::steady_clock::now(),
-            std::make_unique<message::TestMessageContainer>()
+            std::make_unique<testmessages::TestMessageContainer>()
     );
 
     listener.enqueueMessage(message1);

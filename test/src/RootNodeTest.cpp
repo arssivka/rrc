@@ -15,8 +15,8 @@ using namespace rrc;
 class RootNodeFixture : public ::testing::Test {
 public:
     RootNodeFixture() {
-        mMetaTable.registerTypeId<message::TestMessage>(0);
-        mMetaTable.registerTypeId<message::TestMessageContainer>(1);
+        mMetaTable.registerTypeId<testmessages::TestMessage>(0);
+        mMetaTable.registerTypeId<testmessages::TestMessageContainer>(1);
     }
 
 protected:
@@ -28,7 +28,7 @@ protected:
 
 TEST_F(RootNodeFixture, AddAndRemoveListenerTest1) {
     RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable);
-    TypeId typeId = mMetaTable.getTypeId<message::TestMessage>();
+    TypeId typeId = mMetaTable.getTypeId<testmessages::TestMessage>();
     MessageListenerPtr listener = std::make_shared<MessageListener>(typeId);
     rootNode->addListener("test", listener);
     rootNode->entry();
@@ -42,7 +42,7 @@ TEST_F(RootNodeFixture, AddAndRemoveListenerTest1) {
 
 TEST_F(RootNodeFixture, AddAndRemoveListenerTest2) {
     RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable);
-    TypeId typeId = mMetaTable.getTypeId<message::TestMessage>();
+    TypeId typeId = mMetaTable.getTypeId<testmessages::TestMessage>();
     MessageListenerPtr listener = std::make_shared<MessageListener>(typeId);
     rootNode->addListener("test", listener);
     EXPECT_FALSE(listener.unique());
@@ -67,10 +67,10 @@ TEST_F(RootNodeFixture, AddAndRemoveNodeTest3) {
 
 TEST_F(RootNodeFixture, GetTypeIdTest) {
     MetaTable metaTable;
-    metaTable.registerTypeId<message::TestMessage>(0u);
+    metaTable.registerTypeId<testmessages::TestMessage>(0u);
     RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, metaTable);
-    EXPECT_EQ(rootNode->getTypeId<message::TestMessage>(), 0u);
-    EXPECT_EQ(rootNode->getTypeId<message::TestMessageContainer>(), MetaTable::UNKNOWN_TYPE_ID);
+    EXPECT_EQ(rootNode->getTypeId<testmessages::TestMessage>(), 0u);
+    EXPECT_EQ(rootNode->getTypeId<testmessages::TestMessageContainer>(), MetaTable::UNKNOWN_TYPE_ID);
 }
 
 
@@ -79,20 +79,20 @@ TEST_F(RootNodeFixture, SendMessage1) {
     std::shared_ptr<DummyNode> dummyNode1 = std::make_shared<DummyNode>(rootNode, "test");
     std::shared_ptr<DummyNode> dummyNode2 = std::make_shared<DummyNode>(rootNode, "test");
 
-    message::TestMessage tstMessage;
+    testmessages::TestMessage tstMessage;
     tstMessage.set_id(42);
     tstMessage.set_txt("42");
 
     MessagePtr message1 = std::make_shared<Message>(
-            mMetaTable.getTypeId<message::TestMessage>(),
+            mMetaTable.getTypeId<testmessages::TestMessage>(),
             std::chrono::steady_clock::now(),
-            std::make_unique<message::TestMessage>(tstMessage)
+            std::make_unique<testmessages::TestMessage>(tstMessage)
     );
 
     MessagePtr message2 = std::make_shared<Message>(
-            mMetaTable.getTypeId<message::TestMessageContainer>(),
+            mMetaTable.getTypeId<testmessages::TestMessageContainer>(),
             std::chrono::steady_clock::now(),
-            std::make_unique<message::TestMessageContainer>()
+            std::make_unique<testmessages::TestMessageContainer>()
     );
 
     rootNode->sendMessage("test", message1);

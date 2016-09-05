@@ -15,7 +15,7 @@ using namespace rrc;
 class LinearLauncherFixture : public ::testing::Test {
 public:
     LinearLauncherFixture() {
-        mMetaTable.registerTypeId<message::TestMessage>(0);
+        mMetaTable.registerTypeId<testmessages::TestMessage>(0);
     }
 
 protected:

@@ -16,7 +16,7 @@ using namespace rrc;
 class SubscriberFixture : public ::testing::Test {
 public:
     SubscriberFixture() {
-        mMetaTable.registerTypeId<message::TestMessage>(0);
+        mMetaTable.registerTypeId<testmessages::TestMessage>(0);
         mRootNode = std::make_shared<RootNode>(mLauncher, mMetaTable);
     }
 
@@ -28,17 +28,17 @@ protected:
 
 
 TEST_F(SubscriberFixture, CreateSubscriber) {
-    EXPECT_NO_THROW(Subscriber<message::TestMessage>(mRootNode, "test"));
-    EXPECT_THROW(Subscriber<message::TestMessageContainer>(mRootNode, "test"), UnregisteredTypeException);
+    EXPECT_NO_THROW(Subscriber<testmessages::TestMessage>(mRootNode, "test"));
+    EXPECT_THROW(Subscriber<testmessages::TestMessageContainer>(mRootNode, "test"), UnregisteredTypeException);
 }
 
 
 TEST_F(SubscriberFixture, ReceiveMessageTest1) {
-    Subscriber<message::TestMessage> subscriber(mRootNode, "test");
+    Subscriber<testmessages::TestMessage> subscriber(mRootNode, "test");
 
-    TypeId typeId = mMetaTable.getTypeId<message::TestMessage>();
+    TypeId typeId = mMetaTable.getTypeId<testmessages::TestMessage>();
     std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
-    std::unique_ptr<message::TestMessage> data = std::make_unique<message::TestMessage>();
+    std::unique_ptr<testmessages::TestMessage> data = std::make_unique<testmessages::TestMessage>();
     data->set_id(42);
     MessagePtr message = std::make_shared<Message>(typeId, now, std::move(data));
 
@@ -51,11 +51,11 @@ TEST_F(SubscriberFixture, ReceiveMessageTest1) {
 
 
 TEST_F(SubscriberFixture, ReceiveMessageTest2) {
-    Subscriber<message::TestMessage> subscriber(mRootNode, "test");
+    Subscriber<testmessages::TestMessage> subscriber(mRootNode, "test");
 
-    TypeId typeId = mMetaTable.getTypeId<message::TestMessageContainer>();
+    TypeId typeId = mMetaTable.getTypeId<testmessages::TestMessageContainer>();
     std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
-    std::unique_ptr<message::TestMessageContainer> data = std::make_unique<message::TestMessageContainer>();
+    std::unique_ptr<testmessages::TestMessageContainer> data = std::make_unique<testmessages::TestMessageContainer>();
     MessagePtr message = std::make_shared<Message>(typeId, now, std::move(data));
 
     mRootNode->sendMessage("test", message);

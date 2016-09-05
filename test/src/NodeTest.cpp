@@ -15,7 +15,7 @@ using namespace rrc;
 class NodeFixture : public ::testing::Test {
 public:
     NodeFixture() {
-        mMetaTable.registerTypeId<message::TestMessage>(0);
+        mMetaTable.registerTypeId<testmessages::TestMessage>(0);
         mRootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable);
     }
 
@@ -28,14 +28,14 @@ protected:
 
 TEST_F(NodeFixture, CreateAdvertiserTest) {
     DummyNode dummyNode(mRootNode, "test");
-    EXPECT_NO_THROW(dummyNode.createAdvertiser<message::TestMessage>("test"));
-    EXPECT_THROW(dummyNode.createAdvertiser<message::TestMessageContainer>("test"),
+    EXPECT_NO_THROW(dummyNode.createAdvertiser<testmessages::TestMessage>("test"));
+    EXPECT_THROW(dummyNode.createAdvertiser<testmessages::TestMessageContainer>("test"),
                  UnregisteredTypeException);
 }
 
 TEST_F(NodeFixture, CreatedSubscriberTest) {
     DummyNode dummyNode(mRootNode, "test");
-    EXPECT_NO_THROW(dummyNode.createSubscriber<message::TestMessage>("test"));
-    EXPECT_THROW(dummyNode.createSubscriber<message::TestMessageContainer>("test"),
+    EXPECT_NO_THROW(dummyNode.createSubscriber<testmessages::TestMessage>("test"));
+    EXPECT_THROW(dummyNode.createSubscriber<testmessages::TestMessageContainer>("test"),
                  UnregisteredTypeException);
 }
