@@ -1,0 +1,18 @@
+package testmessages;
+
+message TestMessage {
+    required int32 id = 1;
+    required string txt = 2;
+    optional WarningType wrn = 3;
+
+    enum WarningType {
+        UNSETTED = 0;
+        CRIT = 1;
+        NOT_CRIT = 2;
+        SUPER_CRIT = 3;
+    }
+}
+
+message TestMessageContainer {
+    repeated TestMessage messages = 1;
+}
