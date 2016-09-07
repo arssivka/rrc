@@ -5,24 +5,24 @@ add_subdirectory(lib)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(SRCS
-        src/PropertyTests.cpp
-        src/SettingsTests.cpp
-        src/TSLookUpTests.cpp
-        src/MessageTests.cpp
-        src/MetaTableTests.cpp
-        src/TopicTest.cpp
-        src/MessageListenerTests.cpp
-        src/TaskQueueTests.cpp
-        src/RootNodeTest.cpp
-        src/DummyNode.cpp
+        src/core/PropertyTests.cpp
+        src/core/SettingsTests.cpp
+        src/core/TSLookUpTests.cpp
+        src/core/MessageTests.cpp
+        src/core/MetaTableTests.cpp
+        src/core/TopicTest.cpp
+        src/core/MessageListenerTests.cpp
+        src/core/TaskQueueTests.cpp
+        src/core/RootNodeTest.cpp
+        src/core/DummyNode.cpp
         include/DummyNode.h
-        src/BillboardTests.cpp
-        src/RecieveGuardTests.cpp
-        src/NodeTest.cpp
-        src/SubscriberTest.cpp
-        src/LinearLauncherTest.cpp
-        src/AdvertiserTests.cpp
-        src/SendGuardTests.cpp)
+        src/core/BillboardTests.cpp
+        src/core/RecieveGuardTests.cpp
+        src/core/NodeTest.cpp
+        src/core/SubscriberTest.cpp
+        src/core/LinearLauncherTest.cpp
+        src/core/AdvertiserTests.cpp
+        src/core/SendGuardTests.cpp)
 
 set(PROTOS
         proto/Message.proto)

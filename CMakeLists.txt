@@ -48,7 +48,7 @@ set(SRCS
         include/rrc/core/ReceiveGuard.h
         src/rrc/core/IncompatibleTypesException.cpp
         include/rrc/core/IncompatibleTypesException.h
-        include/core.h
+        include/rrc/core.h
         include/rrc/core/MessageFactory.h
         include/rrc/core/MessageFactoryBase.h)
 

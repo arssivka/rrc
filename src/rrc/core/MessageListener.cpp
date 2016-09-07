@@ -3,7 +3,7 @@
  *  @date 7/25/16
  */
 
-#include <include/rrc/core/MessageListener.h>
+#include <rrc/core/MessageListener.h>
 
 
 rrc::MessageListener::MessageListener(rrc::TypeId typeId)

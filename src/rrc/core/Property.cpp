@@ -2,7 +2,7 @@
  *  @autor tekatod
  *  @date 7/15/16
  */
-#include <include/rrc/core/Property.h>
+#include <rrc/core/Property.h>
 
 namespace rrc {
     template<>

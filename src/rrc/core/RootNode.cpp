@@ -3,8 +3,8 @@
  *  @date 8/25/16
  */
 
-#include <include/rrc/core/LauncherBase.h>
-#include <include/rrc/core/RootNode.h>
+#include <rrc/core/LauncherBase.h>
+#include <rrc/core/RootNode.h>
 
 
 rrc::RootNode::RootNode(LauncherBase &launcher, MetaTable &metaTable)

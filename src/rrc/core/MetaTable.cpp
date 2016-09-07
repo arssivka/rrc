@@ -3,7 +3,7 @@
  *  @date 8/25/16
  */
 
-#include <include/rrc/core/MetaTable.h>
+#include <rrc/core/MetaTable.h>
 
 
 const rrc::TypeId rrc::MetaTable::UNKNOWN_TYPE_ID = std::numeric_limits<rrc::TypeId>::max();

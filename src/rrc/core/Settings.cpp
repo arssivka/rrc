@@ -3,7 +3,7 @@
  *  @date 7/8/16
  */
 
-#include <include/rrc/core/Settings.h>
+#include <rrc/core/Settings.h>
 
 rrc::Settings::Settings(unsigned num) : mSettings(num) { }
 

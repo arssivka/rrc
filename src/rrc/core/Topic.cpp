@@ -3,7 +3,7 @@
  *  @date 8/24/16
  */
 
-#include <include/rrc/core/Topic.h>
+#include <rrc/core/Topic.h>
 
 
 rrc::Topic::Topic(TypeId tid)

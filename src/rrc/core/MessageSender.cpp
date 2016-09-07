@@ -3,7 +3,7 @@
  *  @date 7/18/16
  */
 
-#include <include/rrc/core/MessageSender.h>
+#include <rrc/core/MessageSender.h>
 
 
 rrc::MessageSender::MessageSender(rrc::RootNodePtr rootNode, const std::string& topicName)

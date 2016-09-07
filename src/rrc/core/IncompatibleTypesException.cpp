@@ -3,8 +3,8 @@
  *  @date 8/31/16
  */
 
-#include <include/rrc/core/IncompatibleTypesException.h>
-#include <include/rrc/core/MetaTable.h>
+#include <rrc/core/IncompatibleTypesException.h>
+#include <rrc/core/MetaTable.h>
 #include <sstream>
 
 

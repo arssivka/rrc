@@ -3,7 +3,7 @@
  *  @date 7/20/16
  */
 
-#include <include/rrc/core/TaskQueue.h>
+#include <rrc/core/TaskQueue.h>
 
 
 bool rrc::TaskQueue::tryDequeue(rrc::Task& task) {
