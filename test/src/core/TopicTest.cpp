@@ -46,9 +46,9 @@ TEST_F(TopicFixture, CheckTest) {
 
 TEST_F(TopicFixture, EmptyTrueTest) {
     Topic tstTopic(mMetaTable.getTypeId<testmessages::TestMessage>());
-    EXPECT_TRUE(tstTopic.empty());
+    EXPECT_FALSE(tstTopic.hasListeners());
     tstTopic.addListener(mRightMessageListenerPtr);
-    EXPECT_FALSE(tstTopic.empty());
+    EXPECT_TRUE(tstTopic.hasListeners());
 }
 
 
@@ -56,7 +56,7 @@ TEST_F(TopicFixture, RemoveTest) {
     Topic tstTopic(mMetaTable.getTypeId<testmessages::TestMessage>());
     tstTopic.addListener(mRightMessageListenerPtr);
     tstTopic.removeListener(mRightMessageListenerPtr);
-    EXPECT_TRUE(tstTopic.empty());
+    EXPECT_FALSE(tstTopic.hasListeners());
 }
 
 TEST_F(TopicFixture, SendTest) {

@@ -19,15 +19,29 @@ namespace rrc {
     template <class Key>
     class Billboard {
     public:
+
+        /**
+         * @brief Constructor of billboard. Sets the default max load factor 0.8
+         */
         Billboard() {
             // TODO Check it!
             mTopicHash.max_load_factor(0.8);
         }
 
+        /**
+         * @brief Creates topic
+         * @param key Key of the topic
+         * @param tid Id of the type for the topic
+         */
         void createTopic(const Key& key, TypeId tid) {
             mTopicHash.insert({key, std::make_shared<Topic>(tid)});
         }
 
+        /**
+         * @brief Returns topic for the specified key
+         * @param key Key of the needed topic
+         * @return Topic if found otherwise nullptr
+         */
         TopicPtr getTopic(const Key& key) {
             auto found = mTopicHash.find(key);
             if (found != mTopicHash.end()) {
@@ -37,10 +51,18 @@ namespace rrc {
             }
         }
 
+        /**
+         * @brief Removes topic for the specified key
+         * @param key Key of the topic
+         */
         void removeTopic(const Key& key) {
             mTopicHash.erase(key);
         }
 
+        /**
+         * @brief Returns set of the keys of registered topics
+         * @return Set of the topics's keys
+         */
         std::set<Key> getKeys() const {
             std::set<Key> mKeysSet;
             for (auto&& topic : mTopicHash) {

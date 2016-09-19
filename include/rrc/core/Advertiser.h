@@ -15,6 +15,12 @@ namespace rrc {
     template <typename T>
     class Advertiser : private NonCopyable {
     public:
+
+        /**
+         * @brief Constructor of Advertiser
+         * @param rootNode Pointer to Root Node
+         * @param topicName Name of topic to advertise
+         */
         Advertiser(RootNodePtr rootNode, const std::string& topicName) {
             mTypeId = rootNode->getTypeId<T>();
             if (mTypeId == MetaTable::UNKNOWN_TYPE_ID) {
@@ -24,11 +30,19 @@ namespace rrc {
             mRootNode = rootNode;
         }
 
+        /**
+         * @brief Move constructor of advertiser
+         * @param other Reference to other Advertiser to move data from
+         */
         Advertiser(Advertiser&& other)
                 : mRootNode(std::move(other.mRootNode)),
                   mTypeId(other.mTypeId),
                   mTopicName(std::move(other.mTopicName)) { }
 
+        /**
+         * @brief Creates SendGuard
+         * @return SenfGuard specified for the type T
+         */
         SendGuard<T> createSendGuard() const {
             return SendGuard<T>(mRootNode, mTopicName, mTypeId);
         }

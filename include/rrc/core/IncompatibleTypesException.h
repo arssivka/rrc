@@ -10,6 +10,9 @@
 #include "MetaTable.h"
 
 namespace rrc {
+    /**
+     * @brief Exception thrown when types of messages are missmaching
+     */
     class IncompatibleTypesException : public std::runtime_error {
     public:
         IncompatibleTypesException(TypeId firstType = MetaTable::UNKNOWN_TYPE_ID,
@@ -24,5 +27,4 @@ namespace rrc {
         TypeId mSeconTypeId;
     };
 }
-
 

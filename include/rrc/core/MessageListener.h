@@ -17,12 +17,28 @@ namespace {
 namespace rrc {
     class MessageListener {
     public:
+        /**
+         * @brief Constructor of Message Listener
+         * @param typeId Type id of messages to listen
+         */
         MessageListener(TypeId typeId);
 
+        /**
+         * @brief Adds message to queue
+         * @param msg Pointer to desired message
+         */
         void enqueueMessage(MessagePtr msg);
 
+        /**
+         * @brief Tries to dequeue message from queue
+         * @return Pointer to message
+         */
         MessagePtr tryDequeueMessage();
 
+        /**
+         * @brief Returns type id of messages that of this message listener
+         * @return
+         */
         TypeId getTypeId() const;
 
     private:

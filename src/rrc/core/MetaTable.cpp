@@ -31,7 +31,7 @@ bool rrc::MetaTable::isIdReserved(rrc::TypeId tid) {
 }
 
 
-rrc::MessageFactoryPtr rrc::MetaTable::getMessageFactory(rrc::TypeId typeId) {
+rrc::AbstractMessageFactoryPtr rrc::MetaTable::getMessageFactory(rrc::TypeId typeId) {
     auto found = mMessageFactoryHash.find(typeId);
     return (found != mMessageFactoryHash.end())
            ? found->second

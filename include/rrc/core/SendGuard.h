@@ -14,6 +14,13 @@ namespace rrc {
     template <class T>
     class SendGuard : private NonCopyable {
     public:
+
+        /**
+         * @brief Constructor of Send Guard
+         * @param rootNode Pointer to Root Node
+         * @param topicName Name of the topic to gaurd message for
+         * @param typeId Id of type of the message. Default value is UNKNOWN_TYPE_ID and there will be try to set automatically
+         */
         SendGuard(RootNodePtr rootNode, const std::string& topicName, TypeId typeId = MetaTable::UNKNOWN_TYPE_ID)
                 : mTopicName(topicName), mRootNode(rootNode) {
             mTypeId = (typeId == MetaTable::UNKNOWN_TYPE_ID)
@@ -25,6 +32,10 @@ namespace rrc {
             mData.reset(new T);
         }
 
+        /**
+         * @brief Move constructor of Send Guard
+         * @param other Reference to instance of Send Guard to move data from
+         */
         SendGuard(SendGuard&& other)
                 : mTopicName(std::move(other.mTopicName)),
                   mRootNode(std::move(other.mRootNode)),
@@ -32,6 +43,10 @@ namespace rrc {
                   mTypeId(other.mTypeId),
                   mData(std::move(other.mData)) { }
 
+        /**
+         * @brief Sends message
+         * @return True if succeceed, otherwise false
+         */
         bool send() {
             if (this->isSent()) {
                 return false;
@@ -46,23 +61,42 @@ namespace rrc {
             return true;
         }
 
+        /**
+         * @brief Operator -> override
+         * @return Const pointer to message
+         */
         const T* operator->() const {
             return mData.get();
         }
 
+        /**
+         * @brief Operator -> override
+         * @return Pointer to message
+         */
         T* operator->() {
             return mData.get();
         }
 
+        /**
+         * @brief Checks if message already sent
+         * @return True if sent otherwise false
+         */
         bool isSent() const noexcept {
             return mData == nullptr;
         }
 
+        /**
+         * @brief Returns timestamp of the message
+         * @return Timestamp of type std::chrono::steady_clock::time_point
+         */
         const std::chrono::steady_clock::time_point& getTimestamp() const {
             return mTimestamp;
         }
 
-
+        /**
+         * @brief Sets the timestamp of the message
+         * @param timePoint Desired time point of type std::chrono::steady_clock::time_point
+         */
         void setTimestamp(const std::chrono::steady_clock::time_point& timePoint) {
             mTimestamp = timePoint;
         }

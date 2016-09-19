@@ -9,6 +9,9 @@
 #include <memory>
 #include <iostream>
 namespace rrc {
+    /**
+     * @brief Class that makes his child classes to be copied only when modified.
+     */
     template <class T>
     class CopyOnWrite
     {

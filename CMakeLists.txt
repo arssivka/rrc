@@ -14,8 +14,8 @@ add_subdirectory(lib)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(SRCS
-        include/rrc/core/LauncherBase.h
-        include/rrc/core/NodeBase.h
+        include/rrc/core/AbstractLauncher.h
+        include/rrc/core/AbstractNode.h
         src/rrc/core/Settings.cpp
         include/rrc/core/Settings.h
         include/rrc/core/Advertiser.h
@@ -50,7 +50,7 @@ set(SRCS
         include/rrc/core/IncompatibleTypesException.h
         include/rrc/core.h
         include/rrc/core/MessageFactory.h
-        include/rrc/core/MessageFactoryBase.h)
+        include/rrc/core/AbstractMessageFactory.h)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
                "${PROJECT_BINARY_DIR}/VersionDefines.h")

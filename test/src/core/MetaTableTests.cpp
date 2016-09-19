@@ -63,7 +63,7 @@ TEST(MetaTableTest, GetUnregisteredId) {
 TEST(MetaTableTest, MessageFactoryTest) {
     MetaTable metaTable;
     metaTable.registerTypeId<testmessages::TestMessage>(1u);
-    MessageFactoryPtr messageFactoryPtr = metaTable.getMessageFactory(1u);
+    AbstractMessageFactoryPtr messageFactoryPtr = metaTable.getMessageFactory(1u);
     ASSERT_NE(messageFactoryPtr, nullptr);
     EXPECT_NE(messageFactoryPtr->createMessage(), nullptr);
     EXPECT_EQ(metaTable.getMessageFactory(2u), nullptr);

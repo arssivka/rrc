@@ -7,6 +7,9 @@
 
 
 namespace rrc {
+    /**
+     * @brief Class that prevents his child classes of being copied
+     */
     class NonCopyable {
     public:
         NonCopyable() = default;

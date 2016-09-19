@@ -3,11 +3,11 @@
  *  @date 8/25/16
  */
 
-#include <rrc/core/LauncherBase.h>
+#include <rrc/core/AbstractLauncher.h>
 #include <rrc/core/RootNode.h>
 
 
-rrc::RootNode::RootNode(LauncherBase &launcher, MetaTable &metaTable)
+rrc::RootNode::RootNode(AbstractLauncher &launcher, MetaTable &metaTable)
         : mLauncher(&launcher), mMetaTable(&metaTable) { }
 
 
@@ -59,7 +59,7 @@ void rrc::RootNode::removeListener(const rrc::RootNode::Key& topicName, rrc::Mes
         TopicPtr t = mBillboard.getTopic(topicName);
         if (t != nullptr) {
             t->removeListener(listener);
-            if (t->empty()) {
+            if (!t->hasListeners()) {
                 mBillboard.removeTopic(topicName);
             }
         }

@@ -6,10 +6,10 @@
 #pragma once
 
 
-#include "LauncherBase.h"
+#include "AbstractLauncher.h"
 
 namespace rrc {
-    class LinearLauncher : public LauncherBase {
+    class LinearLauncher : public AbstractLauncher {
     public:
         LinearLauncher();
 

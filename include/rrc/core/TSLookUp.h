@@ -21,6 +21,11 @@ namespace rrc {
         typedef std::shared_ptr<D> Ptr;
         typedef H Hash;
 
+        /**
+         * @brief Constructor of TSLookUp
+         * @param numBuckets number of prereserved sells
+         * @param hasher Hash function
+         */
         TSLookUp(
                 unsigned numBuckets = 19, const Hash& hasher = Hash()) :
                 mBuckets(numBuckets), mHasher(hasher) {
@@ -29,31 +34,66 @@ namespace rrc {
             }
         }
 
+        /**
+         * @brief Gets pointer to stored value
+         * @param key Key of value
+         * @return Const pointer to stored value
+         */
         const Ptr get(const K& key) const {
             return this->getBucket(key).valueFor(key);
         }
 
+        /**
+         * @brief Gets pointer to stored value
+         * @param key Key of value
+         * @return Pointer to stored value
+         */
         Ptr get(const K& key) {
             return this->getBucket(key).valueFor(key);
         }
 
+        /**
+         * @brief Gets pointer to stored value and removes it from container
+         * @param key Key of value
+         * @return Pointer to stored value
+         */
         Ptr detach(const K& key) const {
             return this->getBucket(key).detachFor(key);
         }
 
+        /**
+         * @brief Sets value into container
+         * @param key Key of the value to set
+         * @param value Pointer to value to set
+         */
         void set(const K& key, Ptr value) {
             this->getBucket(key).addOrUpdate(key, std::move(value));
         }
 
+        /**
+         * @brief Sets value into container with use of move constructor
+         * @param key Key of the value to set
+         * @param value Rvalue reference to value to set
+         */
         template <class Value>
         void set(const K& key, Value&& value) {
             this->getBucket(key).addOrUpdate(key, std::make_shared<D>(std::forward<Value>(value)));
         }
-        
+
+        /**
+         * @brief Checks if value with specified key is in the container
+         * @param key Key of the value to check
+         * @return True if contains, otherwise false
+         */
         bool contains(const K& key) const {
             return this->getBucket(key).contains(key);
         }
 
+        /**
+         * @brief Removes value from the container with specified key
+         * @param key Key of value to remove
+         * @return True if succeed, otherwise false
+         */
         bool remove(const K& key) {
             return this->getBucket(key).remove(key);
         }

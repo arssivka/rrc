@@ -28,6 +28,10 @@ namespace rrc {
 
         MetaTable() = default;
 
+        /**
+         * @brief Retunrs type id for the specified template parameter
+         * @return Type id if found, otherwise UNKNOWN_TYPE_ID
+         */
         template <class T>
         TypeId getTypeId() const {
             using Type = typename std::remove_reference<T>::type;
@@ -38,6 +42,11 @@ namespace rrc {
             return (found != mTypeInfoHash.end()) ? found->second : UNKNOWN_TYPE_ID;
         }
 
+        /**
+         * @brief Regesters type id for the specified tamplate parameter
+         * @param tid Type id, that nedds to be registered
+         * @return True if succed, otherwise false
+         */
         template <class T>
         bool registerTypeId(TypeId tid) {
             using Type = typename std::remove_reference<T>::type;
@@ -50,15 +59,30 @@ namespace rrc {
             return true;
         }
 
-        MessageFactoryPtr getMessageFactory(TypeId typeId);
+        /**
+         * @brief Returns pointer to Message Factory for the specified type id
+         * @param typeId Type id to get Message FactorY for the needed type
+         * @return Pointer to Message Factory
+         */
+        AbstractMessageFactoryPtr getMessageFactory(TypeId typeId);
 
+        /**
+         * @brief Unregister type by specified type id
+         * @param typeId Type id of the type that needs to be unregistered
+         * @return True if succed, otherwise false
+         */
         bool freeTypeId(TypeId typeId);
 
+        /**
+         * @brief Tells if id already reserved
+         * @param tid Type id to check if reserved
+         * @return True if reserved, otherwise false
+         */
         bool isIdReserved(TypeId tid);
 
     private:
         std::unordered_map<std::type_index, TypeId> mTypeInfoHash;
-        std::unordered_map<TypeId, MessageFactoryPtr> mMessageFactoryHash;
+        std::unordered_map<TypeId, AbstractMessageFactoryPtr> mMessageFactoryHash;
 
     };
 }

@@ -42,6 +42,6 @@ bool rrc::Topic::checkCapability(TypeId typeId) const noexcept {
 }
 
 
-bool rrc::Topic::empty() const {
-    return mListenersList.empty();
+bool rrc::Topic::hasListeners() const {
+    return !mListenersList.empty();
 }
