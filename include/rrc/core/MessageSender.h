@@ -15,6 +15,9 @@ namespace {
 }
 
 namespace rrc {
+    /**
+     * @brief Class for sending messages into topics
+     */
     class MessageSender {
     public:
         typedef std::shared_ptr<MessageSender> Ptr;

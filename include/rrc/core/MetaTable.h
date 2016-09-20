@@ -21,7 +21,9 @@ namespace {
 
 namespace rrc {
     typedef unsigned int TypeId;
-
+    /**
+     * @brief Table which contains types of the messages and allows to register new types and delete existing.
+     */
     class MetaTable {
     public:
         static const TypeId UNKNOWN_TYPE_ID;

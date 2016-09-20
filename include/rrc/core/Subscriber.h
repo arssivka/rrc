@@ -19,6 +19,9 @@ namespace {
 }
 
 namespace rrc {
+    /**
+     * @brief This class allows to subsribe to topic and get messages from it.
+     */
     template <typename T>
     class Subscriber : private NonCopyable {
     public:

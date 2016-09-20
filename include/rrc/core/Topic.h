@@ -15,6 +15,9 @@ namespace {
 }
 
 namespace rrc {
+    /**
+     * @brief All messages come to topics. Topic is a special place for holding specific messages. Nodes can subscribe to tpoics to get messages they need.
+     */
     class Topic {
     public:
 

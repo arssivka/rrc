@@ -17,6 +17,9 @@ namespace {
 }
 
 namespace rrc {
+    /**
+     * @brief Message that you need to send to the topic. It holds a protobuf::MessageLite in it.
+     */
     class Message : private NonCopyable {
     public:
         /**

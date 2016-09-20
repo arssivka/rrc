@@ -18,7 +18,9 @@ namespace rrc {
     class Node;
     typedef std::shared_ptr<Node> NodePtr;
     class AbstractLauncher;
-
+    /**
+     * @brief The main node. It's responsible for syncronisation bentween nodes.
+     */
     class RootNode : public AbstractNode {
     public:
         typedef std::string Key;

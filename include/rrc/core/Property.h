@@ -11,6 +11,9 @@
 #include "mapbox/variant.hpp"
 
 namespace rrc {
+    /**
+     * @brief Property is a class for holding and modifying the setting of the node. It can hold float, bool, int or string.
+     */
     class Property {
     public:
         typedef mapbox::util::variant<std::string, float, bool, int> SettingsType;

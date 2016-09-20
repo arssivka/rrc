@@ -41,7 +41,7 @@ namespace rrc {
 
         /**
          * @brief Creates SendGuard
-         * @return SenfGuard specified for the type T
+         * @return SendGuard specified for the type T
          */
         SendGuard<T> createSendGuard() const {
             return SendGuard<T>(mRootNode, mTopicName, mTypeId);

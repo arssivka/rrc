@@ -16,6 +16,9 @@ namespace {
 }
 
 namespace rrc {
+    /**
+     * @brief Class that contains all the topics and grants access to them.
+     */
     template <class Key>
     class Billboard {
     public:
