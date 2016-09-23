@@ -35,7 +35,7 @@ TEST_F(NodeFixture, CreateAdvertiserTest) {
 
 TEST_F(NodeFixture, CreatedSubscriberTest) {
     DummyNode dummyNode(mRootNode, "test");
-    EXPECT_NO_THROW(dummyNode.createSubscriber<testmessages::TestMessage>("test"));
-    EXPECT_THROW(dummyNode.createSubscriber<testmessages::TestMessageContainer>("test"),
+    EXPECT_NO_THROW(dummyNode.createQueueSubscriber<testmessages::TestMessage>("test"));
+    EXPECT_THROW(dummyNode.createQueueSubscriber<testmessages::TestMessageContainer>("test"),
                  UnregisteredTypeException);
 }

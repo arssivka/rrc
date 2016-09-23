@@ -13,9 +13,9 @@
 using namespace rrc;
 
 
-class SubscriberFixture : public ::testing::Test {
+class QueueSubscriberFixture : public ::testing::Test {
 public:
-    SubscriberFixture() {
+    QueueSubscriberFixture() {
         mMetaTable.registerTypeId<testmessages::TestMessage>(0);
         mRootNode = std::make_shared<RootNode>(mLauncher, mMetaTable);
     }
@@ -27,14 +27,14 @@ protected:
 };
 
 
-TEST_F(SubscriberFixture, CreateSubscriber) {
-    EXPECT_NO_THROW(Subscriber<testmessages::TestMessage>(mRootNode, "test"));
-    EXPECT_THROW(Subscriber<testmessages::TestMessageContainer>(mRootNode, "test"), UnregisteredTypeException);
+TEST_F(QueueSubscriberFixture, CreateSubscriber) {
+    EXPECT_NO_THROW(QueueSubscriber<testmessages::TestMessage>(mRootNode, "test"));
+    EXPECT_THROW(QueueSubscriber<testmessages::TestMessageContainer>(mRootNode, "test"), UnregisteredTypeException);
 }
 
 
-TEST_F(SubscriberFixture, ReceiveMessageTest1) {
-    Subscriber<testmessages::TestMessage> subscriber(mRootNode, "test");
+TEST_F(QueueSubscriberFixture, ReceiveMessageTest1) {
+    QueueSubscriber<testmessages::TestMessage> subscriber(mRootNode, "test");
 
     TypeId typeId = mMetaTable.getTypeId<testmessages::TestMessage>();
     std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
@@ -50,8 +50,8 @@ TEST_F(SubscriberFixture, ReceiveMessageTest1) {
 }
 
 
-TEST_F(SubscriberFixture, ReceiveMessageTest2) {
-    Subscriber<testmessages::TestMessage> subscriber(mRootNode, "test");
+TEST_F(QueueSubscriberFixture, ReceiveMessageTest2) {
+    QueueSubscriber<testmessages::TestMessage> subscriber(mRootNode, "test");
 
     TypeId typeId = mMetaTable.getTypeId<testmessages::TestMessageContainer>();
     std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();

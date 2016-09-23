@@ -8,7 +8,7 @@
 
 #include <unordered_map>
 #include <set>
-#include "MessageListener.h"
+#include "QueueMessageListener.h"
 #include "Topic.h"
 
 namespace {

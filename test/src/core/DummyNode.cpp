@@ -11,7 +11,7 @@ DummyNode::DummyNode(rrc::RootNodePtr rootNode, const std::string& topicName)
         : Node(rootNode), mRootNode(rootNode), mTopicName(topicName) {
     this->resetCounter();
     rrc::TypeId typeId = rootNode->getTypeId<testmessages::TestMessage>();
-    mListener = std::make_shared<rrc::MessageListener>(typeId);
+    mListener = std::make_shared<rrc::QueueMessageListener>(typeId);
     mRootNode->addListener(mTopicName, mListener);
 }
 

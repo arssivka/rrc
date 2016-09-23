@@ -5,15 +5,16 @@
 #include <iostream>
 #include <string>
 #include <gtest/gtest.h>
-#include "rrc/core/Topic.h"
+#include <rrc/core/Topic.h>
+#include <rrc/core/QueueMessageListener.h>
 #include "Message.pb.h"
 
 using namespace rrc;
 
 class TopicFixture : public ::testing::Test {
 public:
-    TopicFixture() : mRightMessageListenerPtr(std::make_shared<MessageListener>(1u)),
-                        mWrongMessageListenerPtr(std::make_shared<MessageListener>(2u)) {
+    TopicFixture() : mRightMessageListenerPtr(std::make_shared<QueueMessageListener>(1u)),
+                        mWrongMessageListenerPtr(std::make_shared<QueueMessageListener>(2u)) {
         mMetaTable.registerTypeId<testmessages::TestMessage>(1u);
         mMetaTable.registerTypeId<testmessages::TestMessageContainer>(2u);
 
@@ -24,8 +25,8 @@ public:
     }
 
 protected:
-    MessageListenerPtr mRightMessageListenerPtr;
-    MessageListenerPtr mWrongMessageListenerPtr;
+    QueueMessageListenerPtr mRightMessageListenerPtr;
+    QueueMessageListenerPtr mWrongMessageListenerPtr;
     MetaTable mMetaTable;
 };
 

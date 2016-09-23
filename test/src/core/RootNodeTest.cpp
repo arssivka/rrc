@@ -29,7 +29,7 @@ protected:
 TEST_F(RootNodeFixture, AddAndRemoveListenerTest1) {
     RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable);
     TypeId typeId = mMetaTable.getTypeId<testmessages::TestMessage>();
-    MessageListenerPtr listener = std::make_shared<MessageListener>(typeId);
+    QueueMessageListenerPtr listener = std::make_shared<QueueMessageListener>(typeId);
     rootNode->addListener("test", listener);
     rootNode->entry();
     EXPECT_FALSE(listener.unique());
@@ -43,7 +43,7 @@ TEST_F(RootNodeFixture, AddAndRemoveListenerTest1) {
 TEST_F(RootNodeFixture, AddAndRemoveListenerTest2) {
     RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable);
     TypeId typeId = mMetaTable.getTypeId<testmessages::TestMessage>();
-    MessageListenerPtr listener = std::make_shared<MessageListener>(typeId);
+    QueueMessageListenerPtr listener = std::make_shared<QueueMessageListener>(typeId);
     rootNode->addListener("test", listener);
     EXPECT_FALSE(listener.unique());
     rootNode->removeListener("test", listener);

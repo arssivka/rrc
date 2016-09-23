@@ -16,3 +16,9 @@ message TestMessage {
 message TestMessageContainer {
     repeated TestMessage messages = 1;
 }
+
+message NetPackage {
+    required int32 typeId = 1;
+    required int32 time = 2;
+    required string data = 3;
+}

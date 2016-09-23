@@ -10,7 +10,7 @@ rrc::Topic::Topic(TypeId tid)
         : mTypeId(tid) { }
 
 
-bool rrc::Topic::addListener(rrc::MessageListenerPtr listener) {
+bool rrc::Topic::addListener(rrc::AbstractMessageListenerPtr listener) {
     if (!this->checkCapability(listener->getTypeId())) {
         return false;
     } else {
@@ -20,7 +20,7 @@ bool rrc::Topic::addListener(rrc::MessageListenerPtr listener) {
 }
 
 
-void rrc::Topic::removeListener(rrc::MessageListenerPtr listener) {
+void rrc::Topic::removeListener(rrc::AbstractMessageListenerPtr listener) {
     mListenersList.remove(listener);
 }
 

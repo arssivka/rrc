@@ -8,7 +8,7 @@
 
 #include <rrc/core/Node.h>
 #include <rrc/core/RootNode.h>
-#include <rrc/core/MessageListener.h>
+#include <rrc/core/QueueMessageListener.h>
 
 class DummyNode : public rrc::Node {
 public:
@@ -37,7 +37,7 @@ private:
     rrc::RootNodePtr mRootNode;
     int mCounter;
     std::string mTopicName;
-    rrc::MessageListenerPtr mListener;
+    rrc::QueueMessageListenerPtr mListener;
 };
 
 

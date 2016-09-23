@@ -9,7 +9,7 @@
 #include <concurrentqueue.h>
 #include "AbstractNode.h"
 #include "Message.h"
-#include "MessageListener.h"
+#include "AbstractMessageListener.h"
 #include "Billboard.h"
 #include "TaskQueue.h"
 #include "MetaTable.h"
@@ -63,14 +63,14 @@ namespace rrc {
          * @param topicName Name of the topic for the listener
          * @param listener Pointer to the listener that needs to be registered
          */
-        void addListener(const Key& topicName, MessageListenerPtr listener);
+        void addListener(const Key& topicName, AbstractMessageListenerPtr listener);
 
         /**
          * @bried Unregisters listener
          * @param topicName Name of the topic for the listener
          * @param listener Pointer to the listener that needs to be unregistered
          */
-        void removeListener(const Key& topicName, MessageListenerPtr listener);
+        void removeListener(const Key& topicName, AbstractMessageListenerPtr listener);
 
         /**
          * @brief Stops the node from execution
@@ -84,6 +84,14 @@ namespace rrc {
         template <class T>
         TypeId getTypeId() {
             return mMetaTable->getTypeId<T>();
+        }
+
+        /**
+         * @brief Returns set of avaliable topic names
+         * @return Set of topic names
+         */
+        std::set<Key> getTopicNames() const {
+            return mBillboard.getKeys();
         }
 
     private:

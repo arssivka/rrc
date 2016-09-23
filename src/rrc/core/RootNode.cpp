@@ -5,6 +5,7 @@
 
 #include <rrc/core/AbstractLauncher.h>
 #include <rrc/core/RootNode.h>
+#include "AbstractMessageListener.cpp"
 
 
 rrc::RootNode::RootNode(AbstractLauncher &launcher, MetaTable &metaTable)
@@ -42,7 +43,7 @@ void rrc::RootNode::removeNode(rrc::NodePtr node) {
 }
 
 
-void rrc::RootNode::addListener(const rrc::RootNode::Key& topicName, rrc::MessageListenerPtr listener) {
+void rrc::RootNode::addListener(const rrc::RootNode::Key& topicName, AbstractMessageListenerPtr listener) {
     mListenersPendingListChanges.enqueue([this, topicName, listener]() {
         TopicPtr t = mBillboard.getTopic(topicName);
         if (t == nullptr) {
@@ -54,7 +55,7 @@ void rrc::RootNode::addListener(const rrc::RootNode::Key& topicName, rrc::Messag
 }
 
 
-void rrc::RootNode::removeListener(const rrc::RootNode::Key& topicName, rrc::MessageListenerPtr listener) {
+void rrc::RootNode::removeListener(const rrc::RootNode::Key& topicName, AbstractMessageListenerPtr listener) {
     mListenersPendingListChanges.enqueue([this, topicName, listener]() {
         TopicPtr t = mBillboard.getTopic(topicName);
         if (t != nullptr) {

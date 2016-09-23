@@ -9,10 +9,12 @@
 #include "AbstractLauncher.h"
 #include "Message.h"
 #include "NonCopyable.h"
-#include "MessageListener.h"
+#include "QueueMessageListener.h"
 #include "TaskQueue.h"
 #include "UnregisteredTypeException.h"
 #include "ReceiveGuard.h"
+#include "QueueMessageListener.h"
+#include "LimitedSizeMessageListener.h"
 
 namespace {
     namespace pb = google::protobuf;
@@ -22,7 +24,7 @@ namespace rrc {
     /**
      * @brief This class allows to subsribe to topic and get messages from it.
      */
-    template <typename T>
+    template <typename MessageType, typename ListenerType>
     class Subscriber : private NonCopyable {
     public:
 
@@ -32,14 +34,16 @@ namespace rrc {
          * @param topicName Name of the topic to subscribe
          */
         Subscriber(RootNodePtr rootNode, const std::string& topicName) {
-            TypeId typeId = rootNode->getTypeId<T>();
+            static_assert(std::is_base_of<AbstractMessageListener, ListenerType>::value,
+                          "ListenerType template parameter must be derived from rrc::AbstractMessageListener");
+            TypeId typeId = rootNode->getTypeId<MessageType>();
             if (typeId == MetaTable::UNKNOWN_TYPE_ID) {
                 throw UnregisteredTypeException();
             }
             mConnected = false;
             mRootNode = rootNode;
             mTopicName = topicName;
-            mListener = std::make_shared<MessageListener>(typeId);
+            mListener = std::make_shared<ListenerType>(typeId);
 
             this->connect();
         }
@@ -60,8 +64,8 @@ namespace rrc {
          * @brief Trys to get message
          * @return Recieve Guard with message of type T
          */
-        ReceiveGuard<T> tryGetMessage() {
-            return ReceiveGuard<T>(mListener->tryDequeueMessage());
+        ReceiveGuard<MessageType> tryGetMessage() {
+            return ReceiveGuard<MessageType>(mListener->tryDequeueMessage());
         }
 
         // TODO Getter with bool result
@@ -89,6 +93,13 @@ namespace rrc {
         bool mConnected;
         RootNodePtr mRootNode;
         std::string mTopicName;
-        MessageListenerPtr mListener;
+        AbstractMessageListenerPtr mListener;
     };
+
+    // TODO Comment it
+    template <class MessageType>
+    using QueueSubscriber = Subscriber<MessageType, QueueMessageListener>;
+
+    template <class MessageType, size_t Size>
+    using LimitedSizeSubscriber = Subscriber<MessageType, LimitedSizeMessageListener<Size>>;
 }

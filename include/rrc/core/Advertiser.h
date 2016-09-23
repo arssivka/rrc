@@ -7,7 +7,6 @@
 
 
 #include "Message.h"
-#include "MessageSender.h"
 #include "UnregisteredTypeException.h"
 #include "SendGuard.h"
 

@@ -7,7 +7,7 @@
 
 
 #include <forward_list>
-#include "MessageListener.h"
+#include "AbstractMessageListener.h"
 #include "NonCopyable.h"
 
 namespace {
@@ -32,13 +32,13 @@ namespace rrc {
          * @param listener Pointer to listener to register
          * @return True if succeed otherwise false
          */
-        bool addListener(MessageListenerPtr listener);
+        bool addListener(AbstractMessageListenerPtr listener);
 
         /**
          * @brief Unregisters specified listener
          * @param listener Pointer to listener that needs to be unregistred
          */
-        void removeListener(MessageListenerPtr listener);
+        void removeListener(AbstractMessageListenerPtr listener);
 
         /**
          * @brief Sends the message
@@ -67,7 +67,7 @@ namespace rrc {
 
     private:
         TypeId mTypeId;
-        std::forward_list<MessageListenerPtr> mListenersList;
+        std::forward_list<AbstractMessageListenerPtr> mListenersList;
 
     };
 

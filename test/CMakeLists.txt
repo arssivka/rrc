@@ -11,7 +11,7 @@ set(SRCS
         src/core/MessageTests.cpp
         src/core/MetaTableTests.cpp
         src/core/TopicTest.cpp
-        src/core/MessageListenerTests.cpp
+        src/core/QueueMessageListenerTests.cpp
         src/core/TaskQueueTests.cpp
         src/core/RootNodeTest.cpp
         src/core/DummyNode.cpp
@@ -19,10 +19,10 @@ set(SRCS
         src/core/BillboardTests.cpp
         src/core/RecieveGuardTests.cpp
         src/core/NodeTest.cpp
-        src/core/SubscriberTest.cpp
+        src/core/QueueSubscriberTest.cpp
         src/core/LinearLauncherTest.cpp
         src/core/AdvertiserTests.cpp
-        src/core/SendGuardTests.cpp)
+        src/core/SendGuardTests.cpp src/core/LimitedSizeSubscriberTests.cpp)
 
 set(PROTOS
         proto/Message.proto)

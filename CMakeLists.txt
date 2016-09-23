@@ -22,16 +22,14 @@ set(SRCS
         include/rrc/core/Subscriber.h
         include/rrc/core/Message.h
         include/rrc/core/NonCopyable.h
-        include/rrc/core/MessageListener.h
+        include/rrc/core/QueueMessageListener.h
         src/rrc/core/Property.cpp
         include/rrc/core/Property.h
         include/rrc/core/TSLookUp.h
         include/rrc/core/CopyOnWrite.h
-        src/rrc/core/MessageSender.cpp
-        include/rrc/core/MessageSender.h
         src/rrc/core/TaskQueue.cpp
         include/rrc/core/TaskQueue.h
-        src/rrc/core/MessageListener.cpp
+        src/rrc/core/QueueMessageListener.cpp
         include/rrc/core/Billboard.h
         src/rrc/core/Topic.cpp include/rrc/core/Topic.h
         src/rrc/core/MetaTable.cpp
@@ -50,10 +48,15 @@ set(SRCS
         include/rrc/core/IncompatibleTypesException.h
         include/rrc/core.h
         include/rrc/core/MessageFactory.h
-        include/rrc/core/AbstractMessageFactory.h)
+        include/rrc/core/AbstractMessageFactory.h
+        include/rrc/core/AbstractMessageListener.h
+        src/rrc/core/AbstractMessageListener.cpp
+        include/rrc/core/LimitedSizeMessageListener.h)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
                "${PROJECT_BINARY_DIR}/VersionDefines.h")
+
+
 
 add_library(rrc ${SRCS} ${PROTO_SRCS} ${PROTO_HDRS})
 target_link_libraries(rrc ${PROTOBUF_LIBRARIES} ${TCMalloc_LIBRARIES} variant concurrentqueue)

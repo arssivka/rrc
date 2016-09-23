@@ -6,19 +6,19 @@
 #include <gtest/gtest.h>
 #include <rrc/core/MetaTable.h>
 #include <Message.pb.h>
-#include <rrc/core/MessageListener.h>
+#include <rrc/core/QueueMessageListener.h>
 
 
 using namespace rrc;
 
-class ListenerFixture : public ::testing::Test {
+class QueueListenerFixture : public ::testing::Test {
 public:
-    ListenerFixture() {
+    QueueListenerFixture() {
         mMetaTable.registerTypeId<testmessages::TestMessage>(1);
         mMetaTable.registerTypeId<testmessages::TestMessageContainer>(2);
     }
 
-    ~ListenerFixture() {
+    ~QueueListenerFixture() {
         //Destroy all the good members
     }
 
@@ -28,23 +28,23 @@ protected:
 };
 
 
-TEST_F(ListenerFixture, GetTypeId) {
+TEST_F(QueueListenerFixture, GetTypeId) {
     TypeId typeId = mMetaTable.getTypeId<testmessages::TestMessage>();
-    MessageListener listener(typeId);
+    QueueMessageListener listener(typeId);
     EXPECT_EQ(listener.getTypeId(), typeId);
 }
 
 
-TEST_F(ListenerFixture, GetMessageFromEmptyQueue) {
+TEST_F(QueueListenerFixture, GetMessageFromEmptyQueue) {
     TypeId typeId = mMetaTable.getTypeId<testmessages::TestMessage>();
-    MessageListener listener(typeId);
+    QueueMessageListener listener(typeId);
     EXPECT_EQ(listener.tryDequeueMessage(), nullptr);
 }
 
 
-TEST_F(ListenerFixture, GetMessages1) {
+TEST_F(QueueListenerFixture, GetMessages1) {
     TypeId typeId = mMetaTable.getTypeId<testmessages::TestMessage>();
-    MessageListener listener(typeId);
+    QueueMessageListener listener(typeId);
     MessagePtr message = std::make_shared<Message>(
             typeId,
             std::chrono::steady_clock::now(),
@@ -56,9 +56,9 @@ TEST_F(ListenerFixture, GetMessages1) {
 }
 
 
-TEST_F(ListenerFixture, GetMessages2) {
+TEST_F(QueueListenerFixture, GetMessages2) {
     TypeId typeId = mMetaTable.getTypeId<testmessages::TestMessage>();
-    MessageListener listener(typeId);
+    QueueMessageListener listener(typeId);
     MessagePtr message = std::make_shared<Message>(
             typeId,
             std::chrono::steady_clock::now(),
@@ -72,10 +72,10 @@ TEST_F(ListenerFixture, GetMessages2) {
 }
 
 
-TEST_F(ListenerFixture, GetMessages3) {
+TEST_F(QueueListenerFixture, GetMessages3) {
     TypeId typeId1 = mMetaTable.getTypeId<testmessages::TestMessage>();
     TypeId typeId2 = mMetaTable.getTypeId<testmessages::TestMessageContainer>();
-    MessageListener listener(typeId1);
+    QueueMessageListener listener(typeId1);
 
     MessagePtr message1 = std::make_shared<Message>(
             typeId1,

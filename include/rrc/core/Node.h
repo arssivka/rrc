@@ -48,9 +48,14 @@ namespace rrc {
          * @param topicName Name of the to subscibe
          * @return Subscriber with parameter = T
          */
-        template <class T>
-        inline Subscriber<T> createSubscriber(const std::string& topicName) {
-            return Subscriber<T>(mRootNode, topicName);
+        template <class MessageType>
+        inline QueueSubscriber<MessageType> createQueueSubscriber(const std::string& topicName) {
+            return QueueSubscriber<MessageType>(mRootNode, topicName);
+        }
+
+        template <class MessageType, size_t Size>
+        inline LimitedSizeSubscriber<MessageType, Size> createLimitedSizeSubscriber(const std::string& topicName) {
+            return LimitedSizeSubscriber<MessageType, Size>(mRootNode, topicName);
         }
 
     protected:
