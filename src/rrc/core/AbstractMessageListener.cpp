@@ -3,8 +3,6 @@
  *  @date 9/23/16
  */
 
-#pragma once
-
 #include <rrc/core/AbstractMessageListener.h>
 
 

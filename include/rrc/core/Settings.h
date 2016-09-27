@@ -6,57 +6,61 @@
 #pragma once
 
 #include <string>
-#include "TSLookUp.h"
-#include "Property.h"
+#include <unordered_map>
+#include <forward_list>
+#include <set>
+#include "AbstractPropertyListener.h"
 
 namespace rrc {
     class Settings {
     public:
 
-        /**
-         * @brief Constructor of settings.
-         * @param num Number of prereserved cells for settings
-         */
-        Settings(unsigned num);
-
-        /**
-         * @brief Default constructor of settins
-         */
         Settings();
 
-        /**
-         * @brief Stores setting to container
-         * @param key Key of the setting
-         * @param data Data to store of string, int, bool, float or Property type
-         */
-        template <class D>
-        void set(const std::string& key, D&& data) {
-            mSettings.set(key, Property(std::forward<D>(data)));
+        template <class T>
+        void addOrUpdateProperty(const std::string &key, T&& property) {
+            auto container = mListenerContainers.find(key);
+            if(container != mListenerContainers.end()) {
+                container->second.updateProperty(Property(std::forward<T>(property)));
+            } else {
+                mListenerContainers.insert({key, PropertyListenerContainer(Property(std::forward<T>(property)))});
+            }
         }
 
-        /**
-         * @brief Removes the setting for the specified key
-         * @param key Key of setting to remove
-         */
-        void remove(const std::string& key);
+        void removeProperty(const std::string &key);
 
-        /**
-         * @brief Returns setting by the specified key
-         * @param key Key of desired setting
-         * @return Property
-         */
-        Property get(const std::string& key) const;
+        void addListener(const std::string &key, AbstractPropertyListenerPtr listener);
 
-        /**
-         * @brief Checks if there is a setiing with the specified key
-         * @param key Key to check
-         * @return True if such setting in the container, otherwise false
-         */
-        bool contains(const std::string& key) const;
+        void removeListener(const std::string &key, AbstractPropertyListenerPtr listener);
+
+        bool empty() const;
+
+        bool contains(const std::string &key) const;
+
+        bool hasListeners(const std::string &key) const;
+
+        std::set<std::string> getKeys() const;
 
 
     private:
-        TSLookUp<std::string, Property> mSettings;
+
+        struct PropertyListenerContainer {
+
+            PropertyListenerContainer(Property property);
+
+            void addListener(AbstractPropertyListenerPtr listener);
+
+            void removeListener(AbstractPropertyListenerPtr listener);
+
+            void updateProperty(Property property);
+
+            bool hasListeners() const;
+
+            std::forward_list<AbstractPropertyListenerPtr> mListenerList;
+
+            Property mProperty;
+        };
+        std::unordered_map<std::string, PropertyListenerContainer> mListenerContainers;
     };
 }
 

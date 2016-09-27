@@ -25,7 +25,6 @@ set(SRCS
         include/rrc/core/QueueMessageListener.h
         src/rrc/core/Property.cpp
         include/rrc/core/Property.h
-        include/rrc/core/TSLookUp.h
         include/rrc/core/CopyOnWrite.h
         src/rrc/core/TaskQueue.cpp
         include/rrc/core/TaskQueue.h
@@ -51,7 +50,10 @@ set(SRCS
         include/rrc/core/AbstractMessageFactory.h
         include/rrc/core/AbstractMessageListener.h
         src/rrc/core/AbstractMessageListener.cpp
-        include/rrc/core/LimitedSizeMessageListener.h)
+        include/rrc/core/LimitedSizeMessageListener.h
+        include/rrc/core/AbstractPropertyListener.h
+        include/rrc/core/PropertyListener.h
+        src/rrc/core/PropertyListener.cpp)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
                "${PROJECT_BINARY_DIR}/VersionDefines.h")

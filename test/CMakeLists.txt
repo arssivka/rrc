@@ -7,7 +7,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(SRCS
         src/core/PropertyTests.cpp
         src/core/SettingsTests.cpp
-        src/core/TSLookUpTests.cpp
         src/core/MessageTests.cpp
         src/core/MetaTableTests.cpp
         src/core/TopicTest.cpp

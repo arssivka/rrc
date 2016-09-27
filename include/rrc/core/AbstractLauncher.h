@@ -13,7 +13,7 @@ namespace rrc {
     typedef std::shared_ptr<Node> NodePtr;
 
     /**
-     * @brief Abstract class for creating launchers. Launcher is needed to run all the nodes and functionality of the whole system.
+     * @brief Abstract class for creating launchers. Lauуncher is needed to run all the nodes and functionality of the whole system.
      */
     class AbstractLauncher {
     public:
