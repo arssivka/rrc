@@ -52,7 +52,7 @@ bool rrc::LinearLauncher::step() {
     for (auto&& container : mNodesList) {
         auto now = std::chrono::steady_clock::now();
         auto elapsed = now - container.timestamp;
-        if (elapsed > container.node->getMinDuration()) {
+        if (elapsed >= container.node->getMinDuration()) {
             container.node->entry();
             container.timestamp = now;
         }
