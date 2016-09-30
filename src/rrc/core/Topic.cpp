@@ -4,19 +4,16 @@
  */
 
 #include <rrc/core/Topic.h>
+#include <rrc/core/BypassMessageFilter.h>
 
 
-rrc::Topic::Topic(TypeId tid)
-        : mTypeId(tid) { }
+rrc::Topic::Topic()
+        : mMessageFilter(std::make_shared<BypassMessageFilter>()), mAutoRemoveEnabled(true),
+          mMessageFilterEnabled(true) { }
 
 
-bool rrc::Topic::addListener(rrc::AbstractMessageListenerPtr listener) {
-    if (!this->checkCapability(listener->getTypeId())) {
-        return false;
-    } else {
-        mListenersList.push_front(std::move(listener));
-        return true;
-    }
+void rrc::Topic::addListener(rrc::AbstractMessageListenerPtr listener) {
+    mListenersList.push_front(std::move(listener));
 }
 
 
@@ -26,22 +23,44 @@ void rrc::Topic::removeListener(rrc::AbstractMessageListenerPtr listener) {
 
 
 void rrc::Topic::sendMessage(MessagePtr message) {
-    for (auto&& listener : mListenersList) {
-        listener->enqueueMessage(message);
+    if (mMessageFilter->accept(message)) {
+        for (auto&& listener : mListenersList) {
+            listener->enqueueMessage(message);
+        }
     }
-}
-
-
-rrc::TypeId rrc::Topic::getTypeId() const noexcept {
-    return mTypeId;
-}
-
-
-bool rrc::Topic::checkCapability(TypeId typeId) const noexcept {
-    return mTypeId == typeId;
 }
 
 
 bool rrc::Topic::hasListeners() const {
     return !mListenersList.empty();
+}
+
+
+bool rrc::Topic::isAutoRemoveEnabled() const {
+    return mAutoRemoveEnabled;
+}
+
+
+void rrc::Topic::setAutoRemoveEnabled(bool autoRemoveEnabled) {
+    mAutoRemoveEnabled = autoRemoveEnabled;
+}
+
+
+bool rrc::Topic::isMessageFilterEnabled() const {
+    return mMessageFilterEnabled;
+}
+
+
+void rrc::Topic::setMessageFilterEnabled(bool filterEnabled) {
+    mMessageFilterEnabled = filterEnabled;
+}
+
+
+rrc::AbstractMessageFilterPtr rrc::Topic::getMessageFilter() const {
+    return mMessageFilter;
+}
+
+
+void rrc::Topic::setMessageFilter(AbstractMessageFilterPtr messageFilter) {
+    mMessageFilter = messageFilter;
 }

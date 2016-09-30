@@ -9,6 +9,7 @@
 #include <forward_list>
 #include "AbstractMessageListener.h"
 #include "NonCopyable.h"
+#include "AbstractMessageFilter.h"
 
 namespace {
     namespace pb = google::protobuf;
@@ -20,19 +21,16 @@ namespace rrc {
      */
     class Topic {
     public:
-
         /**
-         * @brief Constructor of Topic
-         * @param id Type id of the message which this topic handles
+         * @brief Default constructor of Topic
          */
-        Topic(TypeId id);
+        Topic();
 
         /**
          * @brief Register message listener
          * @param listener Pointer to listener to register
-         * @return True if succeed otherwise false
          */
-        bool addListener(AbstractMessageListenerPtr listener);
+        void addListener(AbstractMessageListenerPtr listener);
 
         /**
          * @brief Unregisters specified listener
@@ -47,27 +45,28 @@ namespace rrc {
         void sendMessage(MessagePtr message);
 
         /**
-         * @brief Returns type id of the messages of this topic
-         * @return Type id - unsigned int
-         */
-        TypeId getTypeId() const noexcept;
-
-        /**
-         * @brief Checks the capability of desried type id with this topic
-         * @param typeId Type id ou meed check with
-         * @return True of compatible otherwise false
-         */
-        bool checkCapability(TypeId typeId) const noexcept;
-
-        /**
          * @brief Checks if this topic has listeners
          * @return True if topic has lesteners, otherwise false
          */
         bool hasListeners() const;
 
+        bool isAutoRemoveEnabled() const;
+
+        void setAutoRemoveEnabled(bool autoRemoveEnabled);
+
+        bool isMessageFilterEnabled() const;
+
+        void setMessageFilterEnabled(bool filterEnabled);
+
+        AbstractMessageFilterPtr getMessageFilter() const;
+
+        void setMessageFilter(AbstractMessageFilterPtr messageFilter);
+
     private:
-        TypeId mTypeId;
+        AbstractMessageFilterPtr mMessageFilter;
         std::forward_list<AbstractMessageListenerPtr> mListenersList;
+        bool mAutoRemoveEnabled;
+        bool mMessageFilterEnabled;
 
     };
 

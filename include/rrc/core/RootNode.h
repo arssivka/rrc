@@ -90,9 +90,15 @@ namespace rrc {
          * @brief Returns set of avaliable topic names
          * @return Set of topic names
          */
-        std::set<Key> getTopicNames() const {
+        std::vector<Key> getTopicNames() const {
             return mBillboard.getKeys();
         }
+
+        void removeTopic(const Key& topicName);
+
+        void setTopicAutoRemoveFlag(const Key& topicName, bool);
+
+        void setTopicMessageFilter(const Key& topicName, AbstractMessageFilterPtr filter);
 
     private:
         AbstractLauncher* mLauncher;

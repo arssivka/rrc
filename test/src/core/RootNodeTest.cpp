@@ -7,6 +7,7 @@
 #include <rrc/core/LinearLauncher.h>
 #include <rrc/core/RootNode.h>
 #include <Message.pb.h>
+#include <rrc/core/RejectMessageFilter.h>
 #include "include/DummyNode.h"
 
 using namespace rrc;
@@ -103,4 +104,49 @@ TEST_F(RootNodeFixture, SendMessage1) {
     EXPECT_EQ(dummyNode1->tryGetMessage(), nullptr);
     EXPECT_EQ(dummyNode2->tryGetMessage(), message1);
     EXPECT_EQ(dummyNode2->tryGetMessage(), nullptr);
+}
+
+
+TEST_F(RootNodeFixture, SetTopicMessageFilterTest1) {
+    RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable);
+    std::shared_ptr<DummyNode> dummyNode1 = std::make_shared<DummyNode>(rootNode, "test");
+    std::shared_ptr<DummyNode> dummyNode2 = std::make_shared<DummyNode>(rootNode, "test");
+
+    testmessages::TestMessage tstMessage;
+    tstMessage.set_id(42);
+    tstMessage.set_txt("42");
+
+    MessagePtr message1 = std::make_shared<Message>(
+            mMetaTable.getTypeId<testmessages::TestMessage>(),
+            std::chrono::steady_clock::now(),
+            std::make_unique<testmessages::TestMessage>(tstMessage)
+    );
+
+    MessagePtr message2 = std::make_shared<Message>(
+            mMetaTable.getTypeId<testmessages::TestMessageContainer>(),
+            std::chrono::steady_clock::now(),
+            std::make_unique<testmessages::TestMessageContainer>()
+    );
+
+    rootNode->setTopicMessageFilter("test", std::make_shared<RejectMessageFilter>());
+    rootNode->entry();
+    rootNode->sendMessage("test", message1);
+    rootNode->sendMessage("test", message2);
+    rootNode->entry();
+    EXPECT_EQ(dummyNode1->tryGetMessage(), nullptr);
+    EXPECT_EQ(dummyNode2->tryGetMessage(), nullptr);
+}
+
+
+TEST_F(RootNodeFixture, SetTopicMessageFilterTest) {
+    RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable);
+    auto filter = std::make_shared<RejectMessageFilter>();
+    TypeId typeId = mMetaTable.getTypeId<testmessages::TestMessage>();
+    QueueMessageListenerPtr listener = std::make_shared<QueueMessageListener>(typeId);
+    rootNode->setTopicMessageFilter("test", filter);
+    rootNode->addListener("test", listener);
+    rootNode->entry();
+    rootNode->removeListener("test", listener);
+    rootNode->entry();
+    EXPECT_FALSE(filter.unique());
 }
