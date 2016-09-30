@@ -13,3 +13,6 @@ rrc::AbstractMessageListener::AbstractMessageListener(rrc::TypeId typeId)
 rrc::TypeId rrc::AbstractMessageListener::getTypeId() const {
     return mTypeId;
 }
+
+
+rrc::AbstractMessageListener::~AbstractMessageListener() { }

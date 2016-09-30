@@ -14,6 +14,11 @@ namespace rrc {
 
         virtual Property getProperty() = 0;
 
+        /**
+         * @brief Virtual destructor of AbstractPropertyListener
+         */
+        virtual ~AbstractPropertyListener() { }
+
     };
 
     typedef std::shared_ptr<AbstractPropertyListener> AbstractPropertyListenerPtr;

@@ -21,6 +21,11 @@ namespace rrc {
          */
         virtual void entry() = 0;
 
+        /**
+         * @brief Virtual destructor of AbstractNode
+         */
+        ~AbstractNode() { }
+
     };
 
     typedef std::shared_ptr<AbstractNode> AbstractNodePtr;

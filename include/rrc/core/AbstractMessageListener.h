@@ -30,6 +30,11 @@ namespace rrc {
          */
         TypeId getTypeId() const;
 
+        /**
+         * @brief Virtual destructor of AbstractMessageListener
+         */
+        virtual ~AbstractMessageListener();
+
     protected:
         /**
          * @brief Constructor of Message Listener
