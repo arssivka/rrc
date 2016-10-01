@@ -11,6 +11,7 @@ addons:
             - g++-5
             - gcc-5
             - cmake
+            - cmake-data
             - libprotobuf-dev
             - protobuf-compiler
 install:
