@@ -5,7 +5,7 @@ addons:
         sources:
             - llvm-toolchain-precise
             - ubuntu-toolchain-r-test
-            - kalakris-cmake
+            - george-edison55-precise-backports
         packages:
             - clang-3.7
             - g++-5
