@@ -16,6 +16,11 @@ namespace rrc {
 
         virtual CopyOnWrite<std::map<std::string, Property>> getDictionary() = 0;
 
+        /**
+         * @brief Virtual destructor of AbstractPropertyListener
+         */
+        virtual ~AbstractPropertyListener() { }
+
     };
 
     typedef std::shared_ptr<AbstractPropertyListener> AbstractPropertyListenerPtr;
