@@ -5,10 +5,19 @@
 
 #include <rrc/core/PropertyListener.h>
 
-void rrc::PropertyListener::setProperty(rrc::Property property) {
-    mProperty = property;
+
+rrc::Property rrc::PropertyListener::getProperty(std::string key) {
+    auto property = mPropertyDictionary->find(key);
+    if(property != mPropertyDictionary->end()) {
+        return property->second;
+    }
+    return nullptr;
 }
 
-rrc::Property rrc::PropertyListener::getProperty() {
-    return mProperty;
+rrc::CopyOnWrite<std::map<std::string, rrc::Property>> rrc::PropertyListener::getDictionary() {
+    return mPropertyDictionary;
+}
+
+void rrc::PropertyListener::setDictionary(CopyOnWrite<std::map<std::string, Property>> dictionary) {
+    mPropertyDictionary = dictionary;
 }

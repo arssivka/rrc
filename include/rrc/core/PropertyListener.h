@@ -5,17 +5,20 @@
 #pragma once
 
 #include "AbstractPropertyListener.h"
+#include <map>
 
 namespace rrc{
     class PropertyListener : public AbstractPropertyListener {
     public:
 
-        virtual void setProperty(Property property) override;
+        virtual Property getProperty(std::string key) override;
 
-        virtual Property getProperty() override;
+        virtual void setDictionary(CopyOnWrite<std::map<std::string, Property>> dictionary) override;
+
+        virtual CopyOnWrite<std::map<std::string, Property>> getDictionary() override;
 
     private:
-        Property mProperty;
+        CopyOnWrite<std::map<std::string, Property>> mPropertyDictionary;
     };
 
     typedef std::shared_ptr<PropertyListener> PropertyListenerPtr;

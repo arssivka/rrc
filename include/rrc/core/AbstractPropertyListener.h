@@ -10,9 +10,11 @@ namespace rrc {
     class AbstractPropertyListener {
     public:
 
-        virtual void setProperty(Property property) = 0;
+        virtual Property getProperty(std::string key) = 0;
 
-        virtual Property getProperty() = 0;
+        virtual void setDictionary(CopyOnWrite<std::map<std::string, Property>> dictionary) = 0;
+
+        virtual CopyOnWrite<std::map<std::string, Property>> getDictionary() = 0;
 
     };
 

@@ -16,8 +16,8 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(SRCS
         include/rrc/core/AbstractLauncher.h
         include/rrc/core/AbstractNode.h
-        src/rrc/core/Settings.cpp
-        include/rrc/core/Settings.h
+        src/rrc/core/SettingsBillboard.cpp
+        include/rrc/core/SettingsBillboard.h
         include/rrc/core/Advertiser.h
         include/rrc/core/Subscriber.h
         include/rrc/core/Message.h
