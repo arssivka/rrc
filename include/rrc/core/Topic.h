@@ -50,16 +50,40 @@ namespace rrc {
          */
         bool hasListeners() const;
 
+        /**
+         * @brief Checks if auto remove flag is set
+         * @return True if set, otherwise false
+         */
         bool isAutoRemoveEnabled() const;
 
+        /**
+         * @brief Sets flag of auto removing
+         * @param autoRemoveEnabled Value to set to the flag
+         */
         void setAutoRemoveEnabled(bool autoRemoveEnabled);
 
+        /**
+         * @brief Checks if message filter is enabled
+         * @return True if enabled, otherwise false
+         */
         bool isMessageFilterEnabled() const;
 
+        /**
+         * @brief Enables or disables message filter
+         * @param filterEnabled Pass true if the filter is needed otherwise false
+         */
         void setMessageFilterEnabled(bool filterEnabled);
 
+        /**
+         * @brief Returns message filter apllied to this topic
+         * @return Pointer to message filter
+         */
         AbstractMessageFilterPtr getMessageFilter() const;
 
+        /**
+         * @brief Sets message filter to this topic
+         * @param messageFilter Pointer to needed message filter
+         */
         void setMessageFilter(AbstractMessageFilterPtr messageFilter);
 
     private:
