@@ -37,4 +37,5 @@ protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${PROTOS})
 add_executable(tests ${SRCS} ${PROTO_SRCS} ${PROTO_HDRS})
 target_link_libraries(tests gtest gtest_main rrc ${PROTOBUF_LIBRARIES})
 target_include_directories(tests PUBLIC ${PROTOBUF_INCLUDE_DRIS})
+add_test(tests tests)
 
