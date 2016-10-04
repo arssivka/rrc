@@ -53,7 +53,16 @@ set(SRCS
         include/rrc/core/LimitedSizeMessageListener.h
         include/rrc/core/AbstractPropertyListener.h
         include/rrc/core/PropertyListener.h
-        src/rrc/core/PropertyListener.cpp)
+        src/rrc/core/PropertyListener.cpp
+        include/rrc/core/AbstractMessageFilter.h
+        src/rrc/core/BypassMessageFilter.cpp
+        include/rrc/core/BypassMessageFilter.h
+        src/rrc/core/RejectMessageFilter.cpp
+        include/rrc/core/RejectMessageFilter.h
+        src/rrc/core/TypeIdMessageFilter.cpp
+        include/rrc/core/TypeIdMessageFilter.h
+        src/rrc/core/CallbackMessageFilter.cpp
+        include/rrc/core/CallbackMessageFilter.h)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
                "${PROJECT_BINARY_DIR}/VersionDefines.h")

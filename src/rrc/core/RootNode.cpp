@@ -47,7 +47,7 @@ void rrc::RootNode::addListener(const rrc::RootNode::Key& topicName, AbstractMes
     mListenersPendingListChanges.enqueue([this, topicName, listener]() {
         TopicPtr t = mBillboard.getTopic(topicName);
         if (t == nullptr) {
-            mBillboard.createTopic(topicName, listener->getTypeId());
+            mBillboard.createTopic(topicName);
             t = mBillboard.getTopic(topicName);
         }
         t->addListener(listener);
@@ -60,9 +60,51 @@ void rrc::RootNode::removeListener(const rrc::RootNode::Key& topicName, Abstract
         TopicPtr t = mBillboard.getTopic(topicName);
         if (t != nullptr) {
             t->removeListener(listener);
-            if (!t->hasListeners()) {
+            if (t->isAutoRemoveEnabled() && !t->hasListeners()) {
                 mBillboard.removeTopic(topicName);
             }
+        }
+    });
+}
+
+void rrc::RootNode::removeTopic(const rrc::RootNode::Key& topicName) {
+    mListenersPendingListChanges.enqueue([this, topicName]() {
+        TopicPtr t = mBillboard.getTopic(topicName);
+        if (t != nullptr) {
+            mBillboard.removeTopic(topicName);
+        }
+    });
+}
+
+void rrc::RootNode::setTopicAutoRemoveFlag(const rrc::RootNode::Key& topicName, bool flag) {
+    mListenersPendingListChanges.enqueue([this, topicName, flag]() {
+        TopicPtr t = mBillboard.getTopic(topicName);
+        if (t == nullptr) {
+            if (flag) {
+                mBillboard.createTopic(topicName);
+                t = mBillboard.getTopic(topicName);
+                t->setAutoRemoveEnabled(true);
+            }
+        } else {
+            if (!flag && !t->hasListeners() ) {
+                mBillboard.removeTopic(topicName);
+            } else {
+                t->setAutoRemoveEnabled(false);
+            }
+        }
+    });
+}
+
+void rrc::RootNode::setTopicMessageFilter(const rrc::RootNode::Key& topicName, rrc::AbstractMessageFilterPtr filter) {
+    mListenersPendingListChanges.enqueue([this, topicName, filter{std::move(filter)}]() {
+        TopicPtr t = mBillboard.getTopic(topicName);
+        if (t == nullptr) {
+            mBillboard.createTopic(topicName);
+            t = mBillboard.getTopic(topicName);
+            t->setAutoRemoveEnabled(false);
+            t->setMessageFilter(filter);
+        } else {
+            t->setMessageFilter(filter);
         }
     });
 }

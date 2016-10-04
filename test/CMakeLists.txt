@@ -21,7 +21,12 @@ set(SRCS
         src/core/QueueSubscriberTest.cpp
         src/core/LinearLauncherTest.cpp
         src/core/AdvertiserTests.cpp
-        src/core/SendGuardTests.cpp src/core/LimitedSizeSubscriberTests.cpp)
+        src/core/SendGuardTests.cpp
+        src/core/LimitedSizeSubscriberTests.cpp
+        src/core/TypeIdMessageFilterTests.cpp
+        src/core/RejectMessageFilterTest.cpp
+        src/core/BypassMessageFilterTests.cpp
+        src/core/CallbackMessageFilterTest.cpp)
 
 set(PROTOS
         proto/Message.proto)

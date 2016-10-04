@@ -90,9 +90,29 @@ namespace rrc {
          * @brief Returns set of avaliable topic names
          * @return Set of topic names
          */
-        std::set<Key> getTopicNames() const {
+        std::vector<Key> getTopicNames() const {
             return mBillboard.getKeys();
         }
+
+        /**
+         * @brief Removes topic with the specified name from billboard
+         * @param topicName Name of the topic to remove
+         */
+        void removeTopic(const Key& topicName);
+
+        /**
+         * @brief Sets flag for auto removing of the topic with the specified name
+         * @param topicName Name of the topic to set flag in it
+         * @param flag Value for the flag to be set
+         */
+        void setTopicAutoRemoveFlag(const Key& topicName, bool flag);
+
+        /**
+         * @brief Sets he filter for the topic with the specified name
+         * @param topicName Name of the needed topic
+         * @param filter Filter to apply
+         */
+        void setTopicMessageFilter(const Key& topicName, AbstractMessageFilterPtr filter);
 
     private:
         AbstractLauncher* mLauncher;
