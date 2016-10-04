@@ -16,19 +16,16 @@ public:
         mMetaTable.registerTypeId<testmessages::TestMessageContainer>(2u);
     }
 
-    ~BillboardFixture() {
-        //Destroy all the good members
-    }
-
 protected:
     MetaTable mMetaTable;
+
 };
 
 
 TEST_F(BillboardFixture, CreateAndGetTopicTest) {
     Billboard<std::string> billboard;
-    billboard.createTopic("TestTopic", mMetaTable.getTypeId<testmessages::TestMessage>());
-    billboard.createTopic("TestTopic2", mMetaTable.getTypeId<testmessages::TestMessageContainer>());
+    billboard.createTopic("TestTopic");
+    billboard.createTopic("TestTopic2");
     EXPECT_NE(billboard.getTopic("TestTopic"), nullptr);
     EXPECT_NE(billboard.getTopic("TestTopic2"), nullptr);
     EXPECT_EQ(billboard.getTopic("TestTopic3"), nullptr);
@@ -37,8 +34,8 @@ TEST_F(BillboardFixture, CreateAndGetTopicTest) {
 
 TEST_F(BillboardFixture, RemoveTest) {
     Billboard<std::string> billboard;
-    billboard.createTopic("TestTopic", mMetaTable.getTypeId<testmessages::TestMessage>());
-    billboard.createTopic("TestTopic2", mMetaTable.getTypeId<testmessages::TestMessageContainer>());
+    billboard.createTopic("TestTopic");
+    billboard.createTopic("TestTopic2");
     billboard.removeTopic("TestTopic");
     billboard.removeTopic("TestTopic2");
     EXPECT_EQ(billboard.getTopic("TestTopic"), nullptr);
@@ -47,10 +44,10 @@ TEST_F(BillboardFixture, RemoveTest) {
 
 TEST_F(BillboardFixture, GetKeysTest) {
     Billboard<std::string> billboard;
-    billboard.createTopic("TestTopic", mMetaTable.getTypeId<testmessages::TestMessage>());
-    billboard.createTopic("TestTopic2", mMetaTable.getTypeId<testmessages::TestMessageContainer>());
-    std::set<std::string> testSet = billboard.getKeys();
-    EXPECT_NE(testSet.find("TestTopic"), testSet.end());
-    EXPECT_NE(testSet.find("TestTopic2"), testSet.end());
-    EXPECT_EQ(testSet.find("TestTopic3"), testSet.end());
+    billboard.createTopic("TestTopic");
+    billboard.createTopic("TestTopic2");
+    auto testKeys = billboard.getKeys();
+    EXPECT_NE(std::find(testKeys.begin(), testKeys.end(), "TestTopic"), testKeys.end());
+    EXPECT_NE(std::find(testKeys.begin(), testKeys.end(), "TestTopic2"), testKeys.end());
+    EXPECT_EQ(std::find(testKeys.begin(), testKeys.end(), "TestTopic3"), testKeys.end());
 }

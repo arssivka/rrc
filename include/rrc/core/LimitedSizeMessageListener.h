@@ -49,7 +49,7 @@ namespace rrc {
         bool mEmpty;
         size_t mTailPosition;
         size_t mHeadPosition;
-        std::array<MessagePtr, Size> mMessagesContainer;
+        MessagePtr mMessagesContainer[Size];
     };
 
 

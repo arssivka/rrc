@@ -34,10 +34,9 @@ namespace rrc {
         /**
          * @brief Creates topic
          * @param key Key of the topic
-         * @param tid Id of the type for the topic
          */
-        void createTopic(const Key& key, TypeId tid) {
-            mTopicHash.insert({key, std::make_shared<Topic>(tid)});
+        void createTopic(const Key& key) {
+            mTopicHash.insert({key, std::make_shared<Topic>()});
         }
 
         /**
@@ -64,14 +63,15 @@ namespace rrc {
 
         /**
          * @brief Returns set of the keys of registered topics
-         * @return Set of the topics's keys
+         * @return Vector of the topics's keys
          */
-        std::set<Key> getKeys() const {
-            std::set<Key> mKeysSet;
+        std::vector<Key> getKeys() const {
+            std::vector<Key> keys;
+            keys.reserve(mTopicHash.size());
             for (auto&& topic : mTopicHash) {
-                mKeysSet.insert(topic.first);
+                keys.push_back(topic.first);
             }
-            return mKeysSet;
+            return std::move(keys);
         }
 
 
