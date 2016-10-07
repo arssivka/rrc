@@ -24,7 +24,7 @@
 #include "core/ReceiveGuard.h"
 #include "core/RootNode.h"
 #include "core/SendGuard.h"
-#include "include/rrc/core/SettingsBillboard.h"
+#include "include/rrc/core/SettingsHolder.h"
 #include "core/Subscriber.h"
 #include "core/TaskQueue.h"
 #include "core/Topic.h"

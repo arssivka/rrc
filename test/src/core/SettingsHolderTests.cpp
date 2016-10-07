@@ -6,7 +6,7 @@
 #include <iostream>
 #include <string>
 #include <gtest/gtest.h>
-#include "rrc/core/SettingsBillboard.h"
+#include "rrc/core/SettingsHolder.h"
 #include "rrc/core/PropertyListener.h"
 
 using namespace rrc;
@@ -17,7 +17,7 @@ public:
             : mProperty1(42), mProperty2(true), mProperty3("42") { }
 
 protected:
-    SettingsBillboard mSettings;
+    SettingsHolder mSettings;
     Property mProperty1;
     Property mProperty2;
     Property mProperty3;

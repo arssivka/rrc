@@ -17,7 +17,7 @@ namespace rrc {
     /**
      * @brief Class that holds settings collections aka. PropertyDictionary and grants access to some properties via listeners.
      */
-    class SettingsBillboard {
+    class SettingsHolder {
     public:
 
         /**
@@ -33,7 +33,7 @@ namespace rrc {
                 dictionary->second.addOrUpdateProperty(propertyKey, std::forward<T>(property));
             }
             else {
-                mDictionaries.insert({dictionaryKey, PropertyDictionary(propertyKey, std::forward<T>(property))});
+                mDictionaries.insert({dictionaryKey, PropertyContainer(propertyKey, std::forward<T>(property))});
             }
         }
 
@@ -113,12 +113,12 @@ namespace rrc {
         void removeDictionary(const std::string& dictionaryKey);
 
     private:
-        struct PropertyDictionary {
+        struct PropertyContainer {
 
-            PropertyDictionary() = default;
+            PropertyContainer() = default;
 
             template <class T>
-            PropertyDictionary(const std::string& key, T&& property) {
+            PropertyContainer(const std::string& key, T&& property) {
                 this->addOrUpdateProperty(key, std::forward<T>(property));
             }
 
@@ -131,7 +131,7 @@ namespace rrc {
                     mPropertyDictionary->insert({key, Property(std::forward<T>(property))});
                 }
                 for (auto &&listener : mListeners) {
-                    listener->setDictionary(mPropertyDictionary);
+                    listener->setDictionary(PropertyDictionary(mPropertyDictionary));
                 }
             }
 
@@ -152,7 +152,7 @@ namespace rrc {
             CopyOnWrite<std::map<std::string, Property>> mPropertyDictionary;
             std::forward_list<AbstractPropertyListenerPtr> mListeners;
         };
-        std::map<std::string, PropertyDictionary> mDictionaries;
+        std::map<std::string, PropertyContainer> mDictionaries;
     };
 }
 

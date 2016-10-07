@@ -19,22 +19,29 @@ namespace rrc{
          * @param key Name of the needed property
          * @return Property
          */
-        virtual Property getProperty(std::string key) override;
+        virtual Property getProperty(const std::string& key) override;
 
         /**
-        * @brief Sets the collection of settings to this listener
-        * @param dictionary CopyOnWrite map with the needed settings
-        */
-        virtual void setDictionary(CopyOnWrite<std::map<std::string, Property>> dictionary) override;
+         * @brief Sets the collection of settings to this listener
+         * @param dictionary PropertyDictionary with the needed settings
+         */
+        virtual void setDictionary(PropertyDictionary dictionary) override;
 
         /**
-        * @brief Returns collection of settings from this listener
-        * @return CopyOnWrite map with the settings
-        */
-        virtual CopyOnWrite<std::map<std::string, Property>> getDictionary() override;
+          * @brief Returns collection of settings from this listener
+          * @return PropertDictionary with the settings
+          */
+        virtual PropertyDictionary getDictionary() override;
+
+        /**
+         * @brief Checks if there is such Property with the specified name
+         * @param key Name of the needed property
+         * @return True if such Property exists, otherwise false.
+         */
+        virtual bool contains(const std::string& key) override;
 
     private:
-        CopyOnWrite<std::map<std::string, Property>> mPropertyDictionary;
+        PropertyDictionary mPropertyDictionary;
     };
 
     typedef std::shared_ptr<PropertyListener> PropertyListenerPtr;
