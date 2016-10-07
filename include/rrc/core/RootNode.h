@@ -10,7 +10,7 @@
 #include "AbstractNode.h"
 #include "Message.h"
 #include "AbstractMessageListener.h"
-#include "Billboard.h"
+#include "TopicHolder.h"
 #include "TaskQueue.h"
 #include "MetaTable.h"
 
@@ -23,7 +23,7 @@ namespace rrc {
      */
     class RootNode : public AbstractNode {
     public:
-        typedef std::string Key;
+        typedef std::string TopicName;
 
     public:
 
@@ -44,7 +44,7 @@ namespace rrc {
          * @param topicName Name of the topic for the message
          * @param message Pointer to the message, that needs to be sent
          */
-        void sendMessage(const Key& topicName, MessagePtr message);
+        void sendMessage(const TopicName& topicName, MessagePtr message);
 
         /**
          * @brief Registers node for the synchronization
@@ -63,14 +63,14 @@ namespace rrc {
          * @param topicName Name of the topic for the listener
          * @param listener Pointer to the listener that needs to be registered
          */
-        void addListener(const Key& topicName, AbstractMessageListenerPtr listener);
+        void addListener(const TopicName& topicName, AbstractMessageListenerPtr listener);
 
         /**
          * @bried Unregisters listener
          * @param topicName Name of the topic for the listener
          * @param listener Pointer to the listener that needs to be unregistered
          */
-        void removeListener(const Key& topicName, AbstractMessageListenerPtr listener);
+        void removeListener(const TopicName& topicName, AbstractMessageListenerPtr listener);
 
         /**
          * @brief Stops the node from execution
@@ -90,34 +90,34 @@ namespace rrc {
          * @brief Returns set of avaliable topic names
          * @return Set of topic names
          */
-        std::vector<Key> getTopicNames() const {
-            return mBillboard.getKeys();
+        std::vector<TopicName> getTopicNames() const {
+            return mTopicHolder.getTopicNames();
         }
 
         /**
-         * @brief Removes topic with the specified name from billboard
+         * @brief Removes topic with the specified name from TopicHolder
          * @param topicName Name of the topic to remove
          */
-        void removeTopic(const Key& topicName);
+        void removeTopic(const TopicName& topicName);
 
         /**
          * @brief Sets flag for auto removing of the topic with the specified name
          * @param topicName Name of the topic to set flag in it
          * @param flag Value for the flag to be set
          */
-        void setTopicAutoRemoveFlag(const Key& topicName, bool flag);
+        void setTopicAutoRemoveFlag(const TopicName& topicName, bool flag);
 
         /**
          * @brief Sets he filter for the topic with the specified name
          * @param topicName Name of the needed topic
          * @param filter Filter to apply
          */
-        void setTopicMessageFilter(const Key& topicName, AbstractMessageFilterPtr filter);
+        void setTopicMessageFilter(const TopicName& topicName, AbstractMessageFilterPtr filter);
 
     private:
         AbstractLauncher* mLauncher;
         const MetaTable* mMetaTable;
-        Billboard<Key> mBillboard;
+        TopicHolder<TopicName> mTopicHolder;
 
         TaskQueue mNodesListPendingChanges;
         TaskQueue mListenersPendingListChanges;

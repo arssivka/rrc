@@ -19,33 +19,33 @@ namespace rrc {
     /**
      * @brief Class that contains all the topics and grants access to them.
      */
-    template <class Key>
-    class Billboard {
+    template <class TopicName>
+    class TopicHolder {
     public:
 
         /**
          * @brief Constructor of billboard. Sets the default max load factor 0.8
          */
-        Billboard() {
+        TopicHolder() {
             // TODO Check it!
             mTopicHash.max_load_factor(0.8);
         }
 
         /**
          * @brief Creates topic
-         * @param key Key of the topic
+         * @param topicName Name of the topic
          */
-        void createTopic(const Key& key) {
-            mTopicHash.insert({key, std::make_shared<Topic>()});
+        void createTopic(const TopicName& topicName) {
+            mTopicHash.insert({topicName, std::make_shared<Topic>()});
         }
 
         /**
-         * @brief Returns topic for the specified key
-         * @param key Key of the needed topic
+         * @brief Returns topic for the specified name
+         * @param topicName Name of the needed topic
          * @return Topic if found otherwise nullptr
          */
-        TopicPtr getTopic(const Key& key) {
-            auto found = mTopicHash.find(key);
+        TopicPtr getTopic(const TopicName& topicName) {
+            auto found = mTopicHash.find(topicName);
             if (found != mTopicHash.end()) {
                 return found->second;
             } else {
@@ -54,29 +54,29 @@ namespace rrc {
         }
 
         /**
-         * @brief Removes topic for the specified key
-         * @param key Key of the topic
+         * @brief Removes topic for the specified name
+         * @param topicName Name of the topic
          */
-        void removeTopic(const Key& key) {
-            mTopicHash.erase(key);
+        void removeTopic(const TopicName& topicName) {
+            mTopicHash.erase(topicName);
         }
 
         /**
          * @brief Returns set of the keys of registered topics
          * @return Vector of the topics's keys
          */
-        std::vector<Key> getKeys() const {
-            std::vector<Key> keys;
-            keys.reserve(mTopicHash.size());
+        std::vector<TopicName> getTopicNames() const {
+            std::vector<TopicName> names;
+            names.reserve(mTopicHash.size());
             for (auto&& topic : mTopicHash) {
-                keys.push_back(topic.first);
+                names.push_back(topic.first);
             }
-            return std::move(keys);
+            return std::move(names);
         }
 
 
     private:
-        std::unordered_map<Key, TopicPtr> mTopicHash;
+        std::unordered_map<TopicName, TopicPtr> mTopicHash;
     };
 }
 

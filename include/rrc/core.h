@@ -7,7 +7,7 @@
 
 
 #include "core/Advertiser.h"
-#include "core/Billboard.h"
+#include "include/rrc/core/TopicHolder.h"
 #include "core/CopyOnWrite.h"
 #include "core/IncompatibleTypesException.h"
 #include "core/AbstractLauncher.h"

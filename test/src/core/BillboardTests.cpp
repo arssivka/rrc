@@ -4,7 +4,7 @@
  */
 #include <string>
 #include <gtest/gtest.h>
-#include "rrc/core/Billboard.h"
+#include "rrc/core/TopicHolder.h"
 #include "Message.pb.h"
 
 using namespace rrc;
@@ -23,7 +23,7 @@ protected:
 
 
 TEST_F(BillboardFixture, CreateAndGetTopicTest) {
-    Billboard<std::string> billboard;
+    TopicHolder<std::string> billboard;
     billboard.createTopic("TestTopic");
     billboard.createTopic("TestTopic2");
     EXPECT_NE(billboard.getTopic("TestTopic"), nullptr);
@@ -33,7 +33,7 @@ TEST_F(BillboardFixture, CreateAndGetTopicTest) {
 
 
 TEST_F(BillboardFixture, RemoveTest) {
-    Billboard<std::string> billboard;
+    TopicHolder<std::string> billboard;
     billboard.createTopic("TestTopic");
     billboard.createTopic("TestTopic2");
     billboard.removeTopic("TestTopic");
@@ -43,10 +43,10 @@ TEST_F(BillboardFixture, RemoveTest) {
 }
 
 TEST_F(BillboardFixture, GetKeysTest) {
-    Billboard<std::string> billboard;
+    TopicHolder<std::string> billboard;
     billboard.createTopic("TestTopic");
     billboard.createTopic("TestTopic2");
-    auto testKeys = billboard.getKeys();
+    auto testKeys = billboard.getTopicNames();
     EXPECT_NE(std::find(testKeys.begin(), testKeys.end(), "TestTopic"), testKeys.end());
     EXPECT_NE(std::find(testKeys.begin(), testKeys.end(), "TestTopic2"), testKeys.end());
     EXPECT_EQ(std::find(testKeys.begin(), testKeys.end(), "TestTopic3"), testKeys.end());

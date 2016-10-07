@@ -29,7 +29,7 @@ set(SRCS
         src/rrc/core/TaskQueue.cpp
         include/rrc/core/TaskQueue.h
         src/rrc/core/QueueMessageListener.cpp
-        include/rrc/core/Billboard.h
+        include/rrc/core/TopicHolder.h
         src/rrc/core/Topic.cpp include/rrc/core/Topic.h
         src/rrc/core/MetaTable.cpp
         include/rrc/core/MetaTable.h

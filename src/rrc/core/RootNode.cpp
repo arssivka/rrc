@@ -19,9 +19,9 @@ void rrc::RootNode::entry() {
 }
 
 
-void rrc::RootNode::sendMessage(const rrc::RootNode::Key& topicName, rrc::MessagePtr message) {
+void rrc::RootNode::sendMessage(const rrc::RootNode::TopicName& topicName, rrc::MessagePtr message) {
     mSentMessages.enqueue([this, topicName, message]() {
-        TopicPtr t = mBillboard.getTopic(topicName);
+        TopicPtr t = mTopicHolder.getTopic(topicName);
         if (t != nullptr) {
             t->sendMessage(message);
         }
@@ -43,51 +43,51 @@ void rrc::RootNode::removeNode(rrc::NodePtr node) {
 }
 
 
-void rrc::RootNode::addListener(const rrc::RootNode::Key& topicName, AbstractMessageListenerPtr listener) {
+void rrc::RootNode::addListener(const rrc::RootNode::TopicName& topicName, AbstractMessageListenerPtr listener) {
     mListenersPendingListChanges.enqueue([this, topicName, listener]() {
-        TopicPtr t = mBillboard.getTopic(topicName);
+        TopicPtr t = mTopicHolder.getTopic(topicName);
         if (t == nullptr) {
-            mBillboard.createTopic(topicName);
-            t = mBillboard.getTopic(topicName);
+            mTopicHolder.createTopic(topicName);
+            t = mTopicHolder.getTopic(topicName);
         }
         t->addListener(listener);
     });
 }
 
 
-void rrc::RootNode::removeListener(const rrc::RootNode::Key& topicName, AbstractMessageListenerPtr listener) {
+void rrc::RootNode::removeListener(const rrc::RootNode::TopicName& topicName, AbstractMessageListenerPtr listener) {
     mListenersPendingListChanges.enqueue([this, topicName, listener]() {
-        TopicPtr t = mBillboard.getTopic(topicName);
+        TopicPtr t = mTopicHolder.getTopic(topicName);
         if (t != nullptr) {
             t->removeListener(listener);
             if (t->isAutoRemoveEnabled() && !t->hasListeners()) {
-                mBillboard.removeTopic(topicName);
+                mTopicHolder.removeTopic(topicName);
             }
         }
     });
 }
 
-void rrc::RootNode::removeTopic(const rrc::RootNode::Key& topicName) {
+void rrc::RootNode::removeTopic(const rrc::RootNode::TopicName& topicName) {
     mListenersPendingListChanges.enqueue([this, topicName]() {
-        TopicPtr t = mBillboard.getTopic(topicName);
+        TopicPtr t = mTopicHolder.getTopic(topicName);
         if (t != nullptr) {
-            mBillboard.removeTopic(topicName);
+            mTopicHolder.removeTopic(topicName);
         }
     });
 }
 
-void rrc::RootNode::setTopicAutoRemoveFlag(const rrc::RootNode::Key& topicName, bool flag) {
+void rrc::RootNode::setTopicAutoRemoveFlag(const rrc::RootNode::TopicName& topicName, bool flag) {
     mListenersPendingListChanges.enqueue([this, topicName, flag]() {
-        TopicPtr t = mBillboard.getTopic(topicName);
+        TopicPtr t = mTopicHolder.getTopic(topicName);
         if (t == nullptr) {
             if (flag) {
-                mBillboard.createTopic(topicName);
-                t = mBillboard.getTopic(topicName);
+                mTopicHolder.createTopic(topicName);
+                t = mTopicHolder.getTopic(topicName);
                 t->setAutoRemoveEnabled(true);
             }
         } else {
             if (!flag && !t->hasListeners() ) {
-                mBillboard.removeTopic(topicName);
+                mTopicHolder.removeTopic(topicName);
             } else {
                 t->setAutoRemoveEnabled(false);
             }
@@ -95,12 +95,12 @@ void rrc::RootNode::setTopicAutoRemoveFlag(const rrc::RootNode::Key& topicName, 
     });
 }
 
-void rrc::RootNode::setTopicMessageFilter(const rrc::RootNode::Key& topicName, rrc::AbstractMessageFilterPtr filter) {
+void rrc::RootNode::setTopicMessageFilter(const rrc::RootNode::TopicName& topicName, rrc::AbstractMessageFilterPtr filter) {
     mListenersPendingListChanges.enqueue([this, topicName, filter{std::move(filter)}]() {
-        TopicPtr t = mBillboard.getTopic(topicName);
+        TopicPtr t = mTopicHolder.getTopic(topicName);
         if (t == nullptr) {
-            mBillboard.createTopic(topicName);
-            t = mBillboard.getTopic(topicName);
+            mTopicHolder.createTopic(topicName);
+            t = mTopicHolder.getTopic(topicName);
             t->setAutoRemoveEnabled(false);
             t->setMessageFilter(filter);
         } else {

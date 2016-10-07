@@ -176,7 +176,7 @@ TEST_F(RootNodeFixture, RemoveTopicTest1) {
     rootNode->entry();
     EXPECT_TRUE(listener.unique());
     EXPECT_TRUE(listener2.unique());
-    std::vector<RootNode::Key> topicNames = rootNode->getTopicNames();
+    std::vector<RootNode::TopicName> topicNames = rootNode->getTopicNames();
     EXPECT_TRUE(std::find(topicNames.cbegin(), topicNames.cend(), "test") == topicNames.end());
 }
 
