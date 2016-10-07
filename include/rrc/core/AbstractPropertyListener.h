@@ -4,6 +4,7 @@
  */
 #pragma once
 
+
 #include "Property.h"
 #include "PropertyDictionary.h"
 #include <map>
@@ -39,7 +40,7 @@ namespace rrc {
          * @param key Name of the needed property
          * @return True if such Property exists, otherwise false.
          */
-        virtual bool contains(const std::string& key) = 0;
+        virtual bool isContains(const std::string& key) = 0;
 
         /**
          * @brief Virtual destructor of AbstractPropertyListener

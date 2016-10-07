@@ -4,6 +4,7 @@
  */
 #pragma once
 
+
 #include "AbstractPropertyListener.h"
 #include <map>
 
@@ -16,10 +17,10 @@ namespace rrc{
 
         /**
          * @brief Returns property with the specified name
-         * @param key Name of the needed property
+         * @param propertyName Name of the needed property
          * @return Property
          */
-        virtual Property getProperty(const std::string& key) override;
+        virtual Property getProperty(const std::string& propertyName) override;
 
         /**
          * @brief Sets the collection of settings to this listener
@@ -35,10 +36,10 @@ namespace rrc{
 
         /**
          * @brief Checks if there is such Property with the specified name
-         * @param key Name of the needed property
+         * @param propertyName Name of the needed property
          * @return True if such Property exists, otherwise false.
          */
-        virtual bool contains(const std::string& key) override;
+        virtual bool isContains(const std::string& propertyName) override;
 
     private:
         PropertyDictionary mPropertyDictionary;

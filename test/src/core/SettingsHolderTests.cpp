@@ -24,7 +24,7 @@ protected:
 };
 
 TEST_F(SettingsFixture, AddRemoveTests) {
-    EXPECT_TRUE(mSettings.empty());
+    EXPECT_TRUE(mSettings.isEmpty());
     EXPECT_FALSE(mSettings.hasDictionary("testdict1"));
     EXPECT_FALSE(mSettings.hasDictionary("testdict2"));
     mSettings.addOrUpdateProperty("testdict1","test1", mProperty1);
@@ -46,14 +46,14 @@ TEST_F(SettingsFixture, AddRemoveTests) {
 }
 
 TEST_F(SettingsFixture, GetKeysTests) {
-    EXPECT_TRUE(mSettings.getKeys().empty());
+    EXPECT_TRUE(mSettings.getNames().empty());
     mSettings.addOrUpdateProperty("testdict1","test1", mProperty1);
     mSettings.addOrUpdateProperty("testdict1", "test2", mProperty2);
     mSettings.addOrUpdateProperty("testdict2", "test3", mProperty3);
-    EXPECT_FALSE(mSettings.getKeys().empty());
-    EXPECT_FALSE(mSettings.getDictionaryKeys("testdict1").empty());
-    EXPECT_FALSE(mSettings.getDictionaryKeys("testdict2").empty());
-    EXPECT_TRUE(mSettings.getDictionaryKeys("notexisting").empty());
+    EXPECT_FALSE(mSettings.getNames().empty());
+    EXPECT_FALSE(mSettings.getDictionaryNames("testdict1").empty());
+    EXPECT_FALSE(mSettings.getDictionaryNames("testdict2").empty());
+    EXPECT_TRUE(mSettings.getDictionaryNames("notexisting").empty());
 }
 
 TEST_F(SettingsFixture, AddRemoveListenerTest) {
