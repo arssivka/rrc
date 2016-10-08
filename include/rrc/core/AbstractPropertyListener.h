@@ -11,17 +11,17 @@
 
 namespace rrc {
     /**
-     * @brief Abstract class for getting needed up-to-date collection of settings from the settings billboard; also can get needed property by it's name
+     * @brief Abstract class for getting needed up-to-date collection of settings from the SettingsHolder; also can get needed property by it's name
      */
     class AbstractPropertyListener {
     public:
 
         /**
          * @brief Returns property with the specified name
-         * @param key Name of the needed property
+         * @param propertyName Name of the needed property
          * @return Property
          */
-        virtual Property getProperty(const std::string& key) = 0;
+        virtual Property getProperty(const std::string& propertyName) = 0;
 
         /**
          * @brief Sets the collection of settings to this listener
@@ -37,10 +37,10 @@ namespace rrc {
 
         /**
          * @brief Checks if there is such Property with the specified name
-         * @param key Name of the needed property
+         * @param propertyName Name of the needed property
          * @return True if such Property exists, otherwise false.
          */
-        virtual bool isContains(const std::string& key) = 0;
+        virtual bool isContains(const std::string& propertyName) = 0;
 
         /**
          * @brief Virtual destructor of AbstractPropertyListener

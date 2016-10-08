@@ -81,7 +81,7 @@ namespace rrc {
 
         /**
          * @brief Checks if there settings collection with such name.
-         * @param dictionaryName Key of the dictionary to check.
+         * @param dictionaryName Name of the dictionary to check.
          * @return True if exists, otherwise false.
          */
         bool hasDictionary(const std::string& dictionaryName) const;

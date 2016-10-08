@@ -45,7 +45,7 @@ TEST_F(SettingsFixture, AddRemoveTests) {
     EXPECT_FALSE(mSettings.hasDictionary("testdict2"));
 }
 
-TEST_F(SettingsFixture, GetKeysTests) {
+TEST_F(SettingsFixture, GetNamesTests) {
     EXPECT_TRUE(mSettings.getNames().empty());
     mSettings.addOrUpdateProperty("testdict1","test1", mProperty1);
     mSettings.addOrUpdateProperty("testdict1", "test2", mProperty2);

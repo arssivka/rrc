@@ -46,7 +46,7 @@ namespace rrc {
         /**
          * @brief Returns Property with specified name.
          * @param propertyName Name of the property to get.
-         * @return Property named with the specified key.
+         * @return Property named with the specified name.
          */
         Property getProperty(const std::string& propertyName);
 
