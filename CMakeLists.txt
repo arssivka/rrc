@@ -62,7 +62,24 @@ set(SRCS
         src/rrc/core/TypeIdMessageFilter.cpp
         include/rrc/core/TypeIdMessageFilter.h
         src/rrc/core/CallbackMessageFilter.cpp
-        include/rrc/core/CallbackMessageFilter.h)
+        include/rrc/core/CallbackMessageFilter.h
+        include/rrc/io/CommandLine.h
+        include/rrc/io/Definitions.h
+        include/rrc/io/File.h
+        include/rrc/io/IOBuffer.h
+        include/rrc/io/IODevice.h
+        include/rrc/io/IOError.h
+        include/rrc/io/IOService.h
+        include/rrc/io/Socket.h
+        include/rrc/io/unix/UnixFile.h
+        include/rrc/io/unix/UnixCommandLine.h
+        src/rrc/io/IOBuffer.cpp
+        src/rrc/io/IODevice.cpp
+        src/rrc/io/IOError.cpp
+        src/rrc/io/IOService.cpp
+        src/rrc/io/unix/UnixFile.cpp
+        src/rrc/io/unix/UnixCommandLine.cpp
+        )
 
 configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
                "${PROJECT_BINARY_DIR}/VersionDefines.h")
