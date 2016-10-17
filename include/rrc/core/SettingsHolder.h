@@ -44,12 +44,6 @@ namespace rrc {
          */
         bool isEmpty() const;
 
-        /**
-         * @brief Checks if dictionary with the specified name contains some properties.
-         * @param dictionaryName Name of the dictionary.
-         * @return False if dictionary contains something, otherwise true.
-         */
-        bool isDictionaryEmpty(const std::string& dictionaryName) const;
 
         /**
            * @brief Checks if dictionary with the specified has listeners.
@@ -58,13 +52,6 @@ namespace rrc {
            */
         bool isDictionaryHasListeners(const std::string& dictionaryName) const;
 
-        /**
-         * @brief Checks if dictionary with the specified name contains property with the specified name.
-         * @param dictionaryName Name of the dictionary to search property in it.
-         * @param propertyName Name of the property to check.
-         * @return True if there's such property in the dictionary, otherwise false.
-         */
-        bool isDictionaryContainsProperty(const std::string& dictionaryName, const std::string& propertyName) const;
 
         /**
          * @brief Returns names of the settings collections in SettingsHolder.
@@ -136,10 +123,6 @@ namespace rrc {
             void addListener(AbstractPropertyListenerPtr listener);
 
             void removeListener(AbstractPropertyListenerPtr listener);
-
-            bool isEmpty() const;
-
-            bool isContains(const std::string& propertyName) const;
 
             bool hasListeners() const;
 

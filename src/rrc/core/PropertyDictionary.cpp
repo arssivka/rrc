@@ -14,7 +14,7 @@ rrc::Property rrc::PropertyDictionary::getProperty(const std::string& propertyNa
 }
 
 
-bool rrc::PropertyDictionary::isContains(const std::string& propertyName) const {
+bool rrc::PropertyDictionary::isContainsName(const std::string &propertyName) const {
     return !(mDictionary->find(propertyName) == mDictionary->end());
 }
 

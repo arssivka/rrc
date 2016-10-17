@@ -21,6 +21,6 @@ void rrc::PropertyListener::setDictionary(PropertyDictionary dictionary) {
 }
 
 
-bool rrc::PropertyListener::isContains(const std::string& propertyName) {
-    return mPropertyDictionary.isContains(propertyName);
+bool rrc::PropertyListener::isContainsName(const std::string &propertyName) {
+    return mPropertyDictionary.isContainsName(propertyName);
 }

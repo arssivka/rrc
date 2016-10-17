@@ -11,29 +11,10 @@ bool rrc::SettingsHolder::isEmpty() const {
 }
 
 
-bool rrc::SettingsHolder::isDictionaryEmpty(const std::string& dictionaryName) const {
-    auto dictionary = mDictionaries.find(dictionaryName);
-    if(dictionary != mDictionaries.end()) {
-        return dictionary->second.isEmpty();
-    }
-    return true;
-}
-
-
 bool rrc::SettingsHolder::isDictionaryHasListeners(const std::string& dictionaryName) const {
     auto dictionary = mDictionaries.find(dictionaryName);
     if(dictionary != mDictionaries.end()) {
         return dictionary->second.hasListeners();
-    }
-    return false;
-}
-
-
-bool rrc::SettingsHolder::isDictionaryContainsProperty(const std::string& dictionaryName,
-                                                          const std::string& propertyName) const {
-    auto dictionary = mDictionaries.find(dictionaryName);
-    if(dictionary != mDictionaries.end()) {
-        return dictionary->second.isContains(propertyName);
     }
     return false;
 }
@@ -94,6 +75,9 @@ void rrc::SettingsHolder::removeDictionary(const std::string& dictionaryName) {
 
 void rrc::SettingsHolder::PropertyContainer::removeProperty(const std::string& propertyName) {
     mPropertyDictionary.removeProperty(propertyName);
+    for (auto&& listener : mListeners) {
+        listener->setDictionary(PropertyDictionary(mPropertyDictionary));
+    }
 }
 
 
@@ -105,16 +89,6 @@ void rrc::SettingsHolder::PropertyContainer::addListener(rrc::AbstractPropertyLi
 
 void rrc::SettingsHolder::PropertyContainer::removeListener(rrc::AbstractPropertyListenerPtr listener) {
     mListeners.remove(listener);
-}
-
-
-bool rrc::SettingsHolder::PropertyContainer::isContains(const std::string& propertyName) const {
-    return mPropertyDictionary.isContains(propertyName);
-}
-
-
-bool rrc::SettingsHolder::PropertyContainer::isEmpty() const {
-    return mPropertyDictionary.isEmpty();
 }
 
 

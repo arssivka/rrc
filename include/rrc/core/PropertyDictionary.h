@@ -39,8 +39,12 @@ namespace rrc {
          * @param propertyName Name of the Property to check.
          * @return True if contains, otherwise false.
          */
-        bool isContains(const std::string& propertyName) const;
+        bool isContainsName(const std::string &propertyName) const;
 
+        /**
+         * @brief Checks if this dictionary doesn't contain any poperties.
+         * @return True if empty, otherwise false.
+         */
         bool isEmpty() const;
 
         /**

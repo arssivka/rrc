@@ -32,15 +32,19 @@ TEST_F(SettingsFixture, AddRemoveTests) {
     mSettings.addOrUpdateProperty("testdict2", "test3", mProperty3);
     EXPECT_TRUE(mSettings.hasDictionary("testdict1"));
     EXPECT_TRUE(mSettings.hasDictionary("testdict2"));
-    EXPECT_TRUE(mSettings.isDictionaryContainsProperty("testdict1", "test1"));
-    EXPECT_TRUE(mSettings.isDictionaryContainsProperty("testdict1", "test2"));
-    EXPECT_TRUE(mSettings.isDictionaryContainsProperty("testdict2", "test3"));
+    PropertyListenerPtr mPropertyListener1 = std::make_shared<PropertyListener>();
+    PropertyListenerPtr mPropertyListener2 = std::make_shared<PropertyListener>();
+    mSettings.addListener("testdict1", mPropertyListener1);
+    mSettings.addListener("testdict2", mPropertyListener2);
+    EXPECT_TRUE(mPropertyListener1->isContainsName("test1"));
+    EXPECT_TRUE(mPropertyListener1->isContainsName("test2"));
+    EXPECT_TRUE(mPropertyListener2->isContainsName("test3"));
     mSettings.removeProperty("testdict1", "test1");
     mSettings.removeProperty("testdict1", "test2");
     mSettings.removeProperty("testdict2", "test3");
-    EXPECT_FALSE(mSettings.isDictionaryContainsProperty("testdict1", "test1"));
-    EXPECT_FALSE(mSettings.isDictionaryContainsProperty("testdict1", "test2"));
-    EXPECT_FALSE(mSettings.isDictionaryContainsProperty("testdict2", "test3"));
+    EXPECT_FALSE(mPropertyListener1->isContainsName("test1"));
+    EXPECT_FALSE(mPropertyListener1->isContainsName("test2"));
+    EXPECT_FALSE(mPropertyListener2->isContainsName("test3"));
     mSettings.removeDictionary("testdict2");
     EXPECT_FALSE(mSettings.hasDictionary("testdict2"));
 }
@@ -106,5 +110,8 @@ TEST_F(SettingsFixture, EmptyDictionaryTests) {
     mSettings.addOrUpdateProperty("testdict1", "test2", mProperty2);
     mSettings.removeProperty("testdict1", "test1");
     mSettings.removeProperty("testdict1", "test2");
-    EXPECT_TRUE(mSettings.isDictionaryEmpty("testdict1"));
+    PropertyListenerPtr mPropertyListener1 = std::make_shared<PropertyListener>();
+    mSettings.addListener("testdict1", mPropertyListener1);
+    PropertyDictionary propertyDictionary = mPropertyListener1->getDictionary();
+    EXPECT_TRUE(propertyDictionary.isEmpty());
 }

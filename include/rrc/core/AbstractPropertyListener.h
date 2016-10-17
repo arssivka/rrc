@@ -40,7 +40,7 @@ namespace rrc {
          * @param propertyName Name of the needed property
          * @return True if such Property exists, otherwise false.
          */
-        virtual bool isContains(const std::string& propertyName) = 0;
+        virtual bool isContainsName(const std::string &propertyName) = 0;
 
         /**
          * @brief Virtual destructor of AbstractPropertyListener
