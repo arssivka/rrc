@@ -22,7 +22,8 @@ namespace rrc {
     public:
 
         /**
-         * @brief Method for adding property to settings collection(it wiil create collection if there is no such one). Also it can update value of existing property.
+         * @brief Method for adding property to settings collection(it will create collection if there is no such one).
+         * Also it can update value of existing property.
          * @param dictionaryName Name of the collection in which you need to store or update your property.
          * @param propertyName Name of the property that you need to update or create.
          * @param property It is a needed value of type int, float, bool or std:string or Property instance.
@@ -32,8 +33,7 @@ namespace rrc {
             auto dictionary = mDictionaries.find(dictionaryName);
             if(dictionary != mDictionaries.end()) {
                 dictionary->second.addOrUpdateProperty(propertyName, std::forward<T>(property));
-            }
-            else {
+            } else {
                 mDictionaries.insert({dictionaryName, PropertyContainer(propertyName, std::forward<T>(property))});
             }
         }
