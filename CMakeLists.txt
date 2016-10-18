@@ -16,8 +16,8 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(SRCS
         include/rrc/core/AbstractLauncher.h
         include/rrc/core/AbstractNode.h
-        src/rrc/core/Settings.cpp
-        include/rrc/core/Settings.h
+        src/rrc/core/SettingsHolder.cpp
+        include/rrc/core/SettingsHolder.h
         include/rrc/core/Advertiser.h
         include/rrc/core/Subscriber.h
         include/rrc/core/Message.h
@@ -62,7 +62,9 @@ set(SRCS
         src/rrc/core/TypeIdMessageFilter.cpp
         include/rrc/core/TypeIdMessageFilter.h
         src/rrc/core/CallbackMessageFilter.cpp
-        include/rrc/core/CallbackMessageFilter.h)
+        include/rrc/core/CallbackMessageFilter.h
+        src/rrc/core/PropertyDictionary.cpp
+        include/rrc/core/PropertyDictionary.h)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
                "${PROJECT_BINARY_DIR}/VersionDefines.h")

@@ -5,10 +5,22 @@
 
 #include <rrc/core/PropertyListener.h>
 
-void rrc::PropertyListener::setProperty(rrc::Property property) {
-    mProperty = property;
+
+rrc::Property rrc::PropertyListener::getProperty(const std::string& propertyName) {
+    return mPropertyDictionary.getProperty(propertyName);
 }
 
-rrc::Property rrc::PropertyListener::getProperty() {
-    return mProperty;
+
+rrc::PropertyDictionary rrc::PropertyListener::getDictionary() {
+    return mPropertyDictionary;
+}
+
+
+void rrc::PropertyListener::setDictionary(PropertyDictionary dictionary) {
+    mPropertyDictionary = dictionary;
+}
+
+
+bool rrc::PropertyListener::isContainsName(const std::string &propertyName) {
+    return mPropertyDictionary.isContainsName(propertyName);
 }
