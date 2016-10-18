@@ -54,10 +54,15 @@ TEST_F(SettingsFixture, GetNamesTests) {
     mSettings.addOrUpdateProperty("testdict1","test1", mProperty1);
     mSettings.addOrUpdateProperty("testdict1", "test2", mProperty2);
     mSettings.addOrUpdateProperty("testdict2", "test3", mProperty3);
+    PropertyListenerPtr mPropertyListener1 = std::make_shared<PropertyListener>();
+    PropertyListenerPtr mPropertyListener2 = std::make_shared<PropertyListener>();
+    mSettings.addListener("testdict1", mPropertyListener1);
+    mSettings.addListener("testdict2", mPropertyListener2);
+    PropertyDictionary propertyDictionary1 = mPropertyListener1->getDictionary();
+    PropertyDictionary propertyDictionary2 = mPropertyListener2->getDictionary();
     EXPECT_FALSE(mSettings.getNames().empty());
-    EXPECT_FALSE(mSettings.getDictionaryNames("testdict1").empty());
-    EXPECT_FALSE(mSettings.getDictionaryNames("testdict2").empty());
-    EXPECT_TRUE(mSettings.getDictionaryNames("notexisting").empty());
+    EXPECT_FALSE(propertyDictionary1.getNames().empty());
+    EXPECT_FALSE(propertyDictionary2.getNames().empty());
 }
 
 TEST_F(SettingsFixture, AddRemoveListenerTest) {
