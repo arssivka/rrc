@@ -30,15 +30,6 @@ std::vector<std::string> rrc::SettingsHolder::getNames() const {
 }
 
 
-std::vector<std::string> rrc::SettingsHolder::getDictionaryNames(const std::string& dictionaryName) const {
-    auto dictionary = mDictionaries.find(dictionaryName);
-    if(dictionary != mDictionaries.end()) {
-        return dictionary->second.getNames();
-    }
-    return std::vector<std::string>();
-}
-
-
 void rrc::SettingsHolder::removeProperty(const std::string& dictionaryName, const std::string& propertyName) {
     auto dictionary = mDictionaries.find(dictionaryName);
     if(dictionary != mDictionaries.end()) {

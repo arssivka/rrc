@@ -22,8 +22,8 @@ namespace rrc {
     public:
 
         /**
-         * @brief Method for adding property to settings collection(it will create collection if there is no such one).
-         * Also it can update value of existing property.
+         * @brief Method for adding property to settings collection (it will create collection if there is no such one).
+         * Also it can update value of the existing property.
          * @param dictionaryName Name of the collection in which you need to store or update your property.
          * @param propertyName Name of the property that you need to update or create.
          * @param property It is a needed value of type int, float, bool or std:string or Property instance.
@@ -46,7 +46,7 @@ namespace rrc {
 
 
         /**
-           * @brief Checks if dictionary with the specified has listeners.
+           * @brief Checks if dictionary with the specified name has listeners.
            * @param dictionaryName Name of the dictionary.
            * @return True if dictionary has listeners, otherwise false.
            */
@@ -59,38 +59,32 @@ namespace rrc {
          */
         std::vector<std::string> getNames() const;
 
-        /**
-         * @brief Returns names of the properties that stored in the dictionary with the specified name.
-         * @param dictionaryName Name of the needed dictionary.
-         * @return Vector with the names of properties. Empty vector if there are no properties or collections with such name.
-         */
-        std::vector<std::string> getDictionaryNames(const std::string& dictionaryName) const;
 
         /**
-         * @brief Checks if there settings collection with such name.
+         * @brief Checks if there is settings collection with such name.
          * @param dictionaryName Name of the dictionary to check.
-         * @return True if exists, otherwise false.
+         * @return True if the settings collection exists, otherwise false.
          */
         bool hasDictionary(const std::string& dictionaryName) const;
 
         /**
-         * @brief Removes property with the specified name from the collection with the specified name.
-         * @param dictionaryName Name of the dictionary to remove property from it.
+         * @brief Removes property with the specified name from the settings collection with the specified name.
+         * @param dictionaryName Name of the dictionary to remove the property from.
          * @param propertyName Name of the property to remove.
          */
         void removeProperty(const std::string& dictionaryName, const std::string& propertyName);
 
         /**
-         * @brief Adds listener for the dictionary with the specified name.
+         * @brief Adds listener to the dictionary with the specified name.
          * @param dictionaryName Name of the dictionary for adding listener to it.
-         * @param listener Pointer to listener to add.
+         * @param listener Pointer to the listener to add.
          */
         void addListener(const std::string& dictionaryName, AbstractPropertyListenerPtr listener);
 
         /**
          * @brief Removes listener from the dictionary with the specified name.
          * @param dictionaryName Name of the dictionary for removing listener from it.
-         * @param listener Pointer to listener to remove.
+         * @param listener Pointer to the listener to remove.
          */
         void removeListener(const std::string& dictionaryName, AbstractPropertyListenerPtr listener);
 

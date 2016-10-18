@@ -12,7 +12,8 @@
 
 namespace rrc {
     /**
-     * @brief This is a wrapper class of CopyOnWrite<std::map<string, Property>>. This is created to ease usage.
+     * @brief This is a wrapper class of CopyOnWrite<std::map<string, Property>>. It is created to ease usage of
+     * CopyOnWrite<std::map<string, Property>>.
      */
     class PropertyDictionary {
     public:
@@ -42,7 +43,7 @@ namespace rrc {
         bool isContainsName(const std::string &propertyName) const;
 
         /**
-         * @brief Checks if this dictionary doesn't contain any poperties.
+         * @brief Checks if this dictionary doesn't contain any properties.
          * @return True if empty, otherwise false.
          */
         bool isEmpty() const;
@@ -50,24 +51,24 @@ namespace rrc {
         /**
          * @brief Returns Property with specified name.
          * @param propertyName Name of the property to get.
-         * @return Property named with the specified name.
+         * @return Property with the specified name.
          */
         Property getProperty(const std::string& propertyName);
 
         /**
-         * @brief Returns names of the properties that this Dictionary contains.
+         * @brief Returns names of the properties which this Dictionary contains.
          * @return vector<string> of names.
          */
         std::vector<std::string> getNames() const;
 
         /**
-         * @brief Removes property with the specified named from the property.
+         * @brief Removes property with the specified name from the dictionary.
          * @param propertyName Name of the property to remove.
          */
         void removeProperty(const std::string& propertyName);
 
         /**
-         * @brief Sets new of updates existing property in the dictionary.
+         * @brief Sets new or updates existing property in the dictionary.
          * @param propertyName Name of the property to update or create.
          * @param property Value to store in the property that can be of int, float, bool or string types. Or it can be Property instance.
          */

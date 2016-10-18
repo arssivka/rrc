@@ -11,15 +11,15 @@
 
 namespace rrc {
     /**
-     * @brief Abstract class for getting needed up-to-date collection of settings from the SettingsHolder; also can get needed property by it's name
+     * @brief Abstract class for getting required up-to-date collection of settings from the SettingsHolder; also can get required property by it's name.
      */
     class AbstractPropertyListener {
     public:
 
         /**
-         * @brief Returns property with the specified name
-         * @param propertyName Name of the needed property
-         * @return Property
+         * @brief Returns property with the specified name.
+         * @param propertyName Name of the required property.
+         * @return Property Required property.
          */
         virtual Property getProperty(const std::string& propertyName) = 0;
 

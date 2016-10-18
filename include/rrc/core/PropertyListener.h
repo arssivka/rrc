@@ -10,21 +10,21 @@
 
 namespace rrc{
     /**
-     * @brief Class inherited form the AbstractMessageListener. Themost usual listener. Nothing really special is going here.
+     * @brief Class inherited form the AbstractMessageListener. The most usual listener. Nothing really special is going here.
      */
     class PropertyListener : public AbstractPropertyListener {
     public:
 
         /**
          * @brief Returns property with the specified name
-         * @param propertyName Name of the needed property
-         * @return Property
+         * @param propertyName Name of the required property
+         * @return Property Required property.
          */
         virtual Property getProperty(const std::string& propertyName) override;
 
         /**
          * @brief Sets the collection of settings to this listener
-         * @param dictionary PropertyDictionary with the needed settings
+         * @param dictionary PropertyDictionary with the required settings
          */
         virtual void setDictionary(PropertyDictionary dictionary) override;
 
