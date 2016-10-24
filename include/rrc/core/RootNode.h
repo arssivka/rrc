@@ -13,6 +13,7 @@
 #include "TopicHolder.h"
 #include "TaskQueue.h"
 #include "MetaTable.h"
+#include "SettingsHolder.h"
 
 namespace rrc {
     class Node;
@@ -32,7 +33,7 @@ namespace rrc {
          * @param launcher reference to Launcher Base instance
          * @param metaTable reference to Meta TAble instance
          */
-        RootNode(AbstractLauncher& launcher, MetaTable& metaTable);
+        RootNode(AbstractLauncher& launcher, MetaTable& metaTable, SettingsHolder& settingsHolder);
 
         /**
          * @brief Runs the synchronization algorhythm
@@ -108,15 +109,30 @@ namespace rrc {
         void setTopicAutoRemoveFlag(const TopicName& topicName, bool flag);
 
         /**
-         * @brief Sets he filter for the topic with the specified name
+         * @brief Sets the filter for the topic with the specified name
          * @param topicName Name of the needed topic
          * @param filter Filter to apply
          */
         void setTopicMessageFilter(const TopicName& topicName, AbstractMessageFilterPtr filter);
 
+        /**
+         * @brief Registers property listener for the dictionary with the specified name
+         * @param dictionaryName Name of the dictionary for the listener
+         * @param listener Pointer to listener taht needs to be registered
+         */
+        void addSettingsListener(const std::string& dictionaryName, AbstractPropertyListenerPtr listener);
+
+        /**
+         * @brief Unregisters property listener for the dictionary with the specified name
+         * @param dictionaryName Name of the dictionary for the listener
+         * @param listener Pointer to listener taht needs to be unregistered
+         */
+        void removeSettingsListener(const std::string& dictionaryName, AbstractPropertyListenerPtr listener);
+
     private:
         AbstractLauncher* mLauncher;
         const MetaTable* mMetaTable;
+        SettingsHolder* mSettingsHolder;
         TopicHolder<TopicName> mTopicHolder;
 
         TaskQueue mNodesListPendingChanges;

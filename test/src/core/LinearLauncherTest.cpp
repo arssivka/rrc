@@ -20,12 +20,13 @@ public:
 
 protected:
     MetaTable mMetaTable;
+    SettingsHolder mSettingsHolder;
 };
 
 
 TEST_F(LinearLauncherFixture, AddAndDeleteTest) {
     LinearLauncher launcher;
-    RootNodePtr rootNode = std::make_shared<RootNode>(launcher, mMetaTable);
+    RootNodePtr rootNode = std::make_shared<RootNode>(launcher, mMetaTable, mSettingsHolder);
     std::shared_ptr<DummyNode> node1 = std::make_shared<DummyNode>(rootNode, "test");
     std::shared_ptr<DummyNode> node2 = std::make_shared<DummyNode>(rootNode, "test");
 
@@ -44,7 +45,7 @@ TEST_F(LinearLauncherFixture, AddAndDeleteTest) {
 
 TEST_F(LinearLauncherFixture, Step) {
     LinearLauncher launcher;
-    RootNodePtr rootNode = std::make_shared<RootNode>(launcher, mMetaTable);
+    RootNodePtr rootNode = std::make_shared<RootNode>(launcher, mMetaTable, mSettingsHolder);
     launcher.setRootNode(rootNode);
     std::shared_ptr<DummyNode> node1 = std::make_shared<DummyNode>(rootNode, "test");
     std::shared_ptr<DummyNode> node2 = std::make_shared<DummyNode>(rootNode, "test");

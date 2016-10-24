@@ -17,12 +17,13 @@ class QueueSubscriberFixture : public ::testing::Test {
 public:
     QueueSubscriberFixture() {
         mMetaTable.registerTypeId<testmessages::TestMessage>(0);
-        mRootNode = std::make_shared<RootNode>(mLauncher, mMetaTable);
+        mRootNode = std::make_shared<RootNode>(mLauncher, mMetaTable, mSettingsHolder);
     }
 
 protected:
     MetaTable mMetaTable;
     LinearLauncher mLauncher;
+    SettingsHolder mSettingsHolder;
     RootNodePtr mRootNode;
 };
 

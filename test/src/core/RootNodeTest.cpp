@@ -23,12 +23,13 @@ public:
 protected:
     MetaTable mMetaTable;
     LinearLauncher mLinearLauncher;
+    SettingsHolder mSettingsHolder;
 
 };
 
 
 TEST_F(RootNodeFixture, AddAndRemoveListenerTest1) {
-    RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable);
+    RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable, mSettingsHolder);
     TypeId typeId = mMetaTable.getTypeId<testmessages::TestMessage>();
     QueueMessageListenerPtr listener = std::make_shared<QueueMessageListener>(typeId);
     rootNode->addListener("test", listener);
@@ -42,7 +43,7 @@ TEST_F(RootNodeFixture, AddAndRemoveListenerTest1) {
 
 
 TEST_F(RootNodeFixture, AddAndRemoveListenerTest2) {
-    RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable);
+    RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable, mSettingsHolder);
     TypeId typeId = mMetaTable.getTypeId<testmessages::TestMessage>();
     QueueMessageListenerPtr listener = std::make_shared<QueueMessageListener>(typeId);
     rootNode->addListener("test", listener);
@@ -55,7 +56,7 @@ TEST_F(RootNodeFixture, AddAndRemoveListenerTest2) {
 
 
 TEST_F(RootNodeFixture, AddAndRemoveListenerTest3) {
-    RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable);
+    RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable, mSettingsHolder);
     TypeId typeId = mMetaTable.getTypeId<testmessages::TestMessage>();
     QueueMessageListenerPtr listener = std::make_shared<QueueMessageListener>(typeId);
     EXPECT_NO_THROW(rootNode->removeListener("test", listener));
@@ -65,7 +66,7 @@ TEST_F(RootNodeFixture, AddAndRemoveListenerTest3) {
 
 
 TEST_F(RootNodeFixture, AddAndRemoveNodeTest) {
-    RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable);
+    RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable, mSettingsHolder);
     std::shared_ptr<DummyNode> dummyNode = std::make_shared<DummyNode>(rootNode, "test");
     rootNode->addNode(dummyNode);
     EXPECT_FALSE(dummyNode.unique());
@@ -79,14 +80,14 @@ TEST_F(RootNodeFixture, AddAndRemoveNodeTest) {
 TEST_F(RootNodeFixture, GetTypeIdTest) {
     MetaTable metaTable;
     metaTable.registerTypeId<testmessages::TestMessage>(0u);
-    RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, metaTable);
+    RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, metaTable, mSettingsHolder);
     EXPECT_EQ(rootNode->getTypeId<testmessages::TestMessage>(), 0u);
     EXPECT_EQ(rootNode->getTypeId<testmessages::TestMessageContainer>(), MetaTable::UNKNOWN_TYPE_ID);
 }
 
 
 TEST_F(RootNodeFixture, SendMessage1) {
-    RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable);
+    RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable, mSettingsHolder);
     std::shared_ptr<DummyNode> dummyNode1 = std::make_shared<DummyNode>(rootNode, "test");
     std::shared_ptr<DummyNode> dummyNode2 = std::make_shared<DummyNode>(rootNode, "test");
 
@@ -118,7 +119,7 @@ TEST_F(RootNodeFixture, SendMessage1) {
 
 
 TEST_F(RootNodeFixture, SetTopicMessageFilterTest1) {
-    RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable);
+    RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable, mSettingsHolder);
     std::shared_ptr<DummyNode> dummyNode1 = std::make_shared<DummyNode>(rootNode, "test");
     std::shared_ptr<DummyNode> dummyNode2 = std::make_shared<DummyNode>(rootNode, "test");
 
@@ -149,7 +150,7 @@ TEST_F(RootNodeFixture, SetTopicMessageFilterTest1) {
 
 
 TEST_F(RootNodeFixture, SetTopicMessageFilterTest) {
-    RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable);
+    RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable, mSettingsHolder);
     auto filter = std::make_shared<RejectMessageFilter>();
     TypeId typeId = mMetaTable.getTypeId<testmessages::TestMessage>();
     QueueMessageListenerPtr listener = std::make_shared<QueueMessageListener>(typeId);
@@ -163,7 +164,7 @@ TEST_F(RootNodeFixture, SetTopicMessageFilterTest) {
 
 
 TEST_F(RootNodeFixture, RemoveTopicTest1) {
-    RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable);
+    RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable, mSettingsHolder);
     TypeId typeId = mMetaTable.getTypeId<testmessages::TestMessage>();
     QueueMessageListenerPtr listener = std::make_shared<QueueMessageListener>(typeId);
     QueueMessageListenerPtr listener2 = std::make_shared<QueueMessageListener>(typeId);
@@ -182,14 +183,14 @@ TEST_F(RootNodeFixture, RemoveTopicTest1) {
 
 
 TEST_F(RootNodeFixture, RemoveTopicTest2) {
-    RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable);
+    RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable, mSettingsHolder);
     EXPECT_NO_THROW(rootNode->removeTopic("test"));
     EXPECT_TRUE(rootNode->getTopicNames().empty());
 }
 
 
 TEST_F(RootNodeFixture, GetTopicNamesTest) {
-    RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable);
+    RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable, mSettingsHolder);
     TypeId typeId = mMetaTable.getTypeId<testmessages::TestMessage>();
     QueueMessageListenerPtr listener = std::make_shared<QueueMessageListener>(typeId);
     EXPECT_TRUE(rootNode->getTopicNames().empty());
@@ -201,7 +202,7 @@ TEST_F(RootNodeFixture, GetTopicNamesTest) {
 
 
 TEST_F(RootNodeFixture, SetTopicAutoRemoveFlagTest) {
-    RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable);
+    RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable, mSettingsHolder);
     TypeId typeId = mMetaTable.getTypeId<testmessages::TestMessage>();
     QueueMessageListenerPtr listener = std::make_shared<QueueMessageListener>(typeId);
     EXPECT_TRUE(rootNode->getTopicNames().empty());

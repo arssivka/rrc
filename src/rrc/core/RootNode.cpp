@@ -8,8 +8,8 @@
 #include "AbstractMessageListener.cpp"
 
 
-rrc::RootNode::RootNode(AbstractLauncher &launcher, MetaTable &metaTable)
-        : mLauncher(&launcher), mMetaTable(&metaTable) { }
+rrc::RootNode::RootNode(AbstractLauncher &launcher, MetaTable &metaTable, SettingsHolder &settingsHolder)
+        : mLauncher(&launcher), mMetaTable(&metaTable), mSettingsHolder(&settingsHolder) { }
 
 
 void rrc::RootNode::entry() {
@@ -112,4 +112,12 @@ void rrc::RootNode::setTopicMessageFilter(const rrc::RootNode::TopicName& topicN
 
 void rrc::RootNode::stop() {
     mLauncher->stop();
+}
+
+void rrc::RootNode::addSettingsListener(const std::string &dictionaryName, AbstractPropertyListenerPtr listener) {
+    mSettingsHolder->addListener(dictionaryName, listener);
+}
+
+void rrc::RootNode::removeSettingsListener(const std::string &dictionaryName, AbstractPropertyListenerPtr listener) {
+    mSettingsHolder->removeListener(dictionaryName, listener);
 }
