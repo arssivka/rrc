@@ -16,6 +16,7 @@ void rrc::RootNode::entry() {
     mNodesListPendingChanges.execAll();
     mListenersPendingListChanges.execAll();
     mSentMessages.execAll();
+    mSettingsListenersPendingChanges.execAll();
 }
 
 
@@ -115,9 +116,13 @@ void rrc::RootNode::stop() {
 }
 
 void rrc::RootNode::addSettingsListener(const std::string &dictionaryName, AbstractPropertyListenerPtr listener) {
-    mSettingsHolder->addListener(dictionaryName, listener);
+    mSettingsListenersPendingChanges.enqueue([this, dictionaryName, listener]() {
+        mSettingsHolder->addListener(dictionaryName, listener);
+    });
 }
 
 void rrc::RootNode::removeSettingsListener(const std::string &dictionaryName, AbstractPropertyListenerPtr listener) {
-    mSettingsHolder->removeListener(dictionaryName, listener);
+    mSettingsListenersPendingChanges.enqueue([this, dictionaryName, listener]() {
+        mSettingsHolder->removeListener(dictionaryName, listener);
+    });
 }

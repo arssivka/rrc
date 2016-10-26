@@ -138,6 +138,7 @@ namespace rrc {
         TaskQueue mNodesListPendingChanges;
         TaskQueue mListenersPendingListChanges;
         TaskQueue mSentMessages;
+        TaskQueue mSettingsListenersPendingChanges;
     };
 
     typedef std::shared_ptr<RootNode> RootNodePtr;

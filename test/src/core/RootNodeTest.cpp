@@ -9,21 +9,26 @@
 #include <Message.pb.h>
 #include <rrc/core/RejectMessageFilter.h>
 #include "include/DummyNode.h"
+#include "rrc/core/PropertyListener.h"
 
 using namespace rrc;
 
 
 class RootNodeFixture : public ::testing::Test {
 public:
-    RootNodeFixture() {
+    RootNodeFixture() : mProperty1(42), mProperty2(42) {
         mMetaTable.registerTypeId<testmessages::TestMessage>(0);
         mMetaTable.registerTypeId<testmessages::TestMessageContainer>(1);
+        mSettingsHolder.addOrUpdateProperty("testdict1","test1", mProperty1);
+
     }
 
 protected:
     MetaTable mMetaTable;
     LinearLauncher mLinearLauncher;
     SettingsHolder mSettingsHolder;
+    Property mProperty1;
+    Property mProperty2;
 
 };
 
@@ -210,4 +215,20 @@ TEST_F(RootNodeFixture, SetTopicAutoRemoveFlagTest) {
     EXPECT_TRUE(rootNode->getTopicNames().empty());
     rootNode->entry();
     EXPECT_FALSE(rootNode->getTopicNames().empty());
+}
+
+TEST_F(RootNodeFixture, SetRemoveSettingsListenersTest) {
+    RootNodePtr rootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable, mSettingsHolder);
+    PropertyListenerPtr mPropertyListener1 = std::make_shared<PropertyListener>();
+    PropertyListenerPtr mPropertyListener2 = std::make_shared<PropertyListener>();
+    rootNode->addSettingsListener("testdict1", mPropertyListener1);
+    rootNode->addSettingsListener("testdict1", mPropertyListener2);
+    rootNode->entry();
+    EXPECT_TRUE(mPropertyListener1->isContainsName("test1"));
+    EXPECT_TRUE(mPropertyListener2->isContainsName("test1"));
+    rootNode->removeSettingsListener("testdict1", mPropertyListener2);
+    rootNode->entry();
+    mSettingsHolder.addOrUpdateProperty("testdict1", "test2", mProperty2);
+    EXPECT_FALSE(mPropertyListener2->isContainsName("test2"));
+    EXPECT_TRUE(mPropertyListener1->isContainsName("test2"));
 }
