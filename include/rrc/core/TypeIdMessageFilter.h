@@ -26,7 +26,7 @@ namespace rrc {
          * @param message Pointer to message that needs to be checked
          * @return True if message accpeted, otherwise false.
          */
-        virtual bool accept(MessagePtr message) override;
+        virtual bool accept(Message::Ptr message) override;
 
         /**
          * @brief Returns type id of the messages that this filter accepts

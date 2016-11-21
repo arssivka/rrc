@@ -23,18 +23,16 @@ namespace rrc {
          * @brief Adds message to queue
          * @param msg Pointer to desired message
          */
-        virtual void enqueueMessage(MessagePtr msg) override;
+        virtual void enqueueMessage(Message::Ptr msg) override;
 
         /**
          * @brief Tries to dequeue message from queue
          * @return Pointer to message
          */
-        virtual MessagePtr tryDequeueMessage() override;
+        virtual Message::Ptr tryDequeueMessage() override;
 
     private:
-        std::queue<MessagePtr> mMessagesQueue;
+        std::queue<Message::Ptr> mMessagesQueue;
 
     };
-
-    typedef std::shared_ptr<QueueMessageListener> QueueMessageListenerPtr;
 }

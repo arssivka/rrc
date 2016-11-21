@@ -66,7 +66,7 @@ namespace rrc {
          * @param typeId Type id to get Message FactorY for the needed type
          * @return Pointer to Message Factory
          */
-        AbstractMessageFactoryPtr getMessageFactory(TypeId typeId);
+        AbstractMessageFactory::Ptr getMessageFactory(TypeId typeId);
 
         /**
          * @brief Unregister type by specified type id
@@ -84,7 +84,7 @@ namespace rrc {
 
     private:
         std::unordered_map<std::type_index, TypeId> mTypeInfoHash;
-        std::unordered_map<TypeId, AbstractMessageFactoryPtr> mMessageFactoryHash;
+        std::unordered_map<TypeId, AbstractMessageFactory::Ptr> mMessageFactoryHash;
 
     };
 }

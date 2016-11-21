@@ -10,7 +10,7 @@
 #include "Message.h"
 #include "NonCopyable.h"
 #include "QueueMessageListener.h"
-#include "TaskQueue.h"
+#include "TaskQueueWrapper.h"
 #include "UnregisteredTypeException.h"
 #include "ReceiveGuard.h"
 #include "QueueMessageListener.h"

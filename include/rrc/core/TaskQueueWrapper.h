@@ -8,21 +8,29 @@
 
 #include <atomic>
 #include <concurrentqueue.h>
+#include "AbstractQueueAdapter.h"
 
 namespace rrc {
     typedef std::function<void()> Task;
 
-    class TaskQueue {
+    class TaskQueueWrapper {
     public:
+        TaskQueueWrapper(rrc::AbstractQueueAdapter<Task>::Ptr queueAdapter);
+
+        TaskQueueWrapper(TaskQueueWrapper&& other);
+
+        TaskQueueWrapper(const TaskQueueWrapper& other) = default;
+
 
         /**
          * @brief Enques function object with it's args
          * @param func function object
          * @param args Arguments for the function object
          */
-        template <class Func, class... Args>
+         template <class Func, class... Args>
         void enqueue(Func&& func, Args... args) {
-            mTaskQueue.enqueue(std::bind(std::forward<Func>(func), std::forward<Args>(args)...));
+            mQueueAdapter->enqueue(std::bind(std::forward<Func>(func),
+                                         std::forward<Args>(args)...));
         }
 
         /**
@@ -30,7 +38,7 @@ namespace rrc {
          * @param task const reference to  Task - function<void> object
          */
         void enqueue(const Task& task) {
-            mTaskQueue.enqueue(task);
+            mQueueAdapter->enqueue(task);
         }
 
         /**
@@ -38,7 +46,7 @@ namespace rrc {
          * @param task function<void> object
          */
         void enqueue(Task&& task) {
-            mTaskQueue.enqueue(std::move(task));
+            mQueueAdapter->enqueue(std::move(task));
         }
 
         /**
@@ -59,9 +67,12 @@ namespace rrc {
          */
         void execAll();
 
-    private:
-        moodycamel::ConcurrentQueue<Task> mTaskQueue;
+        bool operator==(const TaskQueueWrapper& rhs) const;
 
+        bool operator!=(const TaskQueueWrapper& rhs) const;
+
+    private:
+        AbstractQueueAdapter<Task>::Ptr mQueueAdapter;
     };
 }
 

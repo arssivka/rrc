@@ -19,7 +19,7 @@ namespace rrc {
     /**
      * @brief All messages come to topics. Topic is a special place for holding specific messages. Nodes can subscribe to tpoics to get messages they need.
      */
-    class Topic {
+    class Topic : public Pointer<Topic> {
     public:
         /**
          * @brief Default constructor of Topic
@@ -30,19 +30,19 @@ namespace rrc {
          * @brief Register message listener
          * @param listener Pointer to listener to register
          */
-        void addListener(AbstractMessageListenerPtr listener);
+        void addListener(AbstractMessageListener::Ptr listener);
 
         /**
          * @brief Unregisters specified listener
          * @param listener Pointer to listener that needs to be unregistred
          */
-        void removeListener(AbstractMessageListenerPtr listener);
+        void removeListener(AbstractMessageListener::Ptr listener);
 
         /**
          * @brief Sends the message
          * @param message Pointer to message that needs to be sent
          */
-        void sendMessage(MessagePtr message);
+        void sendMessage(Message::Ptr message);
 
         /**
          * @brief Checks if this topic has listeners
@@ -78,23 +78,21 @@ namespace rrc {
          * @brief Returns message filter apllied to this topic
          * @return Pointer to message filter
          */
-        AbstractMessageFilterPtr getMessageFilter() const;
+        AbstractMessageFilter::Ptr getMessageFilter() const;
 
         /**
          * @brief Sets message filter to this topic
          * @param messageFilter Pointer to needed message filter
          */
-        void setMessageFilter(AbstractMessageFilterPtr messageFilter);
+        void setMessageFilter(AbstractMessageFilter::Ptr messageFilter);
 
     private:
-        AbstractMessageFilterPtr mMessageFilter;
-        std::forward_list<AbstractMessageListenerPtr> mListenersList;
+        AbstractMessageFilter::Ptr mMessageFilter;
+        std::forward_list<AbstractMessageListener::Ptr> mListenersList;
         bool mAutoRemoveEnabled;
         bool mMessageFilterEnabled;
 
     };
-
-    typedef std::shared_ptr<Topic> TopicPtr;
 }
 
 

@@ -3,21 +3,21 @@
  *  @date 9/2/16
  */
 
-#include <rrc/core/TaskQueue.h>
+#include <rrc/core/TaskQueueWrapper.h>
 #include <gtest/gtest.h>
 
 using namespace rrc;
 
 
 TEST(TaskQueueTest, DequeueFromEmptyQueue) {
-    TaskQueue queue;
+    TaskQueueWrapper queue;
     Task task;
     EXPECT_FALSE(queue.tryDequeue(task));
 }
 
 
 TEST(TaskQueueTest, InsertingTest1) {
-    TaskQueue queue;
+    TaskQueueWrapper queue;
     Task task = []() { };
     queue.enqueue(task);
     EXPECT_TRUE(queue.tryDequeue(task));
@@ -26,7 +26,7 @@ TEST(TaskQueueTest, InsertingTest1) {
 
 
 TEST(TaskQueueTest, InsertingTest2) {
-    TaskQueue queue;
+    TaskQueueWrapper queue;
     Task task = []() { };
     queue.enqueue(task);
     queue.enqueue(task);
@@ -37,7 +37,7 @@ TEST(TaskQueueTest, InsertingTest2) {
 
 
 TEST(TaskQueue, ExecOnceTest) {
-    TaskQueue queue;
+    TaskQueueWrapper queue;
     int counter = 0;
     Task task = [&counter]() {
         ++counter;
@@ -55,7 +55,7 @@ TEST(TaskQueue, ExecOnceTest) {
 
 
 TEST(TaskQueue, ExecAllTest) {
-    TaskQueue queue;
+    TaskQueueWrapper queue;
     int counter = 0;
     Task task = [&counter]() {
         ++counter;
@@ -71,7 +71,7 @@ TEST(TaskQueue, ExecAllTest) {
 
 
 TEST(TaskQueue, InsertWithBindingTest) {
-    TaskQueue queue;
+    TaskQueueWrapper queue;
     int counter1 = 0;
     int counter2 = 0;
     auto func = [](int& var, int value) {

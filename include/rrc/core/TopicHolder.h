@@ -20,7 +20,7 @@ namespace rrc {
      * @brief Class that contains all the topics and grants access to them.
      */
     template <class TopicName>
-    class TopicHolder {
+    class TopicHolder : public Pointer<TopicHolder<TopicName>> {
     public:
 
         /**
@@ -44,7 +44,7 @@ namespace rrc {
          * @param topicName Name of the needed topic
          * @return Topic if found otherwise nullptr
          */
-        TopicPtr getTopic(const TopicName& topicName) {
+        Topic::Ptr getTopic(const TopicName& topicName) {
             auto found = mTopicHash.find(topicName);
             if (found != mTopicHash.end()) {
                 return found->second;
@@ -76,7 +76,7 @@ namespace rrc {
 
 
     private:
-        std::unordered_map<TopicName, TopicPtr> mTopicHash;
+        std::unordered_map<TopicName, Topic::Ptr> mTopicHash;
     };
 }
 

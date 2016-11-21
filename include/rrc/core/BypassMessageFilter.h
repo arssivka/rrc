@@ -19,7 +19,7 @@ namespace rrc {
          * @param message Pointer to message to accept
          * @return True
          */
-        virtual bool accept(MessagePtr message) override;
+        virtual bool accept(Message::Ptr message) override;
     };
 }
 

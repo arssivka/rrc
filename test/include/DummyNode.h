@@ -6,8 +6,6 @@
 #pragma once
 
 
-#include <rrc/core/Node.h>
-#include <rrc/core/RootNode.h>
 #include <rrc/core/QueueMessageListener.h>
 
 class DummyNode : public rrc::Node {

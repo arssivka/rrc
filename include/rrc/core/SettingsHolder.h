@@ -18,7 +18,7 @@ namespace rrc {
     /**
      * @brief Class that holds settings collections aka. PropertyDictionary and grants access to some properties via listeners.
      */
-    class SettingsHolder {
+    class SettingsHolder : public Pointer<SettingsHolder> {
     public:
 
         /**
@@ -79,14 +79,14 @@ namespace rrc {
          * @param dictionaryName Name of the dictionary for adding listener to it.
          * @param listener Pointer to the listener to add.
          */
-        void addListener(const std::string& dictionaryName, AbstractPropertyListenerPtr listener);
+        void addListener(const std::string& dictionaryName, AbstractPropertyListener::Ptr listener);
 
         /**
          * @brief Removes listener from the dictionary with the specified name.
          * @param dictionaryName Name of the dictionary for removing listener from it.
          * @param listener Pointer to the listener to remove.
          */
-        void removeListener(const std::string& dictionaryName, AbstractPropertyListenerPtr listener);
+        void removeListener(const std::string& dictionaryName, AbstractPropertyListener::Ptr listener);
 
         /**
          * @brief Removes dictionary with the specified name from the SettingsHolder.
@@ -114,16 +114,16 @@ namespace rrc {
 
             void removeProperty(const std::string& propertyName);
 
-            void addListener(AbstractPropertyListenerPtr listener);
+            void addListener(AbstractPropertyListener::Ptr listener);
 
-            void removeListener(AbstractPropertyListenerPtr listener);
+            void removeListener(AbstractPropertyListener::Ptr listener);
 
             bool hasListeners() const;
 
             std::vector<std::string> getNames() const;
 
             PropertyDictionary mPropertyDictionary;
-            std::forward_list<AbstractPropertyListenerPtr> mListeners;
+            std::forward_list<AbstractPropertyListener::Ptr> mListeners;
         };
         std::map<std::string, PropertyContainer> mDictionaries;
     };

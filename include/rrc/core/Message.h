@@ -11,6 +11,7 @@
 #include <google/protobuf/message_lite.h>
 #include "NonCopyable.h"
 #include "MetaTable.h"
+#include "Pointer.h"
 
 namespace {
     namespace pb = google::protobuf;
@@ -20,7 +21,7 @@ namespace rrc {
     /**
      * @brief Message that you need to send to the topic. It holds a protobuf::MessageLite in it.
      */
-    class Message : private NonCopyable {
+    class Message : public Pointer<Message>, private NonCopyable {
     public:
         /**
          * @brief Constructor of message
@@ -75,8 +76,6 @@ namespace rrc {
         std::unique_ptr<pb::MessageLite> mDataPtr;
 
     };
-
-    typedef std::shared_ptr<Message> MessagePtr;
 }
 
 

@@ -4,62 +4,54 @@
  */
 
 #include <rrc/core/LinearLauncher.h>
-#include <rrc/core/Node.h>
+#include <stdlib.h>
 
 
 rrc::LinearLauncher::LinearLauncher()
         : mFinished(false) { }
 
 
-rrc::LinearLauncher::~LinearLauncher() {
-}
+rrc::LinearLauncher::~LinearLauncher() { }
 
 
 int rrc::LinearLauncher::run() {
+    // TODO: Optimize memory model
     mFinished = false;
     while (this->step());
-    return 0;
+    return EXIT_SUCCESS;
 }
 
 
 void rrc::LinearLauncher::stop() {
+    // TODO: Optimize memory model
     mFinished = true;
 }
 
 
-void rrc::LinearLauncher::setRootNode(rrc::RootNodePtr node) {
-    mRootNode = std::move(node);
-}
-
-
-void rrc::LinearLauncher::addNode(rrc::NodePtr node) {
+void rrc::LinearLauncher::addNode(rrc::Node::Ptr node) {
     mNodesList.emplace_front(std::move(node));
 }
 
 
-void rrc::LinearLauncher::removeNode(rrc::NodePtr node) {
-    mNodesList.remove_if([node](const NodeContainer& container) {
-        return container.node == node;
-    });
+void rrc::LinearLauncher::removeNode(rrc::Node::Ptr node) {
+    mNodesList.remove(node);
 }
 
 
 bool rrc::LinearLauncher::step() {
-    if (mFinished) {
-        return false;
-    }
-    mRootNode->entry();
-    for (auto&& container : mNodesList) {
-        auto now = std::chrono::steady_clock::now();
-        auto elapsed = now - container.timestamp;
-        if (elapsed >= container.node->getMinDuration()) {
-            container.node->entry();
-            container.timestamp = now;
-        }
-    }
+    // TODO: Optimize memory model
+    if (mFinished) return false;
+    for (auto&& queue : mQueuesList) queue.execAll();
+    for (auto&& node : mNodesList) node->entry();
     return true;
 }
 
 
-rrc::LinearLauncher::NodeContainer::NodeContainer(rrc::NodePtr node)
-        : node(node), timestamp() { }
+void rrc::LinearLauncher::addSyncQueue(TaskQueueWrapper queue) {
+    mQueuesList.emplace_front(std::move(queue));
+}
+
+
+void rrc::LinearLauncher::removeSyncQueue(TaskQueueWrapper queue) {
+    mQueuesList.remove(std::move(queue));
+}

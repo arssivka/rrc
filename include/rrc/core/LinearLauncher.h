@@ -6,7 +6,9 @@
 #pragma once
 
 
+#include <forward_list>
 #include "AbstractLauncher.h"
+#include "Node.h"
 
 namespace rrc {
     /**
@@ -42,35 +44,25 @@ namespace rrc {
         virtual void stop() override;
 
         /**
-        * @brief Sets the root node
-        * @param node Pointer to root node instance
-        */
-        virtual void setRootNode(RootNodePtr node) override;
-
-        /**
         * @brief Registers node
         * @param node Pointer to node instance
         */
-        virtual void addNode(NodePtr node) override;
+        virtual void addNode(Node::Ptr node) override;
 
         /**
          * @brief Removes the node from the list
          * @param node Pointer to node instance
          */
-        virtual void removeNode(NodePtr node) override;
+        virtual void removeNode(Node::Ptr node) override;
 
-    private:
-        struct NodeContainer {
-            NodeContainer(NodePtr node);
+        virtual void addSyncQueue(TaskQueueWrapper queue) override;
 
-            NodePtr node;
-            std::chrono::steady_clock::time_point timestamp;
-        };
+        virtual void removeSyncQueue(TaskQueueWrapper queue) override;
 
     private:
         bool mFinished;
-        RootNodePtr mRootNode;
-        std::forward_list<NodeContainer> mNodesList;
+        std::forward_list<Node::Ptr> mNodesList;
+        std::forward_list<TaskQueueWrapper> mQueuesList;
     };
 }
 

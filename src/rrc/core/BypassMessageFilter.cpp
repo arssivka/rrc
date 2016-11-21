@@ -6,6 +6,6 @@
 #include <rrc/core/BypassMessageFilter.h>
 
 
-bool rrc::BypassMessageFilter::accept(rrc::MessagePtr message) {
+bool rrc::BypassMessageFilter::accept(rrc::Message::Ptr message) {
     return true;
 }

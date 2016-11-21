@@ -6,16 +6,15 @@
 #pragma once
 
 
-#include "RootNode.h"
+#include "Node.h"
+#include "AbstractQueueAdapter.h"
+#include "TaskQueueWrapper.h"
 
 namespace rrc {
-    class Node;
-    typedef std::shared_ptr<Node> NodePtr;
-
     /**
      * @brief Abstract class for creating launchers. Lauуncher is needed to run all the nodes and functionality of the whole system.
      */
-    class AbstractLauncher {
+    class AbstractLauncher : public Pointer<AbstractLauncher> {
     public:
         /**
          * @brief Virtual destructor of Abstract Launcher
@@ -40,22 +39,20 @@ namespace rrc {
         virtual void stop() = 0;
 
         /**
-         * @brief Sets the root node
-         * @param node Pointer to root node instance
-         */
-        virtual void setRootNode(RootNodePtr node) = 0;
-
-        /**
          * @brief Registers node
          * @param node Pointer to node instance
          */
-        virtual void addNode(NodePtr node) = 0;
+        virtual void addNode(Node::Ptr node) = 0;
 
         /**
          * @brief Removes the node from the list
          * @param node Pointer to node instance
          */
-        virtual void removeNode(NodePtr node) = 0;
+        virtual void removeNode(Node::Ptr node) = 0;
+
+        virtual void addSyncQueue(TaskQueueWrapper queue) = 0;
+
+        virtual void removeSyncQueue(TaskQueueWrapper queue) = 0;
     };
 
 }

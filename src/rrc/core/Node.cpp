@@ -1,27 +1,18 @@
 /**
  *  @autor arssivka
- *  @date 8/25/16
+ *  @date 11/21/16
  */
 
 #include <rrc/core/Node.h>
 
 
-rrc::Node::Node() : mMinDuration(std::chrono::seconds(0)) { }
+rrc::Node::Node(rrc::EngineWrapper engineWrapper)
+        : mEngineWrapper(engineWrapper) {}
 
 
-std::chrono::steady_clock::duration rrc::Node::getMinDuration() const {
-    return mMinDuration;
+rrc::EngineWrapper rrc::Node::getEngineWrapper() const {
+    return mEngineWrapper;
 }
 
 
-void rrc::Node::setMinDuration(const std::chrono::steady_clock::duration& minDuration) {
-    mMinDuration = minDuration;
-}
-
-
-rrc::Node::Node(rrc::RootNodePtr rootNode) : mRootNode(rootNode) { }
-
-
-rrc::RootNodePtr rrc::Node::getRootNode() const {
-    return mRootNode;
-}
+rrc::Node::~Node() { }

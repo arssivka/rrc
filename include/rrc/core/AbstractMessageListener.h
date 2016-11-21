@@ -10,19 +10,19 @@
 
 
 namespace rrc {
-    class AbstractMessageListener {
+    class AbstractMessageListener : public Pointer<AbstractMessageListener> {
     public:
         /**
          * @brief Adds message to queue
          * @param msg Pointer to desired message
          */
-        virtual void enqueueMessage(MessagePtr msg) = 0;
+        virtual void enqueueMessage(Message::Ptr msg) = 0;
 
         /**
          * @brief Tries to dequeue message from queue
          * @return Pointer to message
          */
-        virtual MessagePtr tryDequeueMessage() = 0;
+        virtual Message::Ptr tryDequeueMessage() = 0;
 
         /**
          * @brief Returns type id of messages that of this message listener
@@ -46,6 +46,4 @@ namespace rrc {
         TypeId mTypeId;
 
     };
-
-    typedef std::shared_ptr<AbstractMessageListener> AbstractMessageListenerPtr;
 }

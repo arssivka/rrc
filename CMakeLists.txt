@@ -15,7 +15,7 @@ add_subdirectory(lib)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(SRCS
         include/rrc/core/AbstractLauncher.h
-        include/rrc/core/AbstractNode.h
+        include/rrc/core/Node.h
         src/rrc/core/SettingsHolder.cpp
         include/rrc/core/SettingsHolder.h
         include/rrc/core/Advertiser.h
@@ -26,17 +26,13 @@ set(SRCS
         src/rrc/core/Property.cpp
         include/rrc/core/Property.h
         include/rrc/core/CopyOnWrite.h
-        src/rrc/core/TaskQueue.cpp
-        include/rrc/core/TaskQueue.h
+        src/rrc/core/TaskQueueWrapper.cpp
+        include/rrc/core/TaskQueueWrapper.h
         src/rrc/core/QueueMessageListener.cpp
         include/rrc/core/TopicHolder.h
         src/rrc/core/Topic.cpp include/rrc/core/Topic.h
         src/rrc/core/MetaTable.cpp
         include/rrc/core/MetaTable.h
-        src/rrc/core/RootNode.cpp
-        include/rrc/core/RootNode.h
-        src/rrc/core/Node.cpp
-        include/rrc/core/Node.h
         src/rrc/core/LinearLauncher.cpp
         include/rrc/core/LinearLauncher.h
         src/rrc/core/UnregisteredTypeException.cpp
@@ -64,7 +60,28 @@ set(SRCS
         src/rrc/core/CallbackMessageFilter.cpp
         include/rrc/core/CallbackMessageFilter.h
         src/rrc/core/PropertyDictionary.cpp
-        include/rrc/core/PropertyDictionary.h)
+        include/rrc/core/PropertyDictionary.h
+        include/rrc/core/AbstractQueueAdapter.h
+        include/rrc/core/ConcurrentQueueAdapter.h
+        include/rrc/core/STLQueueAdapter.h
+        include/rrc/core/Mechanism.h
+        include/rrc/core/RingQueueAdapter.h
+        src/rrc/core/Engine.cpp
+        include/rrc/core/Engine.h
+        include/rrc/core/Pointer.h
+        src/rrc/core/EngineWrapper.cpp
+        include/rrc/core/EngineWrapper.h
+        src/rrc/core/Rate.cpp
+        include/rrc/core/Rate.h
+        src/rrc/core/AdvertisingMechanism.cpp
+        include/rrc/core/AdvertisingMechanism.h
+        src/rrc/core/NodeMechanism.cpp
+        include/rrc/core/NodeMechanism.h
+        src/rrc/core/SettingsMechanism.cpp
+        include/rrc/core/SettingsMechanism.h
+        src/rrc/core/MechanismVersion.cpp
+        include/rrc/core/MechanismVersion.h
+        include/rrc/core/Meta.h src/rrc/core/Node.cpp)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
                "${PROJECT_BINARY_DIR}/VersionDefines.h")

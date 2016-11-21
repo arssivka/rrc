@@ -1,74 +1,41 @@
 /**
  *  @autor arssivka
- *  @date 8/25/16
+ *  @date 7/8/16
  */
 
 #pragma once
 
-#include <chrono>
-#include "AbstractNode.h"
-#include "Advertiser.h"
-#include "Subscriber.h"
+
+#include <memory>
+#include "NonCopyable.h"
+#include "EngineWrapper.h"
 
 namespace rrc {
-    class RootNode;
-    typedef std::shared_ptr<RootNode> RootNodePtr;
-
-    class Node : public AbstractNode {
+    /**
+     * @brief Abstract class for creating nodes - modules of the system. Each module holds it's own functioanlity.
+     * In the terms of the system, node - is atomic. Executaion of it's entry is guaranteed.
+     */
+    class Node : public Pointer<Node>, private NonCopyable {
     public:
         /**
-         * @brief Default contructor of node
+         * @brief Virtual function for ruuning the node functionality
          */
-        Node();
+        virtual void entry() = 0;
 
         /**
-         * @brief Returns duration of the node - recomendation for launcher how often run this node
-         * @return Duration of type steady_clock::duration
+         * @brief Virtual destructor of AbstractNode
          */
-        std::chrono::steady_clock::duration getMinDuration() const;
+        virtual ~Node();
 
-        /**
-         * Sets duration of the node - recomendation for launcher how often run this node
-         * @param minDuration Desired duration of type steady_clock::duration
-         */
-        void setMinDuration(const std::chrono::steady_clock::duration& minDuration);
-
-        /**
-         * @brief Creates advertiser with parameter T
-         * @param topicName name of the topic to advrtise
-         * @return Advertiser with parameter = T
-         */
-        template <class T>
-        inline Advertiser<T> createAdvertiser(const std::string& topicName) const {
-            return Advertiser<T>(mRootNode, topicName);
-        }
-
-        /**
-         * @brief Creates subscriber with parameter T
-         * @param topicName Name of the to subscibe
-         * @return Subscriber with parameter = T
-         */
-        template <class MessageType>
-        inline QueueSubscriber<MessageType> createQueueSubscriber(const std::string& topicName) {
-            return QueueSubscriber<MessageType>(mRootNode, topicName);
-        }
-
-        template <class MessageType, size_t Size>
-        inline LimitedSizeSubscriber<MessageType, Size> createLimitedSizeSubscriber(const std::string& topicName) {
-            return LimitedSizeSubscriber<MessageType, Size>(mRootNode, topicName);
-        }
 
     protected:
-        Node(RootNodePtr rootNode);
+        Node(EngineWrapper engineWrapper);
 
-        RootNodePtr getRootNode() const;
+        EngineWrapper getEngineWrapper() const;
 
     private:
-        RootNodePtr mRootNode;
-        std::chrono::steady_clock::duration mMinDuration;
+        EngineWrapper mEngineWrapper;
     };
-
-    typedef std::shared_ptr<Node> NodePtr;
 }
 
 

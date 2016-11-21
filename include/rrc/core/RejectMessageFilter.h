@@ -20,7 +20,7 @@ namespace rrc {
          * @param message Pointer to message to not accept
          * @return False
          */
-        virtual bool accept(MessagePtr message) override;
+        virtual bool accept(Message::Ptr message) override;
     };
 }
 

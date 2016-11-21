@@ -8,13 +8,14 @@
 
 #include <google/protobuf/message_lite.h>
 #include <memory>
+#include "Pointer.h"
 
 namespace {
     namespace pb = google::protobuf;
 }
 
 namespace rrc {
-    class AbstractMessageFactory {
+    class AbstractMessageFactory : public Pointer<AbstractMessageFactory> {
     public:
         /**
          * @brief Virtual function for creating the message
@@ -28,6 +29,4 @@ namespace rrc {
         virtual ~AbstractMessageFactory() { }
 
     };
-
-    typedef std::shared_ptr<AbstractMessageFactory> AbstractMessageFactoryPtr;
 }

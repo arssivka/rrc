@@ -38,7 +38,7 @@ void rrc::SettingsHolder::removeProperty(const std::string& dictionaryName, cons
 }
 
 
-void rrc::SettingsHolder::addListener(const std::string& dictionaryName, rrc::AbstractPropertyListenerPtr listener) {
+void rrc::SettingsHolder::addListener(const std::string& dictionaryName, rrc::AbstractPropertyListener::Ptr listener) {
     auto dictionary = mDictionaries.find(dictionaryName);
     if(dictionary != mDictionaries.end()) {
         dictionary->second.addListener(listener);
@@ -46,7 +46,7 @@ void rrc::SettingsHolder::addListener(const std::string& dictionaryName, rrc::Ab
 }
 
 
-void rrc::SettingsHolder::removeListener(const std::string& dictionaryName, rrc::AbstractPropertyListenerPtr listener) {
+void rrc::SettingsHolder::removeListener(const std::string& dictionaryName, rrc::AbstractPropertyListener::Ptr listener) {
     auto dictionary = mDictionaries.find(dictionaryName);
     if(dictionary != mDictionaries.end()) {
         dictionary->second.removeListener(listener);
@@ -72,13 +72,13 @@ void rrc::SettingsHolder::PropertyContainer::removeProperty(const std::string& p
 }
 
 
-void rrc::SettingsHolder::PropertyContainer::addListener(rrc::AbstractPropertyListenerPtr listener) {
+void rrc::SettingsHolder::PropertyContainer::addListener(rrc::AbstractPropertyListener::Ptr listener) {
     mListeners.push_front(listener);
     listener->setDictionary(mPropertyDictionary);
 }
 
 
-void rrc::SettingsHolder::PropertyContainer::removeListener(rrc::AbstractPropertyListenerPtr listener) {
+void rrc::SettingsHolder::PropertyContainer::removeListener(rrc::AbstractPropertyListener::Ptr listener) {
     mListeners.remove(listener);
 }
 

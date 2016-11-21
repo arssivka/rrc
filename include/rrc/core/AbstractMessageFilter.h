@@ -12,14 +12,14 @@ namespace rrc {
     /**
      * @brief Abstract class for creating the message filters which will accept or deny certain messages
      */
-    class AbstractMessageFilter {
+    class AbstractMessageFilter : public Pointer<AbstractMessageFilter> {
     public:
         /**
          * @brief Virtual method for checking the message validity
          * @param message Pointer to message that needs to be checked
          * @return True if message accpeted, otherwise false.
          */
-        virtual bool accept(MessagePtr message) = 0;
+        virtual bool accept(Message::Ptr message) = 0;
 
         /**
          * @brief Virtual destruuctor of message filter
@@ -27,8 +27,6 @@ namespace rrc {
         virtual ~AbstractMessageFilter() { }
 
     };
-
-    typedef std::shared_ptr<AbstractMessageFilter> AbstractMessageFilterPtr;
 }
 
 

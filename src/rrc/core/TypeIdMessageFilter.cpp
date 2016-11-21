@@ -10,7 +10,7 @@ rrc::TypeIdMessageFilter::TypeIdMessageFilter(rrc::TypeId typeId)
         : mTypeId(typeId) {}
 
 
-bool rrc::TypeIdMessageFilter::accept(rrc::MessagePtr message) {
+bool rrc::TypeIdMessageFilter::accept(rrc::Message::Ptr message) {
     return    message != nullptr
            && message->getTypeId() == mTypeId;
 }

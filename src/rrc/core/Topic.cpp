@@ -12,17 +12,17 @@ rrc::Topic::Topic()
           mMessageFilterEnabled(true) { }
 
 
-void rrc::Topic::addListener(rrc::AbstractMessageListenerPtr listener) {
+void rrc::Topic::addListener(rrc::AbstractMessageListener::Ptr listener) {
     mListenersList.push_front(std::move(listener));
 }
 
 
-void rrc::Topic::removeListener(rrc::AbstractMessageListenerPtr listener) {
+void rrc::Topic::removeListener(rrc::AbstractMessageListener::Ptr listener) {
     mListenersList.remove(listener);
 }
 
 
-void rrc::Topic::sendMessage(MessagePtr message) {
+void rrc::Topic::sendMessage(Message::Ptr message) {
     if (mMessageFilter->accept(message)) {
         for (auto&& listener : mListenersList) {
             listener->enqueueMessage(message);
@@ -56,11 +56,11 @@ void rrc::Topic::setMessageFilterEnabled(bool filterEnabled) {
 }
 
 
-rrc::AbstractMessageFilterPtr rrc::Topic::getMessageFilter() const {
+rrc::AbstractMessageFilter::Ptr rrc::Topic::getMessageFilter() const {
     return mMessageFilter;
 }
 
 
-void rrc::Topic::setMessageFilter(AbstractMessageFilterPtr messageFilter) {
+void rrc::Topic::setMessageFilter(AbstractMessageFilter::Ptr messageFilter) {
     mMessageFilter = messageFilter;
 }

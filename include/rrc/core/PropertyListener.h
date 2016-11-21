@@ -44,6 +44,4 @@ namespace rrc{
     private:
         PropertyDictionary mPropertyDictionary;
     };
-
-    typedef std::shared_ptr<PropertyListener> PropertyListenerPtr;
 }

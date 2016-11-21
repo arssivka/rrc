@@ -18,23 +18,23 @@ namespace rrc {
          * @brief Constructor of CallbackMessageFilter
          * @param callback Const reference to callback function object for checking the message
          */
-        CallbackMessageFilter(const std::function<bool(MessagePtr)>& callback);
+        CallbackMessageFilter(const std::function<bool(Message::Ptr)>& callback);
 
         /**
          * @brief Constrcutor of CallbackMessageFilter
          * @param callback R-value refernce callback function object for checking the message
          */
-        CallbackMessageFilter(std::function<bool(MessagePtr)>&& callback);
+        CallbackMessageFilter(std::function<bool(Message::Ptr)>&& callback);
 
         /**
          * @brief Virtual method for checking the message validity
          * @param message Pointer to message that needs to be checked
          * @return True if message accpeted, otherwise false.
          */
-        virtual bool accept(MessagePtr message) override;
+        virtual bool accept(Message::Ptr message) override;
 
     private:
-        std::function<bool(MessagePtr)> mCallback;
+        std::function<bool(Message::Ptr)> mCallback;
     };
 }
 

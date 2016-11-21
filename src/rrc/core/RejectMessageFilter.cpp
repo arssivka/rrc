@@ -6,6 +6,6 @@
 #include <rrc/core/RejectMessageFilter.h>
 
 
-bool rrc::RejectMessageFilter::accept(rrc::MessagePtr message) {
+bool rrc::RejectMessageFilter::accept(rrc::Message::Ptr message) {
     return false;
 }

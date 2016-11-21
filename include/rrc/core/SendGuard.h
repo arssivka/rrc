@@ -7,7 +7,6 @@
 
 
 #include "Message.h"
-#include "RootNode.h"
 #include "UnregisteredTypeException.h"
 
 namespace rrc {
@@ -56,7 +55,7 @@ namespace rrc {
             if (timestamp == std::chrono::steady_clock::time_point()) {
                 timestamp = std::chrono::steady_clock::now();
             }
-            MessagePtr message = std::make_shared<Message>(mTypeId, timestamp, std::move(mData));
+            Message::Ptr message = std::make_shared<Message>(mTypeId, timestamp, std::move(mData));
             mRootNode->sendMessage(mTopicName, std::move(message));
             return true;
         }

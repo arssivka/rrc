@@ -10,15 +10,15 @@ rrc::QueueMessageListener::QueueMessageListener(rrc::TypeId typeId)
         : AbstractMessageListener(typeId) {  }
 
 
-void rrc::QueueMessageListener::enqueueMessage(rrc::MessagePtr msg) {
+void rrc::QueueMessageListener::enqueueMessage(rrc::Message::Ptr msg) {
     if (msg->getTypeId() == this->getTypeId()) {
         mMessagesQueue.emplace(std::move(msg));
     }
 }
 
 
-rrc::MessagePtr rrc::QueueMessageListener::tryDequeueMessage() {
-    MessagePtr message;
+rrc::Message::Ptr rrc::QueueMessageListener::tryDequeueMessage() {
+    Message::Ptr message;
     if (!mMessagesQueue.empty()) {
         message = std::move(mMessagesQueue.front());
         mMessagesQueue.pop();
