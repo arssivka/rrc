@@ -58,8 +58,14 @@ namespace rrc {
          */
         template <class D>
         Property(D&& data) {
-            mField->set<D>(std::forward<D>(data));
+            using decay_t = typename std::decay<D>::type;
+            mField->set<decay_t>(std::forward<D>(data));
         }
+
+//        template <class D>
+//        Property(D& data) {
+//            mField->set<D>(data);
+//        }
 
         /**
          * @brief Default property constructor

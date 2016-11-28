@@ -167,3 +167,9 @@ TEST(PropertyTest, StringToIntTest) {
     int t = p.get<int>();
     EXPECT_EQ(42, t);
 }
+
+TEST(PropertyTest, JustTest) {
+    int x = 42;
+    Property p(x);
+    EXPECT_EQ(42, p.getInt());
+}
