@@ -15,7 +15,7 @@ class SendGuardFixture : public ::testing::Test {
 public:
     SendGuardFixture() : mTopicName("test") {
         mMetaTable.registerTypeId<testmessages::TestMessage>(1u);
-        mRootNode = std::make_shared<RootNode>(mLauncher, mMetaTable);
+        mRootNode = std::make_shared<RootNode>(mLauncher, mMetaTable, mSettingsHolder);
         dummyNode1 = std::make_shared<DummyNode>(mRootNode, "test");
         mTimePoint = std::chrono::steady_clock::now();
     }
@@ -28,6 +28,7 @@ protected:
     MetaTable mMetaTable;
     RootNodePtr mRootNode;
     LinearLauncher mLauncher;
+    SettingsHolder mSettingsHolder;
     std::shared_ptr<DummyNode> dummyNode1;
     std::string mTopicName;
     std::chrono::steady_clock::time_point mTimePoint;

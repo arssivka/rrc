@@ -16,7 +16,7 @@ class AdvertiserFixture : public ::testing::Test {
 public:
     AdvertiserFixture() : mTopicName("test") {
         mMetaTable.registerTypeId<testmessages::TestMessage>(1u);
-        mRootNode = std::make_shared<RootNode>(mLauncher, mMetaTable);
+        mRootNode = std::make_shared<RootNode>(mLauncher, mMetaTable, mSettingsHolder);
         dummyNode1 = std::make_shared<DummyNode>(mRootNode, "test");
     }
 
@@ -28,6 +28,7 @@ protected:
     MetaTable mMetaTable;
     RootNodePtr mRootNode;
     LinearLauncher mLauncher;
+    SettingsHolder mSettingsHolder;
     std::shared_ptr<DummyNode> dummyNode1;
     std::string mTopicName;
 };

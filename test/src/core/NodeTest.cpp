@@ -16,12 +16,13 @@ class NodeFixture : public ::testing::Test {
 public:
     NodeFixture() {
         mMetaTable.registerTypeId<testmessages::TestMessage>(0);
-        mRootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable);
+        mRootNode = std::make_shared<RootNode>(mLinearLauncher, mMetaTable, mSettingsHolder);
     }
 
 protected:
     MetaTable mMetaTable;
     LinearLauncher mLinearLauncher;
+    SettingsHolder mSettingsHolder;
     RootNodePtr mRootNode;
 };
 
