@@ -20,14 +20,14 @@ namespace rrc {
          * @brief Registers node for the synchronization
          * @param node Pointer to the node, that nees to be registered
          */
-        void addNode(Node::Ptr node);
+        void addNode(AbstractNode::Ptr node);
 
 
         /**
          * @brief Unregisters node
          * @param node Pointer to the node that needs to be unregistered
          */
-        void removeNode(Node::Ptr node);
+        void removeNode(AbstractNode::Ptr node);
 
 
         /**

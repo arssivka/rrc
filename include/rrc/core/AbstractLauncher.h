@@ -6,7 +6,7 @@
 #pragma once
 
 
-#include "Node.h"
+#include "AbstractNode.h"
 #include "AbstractQueueAdapter.h"
 #include "TaskQueueWrapper.h"
 
@@ -42,13 +42,13 @@ namespace rrc {
          * @brief Registers node
          * @param node Pointer to node instance
          */
-        virtual void addNode(Node::Ptr node) = 0;
+        virtual void addNode(AbstractNode::Ptr node) = 0;
 
         /**
          * @brief Removes the node from the list
          * @param node Pointer to node instance
          */
-        virtual void removeNode(Node::Ptr node) = 0;
+        virtual void removeNode(AbstractNode::Ptr node) = 0;
 
         virtual void addSyncQueue(TaskQueueWrapper queue) = 0;
 

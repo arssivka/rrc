@@ -28,12 +28,12 @@ void rrc::LinearLauncher::stop() {
 }
 
 
-void rrc::LinearLauncher::addNode(rrc::Node::Ptr node) {
+void rrc::LinearLauncher::addNode(rrc::AbstractNode::Ptr node) {
     mNodesList.emplace_front(std::move(node));
 }
 
 
-void rrc::LinearLauncher::removeNode(rrc::Node::Ptr node) {
+void rrc::LinearLauncher::removeNode(rrc::AbstractNode::Ptr node) {
     mNodesList.remove(node);
 }
 

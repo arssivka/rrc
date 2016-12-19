@@ -1,66 +1,66 @@
-/**
- *  @autor arssivka
- *  @date 9/5/16
- */
-
-#include <gtest/gtest.h>
-#include <rrc/core/MetaTable.h>
-#include <rrc/core/RootNode.h>
-#include <rrc/core/LinearLauncher.h>
-#include <rrc/core/Subscriber.h>
-#include <Message.pb.h>
-
-using namespace rrc;
-
-
-class QueueSubscriberFixture : public ::testing::Test {
-public:
-    QueueSubscriberFixture() {
-        mMetaTable.registerTypeId<testmessages::TestMessage>(0);
-        mRootNode = std::make_shared<RootNode>(mLauncher, mMetaTable, mSettingsHolder);
-    }
-
-protected:
-    MetaTable mMetaTable;
-    LinearLauncher mLauncher;
-    SettingsHolder mSettingsHolder;
-    RootNodePtr mRootNode;
-};
-
-
-TEST_F(QueueSubscriberFixture, CreateSubscriber) {
-    EXPECT_NO_THROW(QueueSubscriber<testmessages::TestMessage>(mRootNode, "test"));
-    EXPECT_THROW(QueueSubscriber<testmessages::TestMessageContainer>(mRootNode, "test"), UnregisteredTypeException);
-}
-
-
-TEST_F(QueueSubscriberFixture, ReceiveMessageTest1) {
-    QueueSubscriber<testmessages::TestMessage> subscriber(mRootNode, "test");
-
-    TypeId typeId = mMetaTable.getTypeId<testmessages::TestMessage>();
-    std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
-    std::unique_ptr<testmessages::TestMessage> data = std::make_unique<testmessages::TestMessage>();
-    data->set_id(42);
-    MessagePtr message = std::make_shared<Message>(typeId, now, std::move(data));
-
-    mRootNode->sendMessage("test", message);
-    EXPECT_FALSE(subscriber.tryGetMessage().isMessageSet());
-    mRootNode->entry();
-    EXPECT_EQ(subscriber.tryGetMessage()->id(), 42);
-    EXPECT_FALSE(subscriber.tryGetMessage().isMessageSet());
-}
-
-
-TEST_F(QueueSubscriberFixture, ReceiveMessageTest2) {
-    QueueSubscriber<testmessages::TestMessage> subscriber(mRootNode, "test");
-
-    TypeId typeId = mMetaTable.getTypeId<testmessages::TestMessageContainer>();
-    std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
-    std::unique_ptr<testmessages::TestMessageContainer> data = std::make_unique<testmessages::TestMessageContainer>();
-    MessagePtr message = std::make_shared<Message>(typeId, now, std::move(data));
-
-    mRootNode->sendMessage("test", message);
-    EXPECT_FALSE(subscriber.tryGetMessage().isMessageSet());
-    mRootNode->entry();
-    EXPECT_FALSE(subscriber.tryGetMessage().isMessageSet());
-}
+///**
+// *  @autor arssivka
+// *  @date 9/5/16
+// */
+//
+//#include <gtest/gtest.h>
+//#include <rrc/core/MetaTable.h>
+//#include <rrc/core/RootNode.h>
+//#include <rrc/core/LinearLauncher.h>
+//#include <rrc/core/Subscriber.h>
+//#include <Message.pb.h>
+//
+//using namespace rrc;
+//
+//
+//class QueueSubscriberFixture : public ::testing::Test {
+//public:
+//    QueueSubscriberFixture() {
+//        mMetaTable.registerTypeId<testmessages::TestMessage>(0);
+//        mRootNode = std::make_shared<RootNode>(mLauncher, mMetaTable, mSettingsHolder);
+//    }
+//
+//protected:
+//    MetaTable mMetaTable;
+//    LinearLauncher mLauncher;
+//    SettingsHolder mSettingsHolder;
+//    RootNodePtr mRootNode;
+//};
+//
+//
+//TEST_F(QueueSubscriberFixture, CreateSubscriber) {
+//    EXPECT_NO_THROW(QueueSubscriber<testmessages::TestMessage>(mRootNode, "test"));
+//    EXPECT_THROW(QueueSubscriber<testmessages::TestMessageContainer>(mRootNode, "test"), UnregisteredTypeException);
+//}
+//
+//
+//TEST_F(QueueSubscriberFixture, ReceiveMessageTest1) {
+//    QueueSubscriber<testmessages::TestMessage> subscriber(mRootNode, "test");
+//
+//    TypeId typeId = mMetaTable.getTypeId<testmessages::TestMessage>();
+//    std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+//    std::unique_ptr<testmessages::TestMessage> data = std::make_unique<testmessages::TestMessage>();
+//    data->set_id(42);
+//    MessagePtr message = std::make_shared<Message>(typeId, now, std::move(data));
+//
+//    mRootNode->sendMessage("test", message);
+//    EXPECT_FALSE(subscriber.tryGetMessage().isMessageSet());
+//    mRootNode->entry();
+//    EXPECT_EQ(subscriber.tryGetMessage()->id(), 42);
+//    EXPECT_FALSE(subscriber.tryGetMessage().isMessageSet());
+//}
+//
+//
+//TEST_F(QueueSubscriberFixture, ReceiveMessageTest2) {
+//    QueueSubscriber<testmessages::TestMessage> subscriber(mRootNode, "test");
+//
+//    TypeId typeId = mMetaTable.getTypeId<testmessages::TestMessageContainer>();
+//    std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+//    std::unique_ptr<testmessages::TestMessageContainer> data = std::make_unique<testmessages::TestMessageContainer>();
+//    MessagePtr message = std::make_shared<Message>(typeId, now, std::move(data));
+//
+//    mRootNode->sendMessage("test", message);
+//    EXPECT_FALSE(subscriber.tryGetMessage().isMessageSet());
+//    mRootNode->entry();
+//    EXPECT_FALSE(subscriber.tryGetMessage().isMessageSet());
+//}

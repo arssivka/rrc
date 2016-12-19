@@ -10,7 +10,7 @@ rrc::NodeMechanism::NodeMechanism(rrc::TaskQueueWrapper syncQueue, rrc::Pointer<
         : Mechanism("rrc.nodes", 0), mSyncQueue(std::move(syncQueue)), mLauncher(std::move(launcher)) { }
 
 
-void rrc::NodeMechanism::addNode(rrc::Pointer<rrc::Node>::Ptr node) {
+void rrc::NodeMechanism::addNode(rrc::Pointer<rrc::AbstractNode>::Ptr node) {
     // TODO: Move to enclosure
     auto launcher = mLauncher;
     mSyncQueue.enqueue([launcher, node]() {
@@ -19,7 +19,7 @@ void rrc::NodeMechanism::addNode(rrc::Pointer<rrc::Node>::Ptr node) {
 }
 
 
-void rrc::NodeMechanism::removeNode(rrc::Pointer<rrc::Node>::Ptr node) {
+void rrc::NodeMechanism::removeNode(rrc::Pointer<rrc::AbstractNode>::Ptr node) {
     // TODO: Move to enclosure
     auto launcher = mLauncher;
     mSyncQueue.enqueue([launcher, node]() {

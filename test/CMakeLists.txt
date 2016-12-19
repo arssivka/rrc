@@ -7,8 +7,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(SRCS
         src/core/PropertyTests.cpp
         src/core/SettingsHolderTests.cpp
-        src/core/MessageTests.cpp
-        src/core/MetaTableTests.cpp
         src/core/TopicTest.cpp
         src/core/QueueMessageListenerTests.cpp
         src/core/TaskQueueTests.cpp
@@ -16,26 +14,18 @@ set(SRCS
         src/core/DummyNode.cpp
         include/DummyNode.h
         src/core/BillboardTests.cpp
-        src/core/RecieveGuardTests.cpp
         src/core/NodeTest.cpp
         src/core/QueueSubscriberTest.cpp
         src/core/LinearLauncherTest.cpp
         src/core/AdvertiserTests.cpp
-        src/core/SendGuardTests.cpp
         src/core/LimitedSizeSubscriberTests.cpp
         src/core/TypeIdMessageFilterTests.cpp
         src/core/RejectMessageFilterTest.cpp
         src/core/BypassMessageFilterTests.cpp
-        src/core/CallbackMessageFilterTest.cpp)
-
-set(PROTOS
-        proto/Message.proto)
-
-protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${PROTOS})
+        src/core/CallbackMessageFilterTest.cpp src/core/MetaTests.cpp src/core/MetaArrayTests.cpp)
 
 
-add_executable(tests ${SRCS} ${PROTO_SRCS} ${PROTO_HDRS})
-target_link_libraries(tests gtest gtest_main rrc ${PROTOBUF_LIBRARIES})
-target_include_directories(tests PUBLIC ${PROTOBUF_INCLUDE_DRIS})
+add_executable(tests ${SRCS})
+target_link_libraries(tests gtest gtest_main rrc)
 add_test(tests tests)
 
