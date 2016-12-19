@@ -69,7 +69,7 @@ set(SRCS
         include/rrc/core/MechanismVersion.h
 #        src/rrc/core/AbstractNode.cpp
         include/rrc/core/MetaFunctions.h
-        include/rrc/core/MetaArray.h include/rrc/core/MetaGenerators.h include/rrc/core/Buffer.cpp include/rrc/core/Buffer.h include/rrc/core/Serializer.h include/rrc/core/SerializerTraits.h)
+        include/rrc/core/MetaArray.h include/rrc/core/MetaGenerators.h include/rrc/core/Serializer.h include/rrc/core/SerializerTraits.h)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
                "${PROJECT_BINARY_DIR}/VersionDefines.h")
