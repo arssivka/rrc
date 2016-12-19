@@ -37,7 +37,7 @@ namespace rrc {
             static const size_t count = sizeof...(Args);
             using Result = Res;
             using Class = Cls;
-            template<size_t i> using Ars = typename std::tuple_element<i, std::tuple<Args...>>::type;
+            template<size_t i> using Arg = typename std::tuple_element<i, std::tuple<Args...>>::type;
         };
 
         namespace detail {
@@ -137,23 +137,10 @@ namespace rrc {
             template<template<class...> class L1, class... T1,
                     template<class...> class L2, class... T2, class... Lr>
             struct AppendImplementation<L1<T1...>, L2<T2...>, Lr...> {
-                using Type = AppendImplementation<L1<T1..., T2...>, Lr...>::Type;
+                using Type = typename AppendImplementation<L1<T1..., T2...>, Lr...>::Type;
             };
         }
-        template<class... L> using Append = detail::AppendImplementation<L...>::Type;
-
-
-        namespace detail {
-            template<class L, class V>
-            struct FillImplementation;
-            template<template<class...> class L, class... T, class V>
-            struct FillImplementation<L<T...>, V> {
-                template<class...> using _Fv = V;
-                using Type = L<_Fv<T>...>;
-            };
-        }
-        template<class L, class V> using Fill = typename detail::FillImplementation<L, V>::Type;
-
+        template<class... L> using Append = typename detail::AppendImplementation<L...>::Type;
 
 
         template<class T, T... Ints>
@@ -185,9 +172,9 @@ namespace rrc {
         namespace detail {
             template<class... S>
             struct AppendSequenceImplementation;
-            template<class T, template<class, T...> class S, T... V>
-            struct AppendSequenceImplementation<S<T, V...>> {
-                using Type = S<T, V...>;
+            template<>
+            struct AppendSequenceImplementation<> {
+                using Type = List<>;
             };
             template<class T, template<class, T...> class S, T... V>
             struct AppendSequenceImplementation<S<T, V...>> {

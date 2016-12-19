@@ -8,14 +8,23 @@
 #include <list>
 #include <functional>
 #include <rrc/core/MetaFunctions.h>
+#include <rrc/core/MetaGenerators.h>
 
 using namespace rrc::meta;
 
 
 typedef int fuck;
 
+class MetaTestClassFixture : public ::testing::Test {
+public:
+    MetaTestClassFixture () = default;
+    float getSomeTest(int x, bool y, double z) {
+        return 70.0;
+    }
+};
 
-TEST(MetaTest, FunctionTrains) {
+
+TEST(MetaTest, FunctionTraits) {
     typedef std::function<void(float, char[4], int)> Function;
     typedef FunctionTraits<Function> Traits;
     bool result = std::is_same<Traits::Result, void>::value;
@@ -26,6 +35,8 @@ TEST(MetaTest, FunctionTrains) {
     EXPECT_TRUE(second);
     bool third = std::is_same<Traits::Arg<2>, fuck>::value;
     EXPECT_TRUE(third);
+    size_t count = Traits::count;
+    EXPECT_EQ(count, 3);
 }
 
 bool func(int) {
@@ -39,11 +50,13 @@ TEST(MetaTest, FuntionTraitsPtr) {
     EXPECT_TRUE(result);
     bool first = std::is_same<Traits::Arg<0>, fuck>::value;
     EXPECT_TRUE(first);
+    size_t count = Traits::count;
+    EXPECT_EQ(count, 1);
 }
 
 
 TEST(MetaTest, ArrayGenerator) {
-    auto count = ArrayGenerator<int8_t, 1, 2, 3>::count;
+    auto count = ArrayGenerator<int8_t, 1, 2, 3>::size;
     EXPECT_EQ(count, 3);
     auto array = ArrayGenerator<int8_t, 1, 2, 3>::data;
     std::array<int8_t, 3> val = array;
@@ -94,20 +107,57 @@ TEST(MetaTest, TrueFalse) {
     EXPECT_NE(True::value, False::value);
 }
 
+TEST(MetaTest, Empty) {
+    typedef List<fuck, fuck, fuck, fuck> FUCK;
+    typedef List<> EMPTY;
+    bool nempty = Empty<FUCK>::value;
+    EXPECT_FALSE(nempty);
+    bool empty = Empty<EMPTY>::value;
+    EXPECT_TRUE(empty);
+}
+
 TEST(MetaTest, Clear) {
     typedef Clear<List<fuck,fuck,fuck,fuck>> FUCK;
     bool eq = std::is_same<FUCK, List<>>::value;
-    bool emp = Empty<FUCK>::value;
     EXPECT_TRUE(eq);
-    EXPECT_TRUE(emp);
 }
 
 template <class A>
 using AddPointer = typename std::add_pointer<A>::type;
 
 TEST(MetaTest, Transform) {
-
     typedef Transform<AddPointer , List<fuck, fuck, fuck>> DIRECTIONAL_FUCK;
     bool same = std::is_same<DIRECTIONAL_FUCK, List<fuck*, fuck*, fuck*>>::value;
     EXPECT_TRUE(same);
+}
+
+TEST(MetaTest, Append) {
+    typedef Append<List<float>, List<fuck, fuck>, List<fuck, fuck, fuck>> append;
+    bool back =std::is_same<List<float, fuck, fuck, fuck, fuck, fuck>, append>::value;
+    EXPECT_TRUE(back);
+}
+
+TEST(MetaTest, AppendSequence) {
+    typedef AppendSequence <IntegralSequence<fuck, 1, 2, 3>, IntegralSequence<fuck, 4, 5, 6>, IntegralSequence<fuck, 7, 8, 9>> append;
+    bool back =std::is_same<IntegralSequence<fuck, 1, 2, 3, 4, 5, 6, 7, 8, 9>, append>::value;
+    EXPECT_TRUE(back);
+}
+
+TEST_F(MetaTestClassFixture, MethodTraits) {
+    typedef MethodTraits<decltype(&MetaTestClassFixture::getSomeTest)> Traits;
+    bool result = std::is_same<Traits::Result, float>::value;
+    EXPECT_TRUE(result);
+    bool first = std::is_same<Traits::Arg<0>, fuck>::value;
+    EXPECT_TRUE(first);
+    bool second = std::is_same<Traits::Arg<1>, bool>::value;
+    EXPECT_TRUE(second);
+    bool third = std::is_same<Traits::Arg<2>, double>::value;
+    EXPECT_TRUE(third);
+    size_t count  = Traits::count;
+    EXPECT_EQ(3, count);
+}
+
+TEST(MetaTest, GetSequence) {
+    typedef GetSequence<IntegralSequence<fuck, 1, 2, 3>> list;
+    bool eq = std::is_same<list, List<std::integral_constant<fuck>(1), 2, 3>>::value;
 }
