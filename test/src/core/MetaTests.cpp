@@ -9,6 +9,7 @@
 #include <functional>
 #include <rrc/core/MetaFunctions.h>
 #include <rrc/core/MetaGenerators.h>
+#include <rrc/core/MetaArray.h>
 
 using namespace rrc::meta;
 
@@ -158,6 +159,27 @@ TEST_F(MetaTestClassFixture, MethodTraits) {
 }
 
 TEST(MetaTest, GetSequence) {
-    typedef GetSequence<IntegralSequence<fuck, 1, 2, 3>> list;
-    bool eq = std::is_same<list, List<std::integral_constant<fuck>(1), 2, 3>>::value;
+    typedef RenameSequence<IntegralSequence<fuck, 1, 2, 3>, ArrayGenerator<fuck>> array;
+    auto array1 = array::data;
+    auto array2 = std::array<fuck, 3>{1, 2, 3};
+    EXPECT_EQ(array1, array2);
+}
+
+TEST(MetaTest, Pack) {
+    typedef Pack<fuck, 1, 2> pack;
+    auto value = pack::value;
+    EXPECT_EQ(value, 0x10002);
+    typedef Pack<short, 1, 2> pack2;
+    auto value2 = pack2::value;
+    EXPECT_EQ(value2, 0x0102);
+    typedef Pack<long int, 1, 2> pack3;
+    auto value3 = pack3::value;
+    EXPECT_EQ(value3, 0x100000002);
+}
+
+TEST(MetaTest, Packer) {
+    typedef Packer<ArrayGenerator<short>, IntegralSequence<short, 1>> packer;
+    std::array<short, 1> array{0x01};
+    auto packed = packer::data;
+    EXPECT_EQ(array, packed);
 }

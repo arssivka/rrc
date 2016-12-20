@@ -147,15 +147,15 @@ namespace rrc {
         struct IntegralSequence {
         };
 
-        namespace detail {
-            template<class S>
-            struct GetSequenceImplementation;
-            template<template<class T, T... I> class S, class U, U... J>
-            struct GetSequenceImplementation<S<U, J...>> {
-                using Type = List<typename std::integral_constant<U, J>::value...>;
-            };
-        }
-        template<class S> using GetSequence = typename detail::GetSequenceImplementation<S>::Type;
+//        namespace detail {
+//            template<class S>
+//            struct GetSequenceImplementation;
+//            template<template<class T, T... I> class S, class U, U... J>
+//            struct GetSequenceImplementation<S<U, J...>> {
+//                using Type = List<typename std::integral_constant<U, J>::value_type...>;
+//            };
+//        }
+//        template<class S> using GetSequence = typename detail::GetSequenceImplementation<S>::Type;
 
         namespace detail {
             template<class A, class B>
@@ -190,30 +190,30 @@ namespace rrc {
 
 
         template <class T, T First, T Second>
-        struct Pack : std::integral_constant<T, (First << sizeof(T) * 4) | (Second & (-1 >> sizeof(T) * 4))> { };
+        struct Pack : std::integral_constant<T, (First << sizeof(T) * 4) | (Second & ((T)-1 >> sizeof(T) * 4))> { };
 
 
         namespace detail {
-            template<class T, class R, class V>
+            template<class R, class V>
             struct PackerImplementation;
             template<class T, template<class, T...> class R,
                     template<class, T...> class V, T... Result, T First, T Second, T... Values>
-            struct PackerImplementation<T, R<T, Result...>, V<T, First, Second, Values...>> {
-                using Type = typename PackerImplementation<T, R<T, Result..., Pack<T, First, Second>::value>, V<T, Values...>>::Type;
+            struct PackerImplementation<R<T, Result...>, V<T, First, Second, Values...>> {
+                using Type = typename PackerImplementation<R<T, Result..., Pack<T, First, Second>::value>, V<T, Values...>>::Type;
             };
             template<class T, template<class, T...> class R,
                     template<class, T...> class V, T... Result, T Last>
-            struct PackerImplementation<T, R<T, Result...>, V<T, Last>> {
+            struct PackerImplementation<R<T, Result...>, V<T, Last>> {
                 using Type = R<T, Result..., Pack<T, 0, Last>::value>;
             };
             template<class T, template<class, T...> class R,
                     template<class, T...> class V, T... Result>
-            struct PackerImplementation<T, R<T, Result...>, V<T>> {
+            struct PackerImplementation<R<T, Result...>, V<T>> {
                 using Type = R<T, Result...>;
             };
         }
-        template <class T, class Res, class Values>
-        using Packer = typename detail::PackerImplementation<T, Res, Values>::Type;
+        template <class Res, class Values>
+        using Packer = typename detail::PackerImplementation<Res, Values>::Type;
 
 
         namespace detail {
