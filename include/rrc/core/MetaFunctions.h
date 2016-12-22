@@ -217,29 +217,31 @@ namespace rrc {
 
 
         namespace detail {
-            template<class R, class S>
+            template<class... Ts>
             struct ConcatenatorImplementation {
             };
             template<template<class...> class R, class... Rs,
-                    template<class...> class S, class Fist, class Second, class... Ss>
-            struct ConcatenatorImplementation<R<Rs...>, S<Fist, Second, Ss...>> {
-                using Type = typename std::conditional<std::is_same<Fist, Second>::value,
-                        typename ConcatenatorImplementation<R<Rs..., Fist>, S<Ss...>>::Type,
-                        typename ConcatenatorImplementation<R<Rs..., Fist>, S<Second, Ss...>>::Type>::type;
+                    template<class...> class S, class First, class Second, class... Ss, class... Os>
+            struct ConcatenatorImplementation<R<Rs...>, S<First, Second, Ss...>, Os...> {
+                using Type = typename std::conditional<std::is_same<First, Second>::value,
+                        typename ConcatenatorImplementation<R<Rs..., First>, S<Ss...>, Os...>::Type,
+                        typename ConcatenatorImplementation<R<Rs..., First>, S<Second, Ss...>, Os...>::Type>::type;
             };
             template<template<class...> class R, class... Rs,
-                    template<class...> class S, class Fist>
-            struct ConcatenatorImplementation<R<Rs...>, S<Fist>> {
-                using Type = R<Rs..., Fist>;
+                    template<class...> class S, class First>
+            struct ConcatenatorImplementation<R<Rs...>, S<First>> {
+                using Type = R<Rs..., First>;
             };
             template<template<class...> class R, class... Rs,
-                    template<class...> class S>
-            struct ConcatenatorImplementation<R<Rs...>, S<>> {
-                using Type = R<Rs...>;
+                    template<class...> class S, class... Os>
+            struct ConcatenatorImplementation<R<Rs...>, S<>, Os...> {
+                using Type = typename std::conditional<Length<Os...>::value == 0,
+                    R<Rs...>,
+                    typename ConcatenatorImplementation<R<Rs...>, S<>, Os...>::Type>::type;
             };
         }
-        template <class R, class S>
-        using Concatenator = typename detail::ConcatenatorImplementation<R, S>::Type;
+        template <class... Ts>
+        using Concatenator = typename detail::ConcatenatorImplementation<List<>, Ts...>::Type;
 
 
         namespace detail {

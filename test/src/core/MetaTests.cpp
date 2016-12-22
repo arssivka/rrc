@@ -12,7 +12,7 @@
 #include <rrc/core/MetaArray.h>
 
 using namespace rrc::meta;
-
+using namespace rrc;
 
 typedef int fuck;
 
@@ -37,7 +37,7 @@ TEST(MetaTest, FunctionTraits) {
     bool third = std::is_same<Traits::Arg<2>, fuck>::value;
     EXPECT_TRUE(third);
     size_t count = Traits::count;
-    EXPECT_EQ(count, 3);
+    EXPECT_EQ(count, (size_t)3);
 }
 
 bool func(int) {
@@ -52,13 +52,13 @@ TEST(MetaTest, FuntionTraitsPtr) {
     bool first = std::is_same<Traits::Arg<0>, fuck>::value;
     EXPECT_TRUE(first);
     size_t count = Traits::count;
-    EXPECT_EQ(count, 1);
+    EXPECT_EQ(count, (size_t)1);
 }
 
 
 TEST(MetaTest, ArrayGenerator) {
     auto count = ArrayGenerator<int8_t, 1, 2, 3>::size;
-    EXPECT_EQ(count, 3);
+    EXPECT_EQ(count, (size_t)3);
     auto array = ArrayGenerator<int8_t, 1, 2, 3>::data;
     std::array<int8_t, 3> val = array;
     EXPECT_TRUE(val == array);
@@ -74,13 +74,13 @@ TEST(MetaTest, Rename) {
 
 TEST(MetaTest, Length) {
     auto len = rrc::meta::Length<fuck, float, double>::value;
-    EXPECT_EQ(len, 3);
+    EXPECT_EQ(len, (size_t)3);
 }
 
 
 TEST(MetaTest, Size) {
     auto size = Size<std::pair<fuck, float>>::value;
-    EXPECT_EQ(size, 2);
+    EXPECT_EQ(size, (size_t)2);
 }
 
 
@@ -155,7 +155,7 @@ TEST_F(MetaTestClassFixture, MethodTraits) {
     bool third = std::is_same<Traits::Arg<2>, double>::value;
     EXPECT_TRUE(third);
     size_t count  = Traits::count;
-    EXPECT_EQ(3, count);
+    EXPECT_EQ((size_t)3, count);
 }
 
 TEST(MetaTest, GetSequence) {
@@ -182,4 +182,66 @@ TEST(MetaTest, Packer) {
     std::array<short, 1> array{0x01};
     auto packed = packer::data;
     EXPECT_EQ(array, packed);
+    typedef Packer<ArrayGenerator<short>, IntegralSequence<short, 1, 2, 3>> packer2;
+    std::array<short, 2> array2{0x0102, 0x03};
+    auto packed2 = packer2::data;
+    EXPECT_EQ(array2, packed2);
+    typedef Packer<ArrayGenerator<short>, IntegralSequence<short, 1, 2, 3, 4>> packer3;
+    std::array<short, 2> array3{0x0102, 0x0304};
+    auto packed3 = packer3::data;
+    EXPECT_EQ(array3, packed3);
+}
+
+TEST(MetaTest, PackedArrayGenerator) {
+    typedef PackedArrayGenerator<short, 1, 2, 3> generator;
+    std::array<short, 2> array{0x0102, 0x03};
+    auto packed = generator::data;
+    EXPECT_EQ(array, packed);
+    auto size = generator::size;
+    EXPECT_EQ(size, (size_t)2);
+    typedef PackedArrayGenerator<short, 1, 2> generator2;
+    std::array<short, 1> array2{0x0102};
+    auto packed2 = generator2::data;
+    EXPECT_EQ(array2, packed2);
+    auto size2 = generator2::size;
+    EXPECT_EQ(size2, (size_t)1);
+    typedef PackedArrayGenerator<short, 1, 2, 3, 4> generator3;
+    std::array<short, 2> array3{0x0102, 0x0304};
+    auto packed3 = generator3::data;
+    EXPECT_EQ(array3, packed3);
+    auto size3 = generator3::size;
+    EXPECT_EQ(size3, (size_t)2);
+}
+
+TEST(MetaTest, CleanType) {
+    typedef CleanType<const int> inttype;
+    bool eq1 = std::is_same<int, inttype>::value;
+    EXPECT_TRUE(eq1);
+    typedef CleanType<std::vector<int>> inttype1;
+    bool eq2 = std::is_same<int, inttype1>::value;
+    EXPECT_TRUE(eq2);
+    typedef CleanType<std::string> chartype;
+    bool eq3 = std::is_same<char, chartype>::value;
+    EXPECT_TRUE(eq3);
+    typedef CleanType<std::vector<std::vector<int>>> inttype2;
+    bool eq4 = std::is_same<int, inttype2>::value;
+    EXPECT_TRUE(eq4);
+}
+
+
+TEST(MetaTest, Concatenator) {
+    //TODO: It's not working. Fix it.
+//    typedef Concatenator<List<int, float>, List<bool, bool, double>> concatenator;
+//    bool eq = std::is_same<List<int, float, bool, double>, concatenator >::value;
+//    EXPECT_TRUE(eq);
+////    typedef Concatenator<List<int, int>, bool> concatenator;
+////    bool eq = std::is_same<List<int, float, bool, double>, concatenator >::value;
+////    EXPECT_TRUE(eq);
+}
+
+TEST(MetaTest, SequenceConcatenator) {
+    //TODO: Maybe you need other functionaluity from this?
+    typedef SequenceConcatenator<IntegralSequence<short, 1, 2, 3>, IntegralSequence<short, 4, 5>> concatenator;
+    bool eq = std::is_same<IntegralSequence<short, 1, 2, 3, 4, 5>,concatenator>::value;
+    EXPECT_TRUE(eq);
 }
