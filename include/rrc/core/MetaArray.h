@@ -11,7 +11,7 @@
 #include "MetaFunctions.h"
 
 namespace rrc {
-    class AbstractMessage;
+    class Message;
 
     enum TypeId {
         UNKNOWN_ID,
@@ -38,7 +38,7 @@ namespace rrc {
     template <class C> struct TypeConverter<C, int64_t> : detail::TypeToIdImpl<C, TypeId::INT64_ID> {};
     template <class C> struct TypeConverter<C, float> : detail::TypeToIdImpl<C, TypeId::FLOAT_ID> {};
     template <class C> struct TypeConverter<C, double> : detail::TypeToIdImpl<C, TypeId::DOUBLE_ID> {};
-    template <class C> struct TypeConverter<C, AbstractMessage> : detail::TypeToIdImpl<C, TypeId::STRUCTURE_ID> {};
+    template <class C> struct TypeConverter<C, Message> : detail::TypeToIdImpl<C, TypeId::STRUCTURE_ID> {};
 
     namespace detail {
         template<class T>

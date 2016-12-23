@@ -13,11 +13,9 @@ namespace rrc {
      * @brief Class that makes his child classes to be copied only when modified.
      */
     template <class T>
-    class CopyOnWrite
-    {
+    class CopyOnWrite {
     public:
         typedef T Data;
-        typedef std::shared_ptr<T> Ptr;
 
         template <class... Args>
         static CopyOnWrite create(Args... args) {
@@ -29,8 +27,8 @@ namespace rrc {
                 : mData(data) {
         }
 
-        CopyOnWrite(const Ptr& sptr)
-                : mData(sptr) {
+        CopyOnWrite(std::shared_ptr<T> sptr)
+                : mData(std::move(sptr)) {
         }
 
         const T* operator->() const {
@@ -58,6 +56,6 @@ namespace rrc {
             }
         }
 
-        mutable Ptr mData;
+        mutable std::shared_ptr<T> mData;
     };
 }
