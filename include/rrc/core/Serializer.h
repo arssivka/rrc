@@ -18,7 +18,7 @@
 #include "SerializerTraits.h"
 
 namespace rrc {
-    template <class T>
+    template<class T>
     class Serializer {
     public:
         using Type = std::remove_cv<T>;
@@ -30,15 +30,13 @@ namespace rrc {
         };
 
         static size_t size(const Type& data) noexcept {
-            return sizeof(data);
+            return 1;
         }
     };
 
 
-
-    template <class T>
-    class SequenceSerializer {
-    public:
+    template<class T>
+    struct ContainerSerializer {
         using Type = T;
 
         static size_t serialize(const T& data, char* buffer) {
@@ -50,27 +48,95 @@ namespace rrc {
             return acc;
         };
 
-        size_t size(T& data) noexcept {
-            return sizeImplementation(data, SerializerTraits<T>::Size);
+        size_t size(const T& data) noexcept {
+            return data.size();
         }
 
-    private:
-        inline size_t sizeImplementation<std::true_type>(T& data, FixedSizeTag) {
-            return data.size() * sizeof(T::value_type);
-        }
+    };
 
-        inline size_t sizeImplementation(T& data, DynamicSizeTag) {
-            return std::accumulate(std::begin(data), std::end(data), (size_t) 0,
-                                   [](size_t acc, const T::value_type& value) -> size_t {
-                return acc + Serializer<T::value_type>::size(value);
-            });
+    template<class T, size_t N>
+    struct Serializer<std::array<T, N>>
+            : public ContainerSerializer<std::array<T, N>> {};
+
+    template<class T, class Alloc>
+    struct Serializer<std::vector<T, Alloc>>
+            : public ContainerSerializer<std::vector<T, Alloc>> {};
+
+    template<class T, class Alloc>
+    struct Serializer<std::deque<T, Alloc>>
+            : public ContainerSerializer<std::deque<T, Alloc>> {};
+
+    template<class T, class Alloc>
+    struct Serializer<std::list<T, Alloc>>
+            : public ContainerSerializer<std::list<T, Alloc>> {};
+
+    template<class T, class Alloc>
+    struct Serializer<std::forward_list<T, Alloc>>
+            : public ContainerSerializer<std::forward_list<T, Alloc>> {};
+
+    template<class T, class Compare, class Alloc>
+    struct Serializer<std::set<T, Compare, Alloc>>
+            : public ContainerSerializer<std::set<T, Compare, Alloc>> {};
+
+    template<class T, class Compare, class Alloc>
+    struct Serializer<std::multiset<T, Compare, Alloc>>
+            : public ContainerSerializer<std::multiset<T, Compare, Alloc>> {};
+
+    template<class Key, class T, class Compare, class Alloc>
+    struct Serializer<std::map<Key, T, Compare, Alloc>>
+            : public ContainerSerializer<std::map<Key, T, Compare, Alloc>> {};
+
+    template<class Key, class T, class Compare, class Alloc>
+    struct Serializer<std::multimap<Key, T, Compare, Alloc>>
+            : public ContainerSerializer<std::multimap<Key, T, Compare, Alloc>> {};
+
+    template<class T, class Hash, class Pred, class Alloc>
+    struct Serializer<std::unordered_set<T, Hash, Pred, Alloc>>
+            : public ContainerSerializer<std::unordered_set<T, Hash, Pred, Alloc>> {};
+
+    template<class T, class Hash, class Pred, class Alloc>
+    struct Serializer<std::unordered_multiset<T, Hash, Pred, Alloc>>
+            : public ContainerSerializer<std::unordered_multiset<T, Hash, Pred, Alloc>> {};
+
+    template<class Key, class T, class Hash, class Pred, class Alloc>
+    struct Serializer<std::unordered_map<Key, T, Hash, Pred, Alloc>>
+            : public ContainerSerializer<std::unordered_map<Key, T, Hash, Pred, Alloc>> {};
+
+    template<class Key, class T, class Hash, class Pred, class Alloc>
+    struct Serializer<std::unordered_multimap<Key, T, Hash, Pred, Alloc>>
+            : public ContainerSerializer<std::unordered_multimap<Key, T, Hash, Pred, Alloc>> {};
+
+    template<class T, class K>
+    struct Serializer<std::pair<T, K>> {
+        using Type = T;
+
+        static size_t serialize(const std::pair<T, K>& data, char* buffer) {
+            size_t acc = 0;
+            acc += Serializer<T>::serialize(data.first, buffer + acc);
+            acc += Serializer<T>::serialize(data.second, buffer + acc);
+            return acc;
+        };
+
+        size_t size(const std::pair<T, K>& data) noexcept {
+            return 2;
         }
     };
 
-    template <class T, size_t N> class Serializer<std::array<T, N>> : SequenceSerializer<std::array<T, N>> {};
-    template <class T> class Serializer<std::vector<T>> : SequenceSerializer<std::vector<T>> {};
-    template <class T> class Serializer<std::deque<T>> : SequenceSerializer<std::deque<T>> {};
-    template <class T> class Serializer<std::forward_list<T>> : SequenceSerializer<std::forward_list<T>> {};
-    template <class T> class Serializer<std::list<T>> : SequenceSerializer<std::list<T>> {};
+    template<class... Ts>
+    struct Serializer<std::tuple<Ts...>> {
+        static size_t serialize(const std::tuple<Ts...>& data, char* buffer) {
+            size_t acc = 0;
+            for (size_t i = 0; i < sizeof...(Ts); ++i) {
+                using Arg = typename std::tuple_element<i, std::tuple<Ts...>>::type;
+                acc += Serializer<Arg>::serialize(std::get<i>(data), buffer + acc);
+            }
+            return acc;
+        };
+
+        size_t size(const std::tuple<Ts...>& data) noexcept {
+            return sizeof...(Ts);
+        }
+
+    };
 
 }
