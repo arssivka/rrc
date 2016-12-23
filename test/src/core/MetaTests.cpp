@@ -14,6 +14,7 @@
 using namespace rrc::meta;
 using namespace rrc;
 
+// We can't test fucking metaprogramming without fucking types!
 typedef int fuck;
 
 class MetaTestClassFixture : public ::testing::Test {
@@ -230,18 +231,54 @@ TEST(MetaTest, CleanType) {
 
 
 TEST(MetaTest, Concatenator) {
-    //TODO: It's not working. Fix it.
-//    typedef Concatenator<List<int, float>, List<bool, bool, double>> concatenator;
-//    bool eq = std::is_same<List<int, float, bool, double>, concatenator >::value;
-//    EXPECT_TRUE(eq);
-////    typedef Concatenator<List<int, int>, bool> concatenator;
-////    bool eq = std::is_same<List<int, float, bool, double>, concatenator >::value;
-////    EXPECT_TRUE(eq);
+    typedef Concatenator<List<int, float>, List<bool, bool, double>> concatenator;
+    bool eq = std::is_same<List<int, float, bool, double>, concatenator >::value;
+    EXPECT_TRUE(eq);
+    typedef Concatenator<List<bool, bool, double>> concatenator1;
+    bool eq1 = std::is_same<List<bool, double>, concatenator1 >::value;
+    EXPECT_TRUE(eq1);
+    typedef Concatenator<List<int, bool>, List<>, List<bool, bool, double>> concatenator2;
+    bool eq2 = std::is_same<List<int, bool, double>, concatenator2>::value;
+    EXPECT_TRUE(eq2);
+    typedef Concatenator<List<int, bool>, List<bool, bool, double>, List<double, short>> concatenator3;
+    bool eq3 = std::is_same<List<int, bool, double, short>, concatenator3>::value;
+    EXPECT_TRUE(eq3);
+}
+
+
+TEST(MetaTest, BackSequenceElement) {
+    typedef BackSequenceElement<IntegralSequence<short, 1, 2, 3>> back;
+    short b = back::value;
+    EXPECT_EQ(b, (short) 3);
+    typedef BackSequenceElement<IntegralSequence<short, 1>> back1;
+    short b1 = back1::value;
+    EXPECT_EQ(b1, (short) 1);
+}
+
+TEST(MetaTest, Back) {
+    typedef Back<List<int, float, bool>> back;
+    bool eq = std::is_same<bool, back>::value;
+    EXPECT_TRUE(eq);
+    typedef Back<List<int>> back1;
+    bool eq1 = std::is_same<int, back1>::value;
+    EXPECT_TRUE(eq1);
 }
 
 TEST(MetaTest, SequenceConcatenator) {
-    //TODO: Maybe you need other functionaluity from this?
     typedef SequenceConcatenator<IntegralSequence<short, 1, 2, 3>, IntegralSequence<short, 4, 5>> concatenator;
     bool eq = std::is_same<IntegralSequence<short, 1, 2, 3, 4, 5>,concatenator>::value;
     EXPECT_TRUE(eq);
+    typedef SequenceConcatenator<IntegralSequence<short, 1, 2, 2, 3, 3>> concatenator1;
+    bool eq1 = std::is_same<IntegralSequence<short, 1, 2, 3>,concatenator1>::value;
+    EXPECT_TRUE(eq1);
+    typedef SequenceConcatenator<IntegralSequence<short>> concatenator2;
+    bool eq2 = std::is_same<IntegralSequence<short>,concatenator2>::value;
+    EXPECT_TRUE(eq2);
+    typedef SequenceConcatenator<IntegralSequence<short, 1, 2, 2, 3>, IntegralSequence<short>, IntegralSequence<short, 3, 4, 5, 5, 5>> concatenator3;
+    bool eq3 = std::is_same<IntegralSequence<short, 1, 2, 3, 4, 5>, concatenator3>::value;
+    EXPECT_TRUE(eq3);
+    typedef SequenceConcatenator<IntegralSequence<short, 1, 2, 2, 3>, IntegralSequence<short, 4, 5, 5, 5>,
+            IntegralSequence<short, 6, 6, 6>> concatenator4;
+    bool eq4 = std::is_same<IntegralSequence<short, 1, 2, 3, 4, 5, 6>, concatenator4>::value;
+    EXPECT_TRUE(eq4);
 }
