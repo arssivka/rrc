@@ -23,7 +23,7 @@ namespace rrc {
         template<class T, T... Vals>
         struct PackedArrayGenerator {
             static_assert(std::is_integral<T>::value, "Generator can create arrays of integral types only");
-            using PackedGenerator = Packer<T, ArrayGenerator<T>, meta::IntegralSequence<T, Vals...>>;
+            using PackedGenerator = Packer<ArrayGenerator<T>, meta::IntegralSequence<T, Vals...>>;
             static constexpr size_t size = PackedGenerator::size;
             constexpr static std::array<T, size> data = PackedGenerator::data;
         };

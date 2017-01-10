@@ -16,6 +16,9 @@ namespace rrc {
         template<class... Args>
         struct List;
 
+        template <bool Condition, class TrueType, class FalseType>
+        using If = typename std::conditional<Condition, TrueType, FalseType>::type;
+
         template<typename Res, typename ...Args>
         struct FunctionTraits<std::function<Res(Args...)>> {
             static const size_t count = sizeof...(Args);
@@ -37,7 +40,7 @@ namespace rrc {
             static const size_t count = sizeof...(Args);
             using Result = Res;
             using Class = Cls;
-            template<size_t i> using Ars = typename std::tuple_element<i, std::tuple<Args...>>::type;
+            template<size_t i> using Arg = typename std::tuple_element<i, std::tuple<Args...>>::type;
         };
 
         namespace detail {
@@ -137,38 +140,46 @@ namespace rrc {
             template<template<class...> class L1, class... T1,
                     template<class...> class L2, class... T2, class... Lr>
             struct AppendImplementation<L1<T1...>, L2<T2...>, Lr...> {
-                using Type = AppendImplementation<L1<T1..., T2...>, Lr...>::Type;
+                using Type = typename AppendImplementation<L1<T1..., T2...>, Lr...>::Type;
             };
         }
-        template<class... L> using Append = detail::AppendImplementation<L...>::Type;
-
-
-        namespace detail {
-            template<class L, class V>
-            struct FillImplementation;
-            template<template<class...> class L, class... T, class V>
-            struct FillImplementation<L<T...>, V> {
-                template<class...> using _Fv = V;
-                using Type = L<_Fv<T>...>;
-            };
-        }
-        template<class L, class V> using Fill = typename detail::FillImplementation<L, V>::Type;
-
+        template<class... L> using Append = typename detail::AppendImplementation<L...>::Type;
 
 
         template<class T, T... Ints>
         struct IntegralSequence {
         };
 
+
+        template<class T>
+        struct BackSequenceElement { };
+        template<class T, template<class, T...> class S, T First, T... Ss>
+        struct BackSequenceElement<S<T, First, Ss...>> : public rrc::meta::If<sizeof...(Ss) == 0,
+                std::integral_constant<T, First>,
+                BackSequenceElement<S<T, Ss...>>> { };
+
         namespace detail {
-            template<class S>
-            struct GetSequenceImplementation;
-            template<template<class T, T... I> class S, class U, U... J>
-            struct GetSequenceImplementation<S<U, J...>> {
-                using Type = List<typename std::integral_constant<U, J>::value...>;
+            template<class T>
+            struct BackImplementation {
+            };
+            template<template<class...> class S, class... Ss>
+            struct BackImplementation<S<Ss...>> {
+                using Type = typename std::tuple_element<sizeof...(Ss) - 1, std::tuple<Ss...>>::type;
             };
         }
-        template<class S> using GetSequence = typename detail::GetSequenceImplementation<S>::Type;
+        template<class T> using Back = typename detail::BackImplementation<T>::Type;
+
+
+
+//        namespace detail {
+//            template<class S>
+//            struct GetSequenceImplementation;
+//            template<template<class T, T... I> class S, class U, U... J>
+//            struct GetSequenceImplementation<S<U, J...>> {
+//                using Type = List<typename std::integral_constant<U, J>::value_type...>;
+//            };
+//        }
+//        template<class S> using GetSequence = typename detail::GetSequenceImplementation<S>::Type;
 
         namespace detail {
             template<class A, class B>
@@ -185,9 +196,9 @@ namespace rrc {
         namespace detail {
             template<class... S>
             struct AppendSequenceImplementation;
-            template<class T, template<class, T...> class S, T... V>
-            struct AppendSequenceImplementation<S<T, V...>> {
-                using Type = S<T, V...>;
+            template<>
+            struct AppendSequenceImplementation<> {
+                using Type = List<>;
             };
             template<class T, template<class, T...> class S, T... V>
             struct AppendSequenceImplementation<S<T, V...>> {
@@ -203,81 +214,101 @@ namespace rrc {
 
 
         template <class T, T First, T Second>
-        struct Pack : std::integral_constant<T, (First << sizeof(T) * 4) | (Second & (-1 >> sizeof(T) * 4))> { };
+        struct Pack : std::integral_constant<T, (First << sizeof(T) * 4) | (Second & ((T)-1 >> sizeof(T) * 4))> { };
 
 
         namespace detail {
-            template<class T, class R, class V>
+            template<class R, class V>
             struct PackerImplementation;
             template<class T, template<class, T...> class R,
                     template<class, T...> class V, T... Result, T First, T Second, T... Values>
-            struct PackerImplementation<T, R<T, Result...>, V<T, First, Second, Values...>> {
-                using Type = typename PackerImplementation<T, R<T, Result..., Pack<T, First, Second>::value>, V<T, Values...>>::Type;
+            struct PackerImplementation<R<T, Result...>, V<T, First, Second, Values...>> {
+                using Type = typename PackerImplementation<R<T, Result..., Pack<T, First, Second>::value>, V<T, Values...>>::Type;
             };
             template<class T, template<class, T...> class R,
                     template<class, T...> class V, T... Result, T Last>
-            struct PackerImplementation<T, R<T, Result...>, V<T, Last>> {
+            struct PackerImplementation<R<T, Result...>, V<T, Last>> {
                 using Type = R<T, Result..., Pack<T, 0, Last>::value>;
             };
             template<class T, template<class, T...> class R,
                     template<class, T...> class V, T... Result>
-            struct PackerImplementation<T, R<T, Result...>, V<T>> {
+            struct PackerImplementation<R<T, Result...>, V<T>> {
                 using Type = R<T, Result...>;
             };
         }
-        template <class T, class Res, class Values>
-        using Packer = typename detail::PackerImplementation<T, Res, Values>::Type;
+        template <class Res, class Values>
+        using Packer = typename detail::PackerImplementation<Res, Values>::Type;
 
 
         namespace detail {
-            template<class R, class S>
-            struct ConcatenatorImplementation {
-            };
-            template<template<class...> class R, class... Rs,
-                    template<class...> class S, class Fist, class Second, class... Ss>
-            struct ConcatenatorImplementation<R<Rs...>, S<Fist, Second, Ss...>> {
-                using Type = typename std::conditional<std::is_same<Fist, Second>::value,
-                        typename ConcatenatorImplementation<R<Rs..., Fist>, S<Ss...>>::Type,
-                        typename ConcatenatorImplementation<R<Rs..., Fist>, S<Second, Ss...>>::Type>::type;
-            };
-            template<template<class...> class R, class... Rs,
-                    template<class...> class S, class Fist>
-            struct ConcatenatorImplementation<R<Rs...>, S<Fist>> {
-                using Type = R<Rs..., Fist>;
-            };
-            template<template<class...> class R, class... Rs,
-                    template<class...> class S>
-            struct ConcatenatorImplementation<R<Rs...>, S<>> {
-                using Type = R<Rs...>;
-            };
-        }
-        template <class R, class S>
-        using Concatenator = typename detail::ConcatenatorImplementation<R, S>::Type;
-
-
-        namespace detail {
-            template<class R, class S>
+            template<bool I, class... Ts>
             struct SequenceConcatenatorImplementation {
             };
-            template<class T, template<class, T...> class R, T... Rs,
-                    template<class, T...> class S, T Fist, T Second, T... Ss>
-            struct SequenceConcatenatorImplementation<R<T, Rs...>, S<T, Fist, Second, Ss...>> {
-                using Type = typename std::conditional<Fist == Second,
-                        typename SequenceConcatenatorImplementation<R<T, Rs..., Fist>, S<T, Ss...>>::Type,
-                        typename SequenceConcatenatorImplementation<R<T, Rs..., Fist>, S<T, Second, Ss...>>::Type>::type;
+            template<class T, template<class, T...> class R, template<class, T...> class S, T... Rs, T First, T... Ss, class... Os>
+            struct SequenceConcatenatorImplementation<false, R<T, Rs...>, S<T, First, Ss...>, Os...> {
+                using Type = typename rrc::meta::If<First == rrc::meta::BackSequenceElement<R<T, Rs...>>::value,
+                        typename SequenceConcatenatorImplementation<false, R<T, Rs...>, S<T, Ss...>, Os...>::Type,
+                        typename SequenceConcatenatorImplementation<false, R<T, Rs..., First>, S<T, Ss...>, Os...>::Type>;
             };
-            template<class T, template<class, T...> class R, T... Rs,
-                    template<class, T...> class S, T Fist>
-            struct SequenceConcatenatorImplementation<R<T, Rs...>, S<T, Fist>> {
-                using Type = R<T, Rs..., Fist>;
+            template<class T, template<class, T...> class R, T... Ss,
+                    template<class, T...> class S, T First, class... Os>
+            struct SequenceConcatenatorImplementation<false, R<T>, S<T, First, Ss...>, Os...> {
+                using Type = typename SequenceConcatenatorImplementation<false, R<T, First>, S<T, Ss...>, Os...>::Type;
+
             };
-            template<class T, template<class, T...> class R, T... Rs,
-                    template<class, T...> class S>
-            struct SequenceConcatenatorImplementation<R<T, Rs...>, S<T>> {
+            template<class T, template<class, T...> class R, template<class, T...> class S, T... Rs, class... Os>
+            struct SequenceConcatenatorImplementation<false, R<T, Rs...>, S<T>, Os...> {
+                using Type = typename rrc::meta::If<Length<Os...>::value == 0,
+                        R<T, Rs...>,
+                        typename SequenceConcatenatorImplementation<false, R<T, Rs...>, Os...>::Type>;
+            };
+            template<class T, template<class, T...> class R, T... Rs>
+            struct SequenceConcatenatorImplementation<false, R<T, Rs...>> {
                 using Type = R<T, Rs...>;
             };
+            template<class T, template<class, T...> class R, T... Ts, class... Os>
+            struct SequenceConcatenatorImplementation<true, R<T, Ts...>, Os...> {
+                using Type = typename SequenceConcatenatorImplementation<false, R<T>, R<T, Ts...>, Os...>::Type;
+            };
         }
-        template <class R, class S>
-        using SequenceConcatenator = typename detail::SequenceConcatenatorImplementation<R, S>::Type;
+        template <class... Ts>
+        using SequenceConcatenator = typename detail::SequenceConcatenatorImplementation<true, Ts...>::Type;
+
+
+        namespace detail {
+            template<bool I, class... Ts>
+            struct ConcatenatorImplementation {
+            };
+            template<template<class...> class R, template<class...> class S, class... Rs, class First, class... Ss, class... Os>
+            struct ConcatenatorImplementation<false, R<Rs...>, S<First, Ss...>, Os...> {
+                using Type = typename rrc::meta::If<std::is_same<First, rrc::meta::Back<R<Rs...>>>::value,
+                        typename ConcatenatorImplementation<false, R<Rs...>, S<Ss...>, Os...>::Type,
+                        typename ConcatenatorImplementation<false, R<Rs..., First>, S<Ss...>, Os...>::Type>;
+            };
+            template<template<class...> class R, class... Ss,
+                    template<class...> class S, class First, class... Os>
+            struct ConcatenatorImplementation<false, R<>, S<First, Ss...>, Os...> {
+                using Type = typename ConcatenatorImplementation<false, R<First>, S<Ss...>, Os...>::Type;
+
+            };
+            template<template<class...> class R, template<class...> class S, class... Rs, class... Os>
+            struct ConcatenatorImplementation<false, R<Rs...>, S<>, Os...> {
+                using Type = typename rrc::meta::If<Length<Os...>::value == 0,
+                        R<Rs...>,
+                        typename ConcatenatorImplementation<false, R<Rs...>, Os...>::Type>;
+            };
+            template<template<class...> class R, class... Rs>
+            struct ConcatenatorImplementation<false, R<Rs...>> {
+                using Type = R<Rs...>;
+            };
+            template<template<class...> class R, class... Ts, class... Os>
+            struct ConcatenatorImplementation<true, R<Ts...>, Os...> {
+                using Type = typename ConcatenatorImplementation<false, R<>, R<Ts...>, Os...>::Type;
+            };
+        }
+        template <class... Ts>
+        using Concatenator = typename detail::ConcatenatorImplementation<true, Ts...>::Type;
     }
 }
+
+
