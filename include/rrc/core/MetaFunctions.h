@@ -147,8 +147,7 @@ namespace rrc {
 
 
         template<class T, T... Ints>
-        struct IntegralSequence {
-        };
+        struct IntegralSequence {};
 
 
         template<class T>
@@ -308,6 +307,18 @@ namespace rrc {
         }
         template <class... Ts>
         using Concatenator = typename detail::ConcatenatorImplementation<true, Ts...>::Type;
+
+
+        namespace detail {
+            template <class S>
+            struct ExtractTypeImplementation;
+            template <template <class> class S, class T>
+            struct ExtractTypeImplementation<S<T>> {
+                using Type = T;
+            };
+        }
+        template <class S>
+        using ExtractType = typename detail::ExtractTypeImplementation<S>::Type;
     }
 }
 

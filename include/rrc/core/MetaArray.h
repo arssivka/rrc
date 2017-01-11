@@ -26,19 +26,28 @@ namespace rrc {
         COUNT_IDS
     };
 
+    template <class C, class... T> struct TypeToId {};
+    template <class C> struct TypeToId<C, bool> : meta::IntegralSequence<C, TypeId::BOOL_ID> {};
+    template <class C> struct TypeToId<C, int8_t> : meta::IntegralSequence<C, TypeId::INT8_ID> {};
+    template <class C> struct TypeToId<C, int16_t> : meta::IntegralSequence<C, TypeId::INT16_ID> {};
+    template <class C> struct TypeToId<C, int32_t> : meta::IntegralSequence<C, TypeId::INT32_ID> {};
+    template <class C> struct TypeToId<C, int64_t> : meta::IntegralSequence<C, TypeId::INT64_ID> {};
+    template <class C> struct TypeToId<C, float> : meta::IntegralSequence<C, TypeId::FLOAT_ID> {};
+    template <class C> struct TypeToId<C, double> : meta::IntegralSequence<C, TypeId::DOUBLE_ID> {};
+    template <class C, template <class...> class List, class... Ts>
+    struct TypeToId<C, List<Ts...>>
+            : meta::AppendSequence<meta::IntegralSequence<C, TypeId::STRUCTURE_ID>, TypeToId<C, Ts>...> {};
+
     namespace detail {
-        template<class C, C ID>
-        struct TypeToIdImpl { constexpr static C value = ID; };
+        template<class List> struct TypeConverterImplementation;
+
+        template<template<class...> class List, class... Ts>
+        struct TypeConverterImplementation<List<Ts...>> {
+            using Type = meta::AppendSequence<TypeToId<int8_t, Ts>...>;
+        };
     }
-    template <class C, class T> struct TypeConverter : detail::TypeToIdImpl<C, TypeId::UNKNOWN_ID> { using Type = T; };
-    template <class C> struct TypeConverter<C, bool> : detail::TypeToIdImpl<C, TypeId::BOOL_ID> {};
-    template <class C> struct TypeConverter<C, int8_t> : detail::TypeToIdImpl<C, TypeId::INT8_ID> {};
-    template <class C> struct TypeConverter<C, int16_t> : detail::TypeToIdImpl<C, TypeId::INT16_ID> {};
-    template <class C> struct TypeConverter<C, int32_t> : detail::TypeToIdImpl<C, TypeId::INT32_ID> {};
-    template <class C> struct TypeConverter<C, int64_t> : detail::TypeToIdImpl<C, TypeId::INT64_ID> {};
-    template <class C> struct TypeConverter<C, float> : detail::TypeToIdImpl<C, TypeId::FLOAT_ID> {};
-    template <class C> struct TypeConverter<C, double> : detail::TypeToIdImpl<C, TypeId::DOUBLE_ID> {};
-    template <class C> struct TypeConverter<C, Message> : detail::TypeToIdImpl<C, TypeId::STRUCTURE_ID> {};
+    template <class List>
+    using TypeConverter = typename detail::TypeConverterImplementation<List>::Type;
 
     namespace detail {
         template<class T>
@@ -69,7 +78,7 @@ namespace rrc {
     template <class T, template <class, T...> class G, class... Types, T... Values>
     struct MetaArray<G<T, Values...>, Types...> {
         template <class K>
-        using Converter = TypeConverter<T, CleanType<K>>;
+        using Converter = TypeToId<T, CleanType<K>>;
         using ValuesSequence = meta::IntegralSequence<T, Values...>;
         using Sequence = meta::AppendSequence<ValuesSequence, meta::IntegralSequence<T, Converter<Types>::value...>>;
         using Generator = meta::RenameSequence<Sequence, G<T>>;
