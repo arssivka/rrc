@@ -10,6 +10,15 @@
 
 namespace rrc {
     namespace meta {
+        /**
+         * @brief Gives all the information about specified function.
+         * You can recieve type of any argument. Returning type. Quantity of arguments.
+         * Example of using: FunctionTraits<std::function<void(float, int)>>::Arg<0>
+         * FunctionTraits<std::function<void(float, int)>>::Arg<1>
+         * FunctionTraits<std::function<void(float, int)>>::Result
+         * FunctionTraits<std::function<void(float, int)>>::count
+         * @tparam T Needed function to extract traits. Function pointer can be applied too.
+         */
         template<typename T>
         struct FunctionTraits;
 
@@ -18,6 +27,9 @@ namespace rrc {
 
         template <bool Condition, class TrueType, class FalseType>
         using If = typename std::conditional<Condition, TrueType, FalseType>::type;
+
+        template <class T>
+        using Decay = typename std::decay<T>::type;
 
         template<typename Res, typename ...Args>
         struct FunctionTraits<std::function<Res(Args...)>> {
@@ -33,6 +45,15 @@ namespace rrc {
             template<size_t i> using Arg = typename std::tuple_element<i, std::tuple<Args...>>::type;
         };
 
+        /**
+         * @brief Gives all the information about specified method.
+         * You can recieve type of any argument. Returning type. Quantity of arguments.
+         * Example of using: MethodTraits<decltype(&SomeClass::SomeFunc>::Arg<0>
+         * FunctionTraits<decltype(&SomeClass::SomeFunc>::Arg<1>
+         * FunctionTraits<decltype(&SomeClass::SomeFunc>::Result
+         * FunctionTraits<decltype(&SomeClass::SomeFunc>::count
+         * @tparam T Needed method to extract traits.
+         */
         template<typename T>
         struct MethodTraits;
         template<typename Res, typename Cls, typename ...Args>
@@ -52,6 +73,13 @@ namespace rrc {
                 using Type = B<T...>;
             };
         }
+        /**
+         * @brief Renames class A to class B.
+         * It can rename any variadic class template into any other and also non-variadic.
+         * Example of using: Rename<std::vector<int>, std::list>
+         * @tparam A Source class to rename
+         * @tparam B Destination class
+         */
         template<class A, template<class...> class B> using Rename = typename detail::RenameImplementation<A, B>::Type;
 
         template<class... T> using Length = typename std::integral_constant<std::size_t, sizeof...(T)>;
@@ -65,6 +93,12 @@ namespace rrc {
                 using Type = L<T..., U...>;
             };
         }
+        /**
+         * @brief Adds an element to the front of the List.
+         * Example of using: PushFront<List<float>, int>
+         * @tparam L List for adding the element.
+         * @tparam T Element to add.
+         */
         template<class L, class T> using PushFront = typename detail::PushFrontImplementation<L, T>::Type;
 
 
@@ -76,6 +110,11 @@ namespace rrc {
                 using Type = T;
             };
         }
+        /**
+         * @brief Gets the front element from the list.
+         * Example of using: Front<List<float, int>>
+         * @tparam L List to get element from
+         */
         template<class L> using Front = typename detail::FrontImplementation<L>::Type;
 
         namespace detail {
@@ -86,6 +125,11 @@ namespace rrc {
                 using Type = L<U...>;
             };
         }
+        /**
+         * @brief Pops the front element from the list.
+         * Example of using: PopFront<List<float, int>>
+         * @tparam L List to pop element from.
+         */
         template<class L> using PopFront = typename detail::PopFrontImplementation<L>::Type;
 
 
@@ -101,6 +145,11 @@ namespace rrc {
                 using Type = L<>;
             };
         }
+        /**
+         * @brief Delets all the elements from list.
+         * Example of using: Clear<List<int,int,int,int>>
+         * @tparam L List to clear.
+         */
         template<class L> using Clear = typename detail::ClearImplementation<L>::Type;
 
         namespace detail {
@@ -111,6 +160,11 @@ namespace rrc {
                 constexpr static bool value = sizeof...(U) == 0;
             };
         }
+        /**
+         * @brief Checks if the specified list is empty or not
+         * Example of using: Empty<List<int, int, int, int>>::value
+         * @tparam L List to check.
+         */
         template<class L> using Empty = detail::EmptyImplementation<L>;
 
 
@@ -123,6 +177,9 @@ namespace rrc {
                 using Type = L<F<T>...>;
             };
         }
+        /**
+         * @brief
+         */
         template<template<class...> class F, class L> using Transform = typename detail::TransformImplementation<F, L>::Type;
 
 
@@ -146,7 +203,7 @@ namespace rrc {
         template<class... L> using Append = typename detail::AppendImplementation<L...>::Type;
 
 
-        template<class T, T... Ints>
+        template<class T, T... Vals>
         struct IntegralSequence {};
 
 
@@ -195,10 +252,6 @@ namespace rrc {
         namespace detail {
             template<class... S>
             struct AppendSequenceImplementation;
-            template<>
-            struct AppendSequenceImplementation<> {
-                using Type = List<>;
-            };
             template<class T, template<class, T...> class S, T... V>
             struct AppendSequenceImplementation<S<T, V...>> {
                 using Type = S<T, V...>;
@@ -217,26 +270,36 @@ namespace rrc {
 
 
         namespace detail {
-            template<class R, class V>
+            template<bool I, class... Ss>
             struct PackerImplementation;
             template<class T, template<class, T...> class R,
-                    template<class, T...> class V, T... Result, T First, T Second, T... Values>
-            struct PackerImplementation<R<T, Result...>, V<T, First, Second, Values...>> {
-                using Type = typename PackerImplementation<R<T, Result..., Pack<T, First, Second>::value>, V<T, Values...>>::Type;
+                    template<class, T...> class V, T... Result, T First, T Second, T... Values, class... Ss>
+            struct PackerImplementation<false, R<T, Result...>, V<T, First, Second, Values...>, Ss...> {
+                using Type = typename PackerImplementation<false, R<T, Result...,
+                        Pack<T, First, Second>::value>, V<T, Values...>, Ss...>::Type;
             };
             template<class T, template<class, T...> class R,
-                    template<class, T...> class V, T... Result, T Last>
-            struct PackerImplementation<R<T, Result...>, V<T, Last>> {
+                    template<class, T...> class V, T... Result, T Last, class... Ss>
+            struct PackerImplementation<false, R<T, Result...>, V<T, Last>, Ss...> {
                 using Type = R<T, Result..., Pack<T, 0, Last>::value>;
             };
             template<class T, template<class, T...> class R,
-                    template<class, T...> class V, T... Result>
-            struct PackerImplementation<R<T, Result...>, V<T>> {
-                using Type = R<T, Result...>;
+                    template<class, T...> class V, T... Result, class... Ss>
+            struct PackerImplementation<false, R<T, Result...>, V<T>, Ss...> {
+                using Type = meta::If<meta::Length<Ss...>::value == 0, R<T, Result...>,
+                        typename PackerImplementation<false, R<T, Result...>, Ss...>::Type>;
+            };
+            template<class T, template<class, T...> class R, T... Rs>
+            struct PackerImplementation<false, R<T, Rs...>> {
+                using Type = R<T, Rs...>;
+            };
+            template<class T, template<class, T...> class R, T... Ts, class... Os>
+            struct PackerImplementation<true, R<T, Ts...>, Os...> {
+                using Type = typename PackerImplementation<false, R<T>, R<T, Ts...>, Os...>::Type;
             };
         }
-        template <class Res, class Values>
-        using Packer = typename detail::PackerImplementation<Res, Values>::Type;
+        template <class... Values>
+        using Packer = typename detail::PackerImplementation<true, Values...>::Type;
 
 
         namespace detail {
@@ -319,6 +382,17 @@ namespace rrc {
         }
         template <class S>
         using ExtractType = typename detail::ExtractTypeImplementation<S>::Type;
+
+        template<std::size_t I = 0, typename FuncT, typename... Tp>
+        inline typename std::enable_if<I == sizeof...(Tp), void>::type
+        forEach(std::tuple<Tp...> &, FuncT) { }
+
+        template<std::size_t I = 0, typename FuncT, typename... Tp>
+        inline typename std::enable_if<I < sizeof...(Tp), void>::type
+        forEach(std::tuple<Tp...>& t, FuncT f) {
+            f(std::get<I>(t));
+            forEach<I + 1, FuncT, Tp...>(t, f);
+        }
     }
 }
 

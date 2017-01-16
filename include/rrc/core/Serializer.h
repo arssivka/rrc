@@ -39,10 +39,10 @@ namespace rrc {
     class Serializer {
     public:
         using SizeCategory = FixedSizeTag;
-        using ValueTypes = meta::List<T>
+        using ValueTypes = meta::List<T>;
         
         using Type = std::remove_cv<T>;
-        static_assert(std::is_fundamental<Type>::value);
+        static_assert(!std::is_fundamental<Type>::value, "Can't deduce fundamental type");
 
         static void serialize(const Type& data, CharPointer& buffer) {
             // TODO: Check endianness
@@ -71,7 +71,8 @@ namespace rrc {
 
     template <class T>
     struct ContainerSerializer {
-        using ValueTypes = Serializer<T::value_type>::ValueTypes;
+        using ValueTypes = typename Serializer<typename T::value_type>::ValueTypes;
+        using SizeCategory = DynamicSizeTag;
 
         static void serialize(const T& data, CharPointer& buffer) {
             for (auto&& item : data) {
@@ -106,9 +107,9 @@ namespace rrc {
             size_t count = size[0];
             size += 1;
             for (size_t i = 0; i < count; ++i) {
-                T::value_type value;
+                typename T::value_type value;
                 if (!Serializer<T>::deserialize(buffer, size, value)) return false;
-                T.insert(std::move(value));
+                data.insert(std::move(value));
             }
             return true;
         }
@@ -160,6 +161,11 @@ namespace rrc {
     struct Serializer<std::vector<T, Alloc>>
             : public ContainerSerializer<std::vector<T, Alloc>>,
               public SequenceDeserializer<std::vector<T, Alloc>> {};
+
+    template<class T, class Traits, class Alloc>
+    struct Serializer<std::basic_string<T, Traits, Alloc>>
+            : public ContainerSerializer<std::basic_string<T, Traits, Alloc>>,
+              public SequenceDeserializer<std::basic_string<T, Traits, Alloc>> {};
 
     template<class T, class Alloc>
     struct Serializer<std::deque<T, Alloc>>
@@ -219,7 +225,7 @@ namespace rrc {
     template<class T, class K>
     struct Serializer<std::pair<T, K>> {
         using SizeCategory = DynamicSizeTag;
-        using ValueTypes = Serializer<std::pair<T, K>>::ValueTypes;
+        using ValueTypes = typename Serializer<std::pair<T, K>>::ValueTypes;
 
         static void serialize(const std::pair<T, K>& data, CharPointer& buffer) {
             Serializer<T>::serialize(data.first, buffer);
@@ -244,23 +250,24 @@ namespace rrc {
     template<class... Ts>
     struct Serializer<std::tuple<Ts...>> {
         using SizeCategory = FixedSizeTag;
-        using ValueTypes = meta::Append<Serializer<Ts>::ValueTypes...>;
+        using ValueTypes = meta::Append<typename Serializer<Ts>::ValueTypes...>;
+        //TODO: This is not working. Guess what you need to do.
         
-        static void serialize(const std::tuple<Ts...>& data, CharPointer& buffer) {
-            for (size_t i = 0; i < sizeof...(Ts); ++i) {
-                using Arg = typename std::tuple_element<i, std::tuple<Ts...>>::type;
-                Serializer<Arg>::serialize(std::get<i>(data), buffer);
-            }
-        };
-
-        static bool deserialize(ConstCharPointer& buffer, ConstSizePointer& size, std::tuple<Ts...>& data) {
-            if (size[0] != Serializer<std::tuple<Ts...>>::minSize()) return false;
-            for (size_t i = 0; i < sizeof...(Ts); ++i) {
-                using Arg = typename std::tuple_element<i, std::tuple<Ts...>>::type;
-                if(!Serializer<Arg>::deserialize(buffer, size, std::get<i>(data))) return false;
-            }
-            return true;
-        }
+//        static void serialize(const std::tuple<Ts...>& data, CharPointer& buffer) {
+//            for (size_t i = 0; i < sizeof...(Ts); ++i) {
+//                using Arg = typename std::tuple_element<i, std::tuple<Ts...>>::type;
+//                Serializer<Arg>::serialize(std::get<i>(data), buffer);
+//            }
+//        };
+//
+//        static bool deserialize(ConstCharPointer& buffer, ConstSizePointer& size, std::tuple<Ts...>& data) {
+//            if (size[0] != Serializer<std::tuple<Ts...>>::minSize()) return false;
+//            for (size_t i = 0; i < sizeof...(Ts); ++i) {
+//                using Arg = typename std::tuple_element<i, std::tuple<Ts...>>::type;
+//                if(!Serializer<Arg>::deserialize(buffer, size, std::get<i>(data))) return false;
+//            }
+//            return true;
+//        }
 
         size_t size(const std::tuple<Ts...>& data) noexcept {
             return 1;
