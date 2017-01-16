@@ -53,8 +53,8 @@ namespace rrc {
         template <class C, template <class...> class List, class... Ts>
         struct ConvertTypeToIdImplementation<C, List<Ts...>> {
             using Type = meta::If<meta::Length<Ts...>::value == 1,
-            meta::AppendSequence<typename ConvertTypeToIdImplementation<C, Ts>::Type...>,
-            meta::AppendSequence<TypeIdSequence<C, TypeId::STRUCTURE_ID>, typename ConvertTypeToIdImplementation<C, Ts>::Type...>>;
+            meta::AppendSequence<typename ConvertTypeToIdImplementation<C, meta::Decay<Ts>>::Type...>,
+            meta::AppendSequence<TypeIdSequence<C, TypeId::STRUCTURE_ID>, typename ConvertTypeToIdImplementation<C, meta::Decay<Ts>>::Type...>>;
         };
     }
     template <class C, class... T>

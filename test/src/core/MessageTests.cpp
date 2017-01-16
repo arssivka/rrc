@@ -25,4 +25,9 @@ TEST(MetaTest, Message) {
     auto pack = meta::Pack<int8_t, INT32_ID, INT32_ID>::value;
     EXPECT_EQ((int_fast8_t) 1, notOnlyFuckMessage.getMetaDataSize());
     EXPECT_EQ(res1[0], pack);
+    Message notOnlyFuckMessage1(std::map<fuck, fuck>(), 0);
+    auto res2 = notOnlyFuckMessage1.getMetaData();
+    auto pack1 = meta::Pack<int8_t, STRUCTURE_ID, INT32_ID>::value;
+    EXPECT_EQ((int_fast8_t) 2, notOnlyFuckMessage1.getMetaDataSize());
+    EXPECT_EQ(res2[0], pack1);
 }

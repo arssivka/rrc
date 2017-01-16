@@ -225,7 +225,7 @@ namespace rrc {
     template<class T, class K>
     struct Serializer<std::pair<T, K>> {
         using SizeCategory = DynamicSizeTag;
-        using ValueTypes = typename Serializer<std::pair<T, K>>::ValueTypes;
+        using ValueTypes = meta::List<typename Serializer<T>::ValueTypes, typename Serializer<K>::ValueTypes>;
 
         static void serialize(const std::pair<T, K>& data, CharPointer& buffer) {
             Serializer<T>::serialize(data.first, buffer);
