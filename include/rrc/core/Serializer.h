@@ -52,7 +52,6 @@ namespace rrc {
 
         static bool deserialize(ConstCharPointer& buffer, ConstSizePointer& size, Type& data) {
             // TODO: Check endianness
-            if (size[0] != Serializer<T>::minSize()) return false;
             data = *(T*) buffer;
             size += 1;
             (T const*) buffer += 1;
@@ -62,16 +61,12 @@ namespace rrc {
         static size_t size(const Type& data) noexcept {
             return 1;
         }
-
-        static constexpr size_t minSize() noexcept {
-            return 1;
-        }
     };
 
 
     template <class T>
     struct ContainerSerializer {
-        using ValueTypes = typename Serializer<typename T::value_type>::ValueTypes;
+        using ValueTypes = meta::List<T>;
         using SizeCategory = DynamicSizeTag;
 
         static void serialize(const T& data, CharPointer& buffer) {
@@ -95,10 +90,6 @@ namespace rrc {
             }
             return true;
         }
-
-        static constexpr size_t minSize() noexcept {
-            return 0;
-        }
     };
 
     template <class T>
@@ -112,10 +103,6 @@ namespace rrc {
                 data.insert(std::move(value));
             }
             return true;
-        }
-
-        static constexpr size_t minSize() noexcept {
-            return 0;
         }
     };
 
@@ -132,10 +119,6 @@ namespace rrc {
             }
             return true;
         }
-
-        static constexpr size_t minSize() noexcept {
-            return 0;
-        }
     };
 
     template<class T, size_t N>
@@ -150,10 +133,6 @@ namespace rrc {
                 if (!Serializer<T>::deserialize(buffer, size, data[i])) return false;
             }
             return true;
-        }
-
-        static constexpr size_t minSize() noexcept {
-            return 0;
         }
     };
 
@@ -233,16 +212,11 @@ namespace rrc {
         };
 
         static bool deserialize(ConstCharPointer& buffer, ConstSizePointer& size, std::pair<T, K>& data) {
-            return    size[0] == Serializer<std::pair<T, K>>::minSize()
-                   && Serializer<T>::deserialize(buffer, size, data.first)
+            return    Serializer<T>::deserialize(buffer, size, data.first)
                    && Serializer<T>::deserialize(buffer, size, data.second);
         }
 
         size_t size(const std::pair<T, K>& data) noexcept {
-            return 1;
-        }
-
-        static constexpr size_t minSize() noexcept {
             return 1;
         }
     };
@@ -250,7 +224,7 @@ namespace rrc {
     template<class... Ts>
     struct Serializer<std::tuple<Ts...>> {
         using SizeCategory = FixedSizeTag;
-        using ValueTypes = meta::Append<typename Serializer<Ts>::ValueTypes...>;
+        using ValueTypes = meta::List<typename Serializer<Ts>::ValueTypes...>;
         //TODO: This is not working. Guess what you need to do.
         
 //        static void serialize(const std::tuple<Ts...>& data, CharPointer& buffer) {
@@ -270,10 +244,6 @@ namespace rrc {
 //        }
 
         size_t size(const std::tuple<Ts...>& data) noexcept {
-            return 1;
-        }
-
-        static constexpr size_t minSize() noexcept {
             return 1;
         }
     };

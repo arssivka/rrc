@@ -18,16 +18,17 @@ typedef int fuck;
 TEST(MetaTest, Message) {
     Message fuckMessage(0, 0, 0, 0, 0);
     auto res = fuckMessage.getMetaData();
-    EXPECT_EQ(res[0], INT32_ID);
-    EXPECT_EQ(fuckMessage.getMetaDataSize(), (int_fast8_t) 1);
+    auto pack = meta::Pack<int8_t, INT32_ID, INT32_ID>::value;
+    EXPECT_EQ(res[0], pack);
+    EXPECT_EQ(fuckMessage.getMetaDataSize(), (int_fast8_t) 3);
     Message notOnlyFuckMessage(std::vector<fuck>{0, 0, 0}, 0);
     auto res1 = notOnlyFuckMessage.getMetaData();
-    auto pack = meta::Pack<int8_t, INT32_ID, INT32_ID>::value;
+    auto pack1 = meta::Pack<int8_t, INT32_ARRAY_ID, INT32_ID>::value;
     EXPECT_EQ((int_fast8_t) 1, notOnlyFuckMessage.getMetaDataSize());
-    EXPECT_EQ(res1[0], pack);
-    Message notOnlyFuckMessage1(std::map<fuck, fuck>(), 0);
+    EXPECT_EQ(res1[0], pack1);
+    Message notOnlyFuckMessage1(std::map<fuck, fuck>{});
     auto res2 = notOnlyFuckMessage1.getMetaData();
-    auto pack1 = meta::Pack<int8_t, STRUCTURE_ID, INT32_ID>::value;
+    auto pack2 = meta::Pack<int8_t, STRUCTURE_ARRAY_ID, INT32_ID>::value;
     EXPECT_EQ((int_fast8_t) 2, notOnlyFuckMessage1.getMetaDataSize());
-    EXPECT_EQ(res2[0], pack1);
+    EXPECT_EQ(res2[0], pack2);
 }

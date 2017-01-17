@@ -194,42 +194,6 @@ TEST(MetaTest, Packer) {
     EXPECT_EQ(array3, packed3);
 }
 
-//TEST(MetaTest, PackedArrayGenerator) {
-//    typedef PackedArrayGenerator<short, 1, 2, 3> generator;
-//    std::array<short, 2> array{0x0102, 0x03};
-//    auto packed = generator::data;
-//    EXPECT_EQ(array, packed);
-//    auto size = generator::size;
-//    EXPECT_EQ(size, (size_t)2);
-//    typedef PackedArrayGenerator<short, 1, 2> generator2;
-//    std::array<short, 1> array2{0x0102};
-//    auto packed2 = generator2::data;
-//    EXPECT_EQ(array2, packed2);
-//    auto size2 = generator2::size;
-//    EXPECT_EQ(size2, (size_t)1);
-//    typedef PackedArrayGenerator<short, 1, 2, 3, 4> generator3;
-//    std::array<short, 2> array3{0x0102, 0x0304};
-//    auto packed3 = generator3::data;
-//    EXPECT_EQ(array3, packed3);
-//    auto size3 = generator3::size;
-//    EXPECT_EQ(size3, (size_t)2);
-//}
-
-TEST(MetaTest, CleanType) {
-    typedef CleanType<const int> inttype;
-    bool eq1 = std::is_same<int, inttype>::value;
-    EXPECT_TRUE(eq1);
-    typedef CleanType<std::vector<int>> inttype1;
-    bool eq2 = std::is_same<int, inttype1>::value;
-    EXPECT_TRUE(eq2);
-    typedef CleanType<std::string> chartype;
-    bool eq3 = std::is_same<char, chartype>::value;
-    EXPECT_TRUE(eq3);
-    typedef CleanType<std::vector<std::vector<int>>> inttype2;
-    bool eq4 = std::is_same<int, inttype2>::value;
-    EXPECT_TRUE(eq4);
-}
-
 
 TEST(MetaTest, Concatenator) {
     typedef Concatenator<List<int, float>, List<bool, bool, double>> concatenator;
