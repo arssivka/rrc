@@ -178,7 +178,13 @@ namespace rrc {
             };
         }
         /**
-         * @brief
+         * @brief Takes a functuian and aplies to each element of the list
+         * Example of using:
+         * template <class A>
+         * using AddPointer = typename std::add_pointer<A>::type;
+         * Transform<AddPointer , List<int, int, int>>
+         * @tparam F Function which must be apllied to elements in the list
+         * @tparam L List of the elements to transform
          */
         template<template<class...> class F, class L> using Transform = typename detail::TransformImplementation<F, L>::Type;
 
@@ -200,13 +206,28 @@ namespace rrc {
                 using Type = typename AppendImplementation<L1<T1..., T2...>, Lr...>::Type;
             };
         }
+        /**
+         * @brief Adds elemetns to the end of the list
+         * Example of using: Append<List<float>, List<int, int>, List<int, int, int>>
+         * @tparam L - First parameter must be a list to add elements to it. Other parameters are elements to add
+         */
         template<class... L> using Append = typename detail::AppendImplementation<L...>::Type;
 
-
+        /**
+         * @brief Just a sequence of integral numbers
+         * Example of using: IntegralSequence<int, 1, 2, 3>
+         * @tparam T Type of the values to keep
+         * @tparam Vals Values to keep
+         */
         template<class T, T... Vals>
         struct IntegralSequence {};
 
 
+        /**
+         * @brief Gets the last element of the specified sequence
+         * Example of using: BackSequenceElement<IntegralSequence<short, 1, 2, 3>>
+         * @tparam T Sequence to get element from
+         */
         template<class T>
         struct BackSequenceElement { };
         template<class T, template<class, T...> class S, T First, T... Ss>
@@ -223,6 +244,11 @@ namespace rrc {
                 using Type = typename std::tuple_element<sizeof...(Ss) - 1, std::tuple<Ss...>>::type;
             };
         }
+        /**
+         * @brief Gets the las element of the specified list
+         * Exmample of using: Back<List<int, float, bool>>
+         * @tparam T List to get element from
+         */
         template<class T> using Back = typename detail::BackImplementation<T>::Type;
 
 
@@ -246,6 +272,12 @@ namespace rrc {
                 using Type = B<T, V...>;
             };
         }
+        /**
+         * @brief Transforms sequence to a container
+         * Example of using: RenameSequence<IntegralSequence<int, 1, 2, 3>, ArrayGenerator<int>>
+         * @tparam A Sequence to rename
+         * @tparam B Needed type of resulting container
+         */
         template<class A, class B> using RenameSequence = typename detail::RenameSequenceImplementation<A, B>::Type;
 
 
@@ -262,9 +294,20 @@ namespace rrc {
                 using Type = typename AppendSequenceImplementation<S1<T, V1..., V2...>, Lr...>::Type;
             };
         }
+        /**
+         * @brief Adds elements to the end of the sequence
+         * Example of using: AppendSequence <IntegralSequence<int, 1, 2, 3>, IntegralSequence<int, 4, 5, 6>, IntegralSequence<int, 7, 8, 9>>
+         * @tparam S First parameter must be a sequence to add elements to it. Other parameters are elements to add
+         */
         template<class... S> using AppendSequence = typename detail::AppendSequenceImplementation<S...>::Type;
 
-
+        /**
+         * @brief Packs to values into one
+         * Example of using: Pack<int, 1, 2>
+         * @tparam T Type of the values to pack
+         * @tparam First First value to pack
+         * @tparam Second Second value to pack
+         */
         template <class T, T First, T Second>
         struct Pack : std::integral_constant<T, (First << sizeof(T) * 4) | (Second & ((T)-1 >> sizeof(T) * 4))> { };
 
@@ -298,6 +341,12 @@ namespace rrc {
                 using Type = typename PackerImplementation<false, R<T>, R<T, Ts...>, Os...>::Type;
             };
         }
+        /**
+         * @brief Packs the values from IntegralSequence pair by pair into an array. If there is no pair for value,
+         * it just stays at it is.
+         * Example of using: Packer<ArrayGenerator<short>, IntegralSequence<short, 1, 2, 3>>
+         * @tparam Values First parameter is an ArrayGenerator, second is an IntegralSequence with the values to pack
+         */
         template <class... Values>
         using Packer = typename detail::PackerImplementation<true, Values...>::Type;
 
@@ -333,6 +382,12 @@ namespace rrc {
                 using Type = typename SequenceConcatenatorImplementation<false, R<T>, R<T, Ts...>, Os...>::Type;
             };
         }
+        /**
+         * @brief Unites a bunch of sequences into one. Also transforms successively repeated numbers in the sequences into one
+         * Example of using: SequenceConcatenator<IntegralSequence<short, 1, 2, 2, 3>, IntegralSequence<short, 4, 5, 5, 5>,
+         * IntegralSequence<short, 6, 6, 6>>
+         * @tparam Ts - Bunch of sequences to unite
+         */
         template <class... Ts>
         using SequenceConcatenator = typename detail::SequenceConcatenatorImplementation<true, Ts...>::Type;
 
@@ -368,10 +423,15 @@ namespace rrc {
                 using Type = typename ConcatenatorImplementation<false, R<>, R<Ts...>, Os...>::Type;
             };
         }
+        /**
+         * @brief Unites a bunch of lists into one. Also transforms successively repeated types in the lists into one
+         * Example of using: Concatenator<List<int, bool>, List<>, List<bool, bool, double>>
+         * @tparam Ts - Bunch of lists to unite
+         */
         template <class... Ts>
         using Concatenator = typename detail::ConcatenatorImplementation<true, Ts...>::Type;
 
-
+        //TODO: Do we need this?
         namespace detail {
             template <class S>
             struct ExtractTypeImplementation;
@@ -383,6 +443,7 @@ namespace rrc {
         template <class S>
         using ExtractType = typename detail::ExtractTypeImplementation<S>::Type;
 
+        //TODO: If we keep it, we need to refactor it.
         template<std::size_t I = 0, typename FuncT, typename... Tp>
         inline typename std::enable_if<I == sizeof...(Tp), void>::type
         forEach(std::tuple<Tp...> &, FuncT) { }

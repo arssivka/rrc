@@ -31,4 +31,10 @@ TEST(MetaTest, Message) {
     auto pack2 = meta::Pack<int8_t, STRUCTURE_ARRAY_ID, INT32_ID>::value;
     EXPECT_EQ((int_fast8_t) 2, notOnlyFuckMessage1.getMetaDataSize());
     EXPECT_EQ(res2[0], pack2);
+    Message veryFuckMessage((double) 0.0, (float) 0.0, (bool) (false));
+    auto res3 = veryFuckMessage.getMetaData();
+    auto pack3 = meta::Pack<int8_t, DOUBLE_ID, FLOAT_ID>::value;
+    EXPECT_EQ((int8_t) 2, veryFuckMessage.getMetaDataSize());
+    EXPECT_EQ(res3[0], pack3);
+    EXPECT_EQ(res3[1], INT8_ID);
 }

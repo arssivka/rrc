@@ -136,9 +136,8 @@ TEST(MetaTest, Transform) {
 
 TEST(MetaTest, Append) {
     typedef Append<List<float>, List<fuck, fuck>, List<fuck, fuck, fuck>> append;
-    bool back =std::is_same<List<float, fuck, fuck, fuck, fuck, fuck>, append>::value;
+    bool back = std::is_same<List<float, fuck, fuck, fuck, fuck, fuck>, append>::value;
     EXPECT_TRUE(back);
-}
 
 TEST(MetaTest, AppendSequence) {
     typedef AppendSequence <IntegralSequence<fuck, 1, 2, 3>, IntegralSequence<fuck, 4, 5, 6>, IntegralSequence<fuck, 7, 8, 9>> append;

@@ -26,6 +26,6 @@ set(SRCS
 
 
 add_executable(tests ${SRCS})
-target_link_libraries(tests gtest gtest_main rrc)
+target_link_libraries(tests gtest gtest_main gmock rrc)
 add_test(tests tests)
 
