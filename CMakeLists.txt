@@ -72,7 +72,7 @@ set(SRCS
         include/rrc/core/MetaArray.h
         include/rrc/core/MetaGenerators.h
         include/rrc/core/Serializer.h
-        include/rrc/core/Message.h)
+        include/rrc/core/Message.h include/rrc/core/ArrayReference.h)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
                "${PROJECT_BINARY_DIR}/VersionDefines.h")
