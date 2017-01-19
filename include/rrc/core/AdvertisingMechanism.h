@@ -12,7 +12,7 @@
 #include "AbstractMessageFilter.h"
 #include "Message.h"
 #include "TopicHolder.h"
-#include "MetaFunctions.h"
+#include "rrc/meta.h"
 #include "TaskQueueWrapper.h"
 
 namespace rrc {

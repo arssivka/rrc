@@ -7,7 +7,7 @@
 #include "gtest/gtest.h"
 #include <list>
 #include <functional>
-#include <rrc/core/MetaFunctions.h>
+#include <rrc/meta.h>
 #include <rrc/core/MetaGenerators.h>
 #include <rrc/core/MetaArray.h>
 #include <rrc/core/Message.h>
@@ -104,10 +104,6 @@ TEST(MetaTest, PopFront) {
     typedef PopFront<List<float, fuck>> push;
     bool front = std::is_same<List<fuck>, push>::value;
     EXPECT_TRUE(front);
-}
-
-TEST(MetaTest, TrueFalse) {
-    EXPECT_NE(True::value, False::value);
 }
 
 TEST(MetaTest, Empty) {

@@ -10,7 +10,7 @@
 #include "AbstractQueueAdapter.h"
 
 namespace rrc {
-    template <class T>
+    template <class T, class Container = std::deque<T>>
     class STLQueueAdapter : public AbstractQueueAdapter<T> {
     public:
         virtual void enqueue(const T& value) override {
@@ -34,7 +34,7 @@ namespace rrc {
         }
 
     private:
-        std::queue<T> mQueue;
+        std::queue<T, Container> mQueue;
 
     };
 }

@@ -3,7 +3,7 @@
  *  @date 1/11/17
  */
 #include "gtest/gtest.h"
-#include <rrc/core/MetaFunctions.h>
+#include <rrc/meta.h>
 #include <rrc/core/MetaGenerators.h>
 #include <rrc/core/MetaArray.h>
 #include <rrc/core/Message.h>

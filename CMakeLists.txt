@@ -68,11 +68,11 @@ set(SRCS
         src/rrc/core/MechanismVersion.cpp
         include/rrc/core/MechanismVersion.h
 #        src/rrc/core/AbstractNode.cpp
-        include/rrc/core/MetaFunctions.h
+        include/rrc/meta.h
         include/rrc/core/MetaArray.h
         include/rrc/core/MetaGenerators.h
         include/rrc/core/Serializer.h
-        include/rrc/core/Message.h include/rrc/core/ArrayReference.h)
+        include/rrc/core/Message.h include/rrc/core/ArrayReference.h include/rrc/core/BigEndian.h include/rrc/core/LittleEndian.h include/rrc/core/Varint.h include/rrc/core/EndianDefines.h include/rrc/meta/FunctionTraits.h include/rrc/meta/MethodTraits.h include/rrc/meta/Rename.h include/rrc/meta/Length.h include/rrc/meta/Size.h include/rrc/meta/List.h include/rrc/meta/If.h include/rrc/meta/Decay.h include/rrc/meta/PushFront.h include/rrc/meta/Front.h include/rrc/meta/PopFront.h include/rrc/meta/Clear.h include/rrc/meta/Empty.h include/rrc/meta/Transform.h include/rrc/meta/Append.h include/rrc/meta/IntegralSequence.h include/rrc/meta/BackSequenceElement.h include/rrc/meta/Back.h include/rrc/meta/RenameSequence.h include/rrc/meta/AppendSequence.h include/rrc/meta/Pack.h include/rrc/meta/Packer.h include/rrc/meta/SequenceConcatenator.h include/rrc/meta/Concatenator.h include/rrc/meta/VarintEncode.h)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
                "${PROJECT_BINARY_DIR}/VersionDefines.h")
