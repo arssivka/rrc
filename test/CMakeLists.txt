@@ -22,7 +22,7 @@ set(SRCS
         src/core/TypeIdMessageFilterTests.cpp
         src/core/RejectMessageFilterTest.cpp
         src/core/BypassMessageFilterTests.cpp
-        src/core/CallbackMessageFilterTest.cpp src/core/MetaTests.cpp src/core/MetaArrayTests.cpp src/core/MessageTests.cpp)
+        src/core/CallbackMessageFilterTest.cpp src/core/MetaTests.cpp src/core/MetaArrayTests.cpp src/core/MessageTests.cpp src/core/VarintTests.cpp)
 
 
 add_executable(tests ${SRCS})
