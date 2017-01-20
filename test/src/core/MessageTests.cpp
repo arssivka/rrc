@@ -5,7 +5,7 @@
 #include "gtest/gtest.h"
 #include <rrc/meta.h>
 #include <rrc/core/MetaGenerators.h>
-#include <rrc/core/MetaArray.h>
+#include <rrc/core/TypeConverter.h>
 #include <rrc/core/Message.h>
 
 using namespace rrc::meta;

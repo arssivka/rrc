@@ -27,5 +27,6 @@
 #include "meta/Rename.h"
 #include "meta/RenameSequence.h"
 #include "meta/SequenceConcatenator.h"
-#include "meta/Size.h"
+#include "rrc/meta/ListSize.h"
 #include "meta/Transform.h"
+#include "meta/VarintEncodeSequence.h"

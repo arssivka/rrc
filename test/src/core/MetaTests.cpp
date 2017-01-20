@@ -9,7 +9,7 @@
 #include <functional>
 #include <rrc/meta.h>
 #include <rrc/core/MetaGenerators.h>
-#include <rrc/core/MetaArray.h>
+#include <rrc/core/TypeConverter.h>
 #include <rrc/core/Message.h>
 
 using namespace rrc::meta;
@@ -81,7 +81,7 @@ TEST(MetaTest, Length) {
 
 
 TEST(MetaTest, Size) {
-    auto size = Size<std::pair<fuck, float>>::value;
+    auto size = ListSize<std::pair<fuck, float>>::value;
     EXPECT_EQ(size, (size_t)2);
 }
 

@@ -11,6 +11,6 @@
 
 namespace rrc {
     namespace meta {
-        template<class L> using Size = Rename<L, Length>;
+        template<class L> using ListSize = Rename<L, Length>;
     }
 }
