@@ -17,6 +17,7 @@
 #include "meta/FunctionTraits.h"
 #include "meta/If.h"
 #include "meta/IntegralSequence.h"
+#include "meta/IterationTags.h"
 #include "meta/Length.h"
 #include "meta/List.h"
 #include "meta/MethodTraits.h"

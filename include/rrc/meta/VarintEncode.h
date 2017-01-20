@@ -5,33 +5,33 @@
 
 #pragma once
 
-
-#include <stdint-gcc.h>
+#include <cstdint>
 #include "AppendSequence.h"
 #include "IntegralSequence.h"
 #include "If.h"
+#include "IterationTags.h"
 
 namespace rrc {
     namespace meta {
         namespace detail {
             // TODO: Documentation and tests
-            template <class T, T Value>
+            template <class T, T Value, class Tag>
             class VarintEncodeImplementation {
             public:
                 using Type = meta::AppendSequence<
                         meta::If<(Value > 127),
-                                meta::IntegralSequence<uint8_t, (Value & 127 | 128)>,
+                                meta::IntegralSequence<uint8_t, ((Value & 127) | 128)>,
                                 meta::IntegralSequence<uint8_t, (Value & 127)>>,
-                        typename VarintEncodeImplementation<T, (Value >> 7)>::Type>;
+                        typename VarintEncodeImplementation<T, (Value >> 7), IterationTraits<(Value >> 7)>>::Type>;
             };
 
-            template <class T>
-            class VarintEncodeImplementation<T, 0> {
+            template <class T, T Value>
+            class VarintEncodeImplementation<T, Value, rrc::meta::FinalIterationTag> {
             public:
-                using Type = meta::IntegralSequence<uint8_t>
+                using Type = meta::IntegralSequence<uint8_t>;
             };
         }
         template <class T, T Value>
-        using VarintEncode = typename detail::VarintEncodeImplementation<T, Value>::Type;
+        using VarintEncode = typename detail::VarintEncodeImplementation<T, Value, IterationTraits<Value>>::Type;
     }
 }
