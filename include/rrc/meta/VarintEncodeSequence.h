@@ -12,17 +12,22 @@
 namespace rrc {
     namespace meta {
         namespace detail {
-            template <class S>
-            class VarintEncodeSequence;
-
-            template <class T, template <class, T...> class S, T... Ts>
-            class VarintEncodeSequence<rrc::meta::IntegralSequence<T, Ts...>> {
+            template <class T, T... Ts>
+            class VarintEncodeSequenceImplementation {
             public:
-                using Type = rrc::meta::AppendSequence<rrc::meta::VarintEncode<T, Ts>...>;
+                using Type = rrc::meta::If<(sizeof...(Ts) != 0),
+                        rrc::meta::AppendSequence<rrc::meta::VarintEncode<T, Ts>...>,
+                        rrc::meta::IntegralSequence<uint8_t>>;
+            };
+
+            template <class T>
+            class VarintEncodeSequenceImplementation<T> {
+            public:
+                using Type = rrc::meta::IntegralSequence<uint8_t>;
             };
         }
 
-        template <class S>
-        using VarintEncode = typename detail::VarintEncodeImplementation<S>::Type;
+        template <class T, T... Ts>
+        using VarintEncodeSequence = typename detail::VarintEncodeSequenceImplementation<T, Ts...>::Type;
     }
 }

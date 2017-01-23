@@ -69,8 +69,7 @@ set(SRCS
         include/rrc/core/MechanismVersion.h
 #        src/rrc/core/AbstractNode.cpp
         include/rrc/meta.h
-        include/rrc/core/MetaArray.h
-        include/rrc/core/MetaGenerators.h
+        include/rrc/meta/ArrayGenerator.h
         include/rrc/core/Serializer.h
         include/rrc/core/Message.h
         include/rrc/core/ArrayReference.h
@@ -82,7 +81,6 @@ set(SRCS
         include/rrc/meta/MethodTraits.h
         include/rrc/meta/Rename.h
         include/rrc/meta/Length.h
-        include/rrc/meta/ListSize.h
         include/rrc/meta/List.h
         include/rrc/meta/If.h
         include/rrc/meta/Decay.h
@@ -105,7 +103,8 @@ set(SRCS
         include/rrc/meta/VarintEncode.h
         include/rrc/core/StructureTypeQuantityGenerator.h
         include/rrc/meta/VarintEncodeSequence.h
-        include/rrc/meta/IterationTags.h)
+        include/rrc/meta/IterationTags.h
+        include/rrc/meta/ListSize.h)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
                "${PROJECT_BINARY_DIR}/VersionDefines.h")

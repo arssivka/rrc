@@ -8,9 +8,9 @@
 #include <list>
 #include <functional>
 #include <rrc/meta.h>
-#include <rrc/core/MetaGenerators.h>
+#include <rrc/meta/ArrayGenerator.h>
 #include <rrc/core/TypeConverter.h>
-#include <rrc/core/Message.h>
+//#include <rrc/core/Message.h>
 
 using namespace rrc::meta;
 using namespace rrc;

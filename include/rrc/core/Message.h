@@ -18,10 +18,10 @@ namespace rrc {
     public:
         template <class... Ts>
         Message(Ts&&... ts) {
-            mMetaData = ArrayReference<const int8_t>(&MetaData<Ts...>::data[0], MetaData<Ts...>::size);
+            mMetaData = ArrayReference<const uint8_t>(&MetaData<Ts...>::data[0], MetaData<Ts...>::size);
         }
 
-        const ArrayReference<const int8_t>& getMetaData() const noexcept {
+        const ArrayReference<const uint8_t>& getMetaData() const noexcept {
             return mMetaData;
         }
 
@@ -42,24 +42,22 @@ namespace rrc {
         template <class... Ts>
         using StructureTypeQuantitySequence = StructureTypeQuantityGenerator<TypesList<Ts...>>;
 
+        //TODO:: Comment what's below and test StructureTypeQuantity. Use of implementation is ugly.
         template <class... Ts>
-        using EncodedStructureTypeQuantitySequence = meta::VarintEncodeSequence<StructureTypeQuantitySequence>;
-
-        template <class... Ts>
-        using StructureTypeQuantityData = meta::RenameSequence<
+        using EncodedStructureTypeQuantitySequence = meta::RenameSequence<
                 StructureTypeQuantitySequence<Ts...>,
-                meta::ArrayGenerator<size_t>
+                meta::detail::VarintEncodeSequenceImplementation<size_t>
         >;
 
         template <class... Ts>
         using MetaData = meta::AppendSequence<
-                meta::ArrayGenerator<int8_t>,
+                meta::ArrayGenerator<uint8_t>,
                 MetaTypesData<Ts...>,
-                StructureTypeQuantityData<Ts...>
+                typename EncodedStructureTypeQuantitySequence<Ts>::Type...
         >;
 
     private:
-        ArrayReference<const int8_t> mMetaData;
+        ArrayReference<const uint8_t> mMetaData;
 
     };
 }

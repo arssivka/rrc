@@ -147,7 +147,7 @@ namespace rrc {
 
         template<template<class...> class List, class... Ts>
         struct TypeConverterImplementation<List<Ts...>> {
-            using Type = meta::AppendSequence<ConvertTypeToId<int8_t, Ts>...>;
+            using Type = meta::AppendSequence<ConvertTypeToId<uint8_t, Ts>...>;
         };
     }
     template <class List>
