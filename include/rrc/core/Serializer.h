@@ -20,6 +20,7 @@
 #include <set>
 #include <unordered_set>
 #include <unordered_map>
+#include <rrc/meta/ForEachTuple.h>
 
 namespace rrc {
     struct SizeTag {};
@@ -223,25 +224,47 @@ namespace rrc {
 
     template<class... Ts>
     struct Serializer<std::tuple<Ts...>> {
+    private:
+        class SerializeFunctor {
+        public:
+            SerializeFunctor(CharPointer& buffer) {}
+
+            template <class T>
+            void operator()(T&& t) {
+                Serializer<T>::serialize(t, mBuffer);
+            }
+
+        private:
+            CharPointer mBuffer;
+        };
+
+        class DeserializeFunctor {
+        public:
+            DeserializeFunctor(ConstCharPointer& buffer, ConstSizePointer& size)
+                    : mBuffer(buffer), mSize(size) {}
+
+            template <class T>
+            void operator()(T& t) {
+                Serializer<T>::deserialize(mBuffer, mSize, t);
+            }
+
+        private:
+            ConstCharPointer& mBuffer;
+            ConstSizePointer& mSize;
+        };
+
+    public:
         using SizeCategory = FixedSizeTag;
         using ValueTypes = MetaList<typename Serializer<Ts>::ValueTypes...>;
-        //TODO: This is not working. Guess what you need to do.
         
-//        static void serialize(const std::tuple<Ts...>& data, CharPointer& buffer) {
-//            for (size_t i = 0; i < sizeof...(Ts); ++i) {
-//                using Arg = typename std::tuple_element<i, std::tuple<Ts...>>::type;
-//                Serializer<Arg>::serialize(std::get<i>(data), buffer);
-//            }
-//        };
-//
-//        static bool deserialize(ConstCharPointer& buffer, ConstSizePointer& size, std::tuple<Ts...>& data) {
-//            if (size[0] != Serializer<std::tuple<Ts...>>::minSize()) return false;
-//            for (size_t i = 0; i < sizeof...(Ts); ++i) {
-//                using Arg = typename std::tuple_element<i, std::tuple<Ts...>>::type;
-//                if(!Serializer<Arg>::deserialize(buffer, size, std::get<i>(data))) return false;
-//            }
-//            return true;
-//        }
+        static void serialize(const std::tuple<Ts...>& data, CharPointer& buffer) {
+            ForEachTuple(data, SerializeFunctor(buffer));
+        };
+
+        static bool deserialize(ConstCharPointer& buffer, ConstSizePointer& size, std::tuple<Ts...>& data) {
+            ForEachTuple(data, DeserializeFunctor(buffer, size));
+            return true;
+        }
 
         size_t size(const std::tuple<Ts...>& data) noexcept {
             return 1;
