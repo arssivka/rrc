@@ -7,7 +7,6 @@
 
 
 namespace rrc {
-    namespace meta {
-        template<class... Args> class List;
-    }
+    template<class... Args>
+    class MetaList;
 }

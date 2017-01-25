@@ -22,87 +22,87 @@
 namespace rrc {
     namespace detail {
         template <class L>
-        class StructureTypeQuantityGeneratorImplementation {
+        class StructureTypeQuantitySequenceImplementation {
         public:
-            using Type = rrc::meta::IntegralSequence<size_t>;
+            using Type = rrc::MetaIntegralSequence<size_t>;
         };
 
         template <template <class...> class List, class... Ts>
-        class StructureTypeQuantityGeneratorImplementation<List<Ts...>> {
+        class StructureTypeQuantitySequenceImplementation<List<Ts...>> {
         public:
-            using Type = meta::If<
-                    (rrc::meta::Length<Ts...>::value > 1),
-                    rrc::meta::AppendSequence<
-                            rrc::meta::IntegralSequence<size_t, meta::Length<Ts...>::value>,
-                            typename StructureTypeQuantityGeneratorImplementation<Ts>::Type...
+            using Type = rrc::MetaIf<
+                    (rrc::MetaLength<Ts...>::value > 1),
+                    rrc::MetaAppendSequence<
+                            rrc::MetaIntegralSequence<size_t, MetaLength<Ts...>::value>,
+                            typename StructureTypeQuantitySequenceImplementation<Ts>::Type...
                     >,
-                    typename StructureTypeQuantityGeneratorImplementation<
-                            rrc::meta::Front<rrc::meta::List<Ts...>>
+                    typename StructureTypeQuantitySequenceImplementation<
+                            rrc::MetaFront<rrc::MetaList<Ts...>>
                     >::Type
             >;
 
         };
         template<class T, class Alloc>
-        class StructureTypeQuantityGeneratorImplementation<std::vector<T, Alloc>>
-                : public StructureTypeQuantityGeneratorImplementation<rrc::meta::List<rrc::meta::Decay<T>>> {};
+        class StructureTypeQuantitySequenceImplementation<std::vector<T, Alloc>>
+                : public StructureTypeQuantitySequenceImplementation<rrc::MetaList<rrc::MetaDecay<T>>> {};
 
         template<class T, class Alloc>
-        class StructureTypeQuantityGeneratorImplementation<std::deque<T, Alloc>>
-                : public StructureTypeQuantityGeneratorImplementation<rrc::meta::List<rrc::meta::Decay<T>>> {};
+        class StructureTypeQuantitySequenceImplementation<std::deque<T, Alloc>>
+                : public StructureTypeQuantitySequenceImplementation<rrc::MetaList<rrc::MetaDecay<T>>> {};
 
         template<class T, class Alloc>
-        class StructureTypeQuantityGeneratorImplementation<std::list<T, Alloc>>
-                : public StructureTypeQuantityGeneratorImplementation<rrc::meta::List<rrc::meta::Decay<T>>> {};
+        class StructureTypeQuantitySequenceImplementation<std::list<T, Alloc>>
+                : public StructureTypeQuantitySequenceImplementation<rrc::MetaList<rrc::MetaDecay<T>>> {};
 
         template<class T, class Alloc>
-        class StructureTypeQuantityGeneratorImplementation<std::forward_list<T, Alloc>>
-                : public StructureTypeQuantityGeneratorImplementation<rrc::meta::List<rrc::meta::Decay<T>>> {};
+        class StructureTypeQuantitySequenceImplementation<std::forward_list<T, Alloc>>
+                : public StructureTypeQuantitySequenceImplementation<rrc::MetaList<rrc::MetaDecay<T>>> {};
 
         template<class T, class Compare, class Alloc>
-        class StructureTypeQuantityGeneratorImplementation<std::set<T, Compare, Alloc>>
-                : public StructureTypeQuantityGeneratorImplementation<rrc::meta::List<rrc::meta::Decay<T>>> {};
+        class StructureTypeQuantitySequenceImplementation<std::set<T, Compare, Alloc>>
+                : public StructureTypeQuantitySequenceImplementation<rrc::MetaList<rrc::MetaDecay<T>>> {};
 
         template<class T, class Compare, class Alloc>
-        class StructureTypeQuantityGeneratorImplementation<std::multiset<T, Compare, Alloc>>
-                : public StructureTypeQuantityGeneratorImplementation<rrc::meta::List<rrc::meta::Decay<T>>> {};
+        class StructureTypeQuantitySequenceImplementation<std::multiset<T, Compare, Alloc>>
+                : public StructureTypeQuantitySequenceImplementation<rrc::MetaList<rrc::MetaDecay<T>>> {};
 
         template<class Key, class T, class Compare, class Alloc>
-        class StructureTypeQuantityGeneratorImplementation<std::map<Key, T, Compare, Alloc>>
-                : public StructureTypeQuantityGeneratorImplementation<rrc::meta::List<std::pair<rrc::meta::Decay<Key>, rrc::meta::Decay<T>>>> {};
+        class StructureTypeQuantitySequenceImplementation<std::map<Key, T, Compare, Alloc>>
+                : public StructureTypeQuantitySequenceImplementation<rrc::MetaList<std::pair<rrc::MetaDecay<Key>, rrc::MetaDecay<T>>>> {};
 
         template<class Key, class T, class Compare, class Alloc>
-        class StructureTypeQuantityGeneratorImplementation<std::multimap<Key, T, Compare, Alloc>>
-                : public StructureTypeQuantityGeneratorImplementation<rrc::meta::List<std::pair<rrc::meta::Decay<Key>, rrc::meta::Decay<T>>>> {};
+        class StructureTypeQuantitySequenceImplementation<std::multimap<Key, T, Compare, Alloc>>
+                : public StructureTypeQuantitySequenceImplementation<rrc::MetaList<std::pair<rrc::MetaDecay<Key>, rrc::MetaDecay<T>>>> {};
 
         template<class T, class Hash, class Pred, class Alloc>
-        class StructureTypeQuantityGeneratorImplementation<std::unordered_set<T, Hash, Pred, Alloc>>
-                : public StructureTypeQuantityGeneratorImplementation<rrc::meta::List<std::pair<rrc::meta::Decay<T>, rrc::meta::Decay<Hash>>>> {};
+        class StructureTypeQuantitySequenceImplementation<std::unordered_set<T, Hash, Pred, Alloc>>
+                : public StructureTypeQuantitySequenceImplementation<rrc::MetaList<std::pair<rrc::MetaDecay<T>, rrc::MetaDecay<Hash>>>> {};
 
         template<class T, class Hash, class Pred, class Alloc>
-        class StructureTypeQuantityGeneratorImplementation<std::unordered_multiset<T, Hash, Pred, Alloc>>
-                : public StructureTypeQuantityGeneratorImplementation<rrc::meta::List<std::pair<rrc::meta::Decay<T>, rrc::meta::Decay<Hash>>>> {};
+        class StructureTypeQuantitySequenceImplementation<std::unordered_multiset<T, Hash, Pred, Alloc>>
+                : public StructureTypeQuantitySequenceImplementation<rrc::MetaList<std::pair<rrc::MetaDecay<T>, rrc::MetaDecay<Hash>>>> {};
 
         template<class Key, class T, class Hash, class Pred, class Alloc>
-        class StructureTypeQuantityGeneratorImplementation<std::unordered_map<Key, T, Hash, Pred, Alloc>>
-                : public StructureTypeQuantityGeneratorImplementation<rrc::meta::List<std::pair<rrc::meta::Decay<Key>, rrc::meta::Decay<T>>>> {};
+        class StructureTypeQuantitySequenceImplementation<std::unordered_map<Key, T, Hash, Pred, Alloc>>
+                : public StructureTypeQuantitySequenceImplementation<rrc::MetaList<std::pair<rrc::MetaDecay<Key>, rrc::MetaDecay<T>>>> {};
 
         template<class Key, class T, class Hash, class Pred, class Alloc>
-        class StructureTypeQuantityGeneratorImplementation<std::unordered_multimap<Key, T, Hash, Pred, Alloc>>
-                : public StructureTypeQuantityGeneratorImplementation<rrc::meta::List<std::pair<rrc::meta::Decay<Key>, rrc::meta::Decay<T>>>> {};
+        class StructureTypeQuantitySequenceImplementation<std::unordered_multimap<Key, T, Hash, Pred, Alloc>>
+                : public StructureTypeQuantitySequenceImplementation<rrc::MetaList<std::pair<rrc::MetaDecay<Key>, rrc::MetaDecay<T>>>> {};
 
         template<class T, class Traits, class Alloc>
-        class StructureTypeQuantityGeneratorImplementation<std::basic_string<T, Traits, Alloc>>
-                : public StructureTypeQuantityGeneratorImplementation<rrc::meta::List<rrc::meta::Decay<T>>> {};
+        class StructureTypeQuantitySequenceImplementation<std::basic_string<T, Traits, Alloc>>
+                : public StructureTypeQuantitySequenceImplementation<rrc::MetaList<rrc::MetaDecay<T>>> {};
 
         template<class T, class K>
-        class StructureTypeQuantityGeneratorImplementation<std::pair<T, K>>
-                : public StructureTypeQuantityGeneratorImplementation<rrc::meta::List<T, K>> {};
+        class StructureTypeQuantitySequenceImplementation<std::pair<T, K>>
+                : public StructureTypeQuantitySequenceImplementation<rrc::MetaList<T, K>> {};
 
         template<class... Ts>
-        class StructureTypeQuantityGeneratorImplementation<std::tuple<Ts...>>
-            : public StructureTypeQuantityGeneratorImplementation<rrc::meta::List<Ts...>> {};
+        class StructureTypeQuantitySequenceImplementation<std::tuple<Ts...>>
+            : public StructureTypeQuantitySequenceImplementation<rrc::MetaList<Ts...>> {};
     }
 
     template <class L>
-    using StructureTypeQuantityGenerator = typename detail::StructureTypeQuantityGeneratorImplementation<L>::Type;
+    using StructureTypeQuantitySequence = typename detail::StructureTypeQuantitySequenceImplementation<L>::Type;
 }

@@ -7,26 +7,25 @@
 #include <cstddef>
 
 namespace rrc {
-    namespace meta {
-        class IterationTag {
+    class IterationTag {
+    };
+
+    class FinalIterationTag
+            : public IterationTag {
+    };
+    namespace detail {
+        template<size_t N>
+        class IterationTraitsImplementation {
+        public:
+            using Tag = IterationTag;
         };
 
-        class FinalIterationTag : public IterationTag {
+        template<>
+        class IterationTraitsImplementation<0> {
+        public:
+            using Tag = FinalIterationTag;
         };
-        namespace detail {
-            template<size_t N>
-            class IterationTraitsImplementation {
-            public:
-                using Tag = IterationTag;
-            };
-
-            template<>
-            class IterationTraitsImplementation<0> {
-            public:
-                using Tag = FinalIterationTag;
-            };
-        }
-        template <size_t N>
-        using IterationTraits = typename detail::IterationTraitsImplementation<N>::Tag;
     }
+    template<size_t N>
+    using IterationTraits = typename detail::IterationTraitsImplementation<N>::Tag;
 }

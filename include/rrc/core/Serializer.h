@@ -39,7 +39,7 @@ namespace rrc {
     class Serializer {
     public:
         using SizeCategory = FixedSizeTag;
-        using ValueTypes = meta::List<T>;
+        using ValueTypes = MetaList<T>;
         
         using Type = std::remove_cv<T>;
         static_assert(!std::is_fundamental<Type>::value, "Can't deduce fundamental type");
@@ -66,7 +66,7 @@ namespace rrc {
 
     template <class T>
     struct ContainerSerializer {
-        using ValueTypes = meta::List<T>;
+        using ValueTypes = MetaList<T>;
         using SizeCategory = DynamicSizeTag;
 
         static void serialize(const T& data, CharPointer& buffer) {
@@ -204,7 +204,7 @@ namespace rrc {
     template<class T, class K>
     struct Serializer<std::pair<T, K>> {
         using SizeCategory = DynamicSizeTag;
-        using ValueTypes = meta::List<typename Serializer<T>::ValueTypes, typename Serializer<K>::ValueTypes>;
+        using ValueTypes = MetaList<typename Serializer<T>::ValueTypes, typename Serializer<K>::ValueTypes>;
 
         static void serialize(const std::pair<T, K>& data, CharPointer& buffer) {
             Serializer<T>::serialize(data.first, buffer);
@@ -224,7 +224,7 @@ namespace rrc {
     template<class... Ts>
     struct Serializer<std::tuple<Ts...>> {
         using SizeCategory = FixedSizeTag;
-        using ValueTypes = meta::List<typename Serializer<Ts>::ValueTypes...>;
+        using ValueTypes = MetaList<typename Serializer<Ts>::ValueTypes...>;
         //TODO: This is not working. Guess what you need to do.
         
 //        static void serialize(const std::tuple<Ts...>& data, CharPointer& buffer) {

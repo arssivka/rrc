@@ -69,7 +69,7 @@ set(SRCS
         include/rrc/core/MechanismVersion.h
 #        src/rrc/core/AbstractNode.cpp
         include/rrc/meta.h
-        include/rrc/meta/ArrayGenerator.h
+        include/rrc/meta/MetaArrayGenerator.h
         include/rrc/core/Serializer.h
         include/rrc/core/Message.h
         include/rrc/core/ArrayReference.h
@@ -79,32 +79,33 @@ set(SRCS
         include/rrc/core/EndianDefines.h
         include/rrc/meta/FunctionTraits.h
         include/rrc/meta/MethodTraits.h
-        include/rrc/meta/Rename.h
-        include/rrc/meta/Length.h
-        include/rrc/meta/List.h
-        include/rrc/meta/If.h
-        include/rrc/meta/Decay.h
-        include/rrc/meta/PushFront.h
-        include/rrc/meta/Front.h
-        include/rrc/meta/PopFront.h
-        include/rrc/meta/Clear.h
-        include/rrc/meta/Empty.h
-        include/rrc/meta/Transform.h
-        include/rrc/meta/Append.h
-        include/rrc/meta/IntegralSequence.h
-        include/rrc/meta/BackSequenceElement.h
-        include/rrc/meta/Back.h
-        include/rrc/meta/RenameSequence.h
-        include/rrc/meta/AppendSequence.h
-        include/rrc/meta/Pack.h
-        include/rrc/meta/Packer.h
-        include/rrc/meta/SequenceConcatenator.h
-        include/rrc/meta/Concatenator.h
-        include/rrc/meta/VarintEncode.h
+        include/rrc/meta/MetaRename.h
+        include/rrc/meta/MetaLength.h
+        include/rrc/meta/MetaList.h
+        include/rrc/meta/MetaIf.h
+        include/rrc/meta/MetaDecay.h
+        include/rrc/meta/MetaPushFront.h
+        include/rrc/meta/MetaFront.h
+        include/rrc/meta/MetaPopFront.h
+        include/rrc/meta/MetaClearList.h
+        include/rrc/meta/MetaEmpty.h
+        include/rrc/meta/MetaTransform.h
+        include/rrc/meta/MetaAppend.h
+        include/rrc/meta/MetaIntegralSequence.h
+        include/rrc/meta/MetaBackSequenceElement.h
+        include/rrc/meta/MetaBack.h
+        include/rrc/meta/MetaRenameSequence.h
+        include/rrc/meta/MetaAppendSequence.h
+        include/rrc/meta/MetaPack.h
+        include/rrc/meta/MetaPacker.h
+        include/rrc/meta/MetaSequenceConcatenator.h
+        include/rrc/meta/MetaConcatenator.h
+        include/rrc/meta/MetaVarintEncode.h
         include/rrc/core/StructureTypeQuantityGenerator.h
-        include/rrc/meta/VarintEncodeSequence.h
+        include/rrc/meta/MetaVarintEncodeSequence.h
         include/rrc/meta/IterationTags.h
-        include/rrc/meta/ListSize.h)
+        include/rrc/meta/MetaListSize.h
+        include/rrc/meta/MetaArrayGenerator.h include/rrc/meta/MetaSequenceSize.h include/rrc/core/TypesIdentifiersArray.h)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
                "${PROJECT_BINARY_DIR}/VersionDefines.h")
