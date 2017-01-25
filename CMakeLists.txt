@@ -110,7 +110,8 @@ set(SRCS
         include/rrc/core/TypesIdentifiersArray.h
         include/rrc/core/TypeSizesArray.h
         include/rrc/meta/ForEachTuple.h
-        include/rrc/meta/MetaGenerateSequence.h)
+        include/rrc/meta/MetaGenerateSequence.h
+        include/rrc/meta/ForEachVariadic.h)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
                "${PROJECT_BINARY_DIR}/VersionDefines.h")

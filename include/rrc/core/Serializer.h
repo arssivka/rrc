@@ -258,11 +258,11 @@ namespace rrc {
         using ValueTypes = MetaList<typename Serializer<Ts>::ValueTypes...>;
         
         static void serialize(const std::tuple<Ts...>& data, CharPointer& buffer) {
-            ForEachTuple(data, SerializeFunctor(buffer));
+            forEachTuple(data, SerializeFunctor(buffer));
         };
 
         static bool deserialize(ConstCharPointer& buffer, ConstSizePointer& size, std::tuple<Ts...>& data) {
-            ForEachTuple(data, DeserializeFunctor(buffer, size));
+            forEachTuple(data, DeserializeFunctor(buffer, size));
             return true;
         }
 
