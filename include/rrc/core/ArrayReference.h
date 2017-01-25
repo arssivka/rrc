@@ -11,19 +11,42 @@
 #include "rrc/meta.h"
 
 namespace rrc {
-    // TODO: Test it!
+    /**
+     * @brief Wrapper around reference to array.
+     * @tparam T Array type
+     */
     template <class T>
     class ArrayReference {
     public:
+        /**
+         * @brief Default constructor. Sets inner pointer to nullptr, size to 0
+         */
         ArrayReference()
                 : mArrayPointer(nullptr), mSize(0) {}
-        
+
+        /**
+         * @brief Default copy constructor
+         * @param other Reference to instance to copy from
+         */
         ArrayReference(const ArrayReference<T>& other) = default;
 
+        /**
+         * @brief Default move constructor
+         * @param other RValue reference to instance to move from
+         */
         ArrayReference(ArrayReference<T>&& other) = default;
 
+        /**
+         * @brief Default destructor
+         */
         ~ArrayReference() = default;
 
+        /**
+         * @brief Constructor of ArrayReference
+         * @tparam A Type of array
+         * @param array Pointer to array
+         * @param size Size of array
+         */
         template <class A>
         ArrayReference(A* array, std::size_t size) {
             mArrayPointer = array;
@@ -34,8 +57,12 @@ namespace rrc {
 
         ArrayReference& operator=( ArrayReference&& other) = default;
 
+        /**
+         * @brief Checks if this instance was initialized by array
+         * @return True if was initialized, otherwise false
+         */
         bool isInitialized() const noexcept {
-            return mArrayPointer == nullptr;
+            return mArrayPointer != nullptr;
         }
 
         template <class A>
@@ -51,14 +78,26 @@ namespace rrc {
             return mArrayPointer[index];
         }
 
+        /**
+         * @brief Returns size of the array
+         * @return Size of type size_t
+         */
         std::size_t getSize() const {
             return mSize;
         }
 
+        /**
+         * @brief Returns pointer to an array this instance holds pointer to
+         * @return Pointer to an array of type T*
+         */
         T* getArrayPointer() {
             return mArrayPointer;
         }
 
+        /**
+         * @brief Returns const pointer to an array this instance holds pointer to
+         * @return Const pointer to an array of type T*
+         */
         const T* getArrayPointer() const {
             return mArrayPointer;
         }
@@ -87,9 +126,6 @@ namespace rrc {
         std::reverse_iterator<const T*> crbegin() const noexcept { return this->end(); }
 
         std::reverse_iterator<const T*> crend() const noexcept { return this->begin(); }
-
-    private:
-
 
     private:
         T* mArrayPointer;
