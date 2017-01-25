@@ -105,7 +105,12 @@ set(SRCS
         include/rrc/meta/MetaVarintEncodeSequence.h
         include/rrc/meta/IterationTags.h
         include/rrc/meta/MetaListSize.h
-        include/rrc/meta/MetaArrayGenerator.h include/rrc/meta/MetaSequenceSize.h include/rrc/core/TypesIdentifiersArray.h)
+        include/rrc/meta/MetaArrayGenerator.h
+        include/rrc/meta/MetaSequenceSize.h
+        include/rrc/core/TypesIdentifiersArray.h
+        include/rrc/core/TypeSizesArray.h
+        include/rrc/meta/ForEachTuple.h
+        include/rrc/meta/MetaGenerateSequence.h)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
                "${PROJECT_BINARY_DIR}/VersionDefines.h")
