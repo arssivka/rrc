@@ -30,7 +30,7 @@ set(SRCS
         src/core/MetaVarintTests.cpp
         src/core/StructureTypeQuantityGeneratorTests.cpp
         src/core/VarintEncodeSequenceTests.cpp
-        src/core/ArrayRefernceTets.cpp)
+        src/core/ArrayRefernceTets.cpp src/core/TypeIdentifiersArrayTests.cpp)
 
 
 add_executable(tests ${SRCS})
