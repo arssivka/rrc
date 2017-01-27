@@ -11,10 +11,16 @@ namespace rrc {
     template<class T>
     class MetaPopFrontSequence;
 
+    template<class T, template<class, T...> class S, T... Ss>
+    class MetaPopFrontSequence<S<T, Ss...>> {
+        public:
+            using Type = MetaIntegralSequence<T>;
+    };
+
     template<class T, template<class, T...> class S, T First, T... Ss>
-    class MetaPopFrontSequenceImplementation<S<T, First, Ss...>> {
-    public:
-        using Type = MetaIntegralSequence<T, Ss...>;
+    class MetaPopFrontSequence<S<T, First, Ss...>> {
+        public:
+            using Type = MetaIntegralSequence<T, Ss...>;
     };
 
 }
