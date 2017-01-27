@@ -26,7 +26,8 @@ set(SRCS
         src/core/TypeIdMessageFilterTests.cpp
         src/core/RejectMessageFilterTest.cpp
         src/core/BypassMessageFilterTests.cpp
-        src/core/CallbackMessageFilterTest.cpp)
+        src/core/CallbackMessageFilterTest.cpp
+        src/core/benchmarks.cpp)
 
 set(PROTOS
         proto/Message.proto)
