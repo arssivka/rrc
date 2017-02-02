@@ -6,23 +6,23 @@
 #pragma once
 
 
-#include "CopyOnWrite.h"
-#include "rrc/meta.h"
-#include "TypesIdentifiersArray.h"
+#include <vector>
+#include <cstddef>
+#include <cstdint>
 
 namespace rrc {
+    // TODO: Tests and docs
     class Message {
     public:
-        template <class... Ts>
-        Message(Ts&&... ts)
-                : mMetaData{ts...} {}
+        Message(const uint8_t* bufferPtr, const size_t size);
 
-        const ArrayReference<const uint8_t>& getMetaData() const noexcept {
-            return mMetaData;
-        }
+        const std::vector<uint8_t>& getBinaryVector() const;
+
+        bool isEmpty() const;
 
     private:
-        TypesIdentifiersArray mMetaData;
+        std::vector<uint8_t> mBinaryVector;
+
     };
 }
 
