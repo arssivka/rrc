@@ -33,3 +33,5 @@
 #include "meta/MetaVarintEncodeSequence.h"
 #include "meta/MetaArrayGenerator.h"
 #include "meta/MetaSequenceSize.h"
+#include "meta/MetaPopFrontSequence.h"
+#include "rrc/meta/MetaFrontSequenceElement.h"

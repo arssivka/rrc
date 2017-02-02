@@ -8,7 +8,6 @@
 #include <list>
 #include <functional>
 #include <rrc/meta.h>
-#include <rrc/meta/MetaArrayGenerator.h>
 #include <rrc/core/TypeConverter.h>
 //#include <rrc/core/Message.h>
 
@@ -137,8 +136,17 @@ TEST(MetaTest, Append) {
 
 TEST(MetaTest, AppendSequence) {
     typedef MetaAppendSequence <MetaIntegralSequence<fuck, 1, 2, 3>, MetaIntegralSequence<fuck, 4, 5, 6>, MetaIntegralSequence<fuck, 7, 8, 9>> append;
-    bool back =std::is_same<MetaIntegralSequence<fuck, 1, 2, 3, 4, 5, 6, 7, 8, 9>, append>::value;
+    bool back = std::is_same<MetaIntegralSequence<fuck, 1, 2, 3, 4, 5, 6, 7, 8, 9>, append>::value;
     EXPECT_TRUE(back);
+}
+
+TEST(MetaTest, PopFrontSequence) {
+    typedef MetaPopFrontSequence<MetaIntegralSequence<fuck, 1, 2, 3>> pop;
+    bool same = std::is_same<MetaIntegralSequence<fuck, 2, 3>, pop::Type>::value;
+    EXPECT_TRUE(same);
+    typedef MetaPopFrontSequence<MetaIntegralSequence<fuck>> emptypop;
+    bool same2 = std::is_same<MetaIntegralSequence<fuck>, emptypop::Type >::value;
+    EXPECT_TRUE(same2);
 }
 
 TEST_F(MetaTestClassFixture, MethodTraits) {
@@ -212,6 +220,15 @@ TEST(MetaTest, BackSequenceElement) {
     EXPECT_EQ(b, (short) 3);
     typedef MetaBackSequenceElement<MetaIntegralSequence<short, 1>> back1;
     short b1 = back1::value;
+    EXPECT_EQ(b1, (short) 1);
+}
+
+TEST(MetaTest, FrontSequenceElement) {
+    typedef MetaFrontSequenceElement<MetaIntegralSequence<short, 1, 2, 3>> front;
+    short b = front::value;
+    EXPECT_EQ(b, (short) 1);
+    typedef MetaFrontSequenceElement<MetaIntegralSequence<short, 1>> front1;
+    short b1 = front1::value;
     EXPECT_EQ(b1, (short) 1);
 }
 

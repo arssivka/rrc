@@ -37,7 +37,7 @@ namespace rrc {
                 detail::MetaVarintEncodeSequenceImplementation<size_t>
         >;
 
-        //TODO:: Comment what's below and test StructureTypeQuantity. Use of implementation is ugly.
+        //TODO: Comment what's below and test StructureTypeQuantity. Use of implementation is ugly.
         template<class... Ts>
         using MetaData = MetaAppendSequence<
                 MetaArrayGenerator<uint8_t>,

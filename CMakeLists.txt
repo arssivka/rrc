@@ -112,6 +112,10 @@ set(SRCS
         include/rrc/meta/ForEachTuple.h
         include/rrc/meta/MetaGenerateSequence.h
         include/rrc/meta/ForEachVariadic.h
+        include/rrc/meta/MetaGenerateSequence.h
+        include/rrc/meta/MetaPopFrontSequence.h
+        include/rrc/meta/MetaFrontSequenceElement.h
+        include/rrc/meta/ForEachVariadic.h
         src/rrc/core/Message.cpp
         include/rrc/core/ObjectFactory.h)
 

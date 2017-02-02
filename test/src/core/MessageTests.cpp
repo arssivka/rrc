@@ -13,7 +13,7 @@
 //typedef int fuck;
 //
 //
-//TEST(MetaTest, Message) {
+//TEST(MessageTest, Message) {
 //    Message fuckMessage(0, 0, 0, 0, 0);
 //    auto res = fuckMessage.getMetaData();
 //    auto pack = MetaPack<int8_t, INT32_ID, INT32_ID>::value;
