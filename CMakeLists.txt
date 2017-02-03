@@ -99,7 +99,7 @@ set(SRCS
         include/rrc/meta/MetaFrontSequenceElement.h
         include/rrc/meta/ForEachVariadic.h
         src/rrc/core/Message.cpp
-        include/rrc/core/ObjectFactory.h)
+        include/rrc/core/QueueAdapterFactory.h)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
                "${PROJECT_BINARY_DIR}/VersionDefines.h")
