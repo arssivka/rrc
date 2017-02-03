@@ -8,19 +8,15 @@
 
 #include <unordered_map>
 #include <set>
-#include "QueueMessageListener.h"
+#include <memory>
 #include "Topic.h"
-
-namespace {
-    namespace pb = google::protobuf;
-}
 
 namespace rrc {
     /**
      * @brief Class that contains all the topics and grants access to them.
      */
     template <class TopicName>
-    class TopicHolder : public Pointer<TopicHolder<TopicName>> {
+    class TopicHolder {
     public:
 
         /**
@@ -36,7 +32,10 @@ namespace rrc {
          * @param topicName Name of the topic
          */
         void createTopic(const TopicName& topicName) {
-            mTopicHash.insert({topicName, std::make_shared<Topic>()});
+            auto exist = mTopicHash.find(topicName) != mTopicHash.end();
+            if (!exist) {
+                mTopicHash.insert({topicName, std::make_shared<Topic>()});
+            }
         }
 
         /**
@@ -44,7 +43,7 @@ namespace rrc {
          * @param topicName Name of the needed topic
          * @return Topic if found otherwise nullptr
          */
-        Topic::Ptr getTopic(const TopicName& topicName) {
+        std::shared_ptr<Topic> getTopic(const TopicName& topicName) {
             auto found = mTopicHash.find(topicName);
             if (found != mTopicHash.end()) {
                 return found->second;
@@ -76,7 +75,7 @@ namespace rrc {
 
 
     private:
-        std::unordered_map<TopicName, Topic::Ptr> mTopicHash;
+        std::unordered_map<TopicName, std::shared_ptr<Topic>> mTopicHash;
     };
 }
 

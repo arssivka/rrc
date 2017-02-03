@@ -6,7 +6,7 @@
 #include <rrc/core/TaskQueueWrapper.h>
 
 
-rrc::TaskQueueWrapper::TaskQueueWrapper(rrc::AbstractQueueAdapter<Task>::Ptr queueAdapter)
+rrc::TaskQueueWrapper::TaskQueueWrapper(std::shared_ptr<rrc::AbstractQueueAdapter<Task>> queueAdapter)
         : mQueueAdapter(std::move(queueAdapter)) {}
 
 
@@ -44,4 +44,19 @@ bool rrc::TaskQueueWrapper::operator==(const rrc::TaskQueueWrapper& rhs) const {
 
 bool rrc::TaskQueueWrapper::operator!=(const rrc::TaskQueueWrapper& rhs) const {
     return !(rhs == *this);
+}
+
+
+void rrc::TaskQueueWrapper::enqueue(const rrc::Task& task) {
+    mQueueAdapter->enqueue(task);
+}
+
+
+void rrc::TaskQueueWrapper::enqueue(rrc::Task&& task) {
+    mQueueAdapter->enqueue(std::move(task));
+}
+
+
+bool rrc::TaskQueueWrapper::isOrphan() const {
+    return mQueueAdapter.unique();
 }

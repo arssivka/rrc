@@ -7,11 +7,11 @@
 
 
 #include "NonCopyable.h"
-#include "Pointer.h"
 
 namespace rrc {
+    // TODO: Docs
     template <class T>
-    class AbstractQueueAdapter : public Pointer<AbstractQueueAdapter<T>>, private NonCopyable {
+    class AbstractQueueAdapter : private NonCopyable {
     public:
         virtual void enqueue(const T& value) = 0;
 

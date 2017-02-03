@@ -7,45 +7,35 @@
 
 
 #include <vector>
-#include "Mechanism.h"
-#include "AbstractMessageListener.h"
-#include "AbstractMessageFilter.h"
+#include "MessageListener.h"
 #include "Message.h"
 #include "TopicHolder.h"
-#include "rrc/meta.h"
 #include "TaskQueueWrapper.h"
 
 namespace rrc {
-    class AdvertisingMechanism : public Mechanism {
+    class AdvertisingMechanism : private NonCopyable {
     public:
-        AdvertisingMechanism(TaskQueueWrapper syncQueue, TopicHolder<std::string>::Ptr topicHolder);
+        AdvertisingMechanism(TaskQueueWrapper syncQueue);
 
         /**
          * @brief Send a message
          * @param topicName Name of the topic for the message
          * @param message Pointer to the message, that needs to be sent
          */
-        void sendMessage(const std::string& topicName, Message::Ptr message);
+        void sendMessage(const std::string& topicName, std::shared_ptr<Message> message);
 
         /**
          * @brief Registers listener
          * @param topicName Name of the topic for the listener
          * @param listener Pointer to the listener that needs to be registered
          */
-        void addListener(const std::string& topicName, AbstractMessageListener::Ptr listener);
-
-        /**
-         * @bried Unregisters listener
-         * @param topicName Name of the topic for the listener
-         * @param listener Pointer to the listener that needs to be unregistered
-         */
-        void removeListener(const std::string& topicName, AbstractMessageListener::Ptr listener);
+        void addListener(const std::string& topicName, std::shared_ptr<MessageListener> listener);
 
         /**
          * @brief Returns set of avaliable topic names
          * @return Set of topic names
          */
-        auto getTopicNames() const;
+        std::vector<std::string> getTopicNames() const;
 
         /**
          * @brief Removes topic with the specified name from TopicHolder
@@ -53,22 +43,8 @@ namespace rrc {
          */
         void removeTopic(const std::string& topicName);
 
-        /**
-         * @brief Sets flag for auto removing of the topic with the specified name
-         * @param topicName Name of the topic to set flag in it
-         * @param flag Value for the flag to be set
-         */
-        void setTopicAutoRemoveFlag(const std::string& topicName, bool flag);
-
-        /**
-         * @brief Sets the filter for the topic with the specified name
-         * @param topicName Name of the needed topic
-         * @param filter Filter to apply
-         */
-        void setTopicMessageFilter(const std::string& topicName, AbstractMessageFilter::Ptr filter);
-
     private:
-        TopicHolder<std::string>::Ptr mTopicHolder;
+        TopicHolder<std::string> mTopicHolder;
         TaskQueueWrapper mSyncQueue;
     };
 }

@@ -14,7 +14,7 @@ namespace rrc {
     /**
      * @brief Abstract class for creating launchers. Lauуncher is needed to run all the nodes and functionality of the whole system.
      */
-    class AbstractLauncher : public Pointer<AbstractLauncher> {
+    class AbstractLauncher {
     public:
         /**
          * @brief Virtual destructor of Abstract Launcher
@@ -42,13 +42,13 @@ namespace rrc {
          * @brief Registers node
          * @param node Pointer to node instance
          */
-        virtual void addNode(AbstractNode::Ptr node) = 0;
+        virtual void addNode(std::shared_ptr<AbstractNode> node) = 0;
 
         /**
          * @brief Removes the node from the list
          * @param node Pointer to node instance
          */
-        virtual void removeNode(AbstractNode::Ptr node) = 0;
+        virtual void removeNode(std::shared_ptr<AbstractNode> node) = 0;
 
         virtual void addSyncQueue(TaskQueueWrapper queue) = 0;
 

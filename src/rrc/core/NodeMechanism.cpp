@@ -6,28 +6,28 @@
 #include "rrc/core/NodeMechanism.h"
 
 
-rrc::NodeMechanism::NodeMechanism(rrc::TaskQueueWrapper syncQueue, rrc::Pointer<rrc::AbstractLauncher>::Ptr launcher)
-        : Mechanism("rrc.nodes", 0), mSyncQueue(std::move(syncQueue)), mLauncher(std::move(launcher)) { }
+rrc::NodeMechanism::NodeMechanism(rrc::TaskQueueWrapper syncQueue, rrc::AbstractLauncher& launcher)
+        : mSyncQueue(std::move(syncQueue)), mLauncher(launcher) { }
 
 
-void rrc::NodeMechanism::addNode(rrc::Pointer<rrc::AbstractNode>::Ptr node) {
+void rrc::NodeMechanism::addNode(std::shared_ptr<rrc::AbstractNode> node) {
     // TODO: Move to enclosure
-    auto launcher = mLauncher;
-    mSyncQueue.enqueue([launcher, node]() {
-        launcher->addNode(node);
+    auto& launcher = mLauncher;
+    mSyncQueue.enqueue([&launcher, node]() {
+        launcher.addNode(node);
     });
 }
 
 
-void rrc::NodeMechanism::removeNode(rrc::Pointer<rrc::AbstractNode>::Ptr node) {
+void rrc::NodeMechanism::removeNode(std::shared_ptr<rrc::AbstractNode> node) {
     // TODO: Move to enclosure
-    auto launcher = mLauncher;
-    mSyncQueue.enqueue([launcher, node]() {
-        launcher->removeNode(node);
+    auto& launcher = mLauncher;
+    mSyncQueue.enqueue([&launcher, node]() {
+        launcher.removeNode(node);
     });
 }
 
 
 void rrc::NodeMechanism::stop() {
-    mLauncher->stop();
+    mLauncher.stop();
 }

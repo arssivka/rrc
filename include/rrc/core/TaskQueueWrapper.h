@@ -15,7 +15,8 @@ namespace rrc {
 
     class TaskQueueWrapper {
     public:
-        TaskQueueWrapper(rrc::AbstractQueueAdapter<Task>::Ptr queueAdapter);
+        // TODO: Docs
+        TaskQueueWrapper(std::shared_ptr<AbstractQueueAdapter<Task>> queueAdapter);
 
         TaskQueueWrapper(TaskQueueWrapper&& other);
 
@@ -37,17 +38,13 @@ namespace rrc {
          * @brief Enques const Task
          * @param task const reference to  Task - function<void> object
          */
-        void enqueue(const Task& task) {
-            mQueueAdapter->enqueue(task);
-        }
+        void enqueue(const Task& task);
 
         /**
          * @brief Enques Task by moving
          * @param task function<void> object
          */
-        void enqueue(Task&& task) {
-            mQueueAdapter->enqueue(std::move(task));
-        }
+        void enqueue(Task&& task);
 
         /**
          * @brief Tries to deque Task into specified reference
@@ -67,12 +64,15 @@ namespace rrc {
          */
         void execAll();
 
+        // TODO Tests and docs
+        bool isOrphan() const;
+
         bool operator==(const TaskQueueWrapper& rhs) const;
 
         bool operator!=(const TaskQueueWrapper& rhs) const;
 
     private:
-        AbstractQueueAdapter<Task>::Ptr mQueueAdapter;
+        std::shared_ptr<AbstractQueueAdapter<Task>> mQueueAdapter;
     };
 }
 

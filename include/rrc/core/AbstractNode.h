@@ -7,14 +7,13 @@
 
 
 #include "NonCopyable.h"
-#include "Pointer.h"
 
 namespace rrc {
     /**
      * @brief Abstract class for creating nodes - modules of the system. Each module holds it's own functioanlity.
      * In the terms of the system, node - is atomic. Executaion of it's entry is guaranteed.
      */
-    class AbstractNode : public Pointer<AbstractNode>, private NonCopyable {
+    class AbstractNode : private NonCopyable {
     public:
         /**
          * @brief Virtual function for ruuning the node functionality

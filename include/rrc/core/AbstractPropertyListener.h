@@ -7,14 +7,13 @@
 
 #include "Property.h"
 #include "PropertyDictionary.h"
-#include "Pointer.h"
 #include <map>
 
 namespace rrc {
     /**
      * @brief Abstract class for getting required up-to-date collection of settings from the SettingsHolder; also can get required property by it's name.
      */
-    class AbstractPropertyListener : public Pointer<AbstractPropertyListener> {
+    class AbstractPropertyListener {
     public:
 
         /**

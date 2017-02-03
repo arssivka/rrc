@@ -6,28 +6,27 @@
 #pragma once
 
 
-#include "Mechanism.h"
 #include "AbstractLauncher.h"
 
 namespace rrc {
-    class NodeMechanism : public Mechanism {
+    class NodeMechanism {
     public:
 
-        NodeMechanism(TaskQueueWrapper syncQueue, AbstractLauncher::Ptr launcher);
+        NodeMechanism(TaskQueueWrapper syncQueue, AbstractLauncher& launcher);
 
 
         /**
          * @brief Registers node for the synchronization
          * @param node Pointer to the node, that nees to be registered
          */
-        void addNode(AbstractNode::Ptr node);
+        void addNode(std::shared_ptr<AbstractNode> node);
 
 
         /**
          * @brief Unregisters node
          * @param node Pointer to the node that needs to be unregistered
          */
-        void removeNode(AbstractNode::Ptr node);
+        void removeNode(std::shared_ptr<AbstractNode> node);
 
 
         /**
@@ -38,7 +37,7 @@ namespace rrc {
 
     private:
         TaskQueueWrapper mSyncQueue;
-        AbstractLauncher::Ptr mLauncher;
+        AbstractLauncher& mLauncher;
     };
 }
 

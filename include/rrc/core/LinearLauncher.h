@@ -47,13 +47,13 @@ namespace rrc {
         * @brief Registers node
         * @param node Pointer to node instance
         */
-        virtual void addNode(AbstractNode::Ptr node) override;
+        virtual void addNode(std::shared_ptr<AbstractNode> node) override;
 
         /**
          * @brief Removes the node from the list
          * @param node Pointer to node instance
          */
-        virtual void removeNode(AbstractNode::Ptr node) override;
+        virtual void removeNode(std::shared_ptr<AbstractNode> node) override;
 
         virtual void addSyncQueue(TaskQueueWrapper queue) override;
 
@@ -61,7 +61,7 @@ namespace rrc {
 
     private:
         bool mFinished;
-        std::forward_list<AbstractNode::Ptr> mNodesList;
+        std::forward_list<std::shared_ptr<AbstractNode>> mNodesList;
         std::forward_list<TaskQueueWrapper> mQueuesList;
     };
 }
