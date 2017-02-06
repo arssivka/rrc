@@ -10,11 +10,11 @@ rrc::MechanismsHolder::MechanismsHolder(rrc::TaskQueueWrapper queue)
         : mAdvertisingMechanism(std::move(queue)) {}
 
 
-rrc::AdvertisingMechanism& rrc::MechanismsHolder::getAdvetisingMechanism() {
+rrc::AdvertisingMechanism& rrc::MechanismsHolder::getAdvertisingMechanism() {
     return mAdvertisingMechanism;
 }
 
 
-const rrc::AdvertisingMechanism& rrc::MechanismsHolder::getAdvetisingMechanism() const {
+const rrc::AdvertisingMechanism& rrc::MechanismsHolder::getAdvertisingMechanism() const {
     return mAdvertisingMechanism;
 }

@@ -16,9 +16,9 @@ namespace rrc {
         // TODO: Docs and tests
         MechanismsHolder(TaskQueueWrapper queue);
 
-        AdvertisingMechanism& getAdvetisingMechanism();
+        AdvertisingMechanism& getAdvertisingMechanism();
 
-        const AdvertisingMechanism& getAdvetisingMechanism() const;
+        const AdvertisingMechanism& getAdvertisingMechanism() const;
 
 
     private:
