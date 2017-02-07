@@ -48,7 +48,7 @@ set(SRCS
         include/rrc/core/Buffer.h
         include/rrc/core/StructureTypeQuantityGenerator.h
         src/rrc/core/Buffer.cpp
-        include/rrc/core/ObjectFactory.h
+        include/rrc/core/QueueAdapterFactory.h
         include/rrc/core/TaskCapture.h)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
@@ -59,6 +59,6 @@ add_library(rrc ${SRCS})
 target_link_libraries(rrc variant concurrentqueue)
 target_include_directories(rrc PUBLIC include)
 
-if (BUILD_TEST)
+if(BUILD_TEST)
     add_subdirectory(test)
-endif ()
+endif()

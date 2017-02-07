@@ -15,9 +15,9 @@ namespace rrc {
         // TODO: Docs and tests
         MechanismsHolder(std::shared_ptr<TaskQueueAdapter> queue);
 
-        AdvertisingMechanism& getAdvetisingMechanism();
+        AdvertisingMechanism& getAdvertisingMechanism();
 
-        const AdvertisingMechanism& getAdvetisingMechanism() const;
+        const AdvertisingMechanism& getAdvertisingMechanism() const;
 
 
     private:
