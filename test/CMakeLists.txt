@@ -15,7 +15,8 @@ set(SRCS
         src/core/NodeTest.cpp
         src/core/LinearLauncherTest.cpp
         src/core/AdvertiserTests.cpp
-        )
+        src/core/QueueAdapterFactoryTests.cpp
+        src/core/BufferTests.cpp)
 
 
 add_executable(tests ${SRCS})

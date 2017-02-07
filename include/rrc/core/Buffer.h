@@ -18,6 +18,10 @@ namespace rrc {
     public:
         Buffer(const uint8_t* bufferPtr, const size_t size);
 
+        Buffer(Buffer&& other) = default;
+
+        Buffer(const Buffer& other);
+
         const uint8_t* getBufferPointer() const;
 
         const size_t getSize() const;

@@ -20,6 +20,17 @@ rrc::Buffer::Buffer(const uint8_t* bufferPtr, const size_t size) {
     }
 }
 
+rrc::Buffer::Buffer(const Buffer& other) {
+    mSize = other.mSize;
+    uint8_t* bufferPtr = new uint8_t[mSize];
+    for(size_t i = 0; i < mSize; ++i) {
+        bufferPtr[i] = other.getBufferPointer()[i];
+    }
+    mBufferPtr = std::unique_ptr<uint8_t>(new uint8_t[mSize]);
+    memcpy(mBufferPtr.get(), bufferPtr, mSize);
+    delete[] bufferPtr;
+}
+
 
 bool rrc::Buffer::isEmpty() const {
     return mBufferPtr == nullptr;
@@ -37,8 +48,8 @@ const uint8_t* rrc::Buffer::getBufferPointer() const {
 
 
 bool rrc::Buffer::operator==(const rrc::Buffer& rhs) const {
-    return (mBufferPtr == rhs.mBufferPtr && mSize == rhs.mSize) ||
-            memcmp(mBufferPtr.get(), rhs.mBufferPtr.get(), std::min(mSize, rhs.mSize));
+    return mSize == rhs.mSize && ((mBufferPtr == rhs.mBufferPtr) ||
+            (0 == memcmp(mBufferPtr.get(), rhs.mBufferPtr.get(), std::min(mSize, rhs.mSize))));
 }
 
 
