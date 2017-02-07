@@ -11,12 +11,14 @@ set(SRCS
         src/core/TaskQueueTests.cpp
         src/core/DummyNode.cpp
         include/DummyNode.h
+        include/QueueAdapter.h
         src/core/BillboardTests.cpp
         src/core/NodeTest.cpp
         src/core/LinearLauncherTest.cpp
         src/core/AdvertiserTests.cpp
         src/core/QueueAdapterFactoryTests.cpp
-        src/core/BufferTests.cpp)
+        src/core/BufferTests.cpp
+        src/core/STLQueueAdapterTests.cpp)
 
 
 add_executable(tests ${SRCS})
