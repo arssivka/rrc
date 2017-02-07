@@ -8,7 +8,6 @@ set(SRCS
         src/core/PropertyTests.cpp
         src/core/SettingsHolderTests.cpp
         src/core/TopicTest.cpp
-        src/core/TaskQueueTests.cpp
         src/core/DummyNode.cpp
         include/DummyNode.h
         include/QueueAdapter.h
@@ -19,7 +18,8 @@ set(SRCS
         src/core/QueueAdapterFactoryTests.cpp
         src/core/BufferTests.cpp
         src/core/STLQueueAdapterTests.cpp
-        src/core/TaskQueueAdapterTests.cpp)
+        src/core/TaskQueueAdapterTests.cpp
+        src/core/ConcurrentQueueAdapterTests.cpp)
 
 
 add_executable(tests ${SRCS})

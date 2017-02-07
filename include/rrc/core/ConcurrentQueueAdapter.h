@@ -5,8 +5,7 @@
 
 #pragma once
 
-
-#include <lib/concurrentqueue/include/concurrentqueue.h>
+#include <concurrentqueue.h>
 #include "AbstractQueueAdapter.h"
 
 namespace rrc {
@@ -18,7 +17,7 @@ namespace rrc {
         }
 
         virtual void enqueue(T&& value) override {
-            mQueue.enqueue(std::move<T>(value));
+            mQueue.enqueue(std::forward<T>(value));
         }
 
         virtual bool tryDequeue(T& value) override {
@@ -26,7 +25,7 @@ namespace rrc {
         }
 
     private:
-        moodycamel::ConcurrentQueue mQueue;
+        moodycamel::ConcurrentQueue<T> mQueue;
 
     };
 }
