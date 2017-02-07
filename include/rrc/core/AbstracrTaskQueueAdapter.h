@@ -13,7 +13,7 @@
 namespace rrc {
     typedef std::function<void()> Task;
 
-    class TaskQueueAdapter : public AbstractQueueAdapter<Task> {
+    class AbstracrTaskQueueAdapter : public AbstractQueueAdapter<Task> {
     public:
         /**
          * @brief Enques function object with it's args

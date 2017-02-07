@@ -12,7 +12,7 @@ std::vector<std::string> rrc::AdvertisingMechanism::getTopicNames() const {
 }
 
 
-rrc::AdvertisingMechanism::AdvertisingMechanism(std::shared_ptr<TaskQueueAdapter> syncQueue)
+rrc::AdvertisingMechanism::AdvertisingMechanism(std::shared_ptr<AbstracrTaskQueueAdapter> syncQueue)
         : mSyncQueue(std::move(syncQueue)) {}
 
 

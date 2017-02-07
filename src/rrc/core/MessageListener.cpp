@@ -23,11 +23,11 @@ bool rrc::MessageListener::sendMessage(std::shared_ptr<rrc::Buffer> message) {
 }
 
 
-rrc::MessageListener::MessageListener(std::shared_ptr<TaskQueueAdapter> taskQueue, rrc::MessageListener::Callback&& callback)
+rrc::MessageListener::MessageListener(std::shared_ptr<AbstracrTaskQueueAdapter> taskQueue, rrc::MessageListener::Callback&& callback)
         : mTaskQueue(std::move(taskQueue)), mCallback(std::move(callback)) {}
 
 
-rrc::MessageListener::MessageListener(std::shared_ptr<TaskQueueAdapter> taskQueue, const rrc::MessageListener::Callback& callback)
+rrc::MessageListener::MessageListener(std::shared_ptr<AbstracrTaskQueueAdapter> taskQueue, const rrc::MessageListener::Callback& callback)
         : mTaskQueue(taskQueue), mCallback(callback) {}
 
 

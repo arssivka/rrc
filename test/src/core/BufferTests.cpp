@@ -18,7 +18,7 @@ TEST(BufferTests, BasicTest) {
     EXPECT_EQ(testBuffer.getBufferPointer()[4], buf[4]);
 }
 
-TEST(BufferTest, EmptyTest) {
+TEST(BufferTests, EmptyTest) {
     uint8_t buf[] = {1, 0, 1, 0, 1};
     Buffer testBuffer(buf, 0);
     EXPECT_TRUE(testBuffer.isEmpty());
@@ -26,7 +26,7 @@ TEST(BufferTest, EmptyTest) {
 }
 
 
-TEST(BufferTest, EqTest) {
+TEST(BufferTests, EqTest) {
     uint8_t buf[] = {1, 0, 1, 0, 1};
     uint8_t buf1[] = {1, 1, 1, 0, 1};
     uint8_t buf2[] = {1, 0, 1, 0, 1, 0};

@@ -10,12 +10,12 @@
 #include "MessageListener.h"
 #include "Buffer.h"
 #include "TopicHolder.h"
-#include "TaskQueueAdapter.h"
+#include "AbstracrTaskQueueAdapter.h"
 
 namespace rrc {
     class AdvertisingMechanism : private NonCopyable {
     public:
-        AdvertisingMechanism(std::shared_ptr<TaskQueueAdapter> syncQueue);
+        AdvertisingMechanism(std::shared_ptr<AbstracrTaskQueueAdapter> syncQueue);
 
         /**
          * @brief Send a message
@@ -42,7 +42,7 @@ namespace rrc {
 
     private:
         TopicHolder<std::string> mTopicHolder;
-        std::shared_ptr<TaskQueueAdapter> mSyncQueue;
+        std::shared_ptr<AbstracrTaskQueueAdapter> mSyncQueue;
     };
 }
 

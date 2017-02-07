@@ -8,7 +8,7 @@
 
 #include "Node.h"
 #include "AbstractQueueAdapter.h"
-#include "TaskQueueAdapter.h"
+#include "AbstracrTaskQueueAdapter.h"
 
 namespace rrc {
     /**
@@ -51,9 +51,9 @@ namespace rrc {
         virtual void removeNode(std::shared_ptr<Node> node) = 0;
 
         // TODO: Docs and tests
-        virtual void addSyncQueue(std::shared_ptr<TaskQueueAdapter> queue) = 0;
+        virtual void addSyncQueue(std::shared_ptr<AbstracrTaskQueueAdapter> queue) = 0;
 
-        virtual void removeSyncQueue(std::shared_ptr<TaskQueueAdapter> queue) = 0;
+        virtual void removeSyncQueue(std::shared_ptr<AbstracrTaskQueueAdapter> queue) = 0;
     };
 
 }

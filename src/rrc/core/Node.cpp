@@ -8,7 +8,7 @@
 rrc::Node::~Node() { }
 
 
-rrc::Node::Node(std::shared_ptr<TaskQueueAdapter> taskQueue, rrc::MechanismsHolder& mechanismsHolder)
+rrc::Node::Node(std::shared_ptr<AbstracrTaskQueueAdapter> taskQueue, rrc::MechanismsHolder& mechanismsHolder)
         : mTaskQueue(std::move(taskQueue)), mMechanismsHolder(mechanismsHolder) {}
 
 

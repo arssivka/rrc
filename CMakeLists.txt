@@ -17,8 +17,8 @@ set(SRCS
         src/rrc/core/Property.cpp
         include/rrc/core/Property.h
         include/rrc/core/CopyOnWrite.h
-        src/rrc/core/TaskQueueAdapter.cpp
-        include/rrc/core/TaskQueueAdapter.h
+        src/rrc/core/AbstracrTaskQueueAdapter.cpp
+        include/rrc/core/AbstracrTaskQueueAdapter.h
         include/rrc/core/TopicHolder.h
         src/rrc/core/Topic.cpp
         include/rrc/core/Topic.h
@@ -34,7 +34,6 @@ set(SRCS
         include/rrc/core/AbstractQueueAdapter.h
         include/rrc/core/ConcurrentQueueAdapter.h
         include/rrc/core/STLQueueAdapter.h
-        include/rrc/core/RingQueueAdapter.h
         src/rrc/core/MechanismsHolder.cpp
         include/rrc/core/MechanismsHolder.h
         src/rrc/core/Rate.cpp

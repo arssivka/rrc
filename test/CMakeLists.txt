@@ -18,7 +18,8 @@ set(SRCS
         src/core/AdvertiserTests.cpp
         src/core/QueueAdapterFactoryTests.cpp
         src/core/BufferTests.cpp
-        src/core/STLQueueAdapterTests.cpp)
+        src/core/STLQueueAdapterTests.cpp
+        src/core/TaskQueueAdapterTests.cpp)
 
 
 add_executable(tests ${SRCS})

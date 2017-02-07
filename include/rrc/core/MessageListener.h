@@ -8,7 +8,7 @@
 
 #include <memory>
 #include "Buffer.h"
-#include "TaskQueueAdapter.h"
+#include "AbstracrTaskQueueAdapter.h"
 
 namespace rrc {
     class MessageListener {
@@ -16,9 +16,9 @@ namespace rrc {
         typedef std::function<void(const Buffer&)> Callback;
 
         // TODO Tests and docs
-        MessageListener(std::shared_ptr<TaskQueueAdapter> taskQueue, Callback&& callback);
+        MessageListener(std::shared_ptr<AbstracrTaskQueueAdapter> taskQueue, Callback&& callback);
 
-        MessageListener(std::shared_ptr<TaskQueueAdapter> taskQueue, const Callback& callback);
+        MessageListener(std::shared_ptr<AbstracrTaskQueueAdapter> taskQueue, const Callback& callback);
 
         bool isOrphan() const;
 
@@ -34,7 +34,7 @@ namespace rrc {
         ~MessageListener();
 
     private:
-        std::weak_ptr<TaskQueueAdapter> mTaskQueue;
+        std::weak_ptr<AbstracrTaskQueueAdapter> mTaskQueue;
         std::function<void(const Buffer&)> mCallback;
 
     };
