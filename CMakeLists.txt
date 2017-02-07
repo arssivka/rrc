@@ -12,13 +12,13 @@ add_subdirectory(lib)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(SRCS
         include/rrc/core/AbstractLauncher.h
-        include/rrc/core/AbstractNode.h
+        include/rrc/core/Node.h
         include/rrc/core/NonCopyable.h
         src/rrc/core/Property.cpp
         include/rrc/core/Property.h
         include/rrc/core/CopyOnWrite.h
-        src/rrc/core/TaskQueueWrapper.cpp
-        include/rrc/core/TaskQueueWrapper.h
+        src/rrc/core/TaskQueueAdapter.cpp
+        include/rrc/core/TaskQueueAdapter.h
         include/rrc/core/TopicHolder.h
         src/rrc/core/Topic.cpp
         include/rrc/core/Topic.h
@@ -29,15 +29,6 @@ set(SRCS
         include/rrc/core/AbstractPropertyListener.h
         include/rrc/core/PropertyListener.h
         src/rrc/core/PropertyListener.cpp
-#        include/rrc/core/AbstractMessageFilter.h
-#        src/rrc/core/BypassMessageFilter.cpp
-#        include/rrc/core/BypassMessageFilter.h
-#        src/rrc/core/RejectMessageFilter.cpp
-#        include/rrc/core/RejectMessageFilter.h
-#        src/rrc/core/TypeIdMessageFilter.cpp
-#        include/rrc/core/TypeIdMessageFilter.h
-#        src/rrc/core/CallbackMessageFilter.cpp
-#        include/rrc/core/CallbackMessageFilter.h
         src/rrc/core/PropertyDictionary.cpp
         include/rrc/core/PropertyDictionary.h
         include/rrc/core/AbstractQueueAdapter.h
@@ -52,64 +43,22 @@ set(SRCS
         include/rrc/core/AdvertisingMechanism.h
         src/rrc/core/NodeMechanism.cpp
         include/rrc/core/NodeMechanism.h
-        src/rrc/core/AbstractNode.cpp
-        include/rrc/meta.h
-        include/rrc/meta/MetaArrayGenerator.h
+        src/rrc/core/Node.cpp
         include/rrc/core/Serializer.h
-        include/rrc/core/Message.h
-        include/rrc/core/ArrayReference.h
-        include/rrc/core/Varint.h
-        include/rrc/meta/FunctionTraits.h
-        include/rrc/meta/MethodTraits.h
-        include/rrc/meta/MetaRename.h
-        include/rrc/meta/MetaLength.h
-        include/rrc/meta/MetaList.h
-        include/rrc/meta/MetaIf.h
-        include/rrc/meta/MetaDecay.h
-        include/rrc/meta/MetaPushFront.h
-        include/rrc/meta/MetaFront.h
-        include/rrc/meta/MetaPopFront.h
-        include/rrc/meta/MetaClearList.h
-        include/rrc/meta/MetaEmpty.h
-        include/rrc/meta/MetaTransform.h
-        include/rrc/meta/MetaAppend.h
-        include/rrc/meta/MetaIntegralSequence.h
-        include/rrc/meta/MetaBackSequenceElement.h
-        include/rrc/meta/MetaBack.h
-        include/rrc/meta/MetaRenameSequence.h
-        include/rrc/meta/MetaAppendSequence.h
-        include/rrc/meta/MetaPack.h
-        include/rrc/meta/MetaPacker.h
-        include/rrc/meta/MetaSequenceConcatenator.h
-        include/rrc/meta/MetaConcatenator.h
-        include/rrc/meta/MetaVarintEncode.h
+        include/rrc/core/Buffer.h
         include/rrc/core/StructureTypeQuantityGenerator.h
-        include/rrc/meta/MetaVarintEncodeSequence.h
-        include/rrc/meta/IterationTags.h
-        include/rrc/meta/MetaListSize.h
-        include/rrc/meta/MetaArrayGenerator.h
-        include/rrc/meta/MetaSequenceSize.h
-        include/rrc/core/TypesIdentifiersArray.h
-        include/rrc/core/TypeSizesArray.h
-        include/rrc/meta/ForEachTuple.h
-        include/rrc/meta/MetaGenerateSequence.h
-        include/rrc/meta/ForEachVariadic.h
-        include/rrc/meta/MetaGenerateSequence.h
-        include/rrc/meta/MetaPopFrontSequence.h
-        include/rrc/meta/MetaFrontSequenceElement.h
-        include/rrc/meta/ForEachVariadic.h
-        src/rrc/core/Message.cpp
-        include/rrc/core/ObjectFactory.h)
+        src/rrc/core/Buffer.cpp
+        include/rrc/core/ObjectFactory.h
+        include/rrc/core/TaskCapture.h)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
-               "${PROJECT_BINARY_DIR}/VersionDefines.h")
-
+        "${PROJECT_BINARY_DIR}/VersionDefines.h")
 
 
 add_library(rrc ${SRCS})
 target_link_libraries(rrc variant concurrentqueue)
 target_include_directories(rrc PUBLIC include)
 
-if(BUILD_TEST)
+if (BUILD_TEST)
     add_subdirectory(test)
-endif()
+endif ()

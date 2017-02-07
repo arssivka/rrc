@@ -7,14 +7,13 @@
 
 
 #include <type_traits>
-#include "include/rrc/meta.h"
 #include "AdvertisingMechanism.h"
 
 namespace rrc {
     class MechanismsHolder {
     public:
         // TODO: Docs and tests
-        MechanismsHolder(TaskQueueWrapper queue);
+        MechanismsHolder(std::shared_ptr<TaskQueueAdapter> queue);
 
         AdvertisingMechanism& getAdvetisingMechanism();
 

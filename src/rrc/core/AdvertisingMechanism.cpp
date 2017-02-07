@@ -4,6 +4,7 @@
  */
 
 #include <rrc/core/AdvertisingMechanism.h>
+#include <include/rrc/core/TaskCapture.h>
 
 
 std::vector<std::string> rrc::AdvertisingMechanism::getTopicNames() const {
@@ -11,17 +12,14 @@ std::vector<std::string> rrc::AdvertisingMechanism::getTopicNames() const {
 }
 
 
-rrc::AdvertisingMechanism::AdvertisingMechanism(TaskQueueWrapper syncQueue)
-        : mSyncQueue(syncQueue) {}
+rrc::AdvertisingMechanism::AdvertisingMechanism(std::shared_ptr<TaskQueueAdapter> syncQueue)
+        : mSyncQueue(std::move(syncQueue)) {}
 
 
-void rrc::AdvertisingMechanism::sendMessage(const std::string& topicName, std::shared_ptr<rrc::Message> message) {
+void rrc::AdvertisingMechanism::sendMessage(const std::string& topicName, std::shared_ptr<rrc::Buffer> message) {
     auto& topicHolder = mTopicHolder;
-    mSyncQueue.enqueue([&topicHolder, topicName, message]() {
-        std::shared_ptr<Topic> topic = topicHolder.getTopic(topicName);
-        if (topic != nullptr) {
-            topic->sendMessage(message);
-        }
+    mSyncQueue->enqueue([&topicHolder, topicName, capturedMessage = std::move(message)]() mutable {
+        topicHolder.sendMessage(topicName, std::move(capturedMessage));
     });
 }
 
@@ -29,22 +27,17 @@ void rrc::AdvertisingMechanism::sendMessage(const std::string& topicName, std::s
 void rrc::AdvertisingMechanism::addListener(const std::string& topicName,
                                             std::shared_ptr<rrc::MessageListener> listener) {
     auto& topicHolder = mTopicHolder;
-    mSyncQueue.enqueue([&topicHolder, topicName, listener]() {
-        std::shared_ptr<Topic> topic = topicHolder.getTopic(topicName);
-        if (topic == nullptr) {
-            topicHolder.createTopic(topicName);
-            topic = topicHolder.getTopic(topicName);
-        }
-        topic->addListener(listener);
-
+    mSyncQueue->enqueue([&topicHolder, topicName, capturedListener = std::move(listener)]() mutable {
+        topicHolder.addListener(topicName, std::move(capturedListener));
     });
 }
 
 
-void rrc::AdvertisingMechanism::removeTopic(const std::string& topicName) {
+void
+rrc::AdvertisingMechanism::removeListener(const std::string& topicName, const std::weak_ptr<MessageListener> listener) {
     auto& topicHolder = mTopicHolder;
-    mSyncQueue.enqueue([&topicHolder, topicName]() {
-        topicHolder.removeTopic(topicName);
+    mSyncQueue->enqueue([&topicHolder, topicName, capturedListener = std::move(listener)]() mutable {
+        topicHolder.removeListener(topicName, std::move(capturedListener));
     });
 }
 

@@ -28,36 +28,39 @@ namespace rrc {
         }
 
         /**
-         * @brief Creates topic
+         * @brief Register message listener
          * @param topicName Name of the topic
+         * @param listener Pointer to listener to register
          */
-        void createTopic(const TopicName& topicName) {
-            auto exist = mTopicHash.find(topicName) != mTopicHash.end();
-            if (!exist) {
-                mTopicHash.insert({topicName, std::make_shared<Topic>()});
+        void addListener(const TopicName& name, std::shared_ptr<MessageListener> listener) {
+            auto found = mTopicHash.find(name);
+            if (found == mTopicHash.end()) {
+                found = mTopicHash.emplace(name, Topic()).first;
+            }
+            auto& topic = found->second;
+            topic.addListener(std::move(listener));
+        }
+
+        // TODO: Docs
+        void removeListener(const TopicName& name, std::weak_ptr<MessageListener> listener) {
+            auto iterator = mTopicHash.find(name);
+            if (iterator != mTopicHash.end()) {
+                auto& topic = iterator->second;
+                topic.removeListener(listener);
             }
         }
 
         /**
-         * @brief Returns topic for the specified name
-         * @param topicName Name of the needed topic
-         * @return Topic if found otherwise nullptr
+         * @brief Sends the message
+         * @param topicName Name of the topic
+         * @param message Pointer to message that needs to be sent
          */
-        std::shared_ptr<Topic> getTopic(const TopicName& topicName) {
-            auto found = mTopicHash.find(topicName);
+        void sendMessage(const TopicName& name, std::shared_ptr<Buffer> message) {
+            auto found = mTopicHash.find(name);
             if (found != mTopicHash.end()) {
-                return found->second;
-            } else {
-                return nullptr;
+                auto& topic = found->second;
+                topic.sendMessage(std::move(message));
             }
-        }
-
-        /**
-         * @brief Removes topic for the specified name
-         * @param topicName Name of the topic
-         */
-        void removeTopic(const TopicName& topicName) {
-            mTopicHash.erase(topicName);
         }
 
         /**
@@ -75,7 +78,7 @@ namespace rrc {
 
 
     private:
-        std::unordered_map<TopicName, std::shared_ptr<Topic>> mTopicHash;
+        std::unordered_map<TopicName, Topic> mTopicHash;
     };
 }
 

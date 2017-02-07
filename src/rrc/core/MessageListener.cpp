@@ -9,10 +9,11 @@
 rrc::MessageListener::~MessageListener() { }
 
 
-bool rrc::MessageListener::sendMessage(std::shared_ptr<rrc::Message> message) {
-    if (!mTaskQueue.isOrphan()) {
+bool rrc::MessageListener::sendMessage(std::shared_ptr<rrc::Buffer> message) {
+    auto queue = mTaskQueue.lock();
+    if (queue != nullptr) {
         auto& callback = mCallback;
-        mTaskQueue.enqueue([callback, message]() {
+        queue->enqueue([callback, message]() {
             callback(*message);
         });
         return true;
@@ -22,9 +23,14 @@ bool rrc::MessageListener::sendMessage(std::shared_ptr<rrc::Message> message) {
 }
 
 
-rrc::MessageListener::MessageListener(rrc::TaskQueueWrapper taskQueue, rrc::MessageListener::Callback&& callback)
-        : mTaskQueue(taskQueue), mCallback(std::move(callback)) {}
+rrc::MessageListener::MessageListener(std::shared_ptr<TaskQueueAdapter> taskQueue, rrc::MessageListener::Callback&& callback)
+        : mTaskQueue(std::move(taskQueue)), mCallback(std::move(callback)) {}
 
 
-rrc::MessageListener::MessageListener(rrc::TaskQueueWrapper taskQueue, const rrc::MessageListener::Callback& callback)
+rrc::MessageListener::MessageListener(std::shared_ptr<TaskQueueAdapter> taskQueue, const rrc::MessageListener::Callback& callback)
         : mTaskQueue(taskQueue), mCallback(callback) {}
+
+
+bool rrc::MessageListener::isOrphan() const {
+    return mTaskQueue.use_count() == 0;
+}

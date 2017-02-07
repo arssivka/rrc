@@ -26,13 +26,16 @@ namespace rrc {
          * @brief Register message listener
          * @param listener Pointer to listener to register
          */
-        void addListener(std::weak_ptr<MessageListener> listener);
+        void addListener(std::shared_ptr<MessageListener> listener);
+
+        // TODO: Docs
+        void removeListener(std::weak_ptr<MessageListener> listener);
 
         /**
          * @brief Sends the message
          * @param message Pointer to message that needs to be sent
          */
-        void sendMessage(std::shared_ptr<Message> message);
+        void sendMessage(std::shared_ptr<Buffer> message);
 
         /**
          * @brief Checks if this topic has listeners
@@ -41,7 +44,7 @@ namespace rrc {
         bool hasListeners() const;
 
     private:
-        std::list<std::weak_ptr<MessageListener>> mListenersList;
+        std::list<std::shared_ptr<MessageListener>> mListenersList;
     };
 }
 

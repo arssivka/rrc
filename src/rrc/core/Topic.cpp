@@ -6,17 +6,25 @@
 #include <rrc/core/Topic.h>
 
 
-void rrc::Topic::addListener(std::weak_ptr<rrc::MessageListener> listener) {
+void rrc::Topic::addListener(std::shared_ptr<rrc::MessageListener> listener) {
     mListenersList.push_front(std::move(listener));
 }
 
-void rrc::Topic::sendMessage(std::shared_ptr<Message> message) {
+
+void rrc::Topic::removeListener(std::weak_ptr<rrc::MessageListener> listener) {
+    auto lock = listener.lock();
+    if (lock != nullptr) {
+        mListenersList.remove_if([&lock](const std::shared_ptr<MessageListener>& current) {
+            return current == lock;
+        });
+    }
+}
+
+
+void rrc::Topic::sendMessage(std::shared_ptr<Buffer> message) {
     for (auto it = mListenersList.begin(); it != mListenersList.end(); ++it) {
-        auto listener = it->lock();
-        bool sent = false;
-        if (listener != nullptr) {
-            sent = listener->sendMessage(message);
-        }
+        auto& listener = *it;
+        bool sent = listener->sendMessage(message);
         if (!sent) {
             mListenersList.erase(it);
         }

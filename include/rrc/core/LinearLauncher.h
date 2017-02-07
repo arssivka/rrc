@@ -8,7 +8,7 @@
 
 #include <forward_list>
 #include "AbstractLauncher.h"
-#include "AbstractNode.h"
+#include "Node.h"
 
 namespace rrc {
     /**
@@ -47,22 +47,22 @@ namespace rrc {
         * @brief Registers node
         * @param node Pointer to node instance
         */
-        virtual void addNode(std::shared_ptr<AbstractNode> node) override;
+        virtual void addNode(std::shared_ptr<Node> node) override;
 
         /**
          * @brief Removes the node from the list
          * @param node Pointer to node instance
          */
-        virtual void removeNode(std::shared_ptr<AbstractNode> node) override;
+        virtual void removeNode(std::shared_ptr<Node> node) override;
 
-        virtual void addSyncQueue(TaskQueueWrapper queue) override;
+        virtual void addSyncQueue(std::shared_ptr<TaskQueueAdapter> queue) override;
 
-        virtual void removeSyncQueue(TaskQueueWrapper queue) override;
+        virtual void removeSyncQueue(std::shared_ptr<TaskQueueAdapter> queue) override;
 
     private:
         bool mFinished;
-        std::forward_list<std::shared_ptr<AbstractNode>> mNodesList;
-        std::forward_list<TaskQueueWrapper> mQueuesList;
+        std::forward_list<std::shared_ptr<Node>> mNodesList;
+        std::forward_list<std::shared_ptr<TaskQueueAdapter>> mQueuesList;
     };
 }
 

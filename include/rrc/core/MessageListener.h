@@ -7,25 +7,26 @@
 
 
 #include <memory>
-#include "Message.h"
-#include "TypeConverter.h"
-#include "TaskQueueWrapper.h"
+#include "Buffer.h"
+#include "TaskQueueAdapter.h"
 
 namespace rrc {
     class MessageListener {
     public:
-        typedef std::function<void(const Message&)> Callback;
+        typedef std::function<void(const Buffer&)> Callback;
 
         // TODO Tests and docs
-        MessageListener(TaskQueueWrapper taskQueue, Callback&& callback);
+        MessageListener(std::shared_ptr<TaskQueueAdapter> taskQueue, Callback&& callback);
 
-        MessageListener(TaskQueueWrapper taskQueue, const Callback& callback);
+        MessageListener(std::shared_ptr<TaskQueueAdapter> taskQueue, const Callback& callback);
+
+        bool isOrphan() const;
 
         /**
          * @brief Adds message to queue
          * @param message Pointer to desired message
          */
-        bool sendMessage(std::shared_ptr<Message> message);
+        bool sendMessage(std::shared_ptr<Buffer> message);
 
         /**
          * @brief Virtual destructor of AbstractMessageListener
@@ -33,8 +34,8 @@ namespace rrc {
         ~MessageListener();
 
     private:
-        TaskQueueWrapper mTaskQueue;
-        std::function<void(const Message&)> mCallback;
+        std::weak_ptr<TaskQueueAdapter> mTaskQueue;
+        std::function<void(const Buffer&)> mCallback;
 
     };
 }

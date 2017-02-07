@@ -6,9 +6,9 @@
 #pragma once
 
 
-#include "AbstractNode.h"
+#include "Node.h"
 #include "AbstractQueueAdapter.h"
-#include "TaskQueueWrapper.h"
+#include "TaskQueueAdapter.h"
 
 namespace rrc {
     /**
@@ -42,17 +42,18 @@ namespace rrc {
          * @brief Registers node
          * @param node Pointer to node instance
          */
-        virtual void addNode(std::shared_ptr<AbstractNode> node) = 0;
+        virtual void addNode(std::shared_ptr<Node> node) = 0;
 
         /**
          * @brief Removes the node from the list
          * @param node Pointer to node instance
          */
-        virtual void removeNode(std::shared_ptr<AbstractNode> node) = 0;
+        virtual void removeNode(std::shared_ptr<Node> node) = 0;
 
-        virtual void addSyncQueue(TaskQueueWrapper queue) = 0;
+        // TODO: Docs and tests
+        virtual void addSyncQueue(std::shared_ptr<TaskQueueAdapter> queue) = 0;
 
-        virtual void removeSyncQueue(TaskQueueWrapper queue) = 0;
+        virtual void removeSyncQueue(std::shared_ptr<TaskQueueAdapter> queue) = 0;
     };
 
 }
