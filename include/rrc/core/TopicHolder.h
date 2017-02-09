@@ -32,7 +32,7 @@ namespace rrc {
          * @param topicName Name of the topic
          * @param listener Pointer to listener to register
          */
-        void addListener(const TopicName& name, std::shared_ptr<MessageListener> listener) {
+        void addListener(const TopicName& name, std::shared_ptr<TaskHub> listener) {
             auto found = mTopicHash.find(name);
             if (found == mTopicHash.end()) {
                 found = mTopicHash.emplace(name, Topic()).first;
@@ -42,7 +42,7 @@ namespace rrc {
         }
 
         // TODO: Docs
-        void removeListener(const TopicName& name, std::weak_ptr<MessageListener> listener) {
+        void removeListener(const TopicName& name, std::weak_ptr<TaskHub> listener) {
             auto iterator = mTopicHash.find(name);
             if (iterator != mTopicHash.end()) {
                 auto& topic = iterator->second;

@@ -18,10 +18,10 @@ void rrc::Node::sendMessage(const std::string& topic, std::shared_ptr<rrc::Buffe
 }
 
 
-const std::weak_ptr<rrc::MessageListener> rrc::Node::subscribe(const std::string& topicName,
-                                                               MessageListener::Callback&& callback) {
+const std::weak_ptr<rrc::TaskHub> rrc::Node::subscribe(const std::string& topicName,
+                                                               TaskHub::Callback&& callback) {
     auto& mechanism = mMechanismsHolder.getAdvertisingMechanism();
-    auto listener = std::make_shared<MessageListener>(mTaskQueue, std::move(callback));
+    auto listener = std::make_shared<TaskHub>(mTaskQueue, std::move(callback));
     mechanism.addListener(topicName, listener);
     return listener;
 }
@@ -32,7 +32,7 @@ void rrc::Node::entry() {
 }
 
 
-void rrc::Node::unsubscribe(const std::string& topicName, const std::weak_ptr<rrc::MessageListener> listener) {
+void rrc::Node::unsubscribe(const std::string& topicName, const std::weak_ptr<rrc::TaskHub> listener) {
     auto& mechanism = mMechanismsHolder.getAdvertisingMechanism();
     mechanism.removeListener(topicName, listener);
 }

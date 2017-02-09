@@ -20,10 +20,10 @@ namespace rrc {
         // TODO: Tests and docs
         Node(std::shared_ptr<AbstracrTaskQueueAdapter> taskQueue, MechanismsHolder& mechanismsHolder);
 
-        const std::weak_ptr<MessageListener> subscribe(const std::string& topicName,
-                                                       MessageListener::Callback&& callback);
+        const std::weak_ptr<TaskHub> subscribe(const std::string& topicName,
+                                                       TaskHub::Callback&& callback);
 
-        void unsubscribe(const std::string& topicName, const std::weak_ptr<MessageListener> listener);
+        void unsubscribe(const std::string& topicName, const std::weak_ptr<TaskHub> listener);
 
         void sendMessage(const std::string& topic, std::shared_ptr<Buffer> message);
 

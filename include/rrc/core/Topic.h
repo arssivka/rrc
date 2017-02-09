@@ -8,7 +8,7 @@
 
 #include <list>
 #include <memory>
-#include "MessageListener.h"
+#include "TaskHub.h"
 #include "NonCopyable.h"
 
 namespace rrc {
@@ -26,10 +26,10 @@ namespace rrc {
          * @brief Register message listener
          * @param listener Pointer to listener to register
          */
-        void addListener(std::shared_ptr<MessageListener> listener);
+        void addListener(std::shared_ptr<TaskHub> listener);
 
         // TODO: Docs
-        void removeListener(std::weak_ptr<MessageListener> listener);
+        void removeListener(std::weak_ptr<TaskHub> listener);
 
         /**
          * @brief Sends the message
@@ -44,7 +44,7 @@ namespace rrc {
         bool hasListeners() const;
 
     private:
-        std::list<std::shared_ptr<MessageListener>> mListenersList;
+        std::list<std::shared_ptr<TaskHub>> mListenersList;
     };
 }
 

@@ -11,14 +11,14 @@
 #include "AbstracrTaskQueueAdapter.h"
 
 namespace rrc {
-    class MessageListener {
+    class TaskHub {
     public:
         typedef std::function<void(const Buffer&)> Callback;
 
         // TODO Tests and docs
-        MessageListener(std::shared_ptr<AbstracrTaskQueueAdapter> taskQueue, Callback&& callback);
+        TaskHub(std::weak_ptr<AbstracrTaskQueueAdapter> taskQueue, Callback&& callback);
 
-        MessageListener(std::shared_ptr<AbstracrTaskQueueAdapter> taskQueue, const Callback& callback);
+        TaskHub(std::weak_ptr<AbstracrTaskQueueAdapter> taskQueue, const Callback& callback);
 
         bool isOrphan() const;
 
@@ -26,12 +26,12 @@ namespace rrc {
          * @brief Adds message to queue
          * @param message Pointer to desired message
          */
-        bool sendMessage(std::shared_ptr<Buffer> message);
+        bool enqueueTask(std::shared_ptr<Buffer> message);
 
         /**
          * @brief Virtual destructor of AbstractMessageListener
          */
-        ~MessageListener();
+        ~TaskHub();
 
     private:
         std::weak_ptr<AbstracrTaskQueueAdapter> mTaskQueue;

@@ -24,8 +24,8 @@ set(SRCS
         include/rrc/core/Topic.h
         src/rrc/core/LinearLauncher.cpp
         include/rrc/core/LinearLauncher.h
-        include/rrc/core/MessageListener.h
-        src/rrc/core/MessageListener.cpp
+        include/rrc/core/TaskHub.h
+        src/rrc/core/TaskHub.cpp
         include/rrc/core/AbstractPropertyListener.h
         include/rrc/core/PropertyListener.h
         src/rrc/core/PropertyListener.cpp
@@ -48,7 +48,12 @@ set(SRCS
         include/rrc/core/StructureTypeQuantityGenerator.h
         src/rrc/core/Buffer.cpp
         include/rrc/core/QueueAdapterFactory.h
-        include/rrc/core/TaskCapture.h)
+        include/rrc/core/TaskCapture.h
+        test/src/core/Service.cpp
+        include/rrc/core/Service.h
+        include/rrc/core/ServiceHolder.h
+        test/src/core/ServiceMechanism.cpp
+        include/rrc/core/ServiceMechanism.h)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
         "${PROJECT_BINARY_DIR}/VersionDefines.h")

@@ -11,10 +11,8 @@ set(SRCS
         src/core/DummyNode.cpp
         include/DummyNode.h
         include/QueueAdapter.h
-        src/core/BillboardTests.cpp
         src/core/NodeTest.cpp
         src/core/LinearLauncherTest.cpp
-        src/core/AdvertiserTests.cpp
         src/core/QueueAdapterFactoryTests.cpp
         src/core/BufferTests.cpp
         src/core/STLQueueAdapterTests.cpp

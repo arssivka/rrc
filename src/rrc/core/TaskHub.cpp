@@ -3,13 +3,13 @@
  *  @date 9/23/16
  */
 
-#include <rrc/core/MessageListener.h>
+#include <rrc/core/TaskHub.h>
 
 
-rrc::MessageListener::~MessageListener() { }
+rrc::TaskHub::~TaskHub() { }
 
 
-bool rrc::MessageListener::sendMessage(std::shared_ptr<rrc::Buffer> message) {
+bool rrc::TaskHub::enqueueTask(std::shared_ptr<rrc::Buffer> message) {
     auto queue = mTaskQueue.lock();
     if (queue != nullptr) {
         auto& callback = mCallback;
@@ -23,14 +23,14 @@ bool rrc::MessageListener::sendMessage(std::shared_ptr<rrc::Buffer> message) {
 }
 
 
-rrc::MessageListener::MessageListener(std::shared_ptr<AbstracrTaskQueueAdapter> taskQueue, rrc::MessageListener::Callback&& callback)
+rrc::TaskHub::TaskHub(std::weak_ptr<AbstracrTaskQueueAdapter> taskQueue, rrc::TaskHub::Callback&& callback)
         : mTaskQueue(std::move(taskQueue)), mCallback(std::move(callback)) {}
 
 
-rrc::MessageListener::MessageListener(std::shared_ptr<AbstracrTaskQueueAdapter> taskQueue, const rrc::MessageListener::Callback& callback)
+rrc::TaskHub::TaskHub(std::weak_ptr<AbstracrTaskQueueAdapter> taskQueue, const rrc::TaskHub::Callback& callback)
         : mTaskQueue(taskQueue), mCallback(callback) {}
 
 
-bool rrc::MessageListener::isOrphan() const {
+bool rrc::TaskHub::isOrphan() const {
     return mTaskQueue.use_count() == 0;
 }
