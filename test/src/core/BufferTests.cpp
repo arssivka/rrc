@@ -78,3 +78,17 @@ TEST(BufferTests, MoveTest) {
     Buffer testBuffer1(buf, 5);
     EXPECT_TRUE(testBuffer == testBuffer1);
 }
+
+TEST(BufferTests, CopyAssigmentTest) {
+    uint8_t buf[] = {0, 1, 2, 3, 4};
+    Buffer testBuffer(buf, 5);
+    Buffer testBuffer1 = testBuffer;
+    EXPECT_TRUE(testBuffer == testBuffer1);
+}
+
+TEST(BufferTests, MoveAssigmentTest) {
+    uint8_t buf[] = {0, 1, 2, 3, 4};
+    Buffer testBuffer(buf, 5);
+    Buffer testBuffer1 = Buffer(buf, 5);
+    EXPECT_TRUE(testBuffer == testBuffer1);
+}

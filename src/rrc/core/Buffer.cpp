@@ -26,6 +26,13 @@ rrc::Buffer::Buffer(const Buffer& other) {
     memcpy(mBufferPtr.get(), other.getBufferPointer(), mSize);
 }
 
+rrc::Buffer& rrc::Buffer::operator=(const rrc::Buffer& other) {
+    mSize = other.mSize;
+    mBufferPtr = std::unique_ptr<uint8_t>(new uint8_t[mSize]);
+    memcpy(mBufferPtr.get(), other.getBufferPointer(), mSize);
+    return *this;
+}
+
 
 bool rrc::Buffer::isEmpty() const {
     return mBufferPtr == nullptr;
@@ -52,9 +59,10 @@ bool rrc::Buffer::operator!=(const rrc::Buffer& rhs) const {
     return !(rhs == *this);
 }
 
-
-std::ostream& operator<<(std::ostream& os, const rrc::Buffer& buffer) {
-    std::ostream_iterator<uint8_t> it(os);
-    std::copy(buffer.begin(), buffer.end(), it);
-    return os;
+namespace rrc {
+    std::ostream &operator<<(std::ostream &os, const rrc::Buffer &buffer) {
+        std::ostream_iterator<uint8_t> it(os);
+        std::copy(buffer.begin(), buffer.end(), it);
+        return os;
+    }
 }

@@ -17,7 +17,9 @@ set(SRCS
         src/core/BufferTests.cpp
         src/core/STLQueueAdapterTests.cpp
         src/core/TaskQueueAdapterTests.cpp
-        src/core/ConcurrentQueueAdapterTests.cpp)
+        src/core/ConcurrentQueueAdapterTests.cpp
+        src/core/TaskHubTests.cpp
+        src/core/ServiceTests.cpp)
 
 
 add_executable(tests ${SRCS})

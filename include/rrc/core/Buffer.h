@@ -32,6 +32,10 @@ namespace rrc {
 
         bool operator!=(const Buffer& rhs) const;
 
+        Buffer& operator=(const Buffer& other);
+
+        Buffer& operator=(Buffer&& other) = default;
+
         const uint8_t* begin() const noexcept { return this->getBufferPointer(); }
 
         const uint8_t* end() const noexcept { return this->getBufferPointer() + this->getSize(); }

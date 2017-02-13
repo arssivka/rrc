@@ -26,6 +26,5 @@ namespace rrc {
 
     private:
         moodycamel::ConcurrentQueue<T> mQueue;
-
     };
 }
