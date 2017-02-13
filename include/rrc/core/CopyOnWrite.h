@@ -31,6 +31,16 @@ namespace rrc {
                 : mData(std::move(sptr)) {
         }
 
+        const T* operator*() const {
+            this->ensureInitialized();
+            return mData.get();
+        }
+
+        T* operator*() {
+            this->ensureUnique();
+            return mData.get();
+        }
+
         const T* operator->() const {
             this->ensureInitialized();
             return mData.get();

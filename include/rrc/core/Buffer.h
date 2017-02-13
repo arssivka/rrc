@@ -32,29 +32,21 @@ namespace rrc {
 
         bool operator!=(const Buffer& rhs) const;
 
-        const uint8_t* begin() const noexcept { return this->getBufferPointer(); }
+        const uint8_t* begin() const noexcept;
 
-        const uint8_t* end() const noexcept { return this->getBufferPointer() + this->getSize(); }
+        const uint8_t* end() const noexcept;
 
-        std::reverse_iterator<const uint8_t*> rbegin() const noexcept {
-            return std::reverse_iterator<const uint8_t*>(this->end());
-        }
+        std::reverse_iterator<const uint8_t*> rbegin() const noexcept;
 
-        std::reverse_iterator<const uint8_t*> rend() const noexcept {
-            return std::reverse_iterator<const uint8_t*>(this->begin());
-        }
+        std::reverse_iterator<const uint8_t*> rend() const noexcept;
 
-        const uint8_t* cbegin() const noexcept { return this->begin(); }
+        const uint8_t* cbegin() const noexcept;
 
-        const uint8_t* cend() const noexcept { return this->end(); }
+        const uint8_t* cend() const noexcept;
 
-        std::reverse_iterator<const uint8_t*> crbegin() const noexcept {
-            return this->rend();
-        }
+        std::reverse_iterator<const uint8_t*> crbegin() const noexcept;
 
-        std::reverse_iterator<const uint8_t*> crend() const noexcept {
-            return this->rbegin();
-        }
+        std::reverse_iterator<const uint8_t*> crend() const noexcept;
 
         friend std::ostream& operator<<(std::ostream& os, const Buffer& buffer);
 

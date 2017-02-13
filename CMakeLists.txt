@@ -26,11 +26,6 @@ set(SRCS
         include/rrc/core/LinearLauncher.h
         include/rrc/core/TaskHub.h
         src/rrc/core/TaskHub.cpp
-        include/rrc/core/AbstractPropertyListener.h
-        include/rrc/core/PropertyListener.h
-        src/rrc/core/PropertyListener.cpp
-        src/rrc/core/PropertyDictionary.cpp
-        include/rrc/core/PropertyDictionary.h
         include/rrc/core/AbstractQueueAdapter.h
         include/rrc/core/ConcurrentQueueAdapter.h
         include/rrc/core/STLQueueAdapter.h
@@ -43,9 +38,7 @@ set(SRCS
         src/rrc/core/NodeMechanism.cpp
         include/rrc/core/NodeMechanism.h
         src/rrc/core/Node.cpp
-        include/rrc/core/Serializer.h
         include/rrc/core/Buffer.h
-        include/rrc/core/StructureTypeQuantityGenerator.h
         src/rrc/core/Buffer.cpp
         include/rrc/core/QueueAdapterFactory.h
         include/rrc/core/TaskCapture.h
@@ -53,7 +46,19 @@ set(SRCS
         include/rrc/core/Service.h
         include/rrc/core/ServiceHolder.h
         test/src/core/ServiceMechanism.cpp
-        include/rrc/core/ServiceMechanism.h)
+        include/rrc/core/ServiceMechanism.h
+        include/rrc/core/PropertyType.h
+        src/rrc/core/Number.cpp
+        include/rrc/core/Number.h
+        include/rrc/core/Nil.h
+        src/rrc/core/String.cpp
+        include/rrc/core/String.h
+        src/rrc/core/Boolean.cpp
+        include/rrc/core/Boolean.h
+        src/rrc/core/Array.cpp
+        include/rrc/core/Array.h
+        src/rrc/core/Table.cpp
+        include/rrc/core/Table.h)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
         "${PROJECT_BINARY_DIR}/VersionDefines.h")
