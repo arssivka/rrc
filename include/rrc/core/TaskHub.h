@@ -34,7 +34,7 @@ namespace rrc {
         ~TaskHub();
 
     private:
-        std::weak_ptr<AbstracrTaskQueueAdapter> mTaskQueue;
+        std::weak_ptr<AbstracrTaskQueueAdapter> mTaskQueuePtr;
         std::function<void(const Buffer&)> mCallback;
 
     };

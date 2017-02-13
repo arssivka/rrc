@@ -10,7 +10,7 @@ rrc::TaskHub::~TaskHub() { }
 
 
 bool rrc::TaskHub::enqueueTask(std::shared_ptr<rrc::Buffer> message) {
-    auto queue = mTaskQueue.lock();
+    auto queue = mTaskQueuePtr.lock();
     if (queue != nullptr) {
         auto& callback = mCallback;
         queue->enqueue([callback, message]() {
@@ -24,13 +24,13 @@ bool rrc::TaskHub::enqueueTask(std::shared_ptr<rrc::Buffer> message) {
 
 
 rrc::TaskHub::TaskHub(std::weak_ptr<AbstracrTaskQueueAdapter> taskQueue, rrc::TaskHub::Callback&& callback)
-        : mTaskQueue(std::move(taskQueue)), mCallback(std::move(callback)) {}
+        : mTaskQueuePtr(std::move(taskQueue)), mCallback(std::move(callback)) {}
 
 
 rrc::TaskHub::TaskHub(std::weak_ptr<AbstracrTaskQueueAdapter> taskQueue, const rrc::TaskHub::Callback& callback)
-        : mTaskQueue(taskQueue), mCallback(callback) {}
+        : mTaskQueuePtr(taskQueue), mCallback(callback) {}
 
 
 bool rrc::TaskHub::isOrphan() const {
-    return mTaskQueue.use_count() == 0;
+    return mTaskQueuePtr.use_count() == 0;
 }
