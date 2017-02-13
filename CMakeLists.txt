@@ -46,8 +46,6 @@ set(SRCS
         include/rrc/core/Service.h
         include/rrc/core/ServiceHolder.h
         src/rrc/core/ServiceMechanism.cpp
-        include/rrc/core/ServiceMechanism.h)
-        test/src/core/ServiceMechanism.cpp
         include/rrc/core/ServiceMechanism.h
         include/rrc/core/PropertyType.h
         src/rrc/core/Number.cpp
