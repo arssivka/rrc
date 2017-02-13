@@ -66,3 +66,35 @@ namespace rrc {
         return os;
     }
 }
+
+
+const uint8_t* rrc::Buffer::begin() const noexcept { return this->getBufferPointer(); }
+
+
+const uint8_t* rrc::Buffer::end() const noexcept { return this->getBufferPointer() + this->getSize(); }
+
+
+std::reverse_iterator<const uint8_t*> rrc::Buffer::rbegin() const noexcept {
+    return std::reverse_iterator<const uint8_t*>(this->end());
+}
+
+
+std::reverse_iterator<const uint8_t*> rrc::Buffer::rend() const noexcept {
+    return std::reverse_iterator<const uint8_t*>(this->begin());
+}
+
+
+const uint8_t* rrc::Buffer::cbegin() const noexcept { return this->begin(); }
+
+
+const uint8_t* rrc::Buffer::cend() const noexcept { return this->end(); }
+
+
+std::reverse_iterator<const uint8_t*> rrc::Buffer::crbegin() const noexcept {
+    return this->rend();
+}
+
+
+std::reverse_iterator<const uint8_t*> rrc::Buffer::crend() const noexcept {
+    return this->rbegin();
+}

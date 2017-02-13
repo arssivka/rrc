@@ -8,7 +8,7 @@
 
 
 std::vector<std::string> rrc::AdvertisingMechanism::getNames() const {
-    return mTopicHolder.getTopicNames();
+    return mTopicHolder.getNames();
 }
 
 

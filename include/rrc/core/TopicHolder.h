@@ -67,7 +67,7 @@ namespace rrc {
          * @brief Returns set of the keys of registered topics
          * @return Vector of the topics's keys
          */
-        std::vector<TopicName> getTopicNames() const {
+        std::vector<TopicName> getNames() const {
             std::vector<TopicName> names;
             names.reserve(mTopicHash.size());
             for (auto&& topic : mTopicHash) {

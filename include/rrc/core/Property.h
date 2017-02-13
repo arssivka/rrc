@@ -4,41 +4,69 @@
  */
 #pragma once
 
-#include <string>
-#include <stdlib.h>
-#include <sstream>
-#include "CopyOnWrite.h"
+
+#include <ostream>
 #include "mapbox/variant.hpp"
+#include "mapbox/recursive_wrapper.hpp"
+#include "CopyOnWrite.h"
+#include "PropertyType.h"
+#include "Nil.h"
+#include "Boolean.h"
+#include "Number.h"
+#include "String.h"
+//#include "Array.h"
+//#include "Table.h"
+
 
 namespace rrc {
+    class Array;
+    class Table;
+
+    namespace detail {
+        template <class T>
+        struct PropertyValueTraits {
+            typedef T VariantType;
+        };
+
+        template <>
+        struct PropertyValueTraits<Array> {
+            typedef mapbox::util::recursive_wrapper<Array> VariantType;
+        };
+
+        template <>
+        struct PropertyValueTraits<Table> {
+            typedef mapbox::util::recursive_wrapper<Table> VariantType;
+        };
+    }
     /**
      * @brief Property is a class for holding and modifying the setting of the node. It can hold float, bool, int or string.
      */
     class Property {
+    private:
+        typedef mapbox::util::variant<Nil, Boolean, Number, String,
+                                mapbox::util::recursive_wrapper<Array>,
+                                mapbox::util::recursive_wrapper<Table>> Value;
+
     public:
-        typedef mapbox::util::variant<std::string, float, bool, int> SettingsType;
+        Property(const String& string);
 
-        /**
-         * @brief Property constructor from const char*
-         * @param str String to store int property
-         */
-        Property(const char* str) {
-            mField->set<std::string>(str);
-        }
+        Property(String&& string);
 
-        /**
-         * @brief Property constructor from std::string
-         * @param str String to store int property
-         */
-        Property(std::string str) {
-            mField->set<std::string>(str);
-        }
+        Property(const Number& number);
 
-        /**
-         * @brief Copy constructor of property
-         * @param other Other property instance to copy from
-         */
-        Property(Property& other) = default;
+        Property(Number&& number);
+
+        Property(const Boolean& boolean);
+
+        Property(Boolean&& boolean);
+
+        Property(const Array& array);
+
+        Property(Array&& array);
+
+        Property(const Table& table);
+
+        Property(Table&& table);
 
         /**
          * @brief Copy constructor of property
@@ -53,96 +81,91 @@ namespace rrc {
         Property(Property&& other) = default;
 
         /**
-         * @brief Constructor of property from int, float or bool
-         * @param data Int, float or bool to store
-         */
-        template <class D>
-        Property(D&& data) {
-            mField->set<D>(std::forward<D>(data));
-        }
-
-        /**
          * @brief Default property constructor
          */
-        Property() { }
+        Property();
 
         /**
          * @brief Default = Operator of property
          * @param other Const reference to Property instance
          * @return Property&
          */
-        Property& operator= (const Property& other) = default;
+        Property& operator=(const Property& other) = default;
 
         /**
          * @brief Default = Operator of property
          * @param other Rvalue reference to Property instance
          * @return Property&
          */
-        Property& operator= (Property&& other) = default;
+        Property& operator=(Property&& other) = default;
 
-        /**
-         * @brief Universal method to get content of property. Can parametrizied by string, bool, int or float
-         * @return Content of property of desired type
-         */
-        template <typename T>
-        T get() const;
-
-        /**
-         * @brief Returns content of property of int type
-         * @return Content of int type
-         */
-        int getInt();
-
-        /**
-         * @brief Returns content of property of float type
-         * @return Content of float type
-         */
-        float getFloat();
-
-        /**
-         * @brief Returns content of property of bool type
-         * @return Content of bool type
-         */
-        bool getBool();
-
-        /**
-         * @brief Returns content of property of std::string type
-         * @return Content of std::string type
-         */
-        std::string getString();
-
-        /**
-         * @brief Sets content of property from const char*
-         * @param str String to set
-         */
-        void set(const char* str) {
-            mField->set<std::string>(str);
-        }
-
-        /**
-         * @brief Sets content of property from std::string
-         * @param str String to set
-         */
-        void set(std::string str) {
-            mField->set<std::string>(str);
-        }
-
-        /**
-         * @brief Sets content of property from int, bool or float
-         * @param str Data to set
-         */
-        template <typename D>
-        void set(D &&data) {
-            if(std::is_same<D, bool>::value || std::is_same<D, int>::value ||
-               std::is_same<D, float>::value || std::is_same<D, std::string>::value) {
-                mField->set<D>(std::forward<D>(data));
+        template <class T>
+        static PropertyType getType() {
+            switch (Value::which<detail::PropertyValueTraits<T>::VariantType>()) {
+                case Value::which<Nil>(): return PropertyType::Nil;
+                case Value::which<Boolean>() : return PropertyType::Boolean;
+                case Value::which<Number>() : return PropertyType::Number;
+                case Value::which<String>() : return PropertyType::String;
+                case Value::which<mapbox::util::recursive_wrapper<Array>>() : return PropertyType::Array;
+                case Value::which<mapbox::util::recursive_wrapper<Table>>() : return PropertyType::Table;
+                default: return PropertyType::Unknown;
             }
-            else {
-                std::cerr << "Unsupported type\n";
-            };
         }
+
+        inline PropertyType getType() const;
+
+        inline bool tryGetNumber(Number& outputNumber) const;
+
+        inline bool tryGetBoolean(Boolean& outputBoolean) const;
+
+        inline bool tryGetString(String& outputString) const;
+
+        inline bool tryGetArray(Array& outputArray) const;
+
+        inline bool tryGetTable(Table& outputTable) const;
+
+        inline void setNil();
+
+        inline void setBoolean(Boolean&& boolean);
+
+        inline void setNumber(Number&& number);
+
+        inline void setString(String&& string);
+
+        inline void setArray(Array&& array);
+
+        inline void setTable(Table&& table);
+
+        inline bool isValid() const;
+
+        inline bool isNil() const;
+
+        inline bool isBoolean() const;
+
+        inline bool isNumber() const;
+
+        inline bool isString() const;
+
+        inline bool isArray() const;
+
+        inline bool isTable() const;
+
+        bool operator==(const Property& rhs) const;
+
+        bool operator!=(const Property& rhs) const;
+
+        bool operator<(const Property& rhs) const;
+
+        bool operator>(const Property& rhs) const;
+
+        bool operator<=(const Property& rhs) const;
+
+        bool operator>=(const Property& rhs) const;
+
+        friend std::ostream& operator<<(std::ostream& os, const rrc::Property& property);
 
     private:
-        CopyOnWrite<SettingsType> mField;
+        CopyOnWrite<Value> mValue;
+
     };
 }
