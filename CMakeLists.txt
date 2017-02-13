@@ -49,10 +49,10 @@ set(SRCS
         src/rrc/core/Buffer.cpp
         include/rrc/core/QueueAdapterFactory.h
         include/rrc/core/TaskCapture.h
-        test/src/core/Service.cpp
+        src/rrc/core/Service.cpp
         include/rrc/core/Service.h
         include/rrc/core/ServiceHolder.h
-        test/src/core/ServiceMechanism.cpp
+        src/rrc/core/ServiceMechanism.cpp
         include/rrc/core/ServiceMechanism.h)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
