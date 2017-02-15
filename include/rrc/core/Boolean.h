@@ -16,26 +16,24 @@ namespace rrc {
 
         Boolean(Boolean&&) = default;
 
-        inline bool get() const;
+        bool get() const;
 
-        inline void set(bool value);
+        void set(bool value);
 
-        inline Boolean& operator=(const Boolean&) = default;
+        Boolean& operator=(const Boolean&) = default;
 
-        inline Boolean& operator=(Boolean&&) = default;
+        Boolean& operator=(Boolean&&) = default;
 
-        inline bool operator==(const Boolean& rhs) const;
+        bool operator==(const Boolean& rhs) const;
 
-        inline bool operator!=(const Boolean& rhs) const;
+        bool operator!=(const Boolean& rhs) const;
 
         friend std::ostream& operator<<(std::ostream& os, Boolean& boolean);
 
-        inline operator bool() const;
+        operator bool() const;
 
 
     private:
         bool mValue;
     };
 }
-
-

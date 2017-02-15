@@ -57,7 +57,6 @@ namespace rrc {
     private:
         std::unique_ptr<uint8_t> mBufferPtr;
         size_t mSize;
-
     };
 }
 

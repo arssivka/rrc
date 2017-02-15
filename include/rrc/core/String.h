@@ -33,43 +33,43 @@ namespace rrc {
 
         String(std::initializer_list<char> initializerList);
 
-        inline String& operator=(const String&) = default;
+        String& operator=(const String&) = default;
 
-        inline String& operator=(String&&) = default;
+        String& operator=(String&&) = default;
 
-        inline const std::string& get() const;
+        const std::string& get() const;
 
-        inline void set(const std::string& string);
+        void set(const std::string& string);
 
-        inline size_t getSize() const;
+        size_t getSize() const;
 
-        inline bool isEmpty() const;
+        bool isEmpty() const;
 
-        inline bool operator==(const String& rhs) const;
+        bool operator==(const String& rhs) const;
 
-        inline bool operator!=(const String& rhs) const;
+        bool operator!=(const String& rhs) const;
 
-        inline const char& operator[](size_t index);
+        const char& operator[](size_t index);
 
-        inline const auto begin() const noexcept;
+        std::string::const_iterator begin() const noexcept;
 
-        inline const auto end() const noexcept;
+        std::string::const_iterator end() const noexcept;
 
-        inline const auto rbegin() const noexcept;
+        std::string::const_reverse_iterator rbegin() const noexcept;
 
-        inline const auto rend() const noexcept;
+        std::string::const_reverse_iterator rend() const noexcept;
 
-        inline const auto cbegin() const noexcept;
+        std::string::const_iterator cbegin() const noexcept;
 
-        inline const auto cend() const noexcept;
+        std::string::const_iterator cend() const noexcept;
 
-        inline const auto crbegin() const noexcept;
+        std::string::const_reverse_iterator crbegin() const noexcept;
 
-        inline const auto crend() const noexcept;
+        std::string::const_reverse_iterator crend() const noexcept;
 
         friend std::ostream& operator<<(std::ostream& os, const String& string);
 
-        inline operator const std::string&();
+        operator const std::string&();
 
     private:
         std::string mString;
