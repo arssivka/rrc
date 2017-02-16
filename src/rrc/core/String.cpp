@@ -49,12 +49,28 @@ bool rrc::String::operator!=(const rrc::String& rhs) const {
     return !(rhs == *this);
 }
 
-
-std::ostream& operator<<(std::ostream& os, const rrc::String& string) {
-    os << string.get();
-    return os;
+bool rrc::String::operator<(const rrc::String& rhs) const {
+    return mString < rhs.mString;
 }
 
+bool rrc::String::operator>(const rrc::String& rhs) const {
+    return mString > rhs.mString;
+}
+
+bool rrc::String::operator<=(const rrc::String& rhs) const {
+    return mString <= rhs.mString;
+}
+
+bool rrc::String::operator>=(const rrc::String& rhs) const {
+    return mString >= rhs.mString;
+}
+
+namespace rrc {
+    std::ostream &operator<<(std::ostream &os, const rrc::String &string) {
+        os << string.get();
+        return os;
+    }
+}
 
 rrc::String::operator const std::string&() {
     return mString;
@@ -74,25 +90,25 @@ bool rrc::String::isEmpty() const {
 const char& rrc::String::operator[](size_t index) { return mString[index]; }
 
 
-const auto rrc::String::begin() const noexcept { return mString.begin(); }
+std::string::const_iterator rrc::String::begin() const noexcept { return mString.begin(); }
 
 
-const auto rrc::String::end() const noexcept { return mString.end(); }
+std::string::const_iterator rrc::String::end() const noexcept { return mString.end(); }
 
 
-const auto rrc::String::rbegin() const noexcept { return mString.rbegin(); }
+std::string::const_reverse_iterator rrc::String::rbegin() const noexcept { return mString.rbegin(); }
 
 
-const auto rrc::String::rend() const noexcept { return mString.rend(); }
+std::string::const_reverse_iterator rrc::String::rend() const noexcept { return mString.rend(); }
 
 
-const auto rrc::String::cbegin() const noexcept { return mString.cbegin(); }
+std::string::const_iterator rrc::String::cbegin() const noexcept { return mString.cbegin(); }
 
 
-const auto rrc::String::cend() const noexcept { return mString.cend(); }
+std::string::const_iterator rrc::String::cend() const noexcept { return mString.cend(); }
 
 
-const auto rrc::String::crbegin() const noexcept { return mString.crbegin(); }
+std::string::const_reverse_iterator rrc::String::crbegin() const noexcept { return mString.crbegin(); }
 
 
-const auto rrc::String::crend() const noexcept { return mString.crend(); }
+std::string::const_reverse_iterator rrc::String::crend() const noexcept { return mString.crend(); }

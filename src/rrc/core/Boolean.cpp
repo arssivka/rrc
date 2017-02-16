@@ -29,6 +29,21 @@ bool rrc::Boolean::operator!=(const rrc::Boolean& rhs) const {
     return !(rhs == *this);
 }
 
+bool rrc::Boolean::operator>(const rrc::Boolean& rhs) const {
+    return mValue > rhs.mValue;
+}
+
+bool rrc::Boolean::operator<(const rrc::Boolean& rhs) const {
+    return mValue < rhs.mValue;
+}
+
+bool rrc::Boolean::operator<=(const rrc::Boolean& rhs) const {
+    return mValue <= rhs.mValue;
+}
+
+bool rrc::Boolean::operator>=(const rrc::Boolean& rhs) const {
+    return mValue >= rhs.mValue;
+}
 
 namespace rrc {
     std::ostream& operator<<(std::ostream& os, const rrc::Boolean& boolean) {

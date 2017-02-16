@@ -50,6 +50,7 @@ set(SRCS
         src/rrc/core/Number.cpp
         include/rrc/core/Number.h
         include/rrc/core/Nil.h
+        src/rrc/core/Nil.cpp
         src/rrc/core/String.cpp
         include/rrc/core/String.h
         src/rrc/core/Boolean.cpp

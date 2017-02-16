@@ -86,6 +86,29 @@ namespace rrc {
         return names;
     }
 
+    bool rrc::Table::operator==(const rrc::Table& rhs) const {
+        return mHash == rhs.mHash;
+    }
+
+    bool rrc::Table::operator!=(const rrc::Table& rhs) const {
+        return mHash != rhs.mHash;
+    }
+
+    bool rrc::Table::operator>(const rrc::Table& rhs) const {
+        return false;
+    }
+
+    bool rrc::Table::operator<(const rrc::Table& rhs) const {
+        return false;
+    }
+
+    bool rrc::Table::operator<=(const rrc::Table& rhs) const {
+        return false;
+    }
+
+    bool rrc::Table::operator>=(const rrc::Table& rhs) const {
+        return false;
+    }
 
     auto Table::begin() noexcept { return mHash.begin(); }
 

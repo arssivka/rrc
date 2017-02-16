@@ -101,7 +101,8 @@ namespace rrc {
 
         template <class T>
         static PropertyType getType() {
-            switch (Value::which<detail::PropertyValueTraits<T>::VariantType>()) {
+            typedef typename detail::PropertyValueTraits<T>::VariantType VariantType;
+            switch (Value::which<VariantType>()) {
                 case Value::which<Nil>(): return PropertyType::Nil;
                 case Value::which<Boolean>() : return PropertyType::Boolean;
                 case Value::which<Number>() : return PropertyType::Number;
@@ -112,43 +113,53 @@ namespace rrc {
             }
         }
 
-        inline PropertyType getType() const;
+        PropertyType getType() const;
 
-        inline bool tryGetNumber(Number& outputNumber) const;
+        bool tryGetNumber(Number& outputNumber) const;
 
-        inline bool tryGetBoolean(Boolean& outputBoolean) const;
+        bool tryGetBoolean(Boolean& outputBoolean) const;
 
-        inline bool tryGetString(String& outputString) const;
+        bool tryGetString(String& outputString) const;
 
-        inline bool tryGetArray(Array& outputArray) const;
+        bool tryGetArray(Array& outputArray) const;
 
-        inline bool tryGetTable(Table& outputTable) const;
+        bool tryGetTable(Table& outputTable) const;
 
-        inline void setNil();
+        void setNil();
 
-        inline void setBoolean(Boolean&& boolean);
+        void setBoolean(Boolean&& boolean);
 
-        inline void setNumber(Number&& number);
+        void setNumber(Number&& number);
 
-        inline void setString(String&& string);
+        void setString(String&& string);
 
-        inline void setArray(Array&& array);
+        void setArray(Array&& array);
 
-        inline void setTable(Table&& table);
+        void setTable(Table&& table);
 
-        inline bool isValid() const;
+        void setBoolean(const Boolean& boolean);
 
-        inline bool isNil() const;
+        void setNumber(const Number& number);
 
-        inline bool isBoolean() const;
+        void setString(const String& string);
 
-        inline bool isNumber() const;
+        void setArray(const Array& array);
 
-        inline bool isString() const;
+        void setTable(const Table& table);
 
-        inline bool isArray() const;
+        bool isValid() const;
 
-        inline bool isTable() const;
+        bool isNil() const;
+
+        bool isBoolean() const;
+
+        bool isNumber() const;
+
+        bool isString() const;
+
+        bool isArray() const;
+
+        bool isTable() const;
 
         bool operator==(const Property& rhs) const;
 

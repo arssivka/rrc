@@ -31,14 +31,14 @@ namespace rrc {
                 : mData(std::move(sptr)) {
         }
 
-        const T* operator*() const {
+        const T& operator*() const {
             this->ensureInitialized();
-            return mData.get();
+            return *mData.get();
         }
 
-        T* operator*() {
+        T& operator*() {
             this->ensureUnique();
-            return mData.get();
+            return *mData.get();
         }
 
         const T* operator->() const {
