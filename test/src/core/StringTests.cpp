@@ -84,3 +84,5 @@ TEST(StringTests, IteratorsTests) {
     }
     EXPECT_EQ(checkVector, fillVector);
 }
+
+//TODO:: new operators tets

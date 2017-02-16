@@ -23,9 +23,9 @@ namespace rrc {
 
         Array& operator=(Array&&) = default;
 
-        inline Property& operator[](size_t index);
+        Property& operator[](size_t index);
 
-        inline const Property& operator[](size_t index) const;
+        const Property& operator[](size_t index) const;
         
         Property get(size_t index, Property defaultValue = Property()) const;
         
@@ -51,29 +51,41 @@ namespace rrc {
         
         size_t getSize() const noexcept;
 
-        inline auto begin() noexcept;
+        bool operator==(const Array& rhs) const;
 
-        inline auto end() noexcept;
+        bool operator!=(const Array& rhs) const;
 
-        inline auto rbegin() noexcept;
+        bool operator>(const Array& rhs) const;
 
-        inline auto rend() noexcept;
+        bool operator<(const Array& rhs) const;
 
-        inline const auto begin() const noexcept;
+        bool operator<=(const Array& rhs) const;
 
-        inline const auto end() const noexcept;
+        bool operator>=(const Array& rhs) const;
 
-        inline const auto rbegin() const noexcept;
+        auto begin() noexcept;
 
-        inline const auto rend() const noexcept;
+        auto end() noexcept;
 
-        inline const auto cbegin() const noexcept;
+        auto rbegin() noexcept;
 
-        inline const auto cend() const noexcept;
+        auto rend() noexcept;
 
-        inline const auto crbegin() const noexcept;
+        const auto begin() const noexcept;
 
-        inline const auto crend() const noexcept;
+        const auto end() const noexcept;
+
+        const auto rbegin() const noexcept;
+
+        const auto rend() const noexcept;
+
+        const auto cbegin() const noexcept;
+
+        const auto cend() const noexcept;
+
+        const auto crbegin() const noexcept;
+
+        const auto crend() const noexcept;
 
 
     private:

@@ -17,27 +17,27 @@ namespace rrc {
 
         Number(Number&&) = default;
 
-        inline double get() const;
+        double get() const;
 
-        inline void set(double value);
+        void set(double value);
 
-        inline Number& operator=(const Number&) = default;
+        Number& operator=(const Number&) = default;
 
-        inline Number& operator=(Number&&) = default;
+        Number& operator=(Number&&) = default;
 
-        inline bool operator==(const Number& rhs) const;
+        bool operator==(const Number& rhs) const;
 
-        inline bool operator!=(const Number& rhs) const;
+        bool operator!=(const Number& rhs) const;
 
-        inline bool operator<(const Number& rhs) const;
+        bool operator<(const Number& rhs) const;
 
-        inline bool operator>(const Number& rhs) const;
+        bool operator>(const Number& rhs) const;
 
-        inline bool operator<=(const Number& rhs) const;
+        bool operator<=(const Number& rhs) const;
 
-        inline bool operator>=(const Number& rhs) const;
+        bool operator>=(const Number& rhs) const;
 
-        inline operator double();
+        operator double();
 
         friend std::ostream& operator<<(std::ostream& os, const rrc::Number& number);
 

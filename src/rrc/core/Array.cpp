@@ -78,6 +78,29 @@ size_t rrc::Array::getSize() const noexcept {
     return mVector.size();
 }
 
+bool rrc::Array::operator==(const rrc::Array& rhs) const {
+    return mVector == rhs.mVector;
+}
+
+bool rrc::Array::operator!=(const rrc::Array& rhs) const {
+    return mVector != rhs.mVector;
+}
+
+bool rrc::Array::operator>(const rrc::Array& rhs) const {
+    return mVector > rhs.mVector;
+}
+
+bool rrc::Array::operator<(const rrc::Array& rhs) const {
+    return mVector < rhs.mVector;
+}
+
+bool rrc::Array::operator<=(const rrc::Array& rhs) const {
+    return mVector <= rhs.mVector;
+}
+
+bool rrc::Array::operator>=(const rrc::Array& rhs) const {
+    return mVector >= rhs.mVector;
+}
 
 auto rrc::Array::begin() noexcept { return mVector.begin(); }
 

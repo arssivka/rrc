@@ -49,6 +49,14 @@ namespace rrc {
 
         bool operator!=(const String& rhs) const;
 
+        bool operator<(const String& rhs) const;
+
+        bool operator>(const String& rhs) const;
+
+        bool operator>=(const String& rhs) const;
+
+        bool operator<=(const String& rhs) const;
+
         const char& operator[](size_t index);
 
         std::string::const_iterator begin() const noexcept;

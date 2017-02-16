@@ -46,3 +46,5 @@ TEST(BooleanTests, AssigmentOperatorTests) {
     Boolean boolean2 = Boolean(true);
     EXPECT_TRUE(boolean2.get());
 }
+
+//TODO:: new operators tests

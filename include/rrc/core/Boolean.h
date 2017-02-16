@@ -28,7 +28,15 @@ namespace rrc {
 
         bool operator!=(const Boolean& rhs) const;
 
-        friend std::ostream& operator<<(std::ostream& os, Boolean& boolean);
+        bool operator>(const Boolean& rhs) const;
+
+        bool operator<(const Boolean& rhs) const;
+
+        bool operator<=(const Boolean& rhs) const;
+
+        bool operator>=(const Boolean& rhs) const;
+
+        friend std::ostream& operator<<(std::ostream& os, const rrc::Boolean& boolean);
 
         operator bool() const;
 

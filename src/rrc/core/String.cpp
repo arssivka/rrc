@@ -49,6 +49,22 @@ bool rrc::String::operator!=(const rrc::String& rhs) const {
     return !(rhs == *this);
 }
 
+bool rrc::String::operator<(const rrc::String& rhs) const {
+    return mString < rhs.mString;
+}
+
+bool rrc::String::operator>(const rrc::String& rhs) const {
+    return mString > rhs.mString;
+}
+
+bool rrc::String::operator<=(const rrc::String& rhs) const {
+    return mString <= rhs.mString;
+}
+
+bool rrc::String::operator>=(const rrc::String& rhs) const {
+    return mString >= rhs.mString;
+}
+
 namespace rrc {
     std::ostream &operator<<(std::ostream &os, const rrc::String &string) {
         os << string.get();

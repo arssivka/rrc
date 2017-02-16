@@ -72,7 +72,7 @@ bool rrc::Property::tryGetNumber(rrc::Number& outputNumber) const {
 
 
 bool rrc::Property::tryGetBoolean(rrc::Boolean& outputBoolean) const {
-    if (this->isArray()) {
+    if (this->isBoolean()) {
         outputBoolean = mValue->get_unchecked<Boolean>();
         return true;
     }
@@ -123,7 +123,7 @@ void rrc::Property::setNumber(rrc::Number&& number) {
 
 
 void rrc::Property::setString(rrc::String&& string) {
-    mValue->set<String>(string);
+    mValue->set<String>(std::move(string));
 }
 
 
@@ -136,9 +136,32 @@ void rrc::Property::setTable(rrc::Table&& table) {
     mValue->set<Table>(std::move(table));
 }
 
+void rrc::Property::setBoolean(const rrc::Boolean& boolean) {
+    mValue->set<Boolean>(boolean);
+}
+
+
+void rrc::Property::setNumber(const rrc::Number& number) {
+    mValue->set<Number>(number);
+}
+
+
+void rrc::Property::setString(const rrc::String& string) {
+    mValue->set<String>(string);
+}
+
+
+void rrc::Property::setArray(const rrc::Array& array) {
+    mValue->set<Array>(array);
+}
+
+
+void rrc::Property::setTable(const rrc::Table& table) {
+    mValue->set<Table>(table);
+}
 
 bool rrc::Property::isValid() const {
-    return !mValue->valid();
+    return mValue->valid();
 }
 
 
