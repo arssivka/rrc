@@ -47,11 +47,11 @@ bool rrc::LinearLauncher::step() {
 }
 
 
-void rrc::LinearLauncher::addSyncQueue(std::shared_ptr<AbstracrTaskQueueAdapter> queue) {
+void rrc::LinearLauncher::addSyncQueue(std::shared_ptr<AbstractTaskQueueAdapter> queue) {
     mQueuesList.emplace_front(std::move(queue));
 }
 
 
-void rrc::LinearLauncher::removeSyncQueue(std::shared_ptr<AbstracrTaskQueueAdapter> queue) {
+void rrc::LinearLauncher::removeSyncQueue(std::shared_ptr<AbstractTaskQueueAdapter> queue) {
     mQueuesList.remove(std::move(queue));
 }

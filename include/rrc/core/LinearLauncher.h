@@ -55,14 +55,14 @@ namespace rrc {
          */
         virtual void removeNode(std::shared_ptr<Node> node) override;
 
-        virtual void addSyncQueue(std::shared_ptr<AbstracrTaskQueueAdapter> queue) override;
+        virtual void addSyncQueue(std::shared_ptr<AbstractTaskQueueAdapter> queue) override;
 
-        virtual void removeSyncQueue(std::shared_ptr<AbstracrTaskQueueAdapter> queue) override;
+        virtual void removeSyncQueue(std::shared_ptr<AbstractTaskQueueAdapter> queue) override;
 
     private:
         bool mFinished;
         std::forward_list<std::shared_ptr<Node>> mNodesList;
-        std::forward_list<std::shared_ptr<AbstracrTaskQueueAdapter>> mQueuesList;
+        std::forward_list<std::shared_ptr<AbstractTaskQueueAdapter>> mQueuesList;
     };
 }
 

@@ -13,7 +13,7 @@ namespace rrc {
     class MechanismsHolder {
     public:
         // TODO: Docs and tests
-        MechanismsHolder(std::shared_ptr<AbstracrTaskQueueAdapter> queue);
+        MechanismsHolder(std::shared_ptr<AbstractTaskQueueAdapter> queue);
 
         AdvertisingMechanism& getAdvertisingMechanism();
 

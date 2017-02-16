@@ -6,12 +6,12 @@
 #include <rrc/core/Topic.h>
 
 
-void rrc::Topic::addListener(std::shared_ptr<rrc::TaskHub> listener) {
+void rrc::Topic::addListener(std::shared_ptr<rrc::TaskHub<Buffer>> listener) {
     mListenersList.push_front(std::move(listener));
 }
 
 
-void rrc::Topic::removeListener(std::weak_ptr<rrc::TaskHub> listener) {
+void rrc::Topic::removeListener(std::weak_ptr<rrc::TaskHub<Buffer>> listener) {
     auto lock = listener.lock();
     if (lock != nullptr) {
         mListenersList.remove(lock);

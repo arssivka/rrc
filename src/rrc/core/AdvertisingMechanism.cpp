@@ -4,7 +4,7 @@
  */
 
 #include <rrc/core/AdvertisingMechanism.h>
-#include <include/rrc/core/TaskCapture.h>
+#include <rrc/core/TaskCapture.h>
 
 
 std::vector<std::string> rrc::AdvertisingMechanism::getNames() const {
@@ -12,7 +12,7 @@ std::vector<std::string> rrc::AdvertisingMechanism::getNames() const {
 }
 
 
-rrc::AdvertisingMechanism::AdvertisingMechanism(std::shared_ptr<AbstracrTaskQueueAdapter> syncQueue)
+rrc::AdvertisingMechanism::AdvertisingMechanism(std::shared_ptr<AbstractTaskQueueAdapter> syncQueue)
         : mSyncQueue(std::move(syncQueue)) {}
 
 
@@ -26,7 +26,7 @@ void rrc::AdvertisingMechanism::sendMessage(const AdvertisingMechanism::Name& to
 
 
 void rrc::AdvertisingMechanism::addListener(const AdvertisingMechanism::Name& topicName,
-                                            std::shared_ptr<rrc::TaskHub> listener) {
+                                            std::shared_ptr<rrc::TaskHub<Buffer>> listener) {
     auto& topicHolderRef = mTopicHolder;
     mSyncQueue->enqueue([&topicHolderRef, topicName, listenerCap = std::move(listener)]() mutable {
         topicHolderRef.addListener(topicName, std::move(listenerCap));
@@ -36,7 +36,7 @@ void rrc::AdvertisingMechanism::addListener(const AdvertisingMechanism::Name& to
 
 void
 rrc::AdvertisingMechanism::removeListener(const AdvertisingMechanism::Name& topicName,
-                                          const std::weak_ptr<TaskHub> listener) {
+                                          const std::weak_ptr<TaskHub<Buffer>> listener) {
     auto& topicHolderRef = mTopicHolder;
     mSyncQueue->enqueue([&topicHolderRef, topicName, listenerCap = std::move(listener)]() mutable {
         topicHolderRef.removeListener(topicName, std::move(listenerCap));

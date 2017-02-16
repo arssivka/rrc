@@ -3,10 +3,10 @@
  *  @date 2/7/17
  */
 
-#include "include/rrc/core/ServiceMechanism.h"
+#include <rrc/core/ServiceMechanism.h>
 
 
-rrc::ServiceMechanism::ServiceMechanism(std::shared_ptr<rrc::AbstracrTaskQueueAdapter> syncQueue)
+rrc::ServiceMechanism::ServiceMechanism(std::shared_ptr<rrc::AbstractTaskQueueAdapter> syncQueue)
         : mSyncQueue(std::move(syncQueue)) {}
 
 
@@ -29,7 +29,7 @@ rrc::ServiceMechanism::removeService(const rrc::ServiceMechanism::Name& name, co
 }
 
 
-void rrc::ServiceMechanism::call(const rrc::ServiceMechanism::Name& name, std::shared_ptr<rrc::TaskHub> resultHub,
+void rrc::ServiceMechanism::call(const rrc::ServiceMechanism::Name& name, std::shared_ptr<rrc::TaskHub<Buffer>> resultHub,
                                  std::shared_ptr<rrc::Buffer> input) {
     auto& serviceHolderRef = mServiceHolder;
     mSyncQueue->enqueue(

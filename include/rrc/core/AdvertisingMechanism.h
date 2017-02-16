@@ -10,14 +10,14 @@
 #include "TaskHub.h"
 #include "Buffer.h"
 #include "TopicHolder.h"
-#include "AbstracrTaskQueueAdapter.h"
+#include "AbstractTaskQueueAdapter.h"
 
 namespace rrc {
     class AdvertisingMechanism : private NonCopyable {
     public:
         typedef std::string Name;
 
-        AdvertisingMechanism(std::shared_ptr<AbstracrTaskQueueAdapter> syncQueue);
+        AdvertisingMechanism(std::shared_ptr<AbstractTaskQueueAdapter> syncQueue);
 
         /**
          * @brief Send a message
@@ -31,10 +31,10 @@ namespace rrc {
          * @param topicName Name of the topic for the listener
          * @param listener Pointer to the listener that needs to be registered
          */
-        void addListener(const Name& topicName, std::shared_ptr<TaskHub> listener);
+        void addListener(const Name& topicName, std::shared_ptr<TaskHub<Buffer>> listener);
 
         // TODO Tests and docs
-        void removeListener(const Name& topicName, const std::weak_ptr<TaskHub> listener);
+        void removeListener(const Name& topicName, const std::weak_ptr<TaskHub<Buffer>> listener);
 
         /**
          * @brief Returns set of avaliable topic names
@@ -44,7 +44,7 @@ namespace rrc {
 
     private:
         TopicHolder<Name> mTopicHolder;
-        std::shared_ptr<AbstracrTaskQueueAdapter> mSyncQueue;
+        std::shared_ptr<AbstractTaskQueueAdapter> mSyncQueue;
     };
 }
 

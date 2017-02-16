@@ -4,7 +4,7 @@
  */
 
 #include <gtest/gtest.h>
-#include <rrc/core/AbstracrTaskQueueAdapter.h>
+#include <rrc/core/AbstractTaskQueueAdapter.h>
 #include <rrc/core/STLQueueAdapter.h>
 #include <rrc/core/TaskHub.h>
 
@@ -13,16 +13,16 @@ using namespace rrc;
 class TaskHubFixture : public ::testing::Test {
 public:
     TaskHubFixture() {
-        testAdapter = (AbstracrTaskQueueAdapter*) new STLQueueAdapter<Task>();
+        testAdapter = (AbstractTaskQueueAdapter*) new STLQueueAdapter<Task>();
     }
 
 protected:
-    AbstracrTaskQueueAdapter* testAdapter;
+    AbstractTaskQueueAdapter* testAdapter;
 };
 
 TEST_F(TaskHubFixture, BasicNonConstConstructorTests) {
-    std::shared_ptr<AbstracrTaskQueueAdapter> testAdapterPtr(testAdapter);
-    TaskHub taskHub(testAdapterPtr, [](const Buffer& buffer){
+    std::shared_ptr<AbstractTaskQueueAdapter> testAdapterPtr(testAdapter);
+    TaskHub<Buffer> taskHub(testAdapterPtr, [](const Buffer& buffer){
         buffer.isEmpty();
     });
     uint8_t buf[] = {1, 0, 1, 0, 1};
@@ -37,8 +37,8 @@ void makeSmth(const Buffer& buffer) {
 }
 
 TEST_F(TaskHubFixture, BasicOrphanTests) {
-    std::shared_ptr<AbstracrTaskQueueAdapter> testAdapterPtr(testAdapter);
-    TaskHub taskHub(testAdapterPtr, &makeSmth);
+    std::shared_ptr<AbstractTaskQueueAdapter> testAdapterPtr(testAdapter);
+    TaskHub<Buffer> taskHub(testAdapterPtr, &makeSmth);
     uint8_t buf[] = {1, 0, 1, 0, 1};
     Buffer testBuffer(buf, 5);
     taskHub.enqueueTask(std::make_shared<Buffer>(testBuffer));

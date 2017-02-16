@@ -7,7 +7,7 @@
 
 
 #include "NonCopyable.h"
-#include "AbstracrTaskQueueAdapter.h"
+#include "AbstractTaskQueueAdapter.h"
 #include "MechanismsHolder.h"
 
 namespace rrc {
@@ -18,12 +18,12 @@ namespace rrc {
     class Node : private NonCopyable {
     public:
         // TODO: Tests and docs
-        Node(std::shared_ptr<AbstracrTaskQueueAdapter> taskQueue, MechanismsHolder& mechanismsHolder);
+        Node(std::shared_ptr<AbstractTaskQueueAdapter> taskQueue, MechanismsHolder& mechanismsHolder);
 
-        const std::weak_ptr<TaskHub> subscribe(const std::string& topicName,
-                                                       TaskHub::Callback&& callback);
+        const std::weak_ptr<TaskHub<Buffer>> subscribe(const std::string& topicName,
+                                                       TaskHub<Buffer>::Callback&& callback);
 
-        void unsubscribe(const std::string& topicName, const std::weak_ptr<TaskHub> listener);
+        void unsubscribe(const std::string& topicName, const std::weak_ptr<TaskHub<Buffer>> listener);
 
         void sendMessage(const std::string& topic, std::shared_ptr<Buffer> message);
 
@@ -35,7 +35,7 @@ namespace rrc {
         virtual ~Node();
 
     private:
-        std::shared_ptr<AbstracrTaskQueueAdapter> mTaskQueue;
+        std::shared_ptr<AbstractTaskQueueAdapter> mTaskQueue;
         MechanismsHolder& mMechanismsHolder;
     };
 }

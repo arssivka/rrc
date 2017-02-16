@@ -3,10 +3,10 @@
  *  @date 7/20/16
  */
 
-#include <rrc/core/AbstracrTaskQueueAdapter.h>
+#include <rrc/core/AbstractTaskQueueAdapter.h>
 
 
-bool rrc::AbstracrTaskQueueAdapter::execOnce() {
+bool rrc::AbstractTaskQueueAdapter::execOnce() {
     Task task;
     if (this->tryDequeue(task)) {
         task();
@@ -16,7 +16,7 @@ bool rrc::AbstracrTaskQueueAdapter::execOnce() {
 }
 
 
-void rrc::AbstracrTaskQueueAdapter::execAll() {
+void rrc::AbstractTaskQueueAdapter::execAll() {
     Task task;
     while (this->tryDequeue(task)) {
         task();

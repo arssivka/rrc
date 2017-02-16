@@ -17,14 +17,14 @@ namespace rrc {
     public:
         typedef std::function<std::shared_ptr<Buffer>(const Buffer&)> Callback;
 
-        Service(std::weak_ptr<AbstracrTaskQueueAdapter> taskQueue, const Callback& callback);
+        Service(std::weak_ptr<AbstractTaskQueueAdapter> taskQueue, const Callback& callback);
 
-        Service(std::weak_ptr<AbstracrTaskQueueAdapter> taskQueue, Callback&& callback);
+        Service(std::weak_ptr<AbstractTaskQueueAdapter> taskQueue, Callback&& callback);
 
-        void call(std::shared_ptr<TaskHub> resultHub, std::shared_ptr<Buffer> input);
+        void call(std::shared_ptr<TaskHub<Buffer>> resultHub, std::shared_ptr<Buffer> input);
 
     private:
-        std::weak_ptr<AbstracrTaskQueueAdapter> mTaskQueue;
+        std::weak_ptr<AbstractTaskQueueAdapter> mTaskQueue;
         Callback mCallback;
     };
 }

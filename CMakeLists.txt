@@ -17,15 +17,14 @@ set(SRCS
         src/rrc/core/Property.cpp
         include/rrc/core/Property.h
         include/rrc/core/CopyOnWrite.h
-        src/rrc/core/AbstracrTaskQueueAdapter.cpp
-        include/rrc/core/AbstracrTaskQueueAdapter.h
+        src/rrc/core/AbstractTaskQueueAdapter.cpp
+        include/rrc/core/AbstractTaskQueueAdapter.h
         include/rrc/core/TopicHolder.h
         src/rrc/core/Topic.cpp
         include/rrc/core/Topic.h
         src/rrc/core/LinearLauncher.cpp
         include/rrc/core/LinearLauncher.h
         include/rrc/core/TaskHub.h
-        src/rrc/core/TaskHub.cpp
         include/rrc/core/AbstractQueueAdapter.h
         include/rrc/core/ConcurrentQueueAdapter.h
         include/rrc/core/STLQueueAdapter.h
@@ -58,7 +57,10 @@ set(SRCS
         src/rrc/core/Array.cpp
         include/rrc/core/Array.h
         src/rrc/core/Table.cpp
-        include/rrc/core/Table.h)
+        include/rrc/core/Table.h
+        include/rrc/core/SettingsHolder.h
+        src/rrc/core/SettingsMechanism.cpp
+        include/rrc/core/SettingsMechanism.h)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
         "${PROJECT_BINARY_DIR}/VersionDefines.h")

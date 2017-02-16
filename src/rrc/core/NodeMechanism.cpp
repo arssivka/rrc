@@ -3,10 +3,10 @@
  *  @date 11/5/16
  */
 
-#include "rrc/core/NodeMechanism.h"
+#include <rrc/core/NodeMechanism.h>
 
 
-rrc::NodeMechanism::NodeMechanism(std::shared_ptr<rrc::AbstracrTaskQueueAdapter> syncQueue, rrc::AbstractLauncher& launcher)
+rrc::NodeMechanism::NodeMechanism(std::shared_ptr<rrc::AbstractTaskQueueAdapter> syncQueue, rrc::AbstractLauncher& launcher)
         : mSyncQueue(std::move(syncQueue)), mLauncher(launcher) { }
 
 

@@ -8,7 +8,7 @@
 rrc::Node::~Node() { }
 
 
-rrc::Node::Node(std::shared_ptr<AbstracrTaskQueueAdapter> taskQueue, rrc::MechanismsHolder& mechanismsHolder)
+rrc::Node::Node(std::shared_ptr<AbstractTaskQueueAdapter> taskQueue, rrc::MechanismsHolder& mechanismsHolder)
         : mTaskQueue(std::move(taskQueue)), mMechanismsHolder(mechanismsHolder) {}
 
 
@@ -18,10 +18,10 @@ void rrc::Node::sendMessage(const std::string& topic, std::shared_ptr<rrc::Buffe
 }
 
 
-const std::weak_ptr<rrc::TaskHub> rrc::Node::subscribe(const std::string& topicName,
-                                                               TaskHub::Callback&& callback) {
+const std::weak_ptr<rrc::TaskHub<rrc::Buffer>> rrc::Node::subscribe(const std::string& topicName,
+                                                               TaskHub<Buffer>::Callback&& callback) {
     auto& mechanism = mMechanismsHolder.getAdvertisingMechanism();
-    auto listener = std::make_shared<TaskHub>(mTaskQueue, std::move(callback));
+    auto listener = std::make_shared<TaskHub<Buffer>>(mTaskQueue, std::move(callback));
     mechanism.addListener(topicName, listener);
     return listener;
 }
@@ -32,7 +32,7 @@ void rrc::Node::entry() {
 }
 
 
-void rrc::Node::unsubscribe(const std::string& topicName, const std::weak_ptr<rrc::TaskHub> listener) {
+void rrc::Node::unsubscribe(const std::string& topicName, const std::weak_ptr<rrc::TaskHub<Buffer>> listener) {
     auto& mechanism = mMechanismsHolder.getAdvertisingMechanism();
     mechanism.removeListener(topicName, listener);
 }

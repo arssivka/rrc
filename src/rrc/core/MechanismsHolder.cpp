@@ -6,7 +6,7 @@
 #include <rrc/core/MechanismsHolder.h>
 
 
-rrc::MechanismsHolder::MechanismsHolder(std::shared_ptr<rrc::AbstracrTaskQueueAdapter> queue)
+rrc::MechanismsHolder::MechanismsHolder(std::shared_ptr<rrc::AbstractTaskQueueAdapter> queue)
         : mAdvertisingMechanism(std::move(queue)) {}
 
 

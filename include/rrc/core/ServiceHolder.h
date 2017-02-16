@@ -45,7 +45,7 @@ namespace rrc {
             }
         }
 
-        void call(const ServiceName& name, std::shared_ptr<TaskHub> resultHub, std::shared_ptr<Buffer> input) {
+        void call(const ServiceName& name, std::shared_ptr<TaskHub<Buffer>> resultHub, std::shared_ptr<Buffer> input) {
             auto range = mServiceHash.equal_range(name);
             for (auto it = range.first; it != range.second; ++it) {
                 auto& service = it->second;

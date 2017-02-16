@@ -26,10 +26,10 @@ namespace rrc {
          * @brief Register message listener
          * @param listener Pointer to listener to register
          */
-        void addListener(std::shared_ptr<TaskHub> listener);
+        void addListener(std::shared_ptr<TaskHub<Buffer>> listener);
 
         // TODO: Docs
-        void removeListener(std::weak_ptr<TaskHub> listener);
+        void removeListener(std::weak_ptr<TaskHub<Buffer>> listener);
 
         /**
          * @brief Sends the message
@@ -44,7 +44,7 @@ namespace rrc {
         bool hasListeners() const;
 
     private:
-        std::list<std::shared_ptr<TaskHub>> mListenersList;
+        std::list<std::shared_ptr<TaskHub<Buffer>>> mListenersList;
     };
 }
 

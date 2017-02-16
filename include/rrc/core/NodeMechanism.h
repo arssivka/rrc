@@ -12,7 +12,7 @@ namespace rrc {
     class NodeMechanism {
     public:
 
-        NodeMechanism(std::shared_ptr<AbstracrTaskQueueAdapter> syncQueue, AbstractLauncher& launcher);
+        NodeMechanism(std::shared_ptr<AbstractTaskQueueAdapter> syncQueue, AbstractLauncher& launcher);
 
 
         /**
@@ -36,7 +36,7 @@ namespace rrc {
 
 
     private:
-        std::shared_ptr<AbstracrTaskQueueAdapter> mSyncQueue;
+        std::shared_ptr<AbstractTaskQueueAdapter> mSyncQueue;
         AbstractLauncher& mLauncher;
     };
 }

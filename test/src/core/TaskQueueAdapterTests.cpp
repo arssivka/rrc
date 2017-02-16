@@ -4,13 +4,13 @@
  */
 
 #include <gtest/gtest.h>
-#include <rrc/core/AbstracrTaskQueueAdapter.h>
+#include <rrc/core/AbstractTaskQueueAdapter.h>
 #include <rrc/core/STLQueueAdapter.h>
 
 using namespace rrc;
 
 TEST(TaskQueueAdapterTests, ExecOnceTest) {
-    AbstracrTaskQueueAdapter* testAdapter = (AbstracrTaskQueueAdapter*) new STLQueueAdapter<Task>();
+    AbstractTaskQueueAdapter* testAdapter = (AbstractTaskQueueAdapter*) new STLQueueAdapter<Task>();
     int r;
     testAdapter->enqueueTask([](int x1, int x2, int& x3) {
         x3 = x1 + x2;
@@ -20,7 +20,7 @@ TEST(TaskQueueAdapterTests, ExecOnceTest) {
 }
 
 TEST(TaskQueueAdapterTests, ExecAllTest) {
-    AbstracrTaskQueueAdapter* testAdapter = (AbstracrTaskQueueAdapter*) new STLQueueAdapter<Task>();
+    AbstractTaskQueueAdapter* testAdapter = (AbstractTaskQueueAdapter*) new STLQueueAdapter<Task>();
     int r;
     int r1;
     int r2;
