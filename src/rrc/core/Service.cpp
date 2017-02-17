@@ -3,7 +3,7 @@
  *  @date 2/7/17
  */
 
-#include "include/rrc/core/Service.h"
+#include <rrc/core/Service.h>
 
 
 rrc::Service::Service(std::weak_ptr<rrc::AbstractTaskQueueAdapter> taskQueue, const rrc::Service::Callback& callback)
