@@ -14,7 +14,9 @@ namespace rrc {
     template <class T>
     class TaskHub {
     public:
-        typedef std::function<void(const T&)> Callback;
+        typedef T Type;
+        typedef std::shared_ptr<T> Pointer;
+        typedef std::function<void(const Pointer)> Callback;
 
         // TODO Tests and docs
         TaskHub(std::weak_ptr<AbstractTaskQueueAdapter> taskQueue, Callback&& callback)
@@ -36,7 +38,7 @@ namespace rrc {
             if (queue != nullptr) {
                 auto& callback = mCallback;
                 queue->enqueue([callback, message]() {
-                    callback(*message);
+                    callback(std::move(message));
                 });
                 return true;
             } else {
@@ -51,7 +53,7 @@ namespace rrc {
 
     private:
         std::weak_ptr<AbstractTaskQueueAdapter> mTaskQueuePtr;
-        std::function<void(const T&)> mCallback;
+        Callback mCallback;
 
     };
 }

@@ -31,11 +31,11 @@ TEST_F(ServiceFixture, BasicNonConstConstructorTests) {
     Buffer testBuffer(buf, 5);
     Buffer resultBuffer(buf, 0);
     std::shared_ptr<TaskHub<Buffer>> taskHub = std::make_shared<TaskHub<Buffer>>(
-            resultAdapterPtr, [&resultBuffer](const Buffer& buffer) {
-                resultBuffer = buffer;
+            resultAdapterPtr, [&resultBuffer](const TaskHub<Buffer>::Pointer buffer) {
+                resultBuffer = *buffer;
             });
-    Service service(testAdapterPtr, [](const Buffer& b) {
-        return std::make_shared<Buffer>(b);
+    Service service(testAdapterPtr, [](const std::shared_ptr<Buffer> b) {
+        return b;
     });
     service.call(taskHub, std::make_shared<Buffer>(testBuffer));
     EXPECT_TRUE(testAdapterPtr->execOnce());
@@ -44,8 +44,8 @@ TEST_F(ServiceFixture, BasicNonConstConstructorTests) {
 }
 
 
-std::shared_ptr<Buffer> makeSmth2(const Buffer& buffer) {
-    return std::make_shared<Buffer>(buffer);
+std::shared_ptr<Buffer> makeSmth2(const std::shared_ptr<Buffer> buffer) {
+    return  buffer;
 }
 
 
@@ -55,10 +55,11 @@ TEST_F(ServiceFixture, BasicConstConstructorTests) {
     uint8_t buf[] = {1, 0, 1, 0, 1};
     Buffer testBuffer(buf, 5);
     Buffer resultBuffer(buf, 0);
-    std::shared_ptr<TaskHub<Buffer>> taskHub = std::make_shared<TaskHub<Buffer>>(resultAdapterPtr,
-                                                                                 [&resultBuffer](const Buffer& buffer) {
-                                                                                     resultBuffer = buffer;
-                                                                                 });
+    std::shared_ptr<TaskHub<Buffer>> taskHub = std::make_shared<TaskHub<Buffer>>(
+            resultAdapterPtr,
+            [&resultBuffer](const TaskHub<Buffer>::Pointer buffer) {
+                resultBuffer = *buffer;
+            });
     Service service(testAdapterPtr, &makeSmth2);
     service.call(taskHub, std::make_shared<Buffer>(testBuffer));
     EXPECT_TRUE(testAdapterPtr->execOnce());
