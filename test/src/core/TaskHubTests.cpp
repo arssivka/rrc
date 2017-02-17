@@ -22,8 +22,8 @@ protected:
 
 TEST_F(TaskHubFixture, BasicNonConstConstructorTests) {
     std::shared_ptr<AbstractTaskQueueAdapter> testAdapterPtr(testAdapter);
-    TaskHub<Buffer> taskHub(testAdapterPtr, [](const Buffer& buffer){
-        buffer.isEmpty();
+    TaskHub<Buffer> taskHub(testAdapterPtr, [](const TaskHub<Buffer>::Pointer& buffer){
+        buffer->isEmpty();
     });
     uint8_t buf[] = {1, 0, 1, 0, 1};
     Buffer testBuffer(buf, 5);
@@ -32,8 +32,8 @@ TEST_F(TaskHubFixture, BasicNonConstConstructorTests) {
     EXPECT_TRUE(testAdapterPtr->execOnce());
 }
 
-void makeSmth(const Buffer& buffer) {
-    buffer.isEmpty();
+void makeSmth(const TaskHub<Buffer>::Pointer buffer) {
+    buffer->isEmpty();
 }
 
 TEST_F(TaskHubFixture, BasicOrphanTests) {

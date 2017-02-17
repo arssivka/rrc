@@ -15,7 +15,7 @@ namespace rrc {
     // TODO Tests and docs
     class Service {
     public:
-        typedef std::function<std::shared_ptr<Buffer>(const Buffer&)> Callback;
+        typedef std::function<std::shared_ptr<Buffer>(const std::shared_ptr<Buffer>)> Callback;
 
         Service(std::weak_ptr<AbstractTaskQueueAdapter> taskQueue, const Callback& callback);
 

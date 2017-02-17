@@ -3,7 +3,7 @@
  *  @date 2/7/17
  */
 
-#include "include/rrc/core/Service.h"
+#include <rrc/core/Service.h>
 
 
 rrc::Service::Service(std::weak_ptr<rrc::AbstractTaskQueueAdapter> taskQueue, const rrc::Service::Callback& callback)
@@ -20,12 +20,8 @@ void rrc::Service::call(std::shared_ptr<TaskHub<Buffer>> resultHub, std::shared_
     if (taskQueue != nullptr) {
         taskQueue->enqueue(
                 [&callback, capturedTaskHub = std::move(resultHub), capturedInput = std::move(input)]() mutable {
-                    try {
-                        auto result = callback(*capturedInput);
-                        capturedTaskHub->enqueueTask(result);
-                    } catch (...) {
-                        capturedTaskHub->enqueueTask(nullptr);
-                    }
+                    auto result = callback(std::move(capturedInput));
+                    capturedTaskHub->enqueueTask(result);
                 });
     } else {
         resultHub->enqueueTask(nullptr);;

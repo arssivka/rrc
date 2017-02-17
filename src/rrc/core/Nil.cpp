@@ -4,7 +4,7 @@
  */
 
 #include <ostream>
-#include "rrc/core/Nil.h"
+#include <rrc/core/Nil.h>
 
 
 bool rrc::Nil::operator==(const rrc::Nil& rhs) const {

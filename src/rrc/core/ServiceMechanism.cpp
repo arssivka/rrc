@@ -6,40 +6,27 @@
 #include <rrc/core/ServiceMechanism.h>
 
 
-rrc::ServiceMechanism::ServiceMechanism(std::shared_ptr<rrc::AbstractTaskQueueAdapter> syncQueue)
-        : mSyncQueue(std::move(syncQueue)) {}
-
-
-void rrc::ServiceMechanism::addService(const rrc::ServiceMechanism::Name& name, std::shared_ptr<rrc::Service> service) {
-    auto& serviceHolderRef = mServiceHolder;
-    mSyncQueue->enqueue(
-            [&serviceHolderRef, name, serviceCap = std::move(service)]() mutable {
-                serviceHolderRef.removeService(name, std::move(serviceCap));
-            });
-}
-
-
-void
-rrc::ServiceMechanism::removeService(const rrc::ServiceMechanism::Name& name, const std::weak_ptr<rrc::Service> service) {
-    auto& serviceHolderRef = mServiceHolder;
-    mSyncQueue->enqueue(
-            [&serviceHolderRef, name, service]() mutable {
-                serviceHolderRef.removeService(name, service);
-            });
-}
-
-
-void rrc::ServiceMechanism::call(const rrc::ServiceMechanism::Name& name, std::shared_ptr<rrc::TaskHub<Buffer>> resultHub,
-                                 std::shared_ptr<rrc::Buffer> input) {
-    auto& serviceHolderRef = mServiceHolder;
-    mSyncQueue->enqueue(
-            [&serviceHolderRef, name, resultHubCap = std::move(resultHub),
-                    inputCap = std::move(input)]() mutable {
-                serviceHolderRef.call(name, std::move(resultHubCap), std::move(inputCap));
-            });
-}
+rrc::ServiceMechanism::ServiceMechanism(std::shared_ptr<AbstractTaskQueueAdapter> syncQueue,
+                                        QueueAdapterFactory <Task> taskQueueFactory)
+        : mSyncQueue(std::move(syncQueue)),
+          mServicesQueue((AbstractTaskQueueAdapter*) taskQueueFactory.createUniquePointer().release()),
+          mCallsQueue((AbstractTaskQueueAdapter*) taskQueueFactory.createUniquePointer().release()) {}
 
 
 std::vector<rrc::ServiceMechanism::Name> rrc::ServiceMechanism::getNames() const {
     return mServiceHolder.getNames();
+}
+
+void rrc::ServiceMechanism::enqueueUpdate() {
+    if (mChangesEnqueuedFlag.test_and_set(std::memory_order_acquire)) {
+        mSyncQueue->enqueue([this]() {
+            this->applyQueues();
+        });
+    }
+}
+
+void rrc::ServiceMechanism::applyQueues() {
+    mServicesQueue->execAll();
+    mCallsQueue->execAll();
+    mChangesEnqueuedFlag.clear(std::memory_order_release);
 }

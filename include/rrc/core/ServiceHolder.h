@@ -25,23 +25,9 @@ namespace rrc {
         void removeService(const ServiceName& name, const std::weak_ptr<Service> service) {
             auto lock = service.lock();
             if (lock != nullptr) {
-//                auto it = mServiceHash.begin();
-//                while (it != mServiceHash.end()) {
-//                    if (it->first == name && it->second == lock) {
-//                        mServiceHash.erase(it);
-//                    } else {
-//                        ++it;
-//                    }
-//                }
                 auto range = mServiceHash.equal_range(name);
-                auto it = range.first;
-                while (it != range.second) {
-                    if (it->second == lock) {
-                        mServiceHash.erase(it);
-                    } else {
-                        ++it;
-                    }
-                }
+                auto toRemove = std::remove(range.first, range.end, lock);
+                mServiceHash.erase(toRemove, mServiceHash.end());
             }
         }
 

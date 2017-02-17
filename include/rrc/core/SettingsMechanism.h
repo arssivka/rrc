@@ -19,15 +19,9 @@ namespace rrc {
         typedef SettingsHolder<Key> Holder;
 
         SettingsMechanism(std::shared_ptr<AbstractTaskQueueAdapter> syncQueue,
-                          QueueAdapterFactory<Task> taskQueueFactory)
-                : mSyncQueue(std::move(syncQueue)),
-                  mTablesQueue((AbstractTaskQueueAdapter*) taskQueueFactory.createUniquePointer().release()),
-                  mListenersQueue((AbstractTaskQueueAdapter*) taskQueueFactory.createUniquePointer().release()),
-                  mTablesChanged(ATOMIC_FLAG_INIT) {}
+                          QueueAdapterFactory<Task> taskQueueFactory);
 
-        Table getTable(const Key& name) const {
-            return mSettingsHolder.getTable(name);
-        }
+        Table getTable(const Key& name) const;
 
         template <class K, class T>
         void setTable(K&& name, T&& table) {
@@ -58,25 +52,13 @@ namespace rrc {
             this->enqueueUpdate();
         }
 
-        std::vector<Key> getNames() const {
-            return mSettingsHolder.getNames();
-        }
+        std::vector<Key> getNames() const;
 
 
     private:
-        void enqueueUpdate() {
-            if (mTablesChanged.test_and_set()) {
-                mSyncQueue->enqueue([this]() {
-                    this->applyQueues();
-                });
-            }
-        }
+        void enqueueUpdate();
 
-        void applyQueues() {
-            mListenersQueue->execAll();
-            mTablesQueue->execAll();
-            mTablesChanged.clear();
-        }
+        void applyQueues();
 
 
     private:
@@ -84,7 +66,7 @@ namespace rrc {
         std::shared_ptr<AbstractTaskQueueAdapter> mSyncQueue;
         std::unique_ptr<AbstractTaskQueueAdapter> mTablesQueue;
         std::unique_ptr<AbstractTaskQueueAdapter> mListenersQueue;
-        std::atomic_flag mTablesChanged;
+        std::atomic_flag mChangesEnqueuedFlag;
     };
 }
 
