@@ -19,6 +19,12 @@ namespace rrc {
 
         Array(Array&&) = default;
 
+        Array(std::initializer_list<Property> initializerList);
+
+        Array(size_t n, Property&& p);
+
+        Array(size_t n, const Property& p);
+
         Array& operator=(const Array&) = default;
 
         Array& operator=(Array&&) = default;

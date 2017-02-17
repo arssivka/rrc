@@ -3,7 +3,6 @@
  *  @date 2/7/17
  */
 
-#include <iostream>
 #include <gtest/gtest.h>
 #include <rrc/core/Buffer.h>
 

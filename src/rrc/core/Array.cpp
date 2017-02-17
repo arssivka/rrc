@@ -7,6 +7,12 @@
 #include <rrc/core/Property.h>
 
 
+rrc::Array::Array(std::initializer_list<rrc::Property> initializerList) : mVector(initializerList) { }
+
+rrc::Array::Array(size_t n, rrc::Property&& p) : mVector(n, std::move(p)) { }
+
+rrc::Array::Array(size_t n, const rrc::Property& p) : mVector(n, p) { }
+
 rrc::Property& rrc::Array::operator[](size_t index) { return mVector[index]; }
 
 

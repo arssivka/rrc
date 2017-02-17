@@ -85,4 +85,13 @@ TEST(StringTests, IteratorsTests) {
     EXPECT_EQ(checkVector, fillVector);
 }
 
-//TODO:: new operators tets
+TEST(StringTests, CompareOperatorsTests) {
+    String string("42");
+    String string1("abc");
+    std::string stdString1("42");
+    std::string stdString2("abc");
+    EXPECT_EQ(string < string1, stdString1 < stdString2);
+    EXPECT_EQ(string > string1, stdString1 > stdString2);
+    EXPECT_EQ(string <= string1, stdString1 <= stdString2);
+    EXPECT_EQ(string >= string1, stdString1 >= stdString2);
+}

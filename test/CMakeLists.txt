@@ -23,7 +23,8 @@ set(SRCS
         src/core/BooleanTests.cpp
         src/core/StringTests.cpp
         src/core/NumberTests.cpp
-        src/core/NilTests.cpp)
+        src/core/NilTests.cpp
+        src/core/ArrayTests.cpp)
 
 
 add_executable(tests ${SRCS})

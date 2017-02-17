@@ -47,4 +47,13 @@ TEST(BooleanTests, AssigmentOperatorTests) {
     EXPECT_TRUE(boolean2.get());
 }
 
-//TODO:: new operators tests
+TEST(BooleanTests, CompareOperatorsTests) {
+    Boolean boolean(true);
+    Boolean boolean1(false);
+    bool stdBool = true;
+    bool stdBool1 = false;
+    EXPECT_EQ(boolean < boolean1, stdBool < stdBool1);
+    EXPECT_EQ(boolean > boolean1, stdBool > stdBool1);
+    EXPECT_EQ(boolean <= boolean1, stdBool <= stdBool1);
+    EXPECT_EQ(boolean >= boolean1, stdBool >= stdBool1);
+}

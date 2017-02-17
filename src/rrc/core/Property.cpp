@@ -30,12 +30,12 @@ rrc::Property::Property(const rrc::Boolean& boolean) {
 
 
 rrc::Property::Property(const rrc::Array& array) {
-    mValue->set<Array>(array);
+    mValue->set<mapbox::util::recursive_wrapper<Array>>(mapbox::util::recursive_wrapper<Array>(array));
 }
 
 
 rrc::Property::Property(rrc::Array&& array) {
-    mValue->set<Array>(array);
+    mValue->set<mapbox::util::recursive_wrapper<Array>>(mapbox::util::recursive_wrapper<Array>(std::move(array)));
 }
 
 
