@@ -8,7 +8,9 @@
 
 rrc::MechanismsHolder::MechanismsHolder(std::shared_ptr<rrc::AbstractTaskQueueAdapter> queue,
                                         QueueAdapterFactory<Task> queueAdapterFactory)
-        : mAdvertisingMechanism(queue), mServiceMechanism(queue), mSettingsMechanism(queue, queueAdapterFactory) {}
+        : mAdvertisingMechanism(queue, queueAdapterFactory),
+          mServiceMechanism(queue, queueAdapterFactory),
+          mSettingsMechanism(queue, queueAdapterFactory) {}
 
 
 rrc::AdvertisingMechanism& rrc::MechanismsHolder::getAdvertisingMechanism() {

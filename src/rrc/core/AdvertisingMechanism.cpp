@@ -4,43 +4,31 @@
  */
 
 #include <rrc/core/AdvertisingMechanism.h>
-#include <rrc/core/TaskCapture.h>
+
+
+rrc::AdvertisingMechanism::AdvertisingMechanism(std::shared_ptr<AbstractTaskQueueAdapter> syncQueue,
+                                                QueueAdapterFactory<Task> taskQueueFactory)
+        : mSyncQueue(std::move(syncQueue)),
+          mListenersQueue((AbstractTaskQueueAdapter*) taskQueueFactory.createUniquePointer().release()),
+          mMessagesQueue((AbstractTaskQueueAdapter*) taskQueueFactory.createUniquePointer().release()) {}
 
 
 std::vector<std::string> rrc::AdvertisingMechanism::getNames() const {
     return mTopicHolder.getNames();
 }
 
-
-rrc::AdvertisingMechanism::AdvertisingMechanism(std::shared_ptr<AbstractTaskQueueAdapter> syncQueue)
-        : mSyncQueue(std::move(syncQueue)) {}
-
-
-void rrc::AdvertisingMechanism::sendMessage(const AdvertisingMechanism::Name& topicName,
-                                            std::shared_ptr<rrc::Buffer> message) {
-    auto& topicHolderRef = mTopicHolder;
-    mSyncQueue->enqueue([&topicHolderRef, topicName, messageCap = std::move(message)]() mutable {
-        topicHolderRef.sendMessage(topicName, std::move(messageCap));
-    });
+void rrc::AdvertisingMechanism::enqueueUpdate() {
+    if (mChangesEnqueuedFlag.test_and_set(std::memory_order_acquire)) {
+        mSyncQueue->enqueue([this]() {
+            this->applyQueues();
+        });
+    }
 }
 
-
-void rrc::AdvertisingMechanism::addListener(const AdvertisingMechanism::Name& topicName,
-                                            std::shared_ptr<rrc::TaskHub<Buffer>> listener) {
-    auto& topicHolderRef = mTopicHolder;
-    mSyncQueue->enqueue([&topicHolderRef, topicName, listenerCap = std::move(listener)]() mutable {
-        topicHolderRef.addListener(topicName, std::move(listenerCap));
-    });
-}
-
-
-void
-rrc::AdvertisingMechanism::removeListener(const AdvertisingMechanism::Name& topicName,
-                                          const std::weak_ptr<TaskHub<Buffer>> listener) {
-    auto& topicHolderRef = mTopicHolder;
-    mSyncQueue->enqueue([&topicHolderRef, topicName, listenerCap = std::move(listener)]() mutable {
-        topicHolderRef.removeListener(topicName, std::move(listenerCap));
-    });
+void rrc::AdvertisingMechanism::applyQueues() {
+    mListenersQueue->execAll();
+    mMessagesQueue->execAll();
+    mChangesEnqueuedFlag.clear(std::memory_order_release);
 }
 
 
