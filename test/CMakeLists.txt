@@ -5,25 +5,20 @@ add_subdirectory(lib)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(SRCS
-        src/core/PropertyTests.cpp
-        src/core/SettingsHolderTests.cpp
-        src/core/TopicTest.cpp
-        src/core/DummyNode.cpp
-        include/DummyNode.h
-        include/QueueAdapter.h
-        src/core/NodeTest.cpp
-        src/core/LinearLauncherTest.cpp
-        src/core/QueueAdapterFactoryTests.cpp
-        src/core/BufferTests.cpp
-        src/core/STLQueueAdapterTests.cpp
-        src/core/TaskQueueAdapterTests.cpp
-        src/core/ConcurrentQueueAdapterTests.cpp
-        src/core/TaskHubTests.cpp
-        src/core/ServiceTests.cpp
-        src/core/BooleanTests.cpp
-        src/core/StringTests.cpp
-        src/core/NumberTests.cpp
-        src/core/NilTests.cpp)
+        src/core/property_tests.cpp
+        src/core/settings_holder_tests.cpp
+        src/core/topic_tests.cpp
+        src/core/dummy_node.cpp
+        include/dummy_node.h
+        src/core/node_tests.cpp
+        src/core/linear_launcher_test.cpp
+        src/core/queue_adapter_factory_tests.cpp
+        src/core/stl_queue_adapter_tests.cpp
+        src/core/task_queue_adapter_tests.cpp
+        src/core/concurrent_queue_adapter_tests.cpp
+        src/core/task_packer_tests.cpp
+        src/core/service_tests.cpp
+        )
 
 
 add_executable(tests ${SRCS})
