@@ -52,17 +52,17 @@ void rrc::linear_launcher::remove_node(std::shared_ptr<rrc::node> node) {
 
 bool rrc::linear_launcher::step() {
     if (m_finished) return false;
-    for (auto&& queue : m_queues_list) queue->exec_all();
+    for (auto&& queue : m_queues_list) exec_all(queue);
     for (auto&& node : m_nodes_list) node->entry();
     return m_finished;
 }
 
 
-void rrc::linear_launcher::add_sync_queue(std::shared_ptr<abstract_task_queue_adapter> queue) {
+void rrc::linear_launcher::add_sync_queue(std::shared_ptr<abstract_queue_adapter<task>> queue) {
     m_queues_list.emplace_front(std::move(queue));
 }
 
 
-void rrc::linear_launcher::remove_sync_queue(std::shared_ptr<abstract_task_queue_adapter> queue) {
+void rrc::linear_launcher::remove_sync_queue(std::shared_ptr<abstract_queue_adapter<task>> queue) {
     m_queues_list.remove(queue);
 }

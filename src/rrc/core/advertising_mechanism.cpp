@@ -18,20 +18,23 @@
  */
 
 #include <rrc/core/advertising_mechanism.h>
+#include <rrc/core/exec.h>
 
 
-rrc::advertising_mechanism::advertising_mechanism(std::shared_ptr<abstract_task_queue_adapter> sync_queue,
+using namespace rrc;
+
+advertising_mechanism::advertising_mechanism(std::shared_ptr<abstract_queue_adapter<task>> sync_queue,
                                                   queue_adapter_factory<task>& task_queue_factory)
         : m_sync_queue(sync_queue),
-          m_listeners_queue((abstract_task_queue_adapter*) task_queue_factory.create_unique_pointer().release()),
-          m_messages_queue((abstract_task_queue_adapter*) task_queue_factory.create_unique_pointer().release()) {}
+          m_listeners_queue((abstract_queue_adapter<task>*) task_queue_factory.create_unique_pointer().release()),
+          m_messages_queue((abstract_queue_adapter<task>*) task_queue_factory.create_unique_pointer().release()) {}
 
 
-std::vector<std::string> rrc::advertising_mechanism::keys() const {
+std::vector<std::string> advertising_mechanism::keys() const {
     return m_topic_holder.keys();
 }
 
-void rrc::advertising_mechanism::enqueue_update() {
+void advertising_mechanism::enqueue_update() {
     if (m_changes_enqueued_flag.test_and_set(std::memory_order_acquire)) {
         m_sync_queue->enqueue([this]() {
             this->apply_queues();
@@ -39,9 +42,9 @@ void rrc::advertising_mechanism::enqueue_update() {
     }
 }
 
-void rrc::advertising_mechanism::apply_queues() {
-    m_listeners_queue->exec_all();
-    m_messages_queue->exec_all();
+void advertising_mechanism::apply_queues() {
+    exec_all(m_listeners_queue);
+    exec_all(m_messages_queue);
     m_changes_enqueued_flag.clear(std::memory_order_release);
 }
 

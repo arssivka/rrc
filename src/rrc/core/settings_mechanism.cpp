@@ -19,11 +19,11 @@
 
 #include <rrc/core/settings_mechanism.h>
 
-rrc::settings_mechanism::settings_mechanism(std::shared_ptr<rrc::abstract_task_queue_adapter> sync_queue,
+rrc::settings_mechanism::settings_mechanism(std::shared_ptr<rrc::abstract_queue_adapter<task>> sync_queue,
                                             rrc::queue_adapter_factory<rrc::task>& task_queue_factory)
         : m_sync_queue(std::move(sync_queue)),
-          m_properties_queue((abstract_task_queue_adapter*) task_queue_factory.create_unique_pointer().release()),
-          m_listeners_queue((abstract_task_queue_adapter*) task_queue_factory.create_unique_pointer().release()),
+          m_properties_queue(task_queue_factory.create()),
+          m_listeners_queue(task_queue_factory.create()),
           m_changes_enqueued_flag(ATOMIC_FLAG_INIT) {}
 
 bool rrc::settings_mechanism::try_get_property(const rrc::settings_mechanism::key_type& key,
@@ -44,7 +44,7 @@ void rrc::settings_mechanism::enqueue_update() {
 }
 
 void rrc::settings_mechanism::apply_queues() {
-    m_listeners_queue->exec_all();
-    m_properties_queue->exec_all();
+    exec_all(m_listeners_queue);
+    exec_all(m_properties_queue);
     m_changes_enqueued_flag.clear(std::memory_order_release);
 }

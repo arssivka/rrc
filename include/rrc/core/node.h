@@ -21,7 +21,7 @@
 
 
 #include "non_copyable.h"
-#include "abstract_task_queue_adapter.h"
+#include "exec.h"
 #include "mechanisms_holder.h"
 
 namespace rrc {
@@ -45,7 +45,7 @@ namespace rrc {
         using settings_listener_type = typename settings_mechanism::listener_type;
 
         // TODO: Tests and docs
-        node(std::shared_ptr<abstract_task_queue_adapter> task_queue, mechanisms_holder& mechanisms_holder)
+        node(std::shared_ptr<abstract_queue_adapter<task>> task_queue, mechanisms_holder& mechanisms_holder)
                 : m_task_queue_ptr(std::move(task_queue)), m_mechanisms_holder(mechanisms_holder) {}
 
         std::shared_ptr<subscriber_type> subscribe(topic_key_type key,
@@ -117,7 +117,7 @@ namespace rrc {
 
         virtual void entry() {
             this->before_events();
-            m_task_queue_ptr->exec_all();
+            exec_all(m_task_queue_ptr);
             this->after_events();
         }
 
@@ -127,12 +127,12 @@ namespace rrc {
         virtual ~node() {}
 
     protected:
-        std::shared_ptr<abstract_task_queue_adapter> task_queue() const {
+        std::shared_ptr<abstract_queue_adapter<task>> task_queue() const {
             return m_task_queue_ptr;
         }
 
     private:
-        std::shared_ptr<abstract_task_queue_adapter> m_task_queue_ptr;
+        std::shared_ptr<abstract_queue_adapter<task>> m_task_queue_ptr;
         mechanisms_holder& m_mechanisms_holder;
     };
 }

@@ -21,7 +21,7 @@
 
 
 #include <memory>
-#include "abstract_task_queue_adapter.h"
+#include "exec.h"
 
 namespace rrc {
     template <class T>
@@ -31,10 +31,10 @@ namespace rrc {
         typedef std::function<void(type)> callback_type;
 
         // TODO Tests and docs
-        task_packer(std::weak_ptr<abstract_task_queue_adapter> task_queue_ptr, callback_type&& callback)
+        task_packer(std::weak_ptr<abstract_queue_adapter<task>> task_queue_ptr, callback_type&& callback)
                 : m_task_queue_ptr(std::move(task_queue_ptr)), m_callback(std::move(callback)) {}
 
-        task_packer(std::weak_ptr<abstract_task_queue_adapter> task_queue_ptr, const callback_type& callback)
+        task_packer(std::weak_ptr<abstract_queue_adapter<task>> task_queue_ptr, const callback_type& callback)
                 : m_task_queue_ptr(task_queue_ptr), m_callback(callback) {}
 
         bool is_orphan() const {
@@ -81,7 +81,7 @@ namespace rrc {
         ~task_packer() {}
 
     private:
-        std::weak_ptr<abstract_task_queue_adapter> m_task_queue_ptr;
+        std::weak_ptr<abstract_queue_adapter<task>> m_task_queue_ptr;
         callback_type m_callback;
 
     };

@@ -17,8 +17,7 @@ set(SRCS
         src/rrc/core/property.cpp
         include/rrc/core/property.h
         include/rrc/core/copy_on_write.h
-        src/rrc/core/abstract_task_queue_adapter.cpp
-        include/rrc/core/abstract_task_queue_adapter.h
+        include/rrc/core/exec.h
         include/rrc/core/topic_holder.h
         src/rrc/core/topic.cpp
         include/rrc/core/topic.h
@@ -45,7 +44,8 @@ set(SRCS
         include/rrc/core/service_mechanism.h
         include/rrc/core/settings_holder.h
         src/rrc/core/settings_mechanism.cpp
-        include/rrc/core/settings_mechanism.h include/rrc/core/defines.h)
+        include/rrc/core/settings_mechanism.h
+        include/rrc/core/defines.h)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
         "${PROJECT_BINARY_DIR}/VersionDefines.h")

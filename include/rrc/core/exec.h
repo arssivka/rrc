@@ -25,30 +25,21 @@
 #include "defines.h"
 
 namespace rrc {
-    class abstract_task_queue_adapter : public abstract_queue_adapter<task> {
-    public:
-        /**
-         * @brief Enques function object with it's args
-         * @param func function object
-         * @param args Arguments for the function object
-         */
-         template <class Func, class... Args>
-        void enqueue_task(Func&& func, Args... args) {
-            this->enqueue(std::bind(std::forward<Func>(func),
-                                         std::forward<Args>(args)...));
+    template <class Q>
+    bool exec_once(Q& queue_ptr) {
+        task t;
+        if (!queue_ptr->try_dequeue(t)) return false;
+        t();
+        return true;
+    }
+
+    template <class Q>
+    void exec_all(Q& queue_ptr) {
+        task t;
+        while (queue_ptr->try_dequeue(t)) {
+            t();
         }
-
-        /**
-         * @brief Executes one Task from queue
-         * @return True if succeed otherwise false
-         */
-        bool exec_once();
-
-        /**
-         * @brief Executes all Tasks from queue
-         */
-        void exec_all();
-    };
+    }
 }
 
 

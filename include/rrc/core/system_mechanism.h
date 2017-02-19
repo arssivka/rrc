@@ -29,7 +29,7 @@
 namespace rrc {
     class system_mechanism {
     public:
-        system_mechanism(std::shared_ptr<abstract_task_queue_adapter> sync_queue,
+        system_mechanism(std::shared_ptr<abstract_queue_adapter<task>> sync_queue,
                          queue_adapter_factory<task>& task_queue_factory,
                          abstract_launcher& launcher,
                          std::vector<std::string> args);
@@ -57,7 +57,7 @@ namespace rrc {
 
 
     private:
-        std::shared_ptr<abstract_task_queue_adapter> m_sync_queue;
+        std::shared_ptr<abstract_queue_adapter<task>> m_sync_queue;
         abstract_launcher& m_launcher;
         const std::vector<std::string> m_args;
     };

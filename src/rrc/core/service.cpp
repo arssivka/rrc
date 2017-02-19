@@ -20,7 +20,7 @@
 #include <rrc/core/service.h>
 
 
-rrc::service::service(std::weak_ptr<rrc::abstract_task_queue_adapter> task_queue, rrc::service::callback_type callback)
+rrc::service::service(std::weak_ptr<rrc::abstract_queue_adapter<task>> task_queue, rrc::service::callback_type callback)
         : m_task_queue_ptr(std::move(task_queue)), m_callback(std::move(callback)) {}
 
 

@@ -21,10 +21,11 @@
 
 
 #include <memory>
+#include "defines.h"
 
 namespace rrc {
     class node;
-    class abstract_task_queue_adapter;
+    template <class T> class abstract_queue_adapter;
 
     /**
      * @brief Abstract class for creating launchers. Lauуncher is needed to run all the nodes and functionality of the whole system.
@@ -66,9 +67,9 @@ namespace rrc {
         virtual void remove_node(std::shared_ptr<node> node_ptr) = 0;
 
         // TODO: Docs and tests
-        virtual void add_sync_queue(std::shared_ptr<abstract_task_queue_adapter> queue_ptr) = 0;
+        virtual void add_sync_queue(std::shared_ptr<abstract_queue_adapter<task>> queue_ptr) = 0;
 
-        virtual void remove_sync_queue(std::shared_ptr<abstract_task_queue_adapter> queue_ptr) = 0;
+        virtual void remove_sync_queue(std::shared_ptr<abstract_queue_adapter<task>> queue_ptr) = 0;
     };
 
 }

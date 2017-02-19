@@ -51,10 +51,10 @@ namespace rrc {
     private:
         abstract_launcher& m_launcher;
 
-        std::shared_ptr<abstract_task_queue_adapter> m_system_mechanism_queue;
-        std::shared_ptr<abstract_task_queue_adapter> m_advertising_mechanism_queue;
-        std::shared_ptr<abstract_task_queue_adapter> m_service_mechanism_queue;
-        std::shared_ptr<abstract_task_queue_adapter> m_settings_mechanism_queue;
+        std::shared_ptr<abstract_queue_adapter<task>> m_system_mechanism_queue;
+        std::shared_ptr<abstract_queue_adapter<task>> m_advertising_mechanism_queue;
+        std::shared_ptr<abstract_queue_adapter<task>> m_service_mechanism_queue;
+        std::shared_ptr<abstract_queue_adapter<task>> m_settings_mechanism_queue;
 
         std::unique_ptr<system_mechanism> m_system_mechanism;
         std::unique_ptr<advertising_mechanism> m_advertising_mechanism;

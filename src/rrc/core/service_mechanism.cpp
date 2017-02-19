@@ -20,11 +20,11 @@
 #include <rrc/core/service_mechanism.h>
 
 
-rrc::service_mechanism::service_mechanism(std::shared_ptr<abstract_task_queue_adapter> sync_queue,
+rrc::service_mechanism::service_mechanism(std::shared_ptr<abstract_queue_adapter<task>> sync_queue,
                                         queue_adapter_factory<task>& task_queue_factory)
         : m_sync_queue{std::move(sync_queue)},
-          m_services_queue{(abstract_task_queue_adapter*) task_queue_factory.create()},
-          m_calls_queue{(abstract_task_queue_adapter*) task_queue_factory.create()} {}
+          m_services_queue{task_queue_factory.create()},
+          m_calls_queue{task_queue_factory.create()} {}
 
 
 std::vector<rrc::service_mechanism::key_type> rrc::service_mechanism::keys() const {
@@ -40,7 +40,7 @@ void rrc::service_mechanism::enqueue_update() {
 }
 
 void rrc::service_mechanism::apply_queues() {
-    m_services_queue->exec_all();
-    m_calls_queue->exec_all();
+    exec_all(m_services_queue);
+    exec_all(m_calls_queue);
     m_changes_enqueued_flag.clear(std::memory_order_release);
 }

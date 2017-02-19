@@ -32,7 +32,7 @@ namespace rrc {
         using message = topic::message_type;
 
 
-        advertising_mechanism(std::shared_ptr<abstract_task_queue_adapter> sync_queue,
+        advertising_mechanism(std::shared_ptr<abstract_queue_adapter<task>> sync_queue,
                               queue_adapter_factory<task>& task_queue_factory);
 
         /**
@@ -83,9 +83,9 @@ namespace rrc {
 
     private:
         topic_holder<key_type> m_topic_holder;
-        std::shared_ptr<abstract_task_queue_adapter> m_sync_queue;
-        std::unique_ptr<abstract_task_queue_adapter> m_listeners_queue;
-        std::unique_ptr<abstract_task_queue_adapter> m_messages_queue;
+        std::shared_ptr<abstract_queue_adapter<task>> m_sync_queue;
+        std::unique_ptr<abstract_queue_adapter<task>> m_listeners_queue;
+        std::unique_ptr<abstract_queue_adapter<task>> m_messages_queue;
         std::atomic_flag m_changes_enqueued_flag;
     };
 }

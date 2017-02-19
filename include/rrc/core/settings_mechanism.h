@@ -20,7 +20,7 @@
 #pragma once
 
 
-#include "abstract_task_queue_adapter.h"
+#include "exec.h"
 #include "settings_holder.h"
 #include "queue_adapter_factory.h"
 #include <atomic>
@@ -31,7 +31,7 @@ namespace rrc {
         using key_type = std::string;
         using listener_type = settings_holder<key_type>::listener_type;
 
-        settings_mechanism(std::shared_ptr<abstract_task_queue_adapter> sync_queue,
+        settings_mechanism(std::shared_ptr<abstract_queue_adapter<task>> sync_queue,
                            queue_adapter_factory<task>& task_queue_factory);
 
         bool try_get_property(const key_type& key, property& output) const;
@@ -71,9 +71,9 @@ namespace rrc {
 
     private:
         settings_holder<key_type> m_settings_holder;
-        std::shared_ptr<abstract_task_queue_adapter> m_sync_queue;
-        std::unique_ptr<abstract_task_queue_adapter> m_properties_queue;
-        std::unique_ptr<abstract_task_queue_adapter> m_listeners_queue;
+        std::shared_ptr<abstract_queue_adapter<task>> m_sync_queue;
+        std::unique_ptr<abstract_queue_adapter<task>> m_properties_queue;
+        std::unique_ptr<abstract_queue_adapter<task>> m_listeners_queue;
         std::atomic_flag m_changes_enqueued_flag;
     };
 }

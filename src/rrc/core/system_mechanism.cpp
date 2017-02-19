@@ -18,10 +18,10 @@
  */
 
 #include <rrc/core/system_mechanism.h>
-#include <rrc/core/abstract_task_queue_adapter.h>
+#include <rrc/core/exec.h>
 
 
-rrc::system_mechanism::system_mechanism(std::shared_ptr<abstract_task_queue_adapter> sync_queue,
+rrc::system_mechanism::system_mechanism(std::shared_ptr<abstract_queue_adapter<task>> sync_queue,
                                         queue_adapter_factory<task>& task_queue_factory,
                                         abstract_launcher& launcher,
                                         std::vector<std::string> args)

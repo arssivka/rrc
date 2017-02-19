@@ -33,14 +33,14 @@ namespace rrc {
         using callback_type = std::function<message_type(message_type)>;
         using listener_type = task_packer<message_type>;
 
-        service(std::weak_ptr<abstract_task_queue_adapter> task_queue_ptr, callback_type callback);
+        service(std::weak_ptr<abstract_queue_adapter<task>> task_queue_ptr, callback_type callback);
 
         bool is_orphan() const;
 
         bool call(std::shared_ptr<listener_type> listener_ptr, message_type input);
 
     private:
-        std::weak_ptr<abstract_task_queue_adapter> m_task_queue_ptr;
+        std::weak_ptr<abstract_queue_adapter<task>> m_task_queue_ptr;
         callback_type m_callback;
     };
 }
