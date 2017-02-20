@@ -49,3 +49,32 @@ void advertising_mechanism::apply_queues() {
 }
 
 
+void advertising_mechanism::send_message(advertising_mechanism::key_type key, advertising_mechanism::message message) {
+    m_messages_queue->enqueue([this, key_cap = std::move(key),
+                                      message_cap = std::move(message)]() mutable {
+        m_topic_holder.send_message(key_cap, std::move(message_cap));
+    });
+    this->enqueue_update();
+}
+
+
+void advertising_mechanism::add_listener(advertising_mechanism::key_type key,
+                                         std::shared_ptr<advertising_mechanism::subscriber> listener_ptr) {
+    m_listeners_queue->enqueue([this, key_cap = std::move(key),
+                                       listener_ptr_cap = std::move(listener_ptr)]() mutable {
+        m_topic_holder.add_listener(key_cap, std::move(listener_ptr_cap));
+    });
+    this->enqueue_update();
+}
+
+
+void advertising_mechanism::remove_listener(advertising_mechanism::key_type key,
+                                            const std::shared_ptr<advertising_mechanism::subscriber> listener_ptr) {
+    m_listeners_queue->enqueue([this, key_cap = std::move(key),
+                                       listener_ptr_cap = std::move(listener_ptr)]() mutable {
+        m_topic_holder.remove_listener(key_cap, std::move(listener_ptr_cap));
+    });
+    this->enqueue_update();
+}
+
+

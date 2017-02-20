@@ -47,7 +47,7 @@ namespace rrc {
          */
         void remove_node(std::shared_ptr<node> node);
 
-        const std::vector<std::string>& get_args() const;
+        const std::vector<std::string>& args() const;
 
 
         /**

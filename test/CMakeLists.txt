@@ -14,7 +14,7 @@ set(SRCS
         src/core/linear_launcher_test.cpp
         src/core/queue_adapter_factory_tests.cpp
         src/core/stl_queue_adapter_tests.cpp
-        src/core/task_queue_adapter_tests.cpp
+        src/core/exec_tests.cpp
         src/core/concurrent_queue_adapter_tests.cpp
         src/core/task_packer_tests.cpp
         src/core/service_tests.cpp

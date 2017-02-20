@@ -44,3 +44,38 @@ void rrc::service_mechanism::apply_queues() {
     exec_all(m_calls_queue);
     m_changes_enqueued_flag.clear(std::memory_order_release);
 }
+
+
+void
+rrc::service_mechanism::add_service(rrc::service_mechanism::key_type key, std::shared_ptr<rrc::service> service_ptr) {
+    m_services_queue->enqueue(
+            [this, key_cap = std::move(key),
+                    service_ptr_cap = std::move(service_ptr)]() mutable {
+                m_service_holder.remove_service(key_cap, std::move(service_ptr_cap));
+            });
+    this->enqueue_update();
+}
+
+
+void rrc::service_mechanism::remove_service(rrc::service_mechanism::key_type key,
+                                            const std::shared_ptr<rrc::service> service_ptr) {
+    m_services_queue->enqueue(
+            [this, key_cap = std::move(key),
+                    service_ptr_cap = std::move(service_ptr)]() mutable {
+                m_service_holder.remove_service(key_cap, std::move(service_ptr_cap));
+            });
+    this->enqueue_update();
+}
+
+
+void rrc::service_mechanism::call(rrc::service_mechanism::key_type key,
+                                  std::shared_ptr<rrc::service_mechanism::listener_type> listener_ptr,
+                                  rrc::service_mechanism::message_type input) {
+    m_calls_queue->enqueue(
+            [this, key_cap = std::move(key),
+                    listener_ptr_cap = std::move(listener_ptr),
+                    input_cap = std::move(input)]() mutable {
+                m_service_holder.call(key_cap, std::move(listener_ptr_cap), std::move(input_cap));
+            });
+    this->enqueue_update();
+}

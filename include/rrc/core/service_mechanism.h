@@ -36,33 +36,11 @@ namespace rrc {
         service_mechanism(std::shared_ptr<abstract_queue_adapter<task>> sync_queue,
                           queue_adapter_factory<task>& task_queue_factory);
 
-        void add_service(key_type key, std::shared_ptr<service> service_ptr) {
-            m_services_queue->enqueue(
-                    [this, key_cap = std::move(key),
-                            service_ptr_cap = std::move(service_ptr)]() mutable {
-                        m_service_holder.remove_service(key_cap, std::move(service_ptr_cap));
-                    });
-            this->enqueue_update();
-        }
+        void add_service(key_type key, std::shared_ptr<service> service_ptr);
 
-        void remove_service(key_type key, const std::shared_ptr<service> service_ptr) {
-            m_services_queue->enqueue(
-                    [this, key_cap = std::move(key),
-                            service_ptr_cap = std::move(service_ptr)]() mutable {
-                        m_service_holder.remove_service(key_cap, std::move(service_ptr_cap));
-                    });
-            this->enqueue_update();
-        }
+        void remove_service(key_type key, const std::shared_ptr<service> service_ptr);
 
-        void call(key_type key, std::shared_ptr<listener_type> listener_ptr, message_type input) {
-            m_calls_queue->enqueue(
-                    [this, key_cap = std::move(key),
-                            listener_ptr_cap = std::move(listener_ptr),
-                            input_cap = std::move(input)]() mutable {
-                        m_service_holder.call(key_cap, std::move(listener_ptr_cap), std::move(input_cap));
-                    });
-            this->enqueue_update();
-        }
+        void call(key_type key, std::shared_ptr<listener_type> listener_ptr, message_type input);
 
         std::vector<key_type> keys() const;
 

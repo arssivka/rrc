@@ -58,7 +58,7 @@ namespace rrc {
 
         void unsubscribe(topic_key_type key, std::shared_ptr<subscriber_type> listener_ptr) {
             auto& mechanism = m_mechanisms_holder.get_advertising_mechanism();
-            mechanism.removeListener(std::move(key), std::move(listener_ptr));
+            mechanism.remove_listener(std::move(key), std::move(listener_ptr));
         }
 
         void send_message(topic_key_type key, topic_message_type message) {

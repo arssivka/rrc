@@ -36,29 +36,11 @@ namespace rrc {
 
         bool try_get_property(const key_type& key, property& output) const;
 
-        void set_property(key_type key, property prop) {
-            m_properties_queue->enqueue([this, key_cap = std::move(key),
-                                                prop_cap = std::move(prop)]() mutable {
-                m_settings_holder.set_property(key_cap, std::move(prop_cap));
-            });
-            this->enqueue_update();
-        }
+        void set_property(key_type key, property prop);
 
-        void add_listener(key_type key, std::shared_ptr<listener_type> listener_ptr) {
-            m_listeners_queue->enqueue([this, key_cap = std::move(key),
-                                               listener_ptr_cap = std::move(listener_ptr)]() mutable {
-                m_settings_holder.add_listener(key_cap, std::move(listener_ptr_cap));
-            });
-            this->enqueue_update();
-        }
+        void add_listener(key_type key, std::shared_ptr<listener_type> listener_ptr);
 
-        void remove_listener(key_type key, std::shared_ptr<listener_type> listener_ptr) {
-            m_listeners_queue->enqueue([this, key_cap = std::move(key),
-                                               listener_ptr_cap = std::move(listener_ptr)]() mutable {
-                m_settings_holder.remove_listener(key_cap, std::move(listener_ptr_cap));
-            });
-            this->enqueue_update();
-        }
+        void remove_listener(key_type key, std::shared_ptr<listener_type> listener_ptr);
 
         std::vector<key_type> keys() const;
 

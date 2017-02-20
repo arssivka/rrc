@@ -40,35 +40,17 @@ namespace rrc {
          * @param topicName Name of the topic for the message
          * @param message Pointer to the message, that needs to be sent
          */
-        void send_message(key_type key, message message) {
-            m_messages_queue->enqueue([this, key_cap = std::move(key),
-                                              message_cap = std::move(message)]() mutable {
-                m_topic_holder.send_message(key_cap, std::move(message_cap));
-            });
-            this->enqueue_update();
-        }
+        void send_message(key_type key, message message);
 
         /**
          * @brief Registers listener
          * @param topicName Name of the topic for the listener
          * @param listenerPtr Pointer to the listener that needs to be registered
          */
-        void add_listener(key_type key, std::shared_ptr<subscriber> listener_ptr) {
-            m_listeners_queue->enqueue([this, key_cap = std::move(key),
-                                               listener_ptr_cap = std::move(listener_ptr)]() mutable {
-                m_topic_holder.add_listener(key_cap, std::move(listener_ptr_cap));
-            });
-            this->enqueue_update();
-        }
+        void add_listener(key_type key, std::shared_ptr<subscriber> listener_ptr);
 
         // TODO Tests and docs
-        void removeListener(key_type key, const std::shared_ptr<subscriber> listener_ptr) {
-            m_listeners_queue->enqueue([this, key_cap = std::move(key),
-                                             listener_ptr_cap = std::move(listener_ptr)]() mutable {
-                m_topic_holder.remove_listener(key_cap, std::move(listener_ptr_cap));
-            });
-            this->enqueue_update();
-        }
+        void remove_listener(key_type key, const std::shared_ptr<subscriber> listener_ptr);
 
         /**
          * @brief Returns set of avaliable topic names

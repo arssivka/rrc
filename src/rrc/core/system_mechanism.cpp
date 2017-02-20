@@ -50,6 +50,6 @@ void rrc::system_mechanism::stop() {
     m_launcher.stop();
 }
 
-const std::vector<std::string>& rrc::system_mechanism::get_args() const {
+const std::vector<std::string>& rrc::system_mechanism::args() const {
     return m_args;
 }

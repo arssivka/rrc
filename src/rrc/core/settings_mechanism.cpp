@@ -48,3 +48,32 @@ void rrc::settings_mechanism::apply_queues() {
     exec_all(m_properties_queue);
     m_changes_enqueued_flag.clear(std::memory_order_release);
 }
+
+
+void rrc::settings_mechanism::set_property(rrc::settings_mechanism::key_type key, rrc::property prop) {
+    m_properties_queue->enqueue([this, key_cap = std::move(key),
+                                        prop_cap = std::move(prop)]() mutable {
+        m_settings_holder.set_property(key_cap, std::move(prop_cap));
+    });
+    this->enqueue_update();
+}
+
+
+void rrc::settings_mechanism::add_listener(rrc::settings_mechanism::key_type key,
+                                           std::shared_ptr<rrc::settings_mechanism::listener_type> listener_ptr) {
+    m_listeners_queue->enqueue([this, key_cap = std::move(key),
+                                       listener_ptr_cap = std::move(listener_ptr)]() mutable {
+        m_settings_holder.add_listener(key_cap, std::move(listener_ptr_cap));
+    });
+    this->enqueue_update();
+}
+
+
+void rrc::settings_mechanism::remove_listener(rrc::settings_mechanism::key_type key,
+                                              std::shared_ptr<rrc::settings_mechanism::listener_type> listener_ptr) {
+    m_listeners_queue->enqueue([this, key_cap = std::move(key),
+                                       listener_ptr_cap = std::move(listener_ptr)]() mutable {
+        m_settings_holder.remove_listener(key_cap, std::move(listener_ptr_cap));
+    });
+    this->enqueue_update();
+}
