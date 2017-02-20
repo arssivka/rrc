@@ -4,8 +4,7 @@
  */
 #include <iostream>
 #include <gtest/gtest.h>
-#include <rrc/core/topic.h>
-#include <rrc/core/stl_queue_adapter.h>
+#include <rrc/core.h>
 
 using namespace rrc;
 

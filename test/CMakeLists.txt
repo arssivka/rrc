@@ -11,7 +11,7 @@ set(SRCS
         src/core/dummy_node.cpp
         include/dummy_node.h
         src/core/node_tests.cpp
-        src/core/linear_launcher_test.cpp
+        src/core/linear_launcher_tests.cpp
         src/core/queue_adapter_factory_tests.cpp
         src/core/stl_queue_adapter_tests.cpp
         src/core/exec_tests.cpp
@@ -23,5 +23,6 @@ set(SRCS
 
 add_executable(tests ${SRCS})
 target_link_libraries(tests gtest gtest_main gmock rrc)
+target_include_directories(tests PUBLIC include/)
 add_test(tests tests)
 

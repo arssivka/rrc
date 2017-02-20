@@ -4,7 +4,7 @@
  */
 
 #include <gtest/gtest.h>
-#include <rrc/core/property.h>
+#include <rrc/core.h>
 
 using namespace rrc;
 

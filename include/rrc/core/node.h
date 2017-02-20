@@ -45,21 +45,12 @@ namespace rrc {
         using settings_listener_type = typename settings_mechanism::listener_type;
 
         // TODO: Tests and docs
-        node(std::shared_ptr<abstract_queue_adapter<task>> task_queue, mechanisms_holder& mechanisms_holder)
-                : m_task_queue_ptr(std::move(task_queue)), m_mechanisms_holder(mechanisms_holder) {}
+        node(std::shared_ptr<abstract_queue_adapter<task>> task_queue, mechanisms_holder& mechanisms_holder);
 
         std::shared_ptr<subscriber_type> subscribe(topic_key_type key,
-                                                   subscriber_callback_type callback) {
-            auto& mechanism = m_mechanisms_holder.get_advertising_mechanism();
-            auto subscriber_ptr = std::make_shared<subscriber_type>(m_task_queue_ptr, std::move(callback));
-            mechanism.add_listener(std::move(key), subscriber_ptr);
-            return subscriber_ptr;
-        }
+                                                   subscriber_callback_type callback);
 
-        void unsubscribe(topic_key_type key, std::shared_ptr<subscriber_type> listener_ptr) {
-            auto& mechanism = m_mechanisms_holder.get_advertising_mechanism();
-            mechanism.remove_listener(std::move(key), std::move(listener_ptr));
-        }
+        void unsubscribe(topic_key_type key, std::shared_ptr<subscriber_type> listener_ptr);
 
         void send_message(topic_key_type key, topic_message_type message) {
             auto& mechanism = m_mechanisms_holder.get_advertising_mechanism();
@@ -67,17 +58,9 @@ namespace rrc {
         }
 
         std::shared_ptr<service> add_service(service_key_type key,
-                                             service_callback_type callback) {
-            auto& mechanism = m_mechanisms_holder.get_service_mechanism();
-            auto listener = std::make_shared<service>(m_task_queue_ptr, std::move(callback));
-            mechanism.add_service(std::move(key), listener);
-            return listener;
-        }
+                                             service_callback_type callback);
 
-        void remove_service(service_key_type key, std::shared_ptr<service> service_ptr) {
-            auto& mechanism = m_mechanisms_holder.get_service_mechanism();
-            mechanism.add_service(std::move(key), std::move(service_ptr));
-        }
+        void remove_service(service_key_type key, std::shared_ptr<service> service_ptr);
 
         void call(service_key_type key, service_message_type message,
                   service_listener_type::callback_type callback) {
@@ -87,53 +70,38 @@ namespace rrc {
         }
 
 
-        bool try_get_property(const settings_key_type& key, property& output) const {
-            auto& mechanism = m_mechanisms_holder.get_settings_mechanism();
-            return mechanism.try_get_property(key, output);
-        }
+        bool try_get_property(const settings_key_type& key, property& output) const;
 
-        void set_property(settings_key_type key, property prop) {
-            auto& mechanism = m_mechanisms_holder.get_settings_mechanism();
-            mechanism.set_property(std::move(key), std::move(prop));
-        }
+        void set_property(settings_key_type key, property prop);
 
         std::shared_ptr<settings_listener_type> add_settings_listener(settings_key_type key,
-                                                                      settings_listener_type::callback_type callback) {
-            auto& mechanism = m_mechanisms_holder.get_settings_mechanism();
-            auto listener_ptr = std::make_shared<settings_listener_type>(m_task_queue_ptr, std::move(callback));
-            mechanism.add_listener(std::move(key), listener_ptr);
-            return listener_ptr;
-        }
+                                                                      settings_listener_type::callback_type callback);
 
         void remove_settings_listener(settings_key_type key,
-                                      std::shared_ptr<settings_listener_type> listener_ptr) {
-            auto& mechanism = m_mechanisms_holder.get_settings_mechanism();
-            mechanism.add_listener(std::move(key), std::move(listener_ptr));
-        }
+                                      std::shared_ptr<settings_listener_type> listener_ptr);
 
-        virtual void before_events() {}
+        virtual void before_events();
 
-        virtual void after_events() {}
+        virtual void after_events();
 
-        virtual void entry() {
-            this->before_events();
-            exec_all(m_task_queue_ptr);
-            this->after_events();
-        }
+        virtual void entry();
+
+        const std::string& name() const;
+
+        void set_name(const std::string& name);
 
         /**
          * @brief Virtual destructor of AbstractNode
          */
-        virtual ~node() {}
+        virtual ~node();
 
     protected:
-        std::shared_ptr<abstract_queue_adapter<task>> task_queue() const {
-            return m_task_queue_ptr;
-        }
+        std::shared_ptr<abstract_queue_adapter<task>> task_queue() const;
 
     private:
         std::shared_ptr<abstract_queue_adapter<task>> m_task_queue_ptr;
         mechanisms_holder& m_mechanisms_holder;
+        std::string m_name;
     };
 }
 
