@@ -34,7 +34,7 @@ namespace rrc {
 
         settings_holder() = default;
 
-        void remove_table(const key_type& key) {
+        void remove_property(const key_type &key) {
             auto found = m_properties_hash.find(key);
             if (found != m_properties_hash.end()) {
                 m_properties_hash.erase(found);
@@ -74,14 +74,14 @@ namespace rrc {
             m_listeners_hash.emplace(key, std::move(listener_ptr));
         }
 
-        void remove_listener(const key_type& key, std::shared_ptr<listener_type> lisneter_ptr) {
+        void remove_listener(const key_type& key, std::shared_ptr<listener_type> listener_ptr) {
             auto range = m_listeners_hash.equal_range(key);
             auto it = range.first;
             while (it != range.second) {
-                if (it->second != lisneter_ptr) {
+                if (it->second != listener_ptr) {
                     ++it;
                 } else {
-                    m_listeners_hash.erase(it);
+                    it = m_listeners_hash.erase(it);
                 }
             }
         }
