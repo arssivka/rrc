@@ -10,19 +10,19 @@
 using namespace rrc;
 
 
-class LinearLauncherFixture : public ::testing::Test {
-public:
-    LinearLauncherFixture() {
-        mMetaTable.registerTypeId<testmessages::TestMessage>(0);
+class linear_launcher_fixture : public ::testing::Test {
+protected:
+    void SetUp() override {
+        m_sync_queue.reset(new stl_queue_adapter<task>());
     }
 
+
 protected:
-    MetaTable mMetaTable;
-    SettingsHolder mSettingsHolder;
+    std::shared_ptr<abstract_queue_adapter<task>> m_sync_queue;
 };
 
 
-TEST_F(LinearLauncherFixture, AddAndDeleteTest) {
+TEST_F(linear_launcher_fixture, add_and_delete_node) {
     LinearLauncher launcher;
     RootNodePtr rootNode = std::make_shared<RootNode>(launcher, mMetaTable, mSettingsHolder);
     std::shared_ptr<dummy_node> node1 = std::make_shared<dummy_node>(rootNode, "test");
@@ -41,7 +41,7 @@ TEST_F(LinearLauncherFixture, AddAndDeleteTest) {
 }
 
 
-TEST_F(LinearLauncherFixture, Step) {
+TEST_F(linear_launcher_fixture, Step) {
     LinearLauncher launcher;
     RootNodePtr rootNode = std::make_shared<RootNode>(launcher, mMetaTable, mSettingsHolder);
     launcher.setRootNode(rootNode);

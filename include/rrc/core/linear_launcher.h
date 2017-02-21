@@ -73,6 +73,8 @@ namespace rrc {
 
         virtual void remove_sync_queue(std::shared_ptr<abstract_queue_adapter<task>> queue) override;
 
+        void reset() override;
+
     private:
         bool m_finished;
         std::forward_list<std::shared_ptr<node>> m_nodes_list;

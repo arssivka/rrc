@@ -66,3 +66,10 @@ void rrc::linear_launcher::add_sync_queue(std::shared_ptr<abstract_queue_adapter
 void rrc::linear_launcher::remove_sync_queue(std::shared_ptr<abstract_queue_adapter<task>> queue) {
     m_queues_list.remove(queue);
 }
+
+
+void rrc::linear_launcher::reset() {
+    m_nodes_list.clear();
+    m_queues_list.clear();
+    m_finished = false;
+}

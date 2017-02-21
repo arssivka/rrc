@@ -9,20 +9,7 @@
 using namespace rrc;
 
 
-class flag_setter {
-public:
-    flag_setter(bool& _flag)
-            : m_flag(_flag) {
-        m_flag = false;
-    }
 
-    void operator()() {
-        m_flag = true;
-    }
-
-private:
-    bool& m_flag;
-};
 
 
 class exec_fixture
