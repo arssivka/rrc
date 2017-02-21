@@ -70,6 +70,8 @@ namespace rrc {
         virtual void add_sync_queue(std::shared_ptr<abstract_queue_adapter<task>> queue_ptr) = 0;
 
         virtual void remove_sync_queue(std::shared_ptr<abstract_queue_adapter<task>> queue_ptr) = 0;
+
+        void reset() = 0;
     };
 
 }

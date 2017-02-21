@@ -45,7 +45,7 @@ set(SRCS
         include/rrc/core/settings_holder.h
         src/rrc/core/settings_mechanism.cpp
         include/rrc/core/settings_mechanism.h
-        include/rrc/core/defines.h)
+        include/rrc/core/defines.h include/rrc/core.h)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
         "${PROJECT_BINARY_DIR}/VersionDefines.h")

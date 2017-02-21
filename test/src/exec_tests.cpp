@@ -4,26 +4,12 @@
  */
 
 #include <gtest/gtest.h>
-#include <rrc/core/exec.h>
-#include <rrc/core/stl_queue_adapter.h>
+#include <rrc/core.h>
 
 using namespace rrc;
 
 
-class flag_setter {
-public:
-    flag_setter(bool& _flag)
-            : m_flag(_flag) {
-        m_flag = false;
-    }
 
-    void operator()() {
-        m_flag = true;
-    }
-
-private:
-    bool& m_flag;
-};
 
 
 class exec_fixture
