@@ -27,7 +27,7 @@ script:
   - cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE ..
   - make
   - cd test
-  - ctest
+  - valgrind --error-exitcode=1 --leak-check=full ./tests
 
 compiler:
   - gcc
