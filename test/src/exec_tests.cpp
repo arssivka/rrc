@@ -5,6 +5,7 @@
 
 #include <gtest/gtest.h>
 #include <rrc/core.h>
+#include <flag_setter.h>
 
 using namespace rrc;
 
