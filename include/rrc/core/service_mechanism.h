@@ -40,7 +40,7 @@ namespace rrc {
 
         void remove_service(key_type key, const std::shared_ptr<service> service_ptr);
 
-        void call(key_type key, std::shared_ptr<listener_type> listener_ptr, message_type input);
+        void call(const key_type& key, std::shared_ptr<listener_type> listener_ptr, message_type input);
 
         std::vector<key_type> keys() const;
 
