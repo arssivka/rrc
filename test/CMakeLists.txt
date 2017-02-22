@@ -18,7 +18,9 @@ set(SRCS
         src/concurrent_queue_adapter_tests.cpp
         src/task_packer_tests.cpp
         src/service_tests.cpp
-        include/flag_setter.h src/flag_setter.cpp)
+        include/flag_setter.h
+        src/flag_setter.cpp
+        src/settings_mechanism_tests.cpp)
 
 
 add_executable(tests ${SRCS})

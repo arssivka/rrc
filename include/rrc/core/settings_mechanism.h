@@ -38,6 +38,8 @@ namespace rrc {
 
         void set_property(key_type key, property prop);
 
+        void remove_property(const key_type& key);
+
         void add_listener(key_type key, std::shared_ptr<listener_type> listener_ptr);
 
         void remove_listener(key_type key, std::shared_ptr<listener_type> listener_ptr);

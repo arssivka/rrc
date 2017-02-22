@@ -77,3 +77,7 @@ void rrc::settings_mechanism::remove_listener(rrc::settings_mechanism::key_type 
     });
     this->enqueue_update();
 }
+
+void rrc::settings_mechanism::remove_property(const rrc::settings_mechanism::key_type& key) {
+    m_settings_holder.remove_property(key);
+}

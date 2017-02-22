@@ -34,7 +34,7 @@ namespace rrc {
 
         settings_holder() = default;
 
-        void remove_property(const key_type &key) {
+        void remove_property(const key_type& key) {
             auto found = m_properties_hash.find(key);
             if (found != m_properties_hash.end()) {
                 m_properties_hash.erase(found);

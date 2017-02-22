@@ -42,6 +42,10 @@ namespace rrc {
 
         queue_adapter_factory(const queue_adapter_factory& other) = default;
 
+        queue_adapter_factory& operator=(queue_adapter_factory& other) = default;
+
+        queue_adapter_factory& operator=(queue_adapter_factory&& other) = default;
+
 
         std::unique_ptr<abstract_queue_adapter<T>> create_unique_pointer() const {
             return std::unique_ptr<abstract_queue_adapter<T>>(m_factory_method());
