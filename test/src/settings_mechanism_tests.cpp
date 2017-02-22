@@ -36,3 +36,52 @@ TEST_F(settings_mechanism_fixture, setter_getter) {
     EXPECT_EQ(property1, m_property1);
     EXPECT_EQ(property2, m_property2);
 }
+
+TEST_F(settings_mechanism_fixture, keys_getter) {
+    auto keys = m_settings_mechanism.keys();
+    EXPECT_EQ(keys.size(), size_t(0));
+    m_settings_mechanism.set_property("ochen_horosho", m_property1);
+    m_settings_mechanism.set_property("ochen_ploho", m_property2);
+    exec_all(m_task_queue);
+    keys = m_settings_mechanism.keys();
+    EXPECT_EQ(keys.size(), size_t(2));
+    EXPECT_TRUE(keys[0] == "ochen_horosho" || keys[0] == "ochen_ploho");
+    EXPECT_TRUE(keys[1] == "ochen_horosho" || keys[1] == "ochen_ploho");
+}
+
+TEST_F(settings_mechanism_fixture, remove_property) {
+    m_settings_mechanism.set_property("ochen_horosho", m_property1);
+    m_settings_mechanism.set_property("ochen_ploho", m_property2);
+    m_settings_mechanism.remove_property("ochen_ploho");
+    property property1;
+    EXPECT_FALSE(m_settings_mechanism.try_get_property("ochen_ploho", property1));
+    EXPECT_NE(property1, m_property1);
+}
+
+TEST_F(settings_mechanism_fixture, listeners) {
+    property property1;
+    property property2;
+    property property3("42");
+    std::shared_ptr<task_packer<property>> listener1 =
+            std::make_shared<task_packer<property>>(m_task_queue, [&property1](property p){
+                property1 = p;
+            });
+    std::shared_ptr<task_packer<property>> listener2 =
+            std::make_shared<task_packer<property>>(m_task_queue, [&property2](property p){
+                property2 = p;
+            });
+    m_settings_mechanism.add_listener("ochen_horosho", listener1);
+    m_settings_mechanism.add_listener("ochen_ploho", listener2);
+    m_settings_mechanism.set_property("ochen_horosho", m_property1);
+    m_settings_mechanism.set_property("ochen_ploho", m_property2);
+    exec_all(m_task_queue);
+    EXPECT_EQ(property1, m_property1);
+    EXPECT_EQ(property2, m_property2);
+    m_settings_mechanism.remove_listener("ochen_ploho", listener2);
+    m_settings_mechanism.set_property("ochen_ploho", property3);
+    exec_all(m_task_queue);
+    EXPECT_EQ(property2, m_property2);
+    m_settings_mechanism.remove_property("ochen_horosho");
+    exec_all(m_task_queue);
+    EXPECT_EQ(property1, property());
+}
