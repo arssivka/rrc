@@ -1,26 +1,26 @@
-/**
- *  @autor arssivka
- *  @date 9/5/16
- */
-
-#include <gtest/gtest.h>
-#include <rrc/core.h>
-#include <dummy_node.h>
-
-using namespace rrc;
-
-
-class linear_launcher_fixture : public ::testing::Test {
-protected:
-    void SetUp() override {
-        m_sync_queue.reset(new stl_queue_adapter<task>());
-    }
-
-
-protected:
-    std::shared_ptr<abstract_queue_adapter<task>> m_sync_queue;
-};
-
+///**
+// *  @autor arssivka
+// *  @date 9/5/16
+// */
+//
+//#include <gtest/gtest.h>
+//#include <rrc/core.h>
+//#include <dummy_node.h>
+//
+//using namespace rrc;
+//
+//
+//class linear_launcher_fixture : public ::testing::Test {
+//protected:
+//    void SetUp() override {
+//        m_sync_queue.reset(new stl_queue_adapter<task>());
+//    }
+//
+//
+//protected:
+//    std::shared_ptr<abstract_queue_adapter<task>> m_sync_queue;
+//};
+//
 //
 //TEST_F(linear_launcher_fixture, add_and_delete_node) {
 //    LinearLauncher launcher;
