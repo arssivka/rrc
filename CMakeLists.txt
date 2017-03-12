@@ -4,55 +4,42 @@ project(rrc VERSION 0.0.2)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++14 -Wall")
 
-option(USE_TCMALLOC "Use full version of tcmalloc library" ON)
 option(BUILD_TEST "Build tests." ON)
 
 add_subdirectory(lib)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(SRCS
-        include/rrc/core/abstract_launcher.h
-        include/rrc/core/node.h
-        include/rrc/core/non_copyable.h
-        src/rrc/core/property.cpp
-        include/rrc/core/property.h
-        include/rrc/core/copy_on_write.h
-        include/rrc/core/exec.h
-        include/rrc/core/topic_holder.h
-        src/rrc/core/topic.cpp
-        include/rrc/core/topic.h
-        src/rrc/core/linear_launcher.cpp
-        include/rrc/core/linear_launcher.h
-        include/rrc/core/task_packer.h
-        include/rrc/core/abstract_queue_adapter.h
-        include/rrc/core/concurrent_queue_adapter.h
-        include/rrc/core/stl_queue_adapter.h
-        src/rrc/core/mechanisms_holder.cpp
-        include/rrc/core/mechanisms_holder.h
-        src/rrc/core/rate.cpp
-        include/rrc/core/rate.h
-        src/rrc/core/advertising_mechanism.cpp
-        include/rrc/core/advertising_mechanism.h
-        src/rrc/core/system_mechanism.cpp
-        include/rrc/core/system_mechanism.h
-        src/rrc/core/node.cpp
-        include/rrc/core/queue_adapter_factory.h
-        src/rrc/core/service.cpp
-        include/rrc/core/service.h
-        include/rrc/core/service_holder.h
-        src/rrc/core/service_mechanism.cpp
-        include/rrc/core/service_mechanism.h
-        include/rrc/core/settings_holder.h
-        src/rrc/core/settings_mechanism.cpp
-        include/rrc/core/settings_mechanism.h
-        include/rrc/core/defines.h include/rrc/core.h)
+        include/rrc/abstract_launcher.h
+        include/rrc/node.h
+        include/rrc/non_copyable.h
+        include/rrc/copy_on_write.h
+        include/rrc/topic_holder.h
+        include/rrc/topic.h
+        src/rrc/lockfree_launcher.cpp
+        include/rrc/lockfree_launcher.h
+        include/rrc/lockfree_task_queue.h
+        include/rrc/concurrent_task_queue.h
+        include/rrc/advertising_mechanism.h
+        include/rrc/service_holder.h
+        include/rrc/service_mechanism.h
+        include/rrc/rrc.h
+        include/rrc/core.h
+        include/rrc/mechanism.h
+        src/rrc/task_scheduler.cpp
+        include/rrc/task_scheduler.h
+        include/rrc/task_queue.h
+        include/rrc/core_base.h
+        include/rrc/barrier.h
+        include/rrc/concurrent_priority_queue.h
+        include/rrc/buffer.h include/rrc/finalizer.h src/rrc/finalizer.cpp include/rrc/finalizer_mechanism.h include/rrc/elem_less.h)
 
-configure_file("${PROJECT_SOURCE_DIR}/template/VersionDefines.h.in"
-        "${PROJECT_BINARY_DIR}/VersionDefines.h")
+configure_file("${PROJECT_SOURCE_DIR}/template/defines.h.in"
+        "${PROJECT_BINARY_DIR}/defines.h")
 
 
 add_library(rrc ${SRCS})
-target_link_libraries(rrc variant concurrentqueue)
+target_link_libraries(rrc concurrentqueue)
 target_include_directories(rrc PUBLIC include)
 
 if(BUILD_TEST)

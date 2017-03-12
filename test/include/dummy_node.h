@@ -6,7 +6,7 @@
 #pragma once
 
 
-#include <rrc/core.h>
+#include <rrc/rrc.h>
 
 class dummy_node : public rrc::node {
 public:
