@@ -37,52 +37,58 @@ namespace rrc {
         typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
         typedef size_t site_type;
 
-        explicit buffer(size_type size, const value_type& val = value_type())
-                : m_data(size, val) {
+        explicit buffer(size_type size, const value_type& val = value_type()) {
+            m_data = copy_on_write<value_type>(new value_type[size]);
+            m_size = size;
+            this->fill(val);
         }
 
         template<class InputIterator>
-        buffer(InputIterator first, InputIterator last)
-                : m_data(make_cow<value_type>(first, last)) {}
+        buffer(InputIterator first, InputIterator last) {
+            size_t size = (size_t) std::distance(first, last);
+            m_data = copy_on_write<value_type>(new value_type[size]);
+            m_size = size;
+            std::copy(first, last, m_data.get());
+        }
 
         buffer(const buffer& other) = default;
 
         buffer(buffer&& other) = default;
 
         reference operator[](size_type n) {
-            return m_data->at(n);
+            return (*m_data)[n];
         }
 
         const_reference operator[](size_type n) const {
-            return m_data->at(n);
+            return (*m_data)[n];
         }
 
         void fill(const value_type& value) { std::fill_n(begin(), size(), value); }
 
-        size_type size() const noexcept { return m_data->size(); }
+        size_type size() const noexcept { return m_size; }
 
-        value_type* data() { return m_data->data(); }
+        value_type* data() { return m_data.get(); }
 
-        const value_type* data() const { return m_data->data(); }
+        const value_type* data() const { return m_data.get(); }
 
-        const_iterator begin() const { return const_iterator(m_data->data()); }
+        const_iterator begin() const { return const_iterator(m_data.get()); }
 
-        const_iterator end() const { return const_iterator(m_data->data() + this->size()); }
+        const_iterator end() const { return const_iterator(m_data.get() + this->size()); }
 
         const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
 
         const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
 
-        const_iterator cbegin() const { return const_iterator(m_data->data()); }
+        const_iterator cbegin() const { return const_iterator(m_data.get()); }
 
-        const_iterator cend() const { return const_iterator(m_data->data() + this->size()); }
+        const_iterator cend() const { return const_iterator(m_data.get() + this->size()); }
 
         const_reverse_iterator crbegin() const { return const_reverse_iterator(end()); }
 
         const_reverse_iterator crend() const { return const_reverse_iterator(begin()); }
 
     private:
-        copy_on_write<std::vector<value_type>> m_data;
-
+        copy_on_write<value_type> m_data;
+        size_t m_size;
     };
 }

@@ -32,7 +32,11 @@ set(SRCS
         include/rrc/core_base.h
         include/rrc/barrier.h
         include/rrc/concurrent_priority_queue.h
-        include/rrc/buffer.h include/rrc/finalizer.h src/rrc/finalizer.cpp include/rrc/finalizer_mechanism.h include/rrc/elem_less.h)
+        include/rrc/buffer.h
+        include/rrc/finalizer.h
+        src/rrc/finalizer.cpp
+        include/rrc/finalizer_mechanism.h
+        include/rrc/elem_less.h)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/defines.h.in"
         "${PROJECT_BINARY_DIR}/defines.h")
