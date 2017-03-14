@@ -22,6 +22,7 @@
 
 #include <unordered_map>
 #include <algorithm>
+#include "service_status.h"
 
 namespace rrc {
     template<class K, class M>
@@ -29,8 +30,8 @@ namespace rrc {
     public:
         typedef K key_type;
         typedef M message_type;
-        typedef std::function<void(message_type)> listener_type;
-        typedef std::function<void(message_type, const listener_type&)> callback_type;
+        typedef std::function<void(service_status, const message_type&)> listener_type;
+        typedef std::function<service_status(const message_type&, message_type&)> callback_type;
 
         service_holder() {
             // TODO: Test it
@@ -44,16 +45,18 @@ namespace rrc {
         void remove_service(std::shared_ptr<callback_type> callback_ptr) {
             auto it = std::find_if(m_service_hash.begin(), m_service_hash.end(),
                                 [callback_ptr_cap = std::move(callback_ptr)](const auto& pair) {
-                return pair->second == callback_ptr_cap;
+                return pair.second == callback_ptr_cap;
             });
             m_service_hash.erase(it);
         }
 
-        void call(const key_type& key, message_type input, const listener_type& listener) {
+        void call(const key_type& key, message_type input, std::shared_ptr<listener_type> listener_ptr) {
             auto it = m_service_hash.find(key);
             if (it != m_service_hash.end()) {
-                auto& callback = *it;
-                callback(std::move(input), listener);
+                auto& callback_ptr = it->second;
+                message_type output;
+                service_status result = (*callback_ptr)(std::move(input), output);
+                (*listener_ptr)(result, output);
             }
         }
 

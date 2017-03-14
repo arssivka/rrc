@@ -31,7 +31,7 @@ namespace rrc {
     class topic {
     public:
         typedef M message_type;
-        typedef std::function<void(message_type)> callback_type;
+        typedef std::function<void(const message_type&)> callback_type;
 
         /**
          * @brief Register message callback
@@ -54,8 +54,7 @@ namespace rrc {
          * @param message Pointer to message that needs to be sent
          */
         void send_message(message_type message) {
-            for (auto& it : m_listeners_hash) {
-                auto& listener_ptr = it->second;
+            for (auto&& listener_ptr : m_listeners_hash) {
                 auto& listener = *listener_ptr;
                 listener(message);
             }

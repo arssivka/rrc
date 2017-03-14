@@ -32,7 +32,6 @@
 #include "lockfree_launcher.h"
 #include "lockfree_task_queue.h"
 #include "mechanism.h"
-#include "node.h"
 #include "non_copyable.h"
 #include "service_holder.h"
 #include "service_mechanism.h"
@@ -40,3 +39,4 @@
 #include "task_scheduler.h"
 #include "topic.h"
 #include "topic_holder.h"
+#include "service_status.h"

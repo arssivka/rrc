@@ -11,7 +11,6 @@ add_subdirectory(lib)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(SRCS
         include/rrc/abstract_launcher.h
-        include/rrc/node.h
         include/rrc/non_copyable.h
         include/rrc/copy_on_write.h
         include/rrc/topic_holder.h
@@ -36,7 +35,7 @@ set(SRCS
         include/rrc/finalizer.h
         src/rrc/finalizer.cpp
         include/rrc/finalizer_mechanism.h
-        include/rrc/elem_less.h)
+        include/rrc/elem_less.h include/rrc/service_status.h)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/defines.h.in"
         "${PROJECT_BINARY_DIR}/defines.h")

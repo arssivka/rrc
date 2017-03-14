@@ -82,7 +82,7 @@ namespace rrc {
             m_changes_enqueued_flag.clear(std::memory_order_release);
             for (auto&& queue : m_local_queues) {
                 bool flag = false;
-                queue.enque([&flag] {
+                queue.enqueue([&flag] {
                     flag = true;
                 });
                 while (!flag && queue.try_exec());

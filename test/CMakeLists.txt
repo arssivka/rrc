@@ -10,12 +10,11 @@ set(SRCS
         include/dummy_node.h
         tst/node_tests.cpp
         tst/linear_launcher_tests.cpp
-        tst/stl_queue_adapter_tests.cpp
-        tst/concurrent_queue_adapter_tests.cpp
-        tst/service_tests.cpp
+        tst/concurrent_task_queue_tests.cpp
+        tst/service_holder_tests.cpp
         include/flag_setter.h
         src/flag_setter.cpp
-        )
+        tst/topic_holder_tests.cpp)
 
 
 add_executable(tests ${SRCS})

@@ -60,13 +60,13 @@ namespace rrc {
             );
         }
 
-        void call(const key_type& key, message_type input, listener_type listener) {
+        void call(const key_type& key, message_type input, std::shared_ptr<listener_type> listener_ptr) {
             this->enqueue_task(
                     SERVICE_CALL_PRIORITY,
                     &base_type::call,
                     std::move(key),
                     std::move(input),
-                    std::move(listener)
+                    std::move(listener_ptr)
             );
         }
 
