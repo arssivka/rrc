@@ -22,41 +22,68 @@
 
 #include <queue>
 #include <mutex>
+#include <condition_variable>
 #include "task_queue.h"
 
 namespace rrc {
     class concurrent_task_queue : public task_queue {
     public:
+        concurrent_task_queue()
+                : m_destroyed(false) {}
+
         virtual void enqueue(task_type value) override {
-            std::unique_lock<std::mutex> lock(m_queue_mutex);
-            m_queue.emplace(std::move(value));
+            {
+                std::unique_lock<std::mutex> lock(m_data_mutex);
+                m_data_queue.emplace(std::move(value));
+            }
+            m_data_cv.notify_one();
         }
 
         virtual bool try_exec() override {
             task_type task;
-            std::unique_lock<std::mutex> lock(m_queue_mutex);
             if (!this->try_dequeue(task)) return false;
             task();
             return true;
         }
 
         virtual bool try_dequeue(task_type& task) override {
-            std::unique_lock<std::mutex> lock(m_queue_mutex);
-            if (m_queue.empty())
+            std::lock_guard<std::mutex> lock(m_data_mutex);
+            if (m_data_queue.empty())
                 return false;
-            task = std::move(m_queue.front());
-            m_queue.pop();
+            task = std::move(m_data_queue.front());
+            m_data_queue.pop();
             return true;
         }
 
         virtual void clean() override {
-            std::unique_lock<std::mutex> lock(m_queue_mutex);
-            while (!m_queue.empty()) m_queue.pop();
+            std::lock_guard<std::mutex> lock(m_data_mutex);
+            while (!m_data_queue.empty()) m_data_queue.pop();
+        }
+
+        bool wait_for_task(task_type& task) {
+            std::unique_lock<std::mutex> lock(m_data_mutex);
+            m_data_cv.wait(lock, [this]() -> bool {
+                return m_destroyed || !m_data_queue.empty();
+            });
+            if (m_data_queue.empty() || m_destroyed)
+                return false;
+            task = std::move(m_data_queue.front());
+            m_data_queue.pop();
+        }
+
+        virtual ~concurrent_task_queue() override {
+            {
+                std::lock_guard<std::mutex> lock(m_data_mutex);
+                m_destroyed = true;
+            }
+            m_data_cv.notify_all();
         }
 
     private:
-        std::queue<task_type> m_queue;
-        std::mutex m_queue_mutex;
+        bool m_destroyed;
+        std::queue<task_type> m_data_queue;
+        std::condition_variable m_data_cv;
+        std::mutex m_data_mutex;
 
     };
 }
