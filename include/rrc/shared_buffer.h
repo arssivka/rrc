@@ -111,7 +111,7 @@ namespace rrc {
         }
 
         bool operator==(const std::string& rhs) const {
-            return m_size == rhs.size() && rhs.compare(m_data.get()) == 0;
+            return m_size == rhs.size() && std::equal(rhs.begin(), rhs.end(), m_data.get());
         }
 
         bool operator!=(const std::string& rhs) const {
