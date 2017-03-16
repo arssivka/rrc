@@ -41,6 +41,10 @@ namespace rrc {
 
         shared_function(shared_function&&) = default;
 
+        shared_function& operator=(const shared_function&) = default;
+
+        shared_function& operator=(shared_function&&) = default;
+
         template <class... Args>
         auto operator()(Args&&... args) const -> typename function_type::result_type {
             function_type& functor = *m_functor_ptr;
@@ -71,7 +75,7 @@ namespace std {
         typedef std::size_t result_type;
 
         size_t operator()(const argument_type& arg) const {
-            typedef argument_type::function_type function_type;
+            typedef typename argument_type::function_type function_type;
             return std::hash<function_type*>{}(arg.get());
         }
     };
