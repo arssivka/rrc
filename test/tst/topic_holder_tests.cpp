@@ -19,10 +19,10 @@ protected:
         m_flag1 = false;
         m_flag2 = false;
         m_message = "flaceh";
-        m_callback1_ptr = std::make_shared<callback_type>([this](const std::string& msg) {
+        m_callback1 = callback_type([this](const std::string& msg) {
             m_flag1 = msg == m_message;
         });
-        m_callback2_ptr = std::make_shared<callback_type>([this](const std::string& msg) {
+        m_callback2 = callback_type([this](const std::string& msg) {
             m_flag2 = msg == m_message;
         });
     }
@@ -32,39 +32,39 @@ protected:
     bool m_flag1;
     bool m_flag2;
     std::string m_message;
-    std::shared_ptr<callback_type> m_callback1_ptr;
-    std::shared_ptr<callback_type> m_callback2_ptr;
+    callback_type m_callback1;
+    callback_type m_callback2;
     holder_type m_holder;
 };
 
 
 TEST_F(topic_holder_fixture, add_listener) {
-    EXPECT_TRUE(m_callback1_ptr.unique());
-    EXPECT_TRUE(m_callback2_ptr.unique());
-    m_holder.add_listener("topic!", m_callback1_ptr);
-    EXPECT_FALSE(m_callback1_ptr.unique());
-    EXPECT_TRUE(m_callback2_ptr.unique());
-    m_holder.add_listener("topic!", m_callback2_ptr);
-    EXPECT_FALSE(m_callback1_ptr.unique());
-    EXPECT_FALSE(m_callback2_ptr.unique());
+    EXPECT_TRUE(m_callback1.unique());
+    EXPECT_TRUE(m_callback2.unique());
+    m_holder.add_listener("topic!", m_callback1);
+    EXPECT_FALSE(m_callback1.unique());
+    EXPECT_TRUE(m_callback2.unique());
+    m_holder.add_listener("topic!", m_callback2);
+    EXPECT_FALSE(m_callback1.unique());
+    EXPECT_FALSE(m_callback2.unique());
 }
 
 TEST_F(topic_holder_fixture, remove_listener) {
-    EXPECT_TRUE(m_callback1_ptr.unique());
-    EXPECT_TRUE(m_callback2_ptr.unique());
-    m_holder.add_listener("topic!", m_callback1_ptr);
-    m_holder.add_listener("topic!", m_callback2_ptr);
-    EXPECT_FALSE(m_callback1_ptr.unique());
-    EXPECT_FALSE(m_callback2_ptr.unique());
-    m_holder.remove_listener("topic!", m_callback1_ptr);
-    m_holder.remove_listener("topic!", m_callback2_ptr);
-    EXPECT_TRUE(m_callback1_ptr.unique());
-    EXPECT_TRUE(m_callback2_ptr.unique());
+    EXPECT_TRUE(m_callback1.unique());
+    EXPECT_TRUE(m_callback2.unique());
+    m_holder.add_listener("topic!", m_callback1);
+    m_holder.add_listener("topic!", m_callback2);
+    EXPECT_FALSE(m_callback1.unique());
+    EXPECT_FALSE(m_callback2.unique());
+    m_holder.remove_listener("topic!", m_callback1);
+    m_holder.remove_listener("topic!", m_callback2);
+    EXPECT_TRUE(m_callback1.unique());
+    EXPECT_TRUE(m_callback2.unique());
 }
 
 TEST_F(topic_holder_fixture, send_message) {
-    m_holder.add_listener("topic!", m_callback1_ptr);
-    m_holder.add_listener("topic!", m_callback2_ptr);
+    m_holder.add_listener("topic!", m_callback1);
+    m_holder.add_listener("topic!", m_callback2);
     EXPECT_FALSE(m_flag1);
     EXPECT_FALSE(m_flag2);
     m_holder.send_message("topic", m_message);
@@ -77,15 +77,15 @@ TEST_F(topic_holder_fixture, send_message) {
 
 TEST_F(topic_holder_fixture, keys) {
     EXPECT_TRUE(m_holder.keys().empty());
-    m_holder.add_listener("topic!", m_callback1_ptr);
-    m_holder.add_listener("topic!", m_callback2_ptr);
+    m_holder.add_listener("topic!", m_callback1);
+    m_holder.add_listener("topic!", m_callback2);
     EXPECT_EQ(m_holder.keys(), std::vector<std::string>{"topic!"});
-    m_holder.add_listener("topic", m_callback1_ptr);
+    m_holder.add_listener("topic", m_callback1);
     auto vector1 = std::vector<std::string>{"topic", "topic!"};
     EXPECT_EQ(m_holder.keys(), vector1);
-    m_holder.remove_listener("topic!", m_callback1_ptr);
+    m_holder.remove_listener("topic!", m_callback1);
     EXPECT_EQ(m_holder.keys(), vector1);
-    m_holder.remove_listener("topic!", m_callback2_ptr);
+    m_holder.remove_listener("topic!", m_callback2);
     EXPECT_EQ(m_holder.keys(), std::vector<std::string>{"topic"});
 
 }

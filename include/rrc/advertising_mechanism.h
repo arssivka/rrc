@@ -58,24 +58,22 @@ namespace rrc {
         /**
          * @brief Registers listener
          * @param topic_key Name of the topic for the listener
-         * @param callback_ptr Pointer to the callback that needs to be registered
+         * @param callback Pointer to the callback that needs to be registered
          */
-        void add_listener(key_type topic_key,
-                          std::shared_ptr<callback_type> callback_ptr) {
+        void add_listener(key_type topic_key, callback_type callback) {
             this->template enqueue_task<CHANGE_LISTENERS_PRIORITY>(
                     &base_type::add_listener,
                     std::move(topic_key),
-                    std::move(callback_ptr)
+                    std::move(callback)
             );
         }
 
         // TODO Tests and docs
-        void remove_listener(key_type topic_key,
-                             std::shared_ptr<callback_type> callback_ptr) {
+        void remove_listener(key_type topic_key, callback_type callback) {
             this->template enqueue_task<CHANGE_LISTENERS_PRIORITY>(
                     &base_type::remove_listener,
                     std::move(topic_key),
-                    std::move(callback_ptr)
+                    std::move(callback)
             );
         }
 

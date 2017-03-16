@@ -16,7 +16,7 @@ protected:
     void SetUp() override {
         m_send_flag = false;
         m_test_message = std::string("meow!");
-        m_listener = std::make_shared<subscriber_type>([this](std::string message) {
+        m_listener = subscriber_type([this](const std::string& message) {
             m_last_message = message;
             m_send_flag = true;
         });
@@ -26,7 +26,7 @@ protected:
     std::string m_test_message;
     std::string m_last_message;
     bool m_send_flag;
-    std::shared_ptr<subscriber_type> m_listener;
+    subscriber_type m_listener;
 
 };
 

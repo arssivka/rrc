@@ -28,6 +28,8 @@ namespace rrc {
     public:
         typedef std::function<F> function_type;
 
+        shared_function() = default;
+
         shared_function(const function_type& function)
                 : m_functor_ptr(std::make_shared<function_type>(function)) {}
 
@@ -61,6 +63,14 @@ namespace rrc {
 
         function_type* get() const noexcept {
             return m_functor_ptr.get();
+        }
+
+        bool unique() const noexcept {
+            return m_functor_ptr.unique();
+        }
+
+        bool initialized() {
+            return m_functor_ptr != nullptr;
         }
 
     private:

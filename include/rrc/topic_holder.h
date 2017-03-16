@@ -42,7 +42,7 @@ namespace rrc {
             m_topic_hash.max_load_factor(0.8);
         }
 
-        void add_listener(const topic_key_type& topic_key, std::shared_ptr<callback_type> callback_ptr) {
+        void add_listener(const topic_key_type& topic_key, callback_type callback_ptr) {
             auto it = m_topic_hash.find(topic_key);
             if (it == m_topic_hash.end()) {
                 it = m_topic_hash.emplace(topic_key, topic<message_type>()).first;
@@ -52,22 +52,22 @@ namespace rrc {
         }
 
         // TODO: Docs
-        void remove_listener(const topic_key_type& key, std::shared_ptr<callback_type> callback_ptr) {
+        void remove_listener(const topic_key_type& key, callback_type callback) {
             auto it = m_topic_hash.find(key);
             if (it != m_topic_hash.end()) {
                 auto& topic = it->second;
-                topic.remove_listener(callback_ptr);
+                topic.remove_listener(callback);
                 if (!topic.has_listeners()) {
                     m_topic_hash.erase(it);
                 }
             }
         }
 
-        void send_message(const topic_key_type& key, message_type message) {
+        void send_message(const topic_key_type& key, const message_type& message) {
             auto it = m_topic_hash.find(key);
             if (it != m_topic_hash.end()) {
                 auto& topic = it->second;
-                topic.send_message(std::move(message));
+                topic.send_message(message);
             }
         }
 

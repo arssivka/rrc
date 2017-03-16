@@ -21,6 +21,7 @@
 
 
 #include <unordered_set>
+#include "shared_function.h"
 
 namespace rrc {
     /**
@@ -31,19 +32,19 @@ namespace rrc {
     class topic {
     public:
         typedef M message_type;
-        typedef std::function<void(const message_type&)> callback_type;
+        typedef shared_function<void(const message_type&)> callback_type;
 
         /**
          * @brief Register message callback
-         * @param callback_ptr Pointer to callback to register
+         * @param callback Pointer to callback to register
          */
-        void add_listener(std::shared_ptr<callback_type> callback_ptr) {
-            m_listeners_hash.emplace(std::move(callback_ptr));
+        void add_listener(callback_type callback) {
+            m_listeners_hash.emplace(std::move(callback));
         }
 
         // TODO: Docs
-        void remove_listener(std::shared_ptr<callback_type> callback_ptr) {
-            auto it = m_listeners_hash.find(callback_ptr);
+        void remove_listener(callback_type callback) {
+            auto it = m_listeners_hash.find(callback);
             if (it != m_listeners_hash.end()) {
                 m_listeners_hash.erase(it);
             }
@@ -53,9 +54,8 @@ namespace rrc {
          * @brief Sends the message
          * @param message Pointer to message that needs to be sent
          */
-        void send_message(message_type message) {
-            for (auto&& listener_ptr : m_listeners_hash) {
-                auto& listener = *listener_ptr;
+        void send_message(const message_type& message) {
+            for (auto&& listener : m_listeners_hash) {
                 listener(message);
             }
         }
@@ -69,7 +69,7 @@ namespace rrc {
         }
 
     private:
-        std::unordered_set<std::shared_ptr<callback_type>> m_listeners_hash;
+        std::unordered_set<callback_type> m_listeners_hash;
     };
 }
 
