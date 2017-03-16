@@ -34,23 +34,23 @@ namespace rrc {
                 : mechanism<finalizer, Q, 1>(launcher) {
             launcher.enqueue_finalize_task([this] {
                 this->apply_changes();
-                this->call(std::mem_fn(&finalizer::exec_all));
+                this->call(std::mem_fn(&finalizer::exec_and_clear));
             });
         }
 
-        void add_finalize_callback(std::shared_ptr<finalizer::callback_type> callback_ptr) {
+        void add_finalize_callback(finalize_callback callback) {
             this->enqueue_task(
                     CHANGE_LISTENERS_PRIORITY,
                     &finalizer::add_callback,
-                    std::move(callback_ptr)
+                    std::move(callback)
             );
         }
 
-        void remove_finalize_callback(std::shared_ptr<finalizer::callback_type> callback_ptr) {
+        void remove_finalize_callback(finalize_callback callback) {
             this->enqueue_task(
                     CHANGE_LISTENERS_PRIORITY,
                     &finalizer::remove_callback,
-                    std::move(callback_ptr)
+                    std::move(callback)
             );
         }
 

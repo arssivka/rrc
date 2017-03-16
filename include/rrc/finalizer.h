@@ -22,19 +22,20 @@
 #include <functional>
 #include <memory>
 #include <forward_list>
+#include "shared_function.h"
 
 namespace rrc {
+    typedef shared_function<void()> finalize_callback;
+
     class finalizer {
     public:
-        typedef std::function<void()> callback_type;
+        void add_callback(finalize_callback callback_ptr);
 
-        void add_callback(std::shared_ptr<callback_type> callback_ptr);
+        void remove_callback(finalize_callback callback_ptr);
 
-        void remove_callback(std::shared_ptr<callback_type> callback_ptr);
-
-        void exec_all();
+        void exec_and_clear();
     private:
-        std::forward_list<std::shared_ptr<callback_type>> m_callback_list;
+        std::forward_list<finalize_callback> m_callback_list;
 
     };
 }

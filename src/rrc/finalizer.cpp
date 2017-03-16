@@ -21,17 +21,16 @@
 #include <rrc/finalizer.h>
 
 
-void rrc::finalizer::add_callback(std::shared_ptr<rrc::finalizer::callback_type> callback_ptr) {
+void rrc::finalizer::add_callback(finalize_callback callback_ptr) {
     m_callback_list.push_front(callback_ptr);
 }
 
-void rrc::finalizer::remove_callback(std::shared_ptr<rrc::finalizer::callback_type> callback_ptr) {
+void rrc::finalizer::remove_callback(finalize_callback callback_ptr) {
     m_callback_list.remove(callback_ptr);
 }
 
-void rrc::finalizer::exec_all() {
-    for (auto&& callback_ptr : m_callback_list) {
-        auto& callback = *callback_ptr;
+void rrc::finalizer::exec_and_clear() {
+    for (auto&& callback : m_callback_list) {
         callback();
     }
     m_callback_list.clear();
