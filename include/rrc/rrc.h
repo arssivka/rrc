@@ -23,7 +23,7 @@
 #include "abstract_launcher.h"
 #include "advertising_mechanism.h"
 #include "barrier.h"
-#include "buffer.h"
+#include "shared_buffer.h"
 #include "concurrent_priority_queue.h"
 #include "concurrent_task_queue.h"
 #include "copy_on_write.h"

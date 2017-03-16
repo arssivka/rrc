@@ -24,7 +24,7 @@
 
 namespace rrc {
     template<class T>
-    class buffer {
+    class shared_buffer {
     public:
         typedef T value_type;
         typedef value_type& reference;
@@ -37,23 +37,23 @@ namespace rrc {
         typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
         typedef size_t site_type;
 
-        explicit buffer(size_type size, const value_type& val = value_type()) {
+        explicit shared_buffer(size_type size, const value_type& val = value_type()) {
             m_data = copy_on_write<value_type>(new value_type[size]);
             m_size = size;
             this->fill(val);
         }
 
         template<class InputIterator>
-        buffer(InputIterator first, InputIterator last) {
+        shared_buffer(InputIterator first, InputIterator last) {
             size_t size = (size_t) std::distance(first, last);
             m_data = copy_on_write<value_type>(new value_type[size]);
             m_size = size;
             std::copy(first, last, m_data.get());
         }
 
-        buffer(const buffer& other) = default;
+        shared_buffer(const shared_buffer& other) = default;
 
-        buffer(buffer&& other) = default;
+        shared_buffer(shared_buffer&& other) = default;
 
         reference operator[](size_type n) {
             return (*m_data)[n];

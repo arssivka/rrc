@@ -19,7 +19,7 @@
 #pragma once
 
 
-#include "buffer.h"
+#include "shared_buffer.h"
 #include "core_base.h"
 #include "advertising_mechanism.h"
 #include "service_mechanism.h"
@@ -29,7 +29,7 @@ namespace rrc {
     namespace defines {
         typedef rrc::lockfree_task_queue queue_type;
         typedef std::string key_type;
-        typedef rrc::buffer<uint8_t> message_type;
+        typedef rrc::shared_buffer<uint8_t> message_type;
     };
 
     class core

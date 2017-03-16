@@ -31,7 +31,7 @@ set(SRCS
         include/rrc/core_base.h
         include/rrc/barrier.h
         include/rrc/concurrent_priority_queue.h
-        include/rrc/buffer.h
+        include/rrc/shared_buffer.h
         include/rrc/finalizer.h
         src/rrc/finalizer.cpp
         include/rrc/finalizer_mechanism.h
