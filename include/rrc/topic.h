@@ -22,28 +22,25 @@
 
 #include <unordered_set>
 #include "shared_function.h"
+#include "callback_defines.h"
 
 namespace rrc {
     /**
      * @brief All messages come to topics. Topic is a special place for holding specific messages. Nodes can subscribe to tpoics to get messages they need.
      */
 
-    template <class M>
     class topic {
     public:
-        typedef M message_type;
-        typedef shared_function<void(const message_type&)> callback_type;
-
         /**
          * @brief Register message callback
          * @param callback Pointer to callback to register
          */
-        void add_listener(callback_type callback) {
+        void add_listener(topic_callback callback) {
             m_listeners_hash.emplace(std::move(callback));
         }
 
         // TODO: Docs
-        void remove_listener(callback_type callback) {
+        void remove_listener(topic_callback callback) {
             auto it = m_listeners_hash.find(callback);
             if (it != m_listeners_hash.end()) {
                 m_listeners_hash.erase(it);
@@ -54,9 +51,9 @@ namespace rrc {
          * @brief Sends the message
          * @param message Pointer to message that needs to be sent
          */
-        void send_message(const message_type& message) {
+        void send_message(const shared_buffer& msg) {
             for (auto&& listener : m_listeners_hash) {
-                listener(message);
+                listener(msg);
             }
         }
 
@@ -69,7 +66,7 @@ namespace rrc {
         }
 
     private:
-        std::unordered_set<callback_type> m_listeners_hash;
+        std::unordered_set<topic_callback> m_listeners_hash;
     };
 }
 

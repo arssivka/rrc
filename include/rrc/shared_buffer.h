@@ -20,15 +20,16 @@
 
 
 #include <vector>
+#include <algorithm>
+#include <ostream>
 #include "copy_on_write.h"
 
 namespace rrc {
-    template<class T>
     class shared_buffer {
     public:
-        typedef T value_type;
+        typedef char value_type;
         typedef value_type& reference;
-        typedef const reference const_reference;
+        typedef const value_type& const_reference;
         typedef const value_type* iterator;
         typedef const value_type* const_iterator;
         typedef std::size_t size_type;
@@ -36,6 +37,13 @@ namespace rrc {
         typedef std::reverse_iterator<const_iterator> reverse_iterator;
         typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
         typedef size_t site_type;
+
+        shared_buffer() = default;
+
+        explicit shared_buffer(const std::string& str) {
+            m_data = copy_on_write<value_type>(new value_type[str.size()]);
+            std::copy(str.cbegin(), str.cend(), m_data.get());
+        }
 
         explicit shared_buffer(size_type size, const value_type& val = value_type()) {
             m_data = copy_on_write<value_type>(new value_type[size]);
@@ -55,15 +63,21 @@ namespace rrc {
 
         shared_buffer(shared_buffer&& other) = default;
 
+        shared_buffer& operator=(const shared_buffer&) = default;
+
+        shared_buffer& operator=(shared_buffer&&) = default;
+
         reference operator[](size_type n) {
-            return (*m_data)[n];
+            value_type* data = m_data.get();
+            return data[n];
         }
 
         const_reference operator[](size_type n) const {
-            return (*m_data)[n];
+            const value_type* data = m_data.get();
+            return data[n];
         }
 
-        void fill(const value_type& value) { std::fill_n(begin(), size(), value); }
+        void fill(const value_type& value) { std::fill_n(m_data.get(), size(), value); }
 
         size_type size() const noexcept { return m_size; }
 
@@ -86,6 +100,28 @@ namespace rrc {
         const_reverse_iterator crbegin() const { return const_reverse_iterator(end()); }
 
         const_reverse_iterator crend() const { return const_reverse_iterator(begin()); }
+
+        bool operator==(const shared_buffer& rhs) const {
+            return m_size == rhs.m_size && std::equal(this->cbegin(), rhs.cend(), rhs.cbegin());
+        }
+
+        bool operator!=(const shared_buffer& rhs) const {
+            return !(*this == rhs);
+        }
+
+        bool operator==(const std::string& rhs) const {
+            return m_size == rhs.size() && rhs.compare(m_data.get()) == 0;
+        }
+
+        bool operator!=(const std::string& rhs) const {
+            return !(*this == rhs);
+        }
+
+        friend std::ostream& operator<<(std::ostream& os, const shared_buffer& buffer) {
+            os << buffer.data();
+            return os;
+        }
+
 
     private:
         copy_on_write<value_type> m_data;

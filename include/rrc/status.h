@@ -7,9 +7,9 @@
 
 
 namespace rrc {
-    enum class service_status {
-        ok,
-        cancel,
+    enum class status {
+        success,
+        fail,
         error
     };
 }

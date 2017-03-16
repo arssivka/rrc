@@ -11,23 +11,21 @@ using namespace rrc;
 class service_holder_fixture
         : public ::testing::Test {
 protected:
-    typedef typename service_holder<std::string, std::string>::callback_type callback_type;
-    typedef typename service_holder<std::string, std::string>::listener_type listener_type;
 
     virtual void SetUp() override {
         m_flage = false;
         m_toli_esho_budet = false;
-        m_message = std::string("meow!");
-        m_callback = callback_type(
-                [this](const std::string& in, std::string& out) -> service_status {
+        m_message = shared_buffer("meow!");
+        m_callback = service_callback(
+                [this](const shared_buffer& in, shared_buffer& out) -> status {
             m_flage = true;
             out = in;
             out[0] = 'M';
-            return service_status::ok;
+            return status::success;
         });
-        m_listener = listener_type(
-                [this](service_status status, const std::string& msg) {
-                    m_toli_esho_budet = service_status::ok == status;
+        m_listener = service_result_callback(
+                [this](status status, const shared_buffer& msg) {
+                    m_toli_esho_budet = status::success == status;
                     m_message = msg;
                     m_message[1] = 'E';
                 }
@@ -41,10 +39,10 @@ protected:
 protected:
     bool m_flage; // it's not a mistake! O_O
     bool m_toli_esho_budet;
-    callback_type m_callback;
-    listener_type m_listener;
-    std::string m_message;
-    service_holder<std::string, std::string> m_holder;
+    service_callback m_callback;
+    service_result_callback m_listener;
+    shared_buffer m_message;
+    service_holder m_holder;
 };
 
 

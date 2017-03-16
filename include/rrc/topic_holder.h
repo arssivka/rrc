@@ -30,30 +30,25 @@ namespace rrc {
     /**
      * @brief Class that contains all the topics and grants access to them.
      */
-    template <class K, class M>
     class topic_holder {
     public:
-        typedef K topic_key_type;
-        typedef M message_type;
-        typedef typename topic<message_type>::callback_type callback_type;
-
         topic_holder() {
             // TODO Check it!
             m_topic_hash.max_load_factor(0.8);
         }
 
-        void add_listener(const topic_key_type& topic_key, callback_type callback_ptr) {
+        void add_listener(const std::string& topic_key, topic_callback callback) {
             auto it = m_topic_hash.find(topic_key);
             if (it == m_topic_hash.end()) {
-                it = m_topic_hash.emplace(topic_key, topic<message_type>()).first;
+                it = m_topic_hash.emplace(topic_key, topic()).first;
             }
             auto& topic = it->second;
-            topic.add_listener(std::move(callback_ptr));
+            topic.add_listener(std::move(callback));
         }
 
         // TODO: Docs
-        void remove_listener(const topic_key_type& key, callback_type callback) {
-            auto it = m_topic_hash.find(key);
+        void remove_listener(const std::string& topic_key, const topic_callback& callback) {
+            auto it = m_topic_hash.find(topic_key);
             if (it != m_topic_hash.end()) {
                 auto& topic = it->second;
                 topic.remove_listener(callback);
@@ -63,11 +58,11 @@ namespace rrc {
             }
         }
 
-        void send_message(const topic_key_type& key, const message_type& message) {
-            auto it = m_topic_hash.find(key);
+        void send_message(const std::string& topic_key, const shared_buffer& msg) {
+            auto it = m_topic_hash.find(topic_key);
             if (it != m_topic_hash.end()) {
                 auto& topic = it->second;
-                topic.send_message(message);
+                topic.send_message(msg);
             }
         }
 
@@ -75,8 +70,8 @@ namespace rrc {
          * @brief Returns set of the keys of registered topics
          * @return Vector of the topics's keys
          */
-        std::vector<topic_key_type> keys() const {
-            std::vector<K> keys;
+        std::vector<std::string> keys() const {
+            std::vector<std::string> keys;
             keys.reserve(m_topic_hash.size());
             for (auto&& topic : m_topic_hash) {
                 keys.push_back(topic.first);
@@ -86,7 +81,7 @@ namespace rrc {
 
 
     private:
-        std::unordered_map<topic_key_type, topic<message_type>> m_topic_hash;
+        std::unordered_map<std::string, topic> m_topic_hash;
 
     };
 }

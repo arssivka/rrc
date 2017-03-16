@@ -11,27 +11,25 @@ using namespace rrc;
 class topic_fixture
         : public ::testing::Test {
 protected:
-    using subscriber_type = typename topic<std::string>::callback_type;
-
     void SetUp() override {
         m_send_flag = false;
-        m_test_message = std::string("meow!");
-        m_listener = subscriber_type([this](const std::string& message) {
+        m_test_message = shared_buffer("meow!");
+        m_listener = topic_callback([this](const shared_buffer& message) {
             m_last_message = message;
             m_send_flag = true;
         });
     }
 
 protected:
-    std::string m_test_message;
-    std::string m_last_message;
+    shared_buffer m_test_message;
+    shared_buffer m_last_message;
     bool m_send_flag;
-    subscriber_type m_listener;
+    topic_callback m_listener;
 
 };
 
 TEST_F(topic_fixture, has_listener) {
-    topic<std::string> tpc;
+    topic tpc;
     EXPECT_FALSE(tpc.has_listeners());
     tpc.add_listener(m_listener);
     EXPECT_TRUE(tpc.has_listeners());
@@ -43,7 +41,7 @@ TEST_F(topic_fixture, has_listener) {
 
 
 TEST_F(topic_fixture, add_listener) {
-    topic<std::string> tpc;
+    topic tpc;
     EXPECT_FALSE(tpc.has_listeners());
     tpc.add_listener(m_listener);
     EXPECT_TRUE(tpc.has_listeners());
@@ -51,7 +49,7 @@ TEST_F(topic_fixture, add_listener) {
 
 
 TEST_F(topic_fixture, remove_listener) {
-    topic<std::string> tpc;
+    topic tpc;
     EXPECT_FALSE(tpc.has_listeners());
     tpc.add_listener(m_listener);
     tpc.add_listener(m_listener);
@@ -61,7 +59,7 @@ TEST_F(topic_fixture, remove_listener) {
 
 
 TEST_F(topic_fixture, send_1) {
-    topic<std::string> tpc;
+    topic tpc;
     EXPECT_FALSE(m_send_flag);
     tpc.send_message(m_test_message);
     EXPECT_FALSE(m_send_flag);

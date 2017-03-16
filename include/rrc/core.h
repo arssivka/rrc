@@ -26,15 +26,10 @@
 #include "finalizer_mechanism.h"
 
 namespace rrc {
-    namespace defines {
-        typedef std::string key_type;
-        typedef rrc::shared_buffer<uint8_t> message_type;
-    };
-
     class core
             : public core_base,
-              public advertising_mechanism<defines::key_type, defines::message_type>,
-              public service_mechanism<defines::key_type, defines::message_type>,
+              public advertising_mechanism,
+              public service_mechanism,
               public finalizer_mechanism {
     public:
         core(abstract_launcher& launcher, int argc, char** argv)

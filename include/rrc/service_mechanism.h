@@ -24,41 +24,33 @@
 #include "mechanism.h"
 
 namespace rrc {
-    template <class K, class M>
-    class service_mechanism : protected mechanism<service_holder<K, M>, 2> {
+    class service_mechanism : protected mechanism<service_holder, 2> {
     public:
         enum {
             SERVICE_CHANGES_PRIORITY,
             SERVICE_CALL_PRIORITY
         };
 
-        typedef K key_type;
-        typedef M message_type;
-        typedef mechanism<service_holder<key_type, message_type>, 2> mechanism_type;
-        typedef typename mechanism_type::base_type base_type;
-        typedef typename base_type::listener_type listener_type ;
-        typedef typename base_type::callback_type callback_type;
-
         service_mechanism(abstract_launcher& launcher)
-                : mechanism_type(launcher) {}
+                : mechanism(launcher) {}
 
-        void add_service(key_type key, callback_type callback) {
-            this->template enqueue_task<SERVICE_CHANGES_PRIORITY>(
+        void add_service(std::string key, service_callback callback) {
+            mechanism::template enqueue_task<SERVICE_CHANGES_PRIORITY>(
                     &base_type::add_service,
                     std::move(key),
                     std::move(callback)
             );
         }
 
-        void remove_service(callback_type callback) {
-            this->template enqueue_task<SERVICE_CHANGES_PRIORITY>(
+        void remove_service(service_callback callback) {
+            mechanism::template enqueue_task<SERVICE_CHANGES_PRIORITY>(
                     &base_type::remove_service,
                     std::move(callback)
             );
         }
 
-        void call(const key_type& key, message_type input, listener_type listener) {
-            this->template enqueue_task<SERVICE_CALL_PRIORITY>(
+        void call(const std::string& key, shared_buffer input, service_result_callback listener) {
+            mechanism::template enqueue_task<SERVICE_CALL_PRIORITY>(
                     &base_type::call,
                     std::move(key),
                     std::move(input),
@@ -66,8 +58,8 @@ namespace rrc {
             );
         }
 
-        std::vector<key_type> keys() const {
-            return this->call(&base_type::keys);
+        std::vector<std::string> keys() const {
+            return mechanism::call(std::mem_fn(&service_holder::keys));
         }
     };
 }

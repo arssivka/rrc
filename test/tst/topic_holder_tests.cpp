@@ -12,17 +12,14 @@ using namespace rrc;
 
 class topic_holder_fixture : public ::testing::Test {
 protected:
-    typedef topic_holder<std::string, std::string> holder_type;
-    typedef typename holder_type::callback_type callback_type;
-
     void SetUp() override {
         m_flag1 = false;
         m_flag2 = false;
-        m_message = "flaceh";
-        m_callback1 = callback_type([this](const std::string& msg) {
+        m_message = shared_buffer("flaceh");
+        m_callback1 = topic_callback([this](const shared_buffer& msg) {
             m_flag1 = msg == m_message;
         });
-        m_callback2 = callback_type([this](const std::string& msg) {
+        m_callback2 = topic_callback([this](const shared_buffer& msg) {
             m_flag2 = msg == m_message;
         });
     }
@@ -31,10 +28,10 @@ protected:
 protected:
     bool m_flag1;
     bool m_flag2;
-    std::string m_message;
-    callback_type m_callback1;
-    callback_type m_callback2;
-    holder_type m_holder;
+    shared_buffer m_message;
+    topic_callback m_callback1;
+    topic_callback m_callback2;
+    topic_holder m_holder;
 };
 
 
@@ -81,7 +78,7 @@ TEST_F(topic_holder_fixture, keys) {
     m_holder.add_listener("topic!", m_callback2);
     EXPECT_EQ(m_holder.keys(), std::vector<std::string>{"topic!"});
     m_holder.add_listener("topic", m_callback1);
-    auto vector1 = std::vector<std::string>{"topic", "topic!"};
+    std::vector<std::string> vector1{"topic", "topic!"};
     EXPECT_EQ(m_holder.keys(), vector1);
     m_holder.remove_listener("topic!", m_callback1);
     EXPECT_EQ(m_holder.keys(), vector1);

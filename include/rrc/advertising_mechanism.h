@@ -24,31 +24,24 @@
 #include "mechanism.h"
 
 namespace rrc {
-    template <class K, class M>
-    class advertising_mechanism : protected mechanism<topic_holder<K, M>, 2> {
+    class advertising_mechanism : protected mechanism<topic_holder, 2> {
     public:
         enum {
             CHANGE_LISTENERS_PRIORITY,
             SEND_MESSAGE_PRIORITY
         };
 
-        typedef K key_type;
-        typedef M message_type;
-        typedef mechanism<topic_holder<key_type, message_type>, 2> mechanism_type;
-        typedef typename mechanism_type::base_type base_type;
-        typedef typename base_type::callback_type callback_type;
-
 
         advertising_mechanism(abstract_launcher& launcher)
-                : mechanism_type(launcher) {}
+                : mechanism(launcher) {}
 
         /**
          * @brief Send a message
          * @param topic_key Name of the topic for the message
          * @param message Pointer to the message, that needs to be sent
          */
-        void send_message(key_type topic_key, message_type message) {
-            this->template enqueue_task<SEND_MESSAGE_PRIORITY>(
+        void send_message(std::string topic_key, shared_buffer message) {
+            mechanism::template enqueue_task<SEND_MESSAGE_PRIORITY>(
                     &base_type::send_message,
                     std::move(topic_key),
                     std::move(message)
@@ -60,8 +53,8 @@ namespace rrc {
          * @param topic_key Name of the topic for the listener
          * @param callback Pointer to the callback that needs to be registered
          */
-        void add_listener(key_type topic_key, callback_type callback) {
-            this->template enqueue_task<CHANGE_LISTENERS_PRIORITY>(
+        void add_listener(std::string topic_key, topic_callback callback) {
+            mechanism::template enqueue_task<CHANGE_LISTENERS_PRIORITY>(
                     &base_type::add_listener,
                     std::move(topic_key),
                     std::move(callback)
@@ -69,8 +62,8 @@ namespace rrc {
         }
 
         // TODO Tests and docs
-        void remove_listener(key_type topic_key, callback_type callback) {
-            this->template enqueue_task<CHANGE_LISTENERS_PRIORITY>(
+        void remove_listener(std::string topic_key, topic_callback callback) {
+            mechanism::template enqueue_task<CHANGE_LISTENERS_PRIORITY>(
                     &base_type::remove_listener,
                     std::move(topic_key),
                     std::move(callback)
@@ -81,8 +74,8 @@ namespace rrc {
          * @brief Returns set of avaliable topic names
          * @return Set of topic names
          */
-        std::vector<key_type> keys() const {
-            return this->call(&base_type::keys);
+        std::vector<std::string> keys() const {
+            return mechanism::call(mem_fn(&base_type::keys));
         }
 
     };
