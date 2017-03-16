@@ -35,7 +35,9 @@ set(SRCS
         include/rrc/finalizer.h
         src/rrc/finalizer.cpp
         include/rrc/finalizer_mechanism.h
-        include/rrc/elem_less.h include/rrc/service_status.h)
+        include/rrc/elem_less.h
+        include/rrc/service_status.h
+        include/rrc/shared_function.h)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/defines.h.in"
         "${PROJECT_BINARY_DIR}/defines.h")
