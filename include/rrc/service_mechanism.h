@@ -34,18 +34,23 @@ namespace rrc {
         service_mechanism(abstract_launcher& launcher)
                 : mechanism(launcher) {}
 
-        void add_service(std::string key, service_callback callback) {
+        void add_service(std::string key,
+                         service_callback callback,
+                         result_callback result = result_callback()) {
             mechanism::template enqueue_task<SERVICE_CHANGES_PRIORITY>(
                     &base_type::add_service,
                     std::move(key),
-                    std::move(callback)
+                    std::move(callback),
+                    std::move(result)
             );
         }
 
-        void remove_service(service_callback callback) {
+        void remove_service(service_callback callback,
+                            result_callback result = result_callback()) {
             mechanism::template enqueue_task<SERVICE_CHANGES_PRIORITY>(
                     &base_type::remove_service,
-                    std::move(callback)
+                    std::move(callback),
+                    std::move(result)
             );
         }
 
