@@ -38,11 +38,12 @@ namespace rrc {
         typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
         typedef size_t site_type;
 
-        shared_buffer() = default;
+        shared_buffer() : m_data(), m_size(0) { }
 
         explicit shared_buffer(const std::string& str) {
             m_data = copy_on_write<value_type>(new value_type[str.size()]);
             std::copy(str.cbegin(), str.cend(), m_data.get());
+            m_size = str.size();
         }
 
         explicit shared_buffer(size_type size, const value_type& val = value_type()) {
@@ -102,7 +103,7 @@ namespace rrc {
         const_reverse_iterator crend() const { return const_reverse_iterator(begin()); }
 
         bool operator==(const shared_buffer& rhs) const {
-            return m_size == rhs.m_size && std::equal(this->cbegin(), rhs.cend(), rhs.cbegin());
+            return m_size == rhs.m_size && std::equal(this->cbegin(), this->cend(), rhs.cbegin());
         }
 
         bool operator!=(const shared_buffer& rhs) const {

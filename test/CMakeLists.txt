@@ -15,7 +15,8 @@ set(SRCS
         include/flag_setter.h
         src/flag_setter.cpp
         tst/topic_holder_tests.cpp
-        tst/lockfree_launcher_tests.cpp)
+        tst/lockfree_launcher_tests.cpp
+        tst/buffer_tests.cpp)
 
 
 add_executable(tests ${SRCS})
