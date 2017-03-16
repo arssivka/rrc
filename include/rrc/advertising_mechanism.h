@@ -32,21 +32,14 @@ namespace rrc {
         };
 
 
-        advertising_mechanism(abstract_launcher& launcher)
-                : mechanism(launcher) {}
+        advertising_mechanism(abstract_launcher& launcher);
 
         /**
          * @brief Send a message
          * @param topic_key Name of the topic for the message
          * @param message Pointer to the message, that needs to be sent
          */
-        void send_message(std::string topic_key, shared_buffer message) {
-            mechanism::template enqueue_task<SEND_MESSAGE_PRIORITY>(
-                    &base_type::send_message,
-                    std::move(topic_key),
-                    std::move(message)
-            );
-        }
+        void send_message(std::string topic_key, shared_buffer message);
 
         /**
          * @brief Registers listener
@@ -55,34 +48,18 @@ namespace rrc {
          */
         void add_listener(std::string topic_key,
                           topic_callback callback,
-                          result_callback result = result_callback()) {
-            mechanism::template enqueue_task<CHANGE_LISTENERS_PRIORITY>(
-                    &base_type::add_listener,
-                    std::move(topic_key),
-                    std::move(callback),
-                    std::move(result)
-            );
-        }
+                          result_callback result = result_callback());
 
         // TODO Tests and docs
         void remove_listener(std::string topic_key,
                              topic_callback callback,
-                             result_callback result = result_callback()) {
-            mechanism::template enqueue_task<CHANGE_LISTENERS_PRIORITY>(
-                    &base_type::remove_listener,
-                    std::move(topic_key),
-                    std::move(callback),
-                    std::move(result)
-            );
-        }
+                             result_callback result = result_callback());
 
         /**
          * @brief Returns set of avaliable topic names
          * @return Set of topic names
          */
-        std::vector<std::string> keys() const {
-            return mechanism::call(mem_fn(&base_type::keys));
-        }
+        std::vector<std::string> keys() const;
 
     };
 }

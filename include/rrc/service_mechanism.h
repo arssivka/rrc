@@ -31,41 +31,18 @@ namespace rrc {
             SERVICE_CALL_PRIORITY
         };
 
-        service_mechanism(abstract_launcher& launcher)
-                : mechanism(launcher) {}
+        service_mechanism(abstract_launcher& launcher);
 
         void add_service(std::string key,
                          service_callback callback,
-                         result_callback result = result_callback()) {
-            mechanism::template enqueue_task<SERVICE_CHANGES_PRIORITY>(
-                    &base_type::add_service,
-                    std::move(key),
-                    std::move(callback),
-                    std::move(result)
-            );
-        }
+                         result_callback result = result_callback());
 
         void remove_service(service_callback callback,
-                            result_callback result = result_callback()) {
-            mechanism::template enqueue_task<SERVICE_CHANGES_PRIORITY>(
-                    &base_type::remove_service,
-                    std::move(callback),
-                    std::move(result)
-            );
-        }
+                            result_callback result = result_callback());
 
-        void call(const std::string& key, shared_buffer input, service_result_callback listener) {
-            mechanism::template enqueue_task<SERVICE_CALL_PRIORITY>(
-                    &base_type::call,
-                    std::move(key),
-                    std::move(input),
-                    std::move(listener)
-            );
-        }
+        void call(const std::string& key, shared_buffer input, service_result_callback listener);
 
-        std::vector<std::string> keys() const {
-            return mechanism::call(std::mem_fn(&service_holder::keys));
-        }
+        std::vector<std::string> keys() const;
     };
 }
 

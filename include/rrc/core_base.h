@@ -27,14 +27,9 @@
 namespace rrc {
     class core_base {
     public:
-        core_base(abstract_launcher& launcher, int argc, char** argv)
-                : m_launcher(launcher) {
-            m_args.assign(argv + 1, argv + argc);
-        }
+        core_base(abstract_launcher& launcher, int argc, char** argv);
 
-        const std::vector<std::string>& args() const noexcept {
-            return m_args;
-        }
+        const std::vector<std::string>& args() const noexcept;
 
         template <class Func, class... Args>
         void enqueue_task(Func&& func, Args... args) {
@@ -53,16 +48,9 @@ namespace rrc {
             m_launcher.enqueue_user_task_for(duration, std::bind(std::forward<Func>, std::forward<Args>(args)...));
         };
 
-        bool is_multithreaded() const {
-            return m_launcher.is_multithreading();
-        }
+        bool is_multithreaded() const;
 
-        void stop() {
-            m_launcher.stop();
-        }
-
-    private:
-
+        void stop();
 
     private:
         abstract_launcher& m_launcher;

@@ -40,7 +40,7 @@ set(SRCS
         include/rrc/shared_function.h
         include/rrc/async_worker.h
         include/rrc/callback_defines.h
-        include/rrc/array_deleter.h)
+        include/rrc/array_deleter.h src/rrc/shared_buffer.cpp src/rrc/topic.cpp src/rrc/topic_holder.cpp src/rrc/service_mechanism.cpp src/rrc/service_holder.cpp src/rrc/finalizer_mechanism.cpp src/rrc/core_base.cpp src/rrc/advertising_mechanism.cpp)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/defines.h.in"
         "${PROJECT_BINARY_DIR}/defines.h")

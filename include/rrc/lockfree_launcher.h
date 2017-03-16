@@ -34,9 +34,7 @@ namespace rrc {
         /**
          * @brief Default constructor of Linear Launcher
          */
-        lockfree_launcher(std::chrono::steady_clock::duration sleep_duration = std::chrono::milliseconds(1))
-                : m_finished(true),
-                  m_sleep_duration(sleep_duration) {}
+        lockfree_launcher(std::chrono::steady_clock::duration sleep_duration = std::chrono::milliseconds(1));
         /**
          * @brief Linear Launcher destructor
          */

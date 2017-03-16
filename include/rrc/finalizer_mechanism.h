@@ -29,27 +29,11 @@ namespace rrc {
             CHANGE_LISTENERS_PRIORITY
         };
 
-        finalizer_mechanism(abstract_launcher& launcher)
-                : mechanism<finalizer, 1>(launcher) {
-            launcher.enqueue_finalize_task([this] {
-                this->apply_changes();
-                this->call(std::mem_fn(&finalizer::exec_and_clear));
-            });
-        }
+        finalizer_mechanism(abstract_launcher& launcher);
 
-        void add_finalize_callback(finalize_callback callback) {
-            this->template enqueue_task<CHANGE_LISTENERS_PRIORITY>(
-                    &finalizer::add_callback,
-                    std::move(callback)
-            );
-        }
+        void add_finalize_callback(finalize_callback callback);
 
-        void remove_finalize_callback(finalize_callback callback) {
-            this->template enqueue_task<CHANGE_LISTENERS_PRIORITY>(
-                    &finalizer::remove_callback,
-                    std::move(callback)
-            );
-        }
+        void remove_finalize_callback(finalize_callback callback);
 
     };
 }

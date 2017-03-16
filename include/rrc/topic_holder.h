@@ -32,59 +32,24 @@ namespace rrc {
      */
     class topic_holder {
     public:
-        topic_holder() {
-            // TODO Check it!
-            m_topic_hash.max_load_factor(0.8);
-        }
+        topic_holder();
 
         void add_listener(const std::string& topic_key,
                           topic_callback callback,
-                          const result_callback& result = result_callback()) {
-            auto it = m_topic_hash.find(topic_key);
-            if (it == m_topic_hash.end()) {
-                it = m_topic_hash.emplace(topic_key, topic()).first;
-            }
-            auto& topic = it->second;
-            topic.add_listener(std::move(callback), result);
-        }
+                          const result_callback& result = result_callback());
 
         // TODO: Docs
         void remove_listener(const std::string& topic_key,
                              const topic_callback& callback,
-                             const result_callback& result = result_callback()) {
-            auto it = m_topic_hash.find(topic_key);
-            if (it != m_topic_hash.end()) {
-                auto& topic = it->second;
-                topic.remove_listener(callback, result);
-                if (!topic.has_listeners()) {
-                    m_topic_hash.erase(it);
-                }
-            } else {
-                result(status::fail);
-            }
+                             const result_callback& result = result_callback());
 
-        }
-
-        void send_message(const std::string& topic_key, const shared_buffer& msg) {
-            auto it = m_topic_hash.find(topic_key);
-            if (it != m_topic_hash.end()) {
-                auto& topic = it->second;
-                topic.send_message(msg);
-            }
-        }
+        void send_message(const std::string& topic_key, const shared_buffer& msg);
 
         /**
          * @brief Returns set of the keys of registered topics
          * @return Vector of the topics's keys
          */
-        std::vector<std::string> keys() const {
-            std::vector<std::string> keys;
-            keys.reserve(m_topic_hash.size());
-            for (auto&& topic : m_topic_hash) {
-                keys.push_back(topic.first);
-            }
-            return keys;
-        }
+        std::vector<std::string> keys() const;
 
 
     private:

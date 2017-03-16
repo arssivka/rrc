@@ -35,39 +35,22 @@ namespace rrc {
          * @brief Register message callback
          * @param callback Pointer to callback to register
          */
-        void add_listener(topic_callback callback, const result_callback& result = result_callback()) {
-            m_listeners_hash.emplace(std::move(callback));
-            if (result) result(status::success);
-        }
+        void add_listener(topic_callback callback, const result_callback& result = result_callback());
 
         // TODO: Docs
-        void remove_listener(topic_callback callback, const result_callback& result = result_callback()) {
-            auto it = m_listeners_hash.find(callback);
-            status stat = status::fail;
-            if (it != m_listeners_hash.end()) {
-                m_listeners_hash.erase(it);
-                stat = status::success;
-            }
-            if (result) result(stat);
-        }
+        void remove_listener(topic_callback callback, const result_callback& result = result_callback());
 
         /**
          * @brief Sends the message
          * @param message Pointer to message that needs to be sent
          */
-        void send_message(const shared_buffer& msg) {
-            for (auto&& listener : m_listeners_hash) {
-                listener(msg);
-            }
-        }
+        void send_message(const shared_buffer& msg);
 
         /**
          * @brief Checks if this topic has listeners
          * @return True if topic has lesteners, otherwise false
          */
-        bool has_listeners() const {
-            return !m_listeners_hash.empty();
-        }
+        bool has_listeners() const;
 
     private:
         std::unordered_set<topic_callback> m_listeners_hash;

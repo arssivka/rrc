@@ -119,3 +119,8 @@ bool rrc::lockfree_launcher::exec_current_tasks(rrc::task_scheduler& scheduler) 
         }
     }
 }
+
+
+rrc::lockfree_launcher::lockfree_launcher(std::chrono::steady_clock::duration sleep_duration)
+        : m_finished(true),
+          m_sleep_duration(sleep_duration) {}
