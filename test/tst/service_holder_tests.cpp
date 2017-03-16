@@ -24,8 +24,8 @@ protected:
             return status::success;
         });
         m_listener = service_result_callback(
-                [this](status status, const shared_buffer& msg) {
-                    m_toli_esho_budet = status::success == status;
+                [this](status stat, const shared_buffer& msg) {
+                    m_toli_esho_budet = status::success == stat;
                     m_message = msg;
                     m_message[1] = 'E';
                 }
