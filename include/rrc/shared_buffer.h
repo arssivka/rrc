@@ -23,6 +23,7 @@
 #include <algorithm>
 #include <ostream>
 #include "copy_on_write.h"
+#include "array_deleter.h"
 
 namespace rrc {
     class shared_buffer {
@@ -41,13 +42,13 @@ namespace rrc {
         shared_buffer() : m_data(), m_size(0) { }
 
         explicit shared_buffer(const std::string& str) {
-            m_data = copy_on_write<value_type>(new value_type[str.size()]);
+            m_data.reset(new value_type[str.size()], array_deleter<value_type>());
             std::copy(str.cbegin(), str.cend(), m_data.get());
             m_size = str.size();
         }
 
         explicit shared_buffer(size_type size, const value_type& val = value_type()) {
-            m_data = copy_on_write<value_type>(new value_type[size]);
+            m_data.reset(new value_type[size], array_deleter<value_type>());
             m_size = size;
             this->fill(val);
         }
@@ -55,7 +56,7 @@ namespace rrc {
         template<class InputIterator>
         shared_buffer(InputIterator first, InputIterator last) {
             size_t size = (size_t) std::distance(first, last);
-            m_data = copy_on_write<value_type>(new value_type[size]);
+            m_data.reset(new value_type[size], array_deleter<value_type>());
             m_size = size;
             std::copy(first, last, m_data.get());
         }
@@ -69,40 +70,78 @@ namespace rrc {
         shared_buffer& operator=(shared_buffer&&) = default;
 
         reference operator[](size_type n) {
+            this->ensure_unique();
             value_type* data = m_data.get();
             return data[n];
         }
 
         const_reference operator[](size_type n) const {
+            this->ensure_initialized();
             const value_type* data = m_data.get();
             return data[n];
         }
 
-        void fill(const value_type& value) { std::fill_n(m_data.get(), size(), value); }
+        void fill(const value_type& value) {
+            this->ensure_unique();
+            std::fill_n(m_data.get(), size(), value);
+        }
 
-        size_type size() const noexcept { return m_size; }
+        size_type size() const noexcept {
+            this->ensure_initialized();
+            return m_size;
+        }
 
-        value_type* data() { return m_data.get(); }
+        value_type* data() {
+            return m_data.get();
+        }
 
-        const value_type* data() const { return m_data.get(); }
+        const value_type* data() const {
+            this->ensure_initialized();
+            return m_data.get();
+        }
 
-        const_iterator begin() const { return const_iterator(m_data.get()); }
+        const_iterator begin() const {
+            this->ensure_initialized();
+            return const_iterator(m_data.get());
+        }
 
-        const_iterator end() const { return const_iterator(m_data.get() + this->size()); }
+        const_iterator end() const {
+            this->ensure_initialized();
+            return const_iterator(m_data.get() + this->size());
+        }
 
-        const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
+        const_reverse_iterator rbegin() const {
+            this->ensure_initialized();
+            return const_reverse_iterator(end());
+        }
 
-        const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
+        const_reverse_iterator rend() const {
+            this->ensure_initialized();
+            return const_reverse_iterator(begin());
+        }
 
-        const_iterator cbegin() const { return const_iterator(m_data.get()); }
+        const_iterator cbegin() const {
+            this->ensure_initialized();
+            return const_iterator(m_data.get());
+        }
 
-        const_iterator cend() const { return const_iterator(m_data.get() + this->size()); }
+        const_iterator cend() const {
+            this->ensure_initialized();
+            return const_iterator(m_data.get() + this->size());
+        }
 
-        const_reverse_iterator crbegin() const { return const_reverse_iterator(end()); }
+        const_reverse_iterator crbegin() const {
+            this->ensure_initialized();
+            return const_reverse_iterator(end());
+        }
 
-        const_reverse_iterator crend() const { return const_reverse_iterator(begin()); }
+        const_reverse_iterator crend() const {
+            this->ensure_initialized();
+            return const_reverse_iterator(begin());
+        }
 
         bool operator==(const shared_buffer& rhs) const {
+            this->ensure_initialized();
             return m_size == rhs.m_size && std::equal(this->cbegin(), this->cend(), rhs.cbegin());
         }
 
@@ -111,7 +150,8 @@ namespace rrc {
         }
 
         bool operator==(const std::string& rhs) const {
-            return m_size == rhs.size() && std::equal(rhs.begin(), rhs.end(), m_data.get());
+            this->ensure_initialized();
+            return m_size == rhs.size() && std::equal(m_data.get(), m_data.get() + m_size, rhs.begin());
         }
 
         bool operator!=(const std::string& rhs) const {
@@ -123,9 +163,27 @@ namespace rrc {
             return os;
         }
 
+    private:
+        void ensure_initialized() const {
+            if(!m_data) {
+                m_data.reset(new value_type());
+                *m_data = '\0';
+                m_size = 1;
+            }
+        }
+
+        void ensure_unique() {
+            this->ensure_initialized();
+            if(!m_data.unique()) {
+                value_type* old_ptr = m_data.get();
+                m_data.reset(new value_type[m_size], array_deleter<value_type>());
+                std::copy(old_ptr, old_ptr + m_size, m_data.get());
+            }
+        }
+
 
     private:
-        copy_on_write<value_type> m_data;
-        size_t m_size;
+        mutable std::shared_ptr<value_type> m_data;
+        mutable size_t m_size;
     };
 }

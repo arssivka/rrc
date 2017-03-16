@@ -39,7 +39,8 @@ set(SRCS
         include/rrc/status.h
         include/rrc/shared_function.h
         include/rrc/async_worker.h
-        include/rrc/callback_defines.h)
+        include/rrc/callback_defines.h
+        include/rrc/array_deleter.h)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/defines.h.in"
         "${PROJECT_BINARY_DIR}/defines.h")
