@@ -36,7 +36,7 @@ namespace rrc {
                          service_callback callback,
                          const result_callback& result = result_callback()) {
             m_service_hash.emplace(key, std::move(callback));
-            result(status::success);
+            if (result) result(status::success);
         }
 
         void remove_service(const service_callback& callback,
@@ -46,9 +46,9 @@ namespace rrc {
                 return pair.second == callback;
             });
             m_service_hash.erase(it);
-            result(it != m_service_hash.end()
-                   ? status::success
-                   : status::fail);
+            if (result) result(it != m_service_hash.end()
+                               ? status::success
+                               : status::fail);
         }
 
         void call(const std::string& key, const shared_buffer input, service_result_callback listener) {
