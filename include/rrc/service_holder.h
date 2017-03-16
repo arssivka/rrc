@@ -32,16 +32,23 @@ namespace rrc {
             m_service_hash.max_load_factor(0.8);
         }
 
-        void add_service(const std::string& key, service_callback callback) {
+        void add_service(const std::string& key,
+                         service_callback callback,
+                         const result_callback& result = result_callback()) {
             m_service_hash.emplace(key, std::move(callback));
+            if (result) result(status::success);
         }
 
-        void remove_service(const service_callback& callback) {
+        void remove_service(const service_callback& callback,
+                            const result_callback& result = result_callback()) {
             auto it = std::find_if(m_service_hash.begin(), m_service_hash.end(),
                                 [&callback](const auto& pair) {
                 return pair.second == callback;
             });
             m_service_hash.erase(it);
+            if (result) result(it != m_service_hash.end()
+                               ? status::success
+                               : status::fail);
         }
 
         void call(const std::string& key, const shared_buffer input, service_result_callback listener) {

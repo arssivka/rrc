@@ -31,10 +31,10 @@ namespace rrc {
         shared_function() = default;
 
         shared_function(const function_type& function)
-                : m_functor_ptr(std::make_shared<function_type>(function)) {}
+                : m_functor_ptr(function ? std::make_shared<function_type>(function) : nullptr) {}
 
         shared_function(function_type&& function)
-                : m_functor_ptr(std::make_shared<function_type>(std::move(function))) {}
+                : m_functor_ptr(function ? std::make_shared<function_type>(std::move(function)) : nullptr) {}
 
         shared_function(std::shared_ptr<function_type> function_ptr)
                 : m_functor_ptr(std::move(function_ptr)) {}
@@ -69,8 +69,12 @@ namespace rrc {
             return m_functor_ptr.unique();
         }
 
-        bool initialized() {
-            return m_functor_ptr != nullptr;
+        bool initialized() const noexcept {
+            return m_functor_ptr != nullptr && *m_functor_ptr;
+        }
+
+        operator bool() const noexcept {
+            return this->initialized();
         }
 
         long use_count() {

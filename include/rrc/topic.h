@@ -35,16 +35,20 @@ namespace rrc {
          * @brief Register message callback
          * @param callback Pointer to callback to register
          */
-        void add_listener(topic_callback callback) {
+        void add_listener(topic_callback callback, const result_callback& result = result_callback()) {
             m_listeners_hash.emplace(std::move(callback));
+            if (result) result(status::success);
         }
 
         // TODO: Docs
-        void remove_listener(topic_callback callback) {
+        void remove_listener(topic_callback callback, const result_callback& result = result_callback()) {
             auto it = m_listeners_hash.find(callback);
+            status stat = status::fail;
             if (it != m_listeners_hash.end()) {
                 m_listeners_hash.erase(it);
+                stat = status::success;
             }
+            if (result) result(stat);
         }
 
         /**
