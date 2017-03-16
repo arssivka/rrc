@@ -53,20 +53,26 @@ namespace rrc {
          * @param topic_key Name of the topic for the listener
          * @param callback Pointer to the callback that needs to be registered
          */
-        void add_listener(std::string topic_key, topic_callback callback) {
+        void add_listener(std::string topic_key,
+                          topic_callback callback,
+                          result_callback result = result_callback()) {
             mechanism::template enqueue_task<CHANGE_LISTENERS_PRIORITY>(
                     &base_type::add_listener,
                     std::move(topic_key),
-                    std::move(callback)
+                    std::move(callback),
+                    std::move(result)
             );
         }
 
         // TODO Tests and docs
-        void remove_listener(std::string topic_key, topic_callback callback) {
+        void remove_listener(std::string topic_key,
+                             topic_callback callback,
+                             result_callback result = result_callback()) {
             mechanism::template enqueue_task<CHANGE_LISTENERS_PRIORITY>(
                     &base_type::remove_listener,
                     std::move(topic_key),
-                    std::move(callback)
+                    std::move(callback),
+                    std::move(result)
             );
         }
 
