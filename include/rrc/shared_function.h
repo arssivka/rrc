@@ -55,8 +55,25 @@ namespace rrc {
             return !(rhs == *this);
         }
 
+        function_type* get() const noexcept {
+            return m_functor_ptr.get();
+        }
+
     private:
-        std::shared_ptr<std::function<F>> m_functor_ptr;
+        std::shared_ptr<function_type> m_functor_ptr;
+    };
+}
+
+namespace std {
+    template <class F>
+    struct hash<rrc::shared_function<F>> {
+        typedef rrc::shared_function<F> argument_type;
+        typedef std::size_t result_type;
+
+        size_t operator()(const argument_type& arg) const {
+            typedef argument_type::function_type function_type;
+            return std::hash<function_type*>{}(arg.get());
+        }
     };
 }
 
