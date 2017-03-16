@@ -27,16 +27,15 @@
 
 namespace rrc {
     namespace defines {
-        typedef rrc::lockfree_task_queue queue_type;
         typedef std::string key_type;
         typedef rrc::shared_buffer<uint8_t> message_type;
     };
 
     class core
             : public core_base,
-              public advertising_mechanism<defines::queue_type, defines::key_type, defines::message_type>,
-              public service_mechanism<defines::queue_type, defines::key_type, defines::message_type>,
-              public finalizer_mechanism<defines::queue_type> {
+              public advertising_mechanism<defines::key_type, defines::message_type>,
+              public service_mechanism<defines::key_type, defines::message_type>,
+              public finalizer_mechanism {
     public:
         core(abstract_launcher& launcher, int argc, char** argv)
                 : core_base(launcher, argc, argv),

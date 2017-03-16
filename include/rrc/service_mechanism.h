@@ -24,8 +24,8 @@
 #include "mechanism.h"
 
 namespace rrc {
-    template <class Q, class K, class M>
-    class service_mechanism : protected mechanism<service_holder<K, M>, Q, 2> {
+    template <class K, class M>
+    class service_mechanism : protected mechanism<service_holder<K, M>, 2> {
     public:
         enum {
             SERVICE_CHANGES_PRIORITY,
@@ -34,8 +34,7 @@ namespace rrc {
 
         typedef K key_type;
         typedef M message_type;
-        typedef Q queue_type;
-        typedef mechanism<service_holder<key_type, message_type>, queue_type, 2> mechanism_type;
+        typedef mechanism<service_holder<key_type, message_type>, 2> mechanism_type;
         typedef typename mechanism_type::base_type base_type;
         typedef typename base_type::listener_type listener_type ;
         typedef typename base_type::callback_type callback_type;
@@ -44,8 +43,7 @@ namespace rrc {
                 : mechanism_type(launcher) {}
 
         void add_service(key_type key, std::shared_ptr<callback_type> callback_ptr) {
-            this->enqueue_task(
-                    SERVICE_CHANGES_PRIORITY,
+            this->template enqueue_task<SERVICE_CHANGES_PRIORITY>(
                     &base_type::add_service,
                     std::move(key),
                     std::move(callback_ptr)
@@ -53,16 +51,14 @@ namespace rrc {
         }
 
         void remove_service(std::shared_ptr<callback_type> callback_ptr) {
-            this->enqueue_task(
-                    SERVICE_CHANGES_PRIORITY,
+            this->template enqueue_task<SERVICE_CHANGES_PRIORITY>(
                     &base_type::remove_service,
                     std::move(callback_ptr)
             );
         }
 
         void call(const key_type& key, message_type input, std::shared_ptr<listener_type> listener_ptr) {
-            this->enqueue_task(
-                    SERVICE_CALL_PRIORITY,
+            this->template enqueue_task<SERVICE_CALL_PRIORITY>(
                     &base_type::call,
                     std::move(key),
                     std::move(input),

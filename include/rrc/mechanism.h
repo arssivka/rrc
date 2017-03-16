@@ -26,12 +26,11 @@
 #include <type_traits>
 
 namespace rrc {
-    template<class T, class Q, size_t N>
+    template<class T, size_t N>
     class mechanism : private non_copyable {
     protected:
         static constexpr size_t queues_count = N;
         typedef T base_type;
-        typedef Q queue_type;
 
         template<class... Args>
         mechanism(abstract_launcher& launcher, Args&& ... args)
@@ -40,7 +39,7 @@ namespace rrc {
                   m_changes_enqueued_flag(ATOMIC_FLAG_INIT) {}
 
         template<size_t I, class Func, class... Args>
-        inline void enqueue_task(size_t num_local_queue, Func&& func, Args&& ... args) {
+        inline void enqueue_task(Func&& func, Args&& ... args) {
             static_assert(I < queues_count, "Incorrect queue index");
             m_local_queues[I].enqueue(
                     std::bind(std::forward<Func>(func), &m_base, std::forward<Args>(args)...)
@@ -93,6 +92,6 @@ namespace rrc {
         base_type m_base;
         abstract_launcher& m_launcher;
         std::atomic_flag m_changes_enqueued_flag;
-        std::array<queue_type, queues_count> m_local_queues;
+        std::array<lockfree_task_queue, queues_count> m_local_queues;
     };
 }

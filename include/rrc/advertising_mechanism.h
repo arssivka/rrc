@@ -24,8 +24,8 @@
 #include "mechanism.h"
 
 namespace rrc {
-    template <class Q, class K, class M>
-    class advertising_mechanism : protected mechanism<topic_holder<K, M>, Q, 2> {
+    template <class K, class M>
+    class advertising_mechanism : protected mechanism<topic_holder<K, M>, 2> {
     public:
         enum {
             CHANGE_LISTENERS_PRIORITY,
@@ -34,8 +34,7 @@ namespace rrc {
 
         typedef K key_type;
         typedef M message_type;
-        typedef Q queue_type;
-        typedef mechanism<topic_holder<key_type, message_type>, queue_type, 2> mechanism_type;
+        typedef mechanism<topic_holder<key_type, message_type>, 2> mechanism_type;
         typedef typename mechanism_type::base_type base_type;
         typedef typename base_type::callback_type callback_type;
 
@@ -49,8 +48,7 @@ namespace rrc {
          * @param message Pointer to the message, that needs to be sent
          */
         void send_message(key_type topic_key, message_type message) {
-            this->enqueue_task(
-                    SEND_MESSAGE_PRIORITY,
+            this->template enqueue_task<SEND_MESSAGE_PRIORITY>(
                     &base_type::send_message,
                     std::move(topic_key),
                     std::move(message)
@@ -64,8 +62,7 @@ namespace rrc {
          */
         void add_listener(key_type topic_key,
                           std::shared_ptr<callback_type> callback_ptr) {
-            this->enqueue_task(
-                    CHANGE_LISTENERS_PRIORITY,
+            this->template enqueue_task<CHANGE_LISTENERS_PRIORITY>(
                     &base_type::add_listener,
                     std::move(topic_key),
                     std::move(callback_ptr)
@@ -75,8 +72,7 @@ namespace rrc {
         // TODO Tests and docs
         void remove_listener(key_type topic_key,
                              std::shared_ptr<callback_type> callback_ptr) {
-            this->enqueue_task(
-                    CHANGE_LISTENERS_PRIORITY,
+            this->template enqueue_task<CHANGE_LISTENERS_PRIORITY>(
                     &base_type::remove_listener,
                     std::move(topic_key),
                     std::move(callback_ptr)

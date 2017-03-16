@@ -23,15 +23,14 @@
 #include "finalizer.h"
 
 namespace rrc {
-    template <class Q>
-    class finalizer_mechanism : public mechanism<finalizer, Q, 1> {
+    class finalizer_mechanism : public mechanism<finalizer, 1> {
     public:
         enum {
             CHANGE_LISTENERS_PRIORITY
         };
 
         finalizer_mechanism(abstract_launcher& launcher)
-                : mechanism<finalizer, Q, 1>(launcher) {
+                : mechanism<finalizer, 1>(launcher) {
             launcher.enqueue_finalize_task([this] {
                 this->apply_changes();
                 this->call(std::mem_fn(&finalizer::exec_and_clear));
@@ -39,16 +38,14 @@ namespace rrc {
         }
 
         void add_finalize_callback(finalize_callback callback) {
-            this->enqueue_task(
-                    CHANGE_LISTENERS_PRIORITY,
+            this->template enqueue_task<CHANGE_LISTENERS_PRIORITY>(
                     &finalizer::add_callback,
                     std::move(callback)
             );
         }
 
         void remove_finalize_callback(finalize_callback callback) {
-            this->enqueue_task(
-                    CHANGE_LISTENERS_PRIORITY,
+            this->template enqueue_task<CHANGE_LISTENERS_PRIORITY>(
                     &finalizer::remove_callback,
                     std::move(callback)
             );
