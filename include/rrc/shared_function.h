@@ -73,6 +73,10 @@ namespace rrc {
             return m_functor_ptr != nullptr;
         }
 
+        long use_count() {
+            return m_functor_ptr.use_count();
+        }
+
     private:
         std::shared_ptr<function_type> m_functor_ptr;
     };

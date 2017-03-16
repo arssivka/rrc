@@ -23,6 +23,7 @@
 #include <unordered_map>
 #include <algorithm>
 #include "service_status.h"
+#include "shared_function.h"
 
 namespace rrc {
     template<class K, class M>
@@ -30,33 +31,32 @@ namespace rrc {
     public:
         typedef K key_type;
         typedef M message_type;
-        typedef std::function<void(service_status, const message_type&)> listener_type;
-        typedef std::function<service_status(const message_type&, message_type&)> callback_type;
+        typedef shared_function<void(service_status, const message_type&)> listener_type;
+        typedef shared_function<service_status(const message_type&, message_type&)> callback_type;
 
         service_holder() {
-            // TODO: Test it
             m_service_hash.max_load_factor(0.8);
         }
 
-        void add_service(const key_type& key, std::shared_ptr<callback_type> callback_ptr) {
-            m_service_hash.emplace(key, std::move(callback_ptr));
+        void add_service(const key_type& key, callback_type callback) {
+            m_service_hash.emplace(key, std::move(callback));
         }
 
-        void remove_service(std::shared_ptr<callback_type> callback_ptr) {
+        void remove_service(const callback_type& callback) {
             auto it = std::find_if(m_service_hash.begin(), m_service_hash.end(),
-                                [callback_ptr_cap = std::move(callback_ptr)](const auto& pair) {
-                return pair.second == callback_ptr_cap;
+                                [&callback](const auto& pair) {
+                return pair.second == callback;
             });
             m_service_hash.erase(it);
         }
 
-        void call(const key_type& key, message_type input, std::shared_ptr<listener_type> listener_ptr) {
+        void call(const key_type& key, message_type input, listener_type listener) {
             auto it = m_service_hash.find(key);
             if (it != m_service_hash.end()) {
-                auto& callback_ptr = it->second;
+                auto& callback = it->second;
                 message_type output;
-                service_status result = (*callback_ptr)(std::move(input), output);
-                (*listener_ptr)(result, output);
+                service_status result = callback(std::move(input), output);
+                listener(result, output);
             }
         }
 
@@ -70,7 +70,7 @@ namespace rrc {
         }
 
     private:
-        std::unordered_map<K, std::shared_ptr<callback_type>> m_service_hash;
+        std::unordered_map<K, callback_type> m_service_hash;
     };
 }
 

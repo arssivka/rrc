@@ -42,27 +42,27 @@ namespace rrc {
         service_mechanism(abstract_launcher& launcher)
                 : mechanism_type(launcher) {}
 
-        void add_service(key_type key, std::shared_ptr<callback_type> callback_ptr) {
+        void add_service(key_type key, callback_type callback) {
             this->template enqueue_task<SERVICE_CHANGES_PRIORITY>(
                     &base_type::add_service,
                     std::move(key),
-                    std::move(callback_ptr)
+                    std::move(callback)
             );
         }
 
-        void remove_service(std::shared_ptr<callback_type> callback_ptr) {
+        void remove_service(callback_type callback) {
             this->template enqueue_task<SERVICE_CHANGES_PRIORITY>(
                     &base_type::remove_service,
-                    std::move(callback_ptr)
+                    std::move(callback)
             );
         }
 
-        void call(const key_type& key, message_type input, std::shared_ptr<listener_type> listener_ptr) {
+        void call(const key_type& key, message_type input, listener_type listener) {
             this->template enqueue_task<SERVICE_CALL_PRIORITY>(
                     &base_type::call,
                     std::move(key),
                     std::move(input),
-                    std::move(listener_ptr)
+                    std::move(listener)
             );
         }
 

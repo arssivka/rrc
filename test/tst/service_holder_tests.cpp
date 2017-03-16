@@ -18,14 +18,14 @@ protected:
         m_flage = false;
         m_toli_esho_budet = false;
         m_message = std::string("meow!");
-        m_callback = std::make_shared<callback_type>(
+        m_callback = callback_type(
                 [this](const std::string& in, std::string& out) -> service_status {
             m_flage = true;
             out = in;
             out[0] = 'M';
             return service_status::ok;
         });
-        m_listener = std::make_shared<listener_type>(
+        m_listener = listener_type(
                 [this](service_status status, const std::string& msg) {
                     m_toli_esho_budet = service_status::ok == status;
                     m_message = msg;
@@ -41,8 +41,8 @@ protected:
 protected:
     bool m_flage; // it's not a mistake! O_O
     bool m_toli_esho_budet;
-    std::shared_ptr<callback_type> m_callback;
-    std::shared_ptr<listener_type> m_listener;
+    callback_type m_callback;
+    listener_type m_listener;
     std::string m_message;
     service_holder<std::string, std::string> m_holder;
 };
