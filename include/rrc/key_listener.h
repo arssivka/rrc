@@ -14,38 +14,25 @@
  * limitations under the License.
  *
  *  @autor arssivka
- *  @date 2/24/17
+ *  @date 3/17/17
  */
 #pragma once
 
 
-#include "shared_buffer.h"
-#include "core_base.h"
-#include "topic_mechanism.h"
-#include "service_mechanism.h"
-#include "finalizer_mechanism.h"
+#include <forward_list>
+#include "callback_defines.h"
 
 namespace rrc {
-    class core : public core_base {
+    class key_listener {
     public:
-        core(abstract_launcher& launcher, int argc, char** argv);
+        void add_listener(rrc::key_callback callback, const rrc::result_callback& result);
 
-        const topic_mechanism& topics() const;
+        void remove_listener(const rrc::key_callback& callback, const rrc::result_callback& result);
 
-        const service_mechanism& services() const;
-
-        const finalizer_mechanism& finalizers() const;
-
-        topic_mechanism& topics();
-
-        service_mechanism& services();
-
-        finalizer_mechanism& finalizers();
+        void notify(result_code code, const std::string& key);
 
     private:
-        topic_mechanism m_topic_mechanism;
-        service_mechanism m_service_mechanism;
-        finalizer_mechanism m_finalizer_mechanism;
+        std::forward_list<key_callback> m_key_listeners;
     };
 }
 

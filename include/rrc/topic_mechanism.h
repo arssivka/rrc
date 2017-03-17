@@ -24,15 +24,16 @@
 #include "mechanism.h"
 
 namespace rrc {
-    class advertising_mechanism : protected mechanism<topic_holder, 2> {
+    class topic_mechanism : protected mechanism<topic_holder, 3> {
     public:
         enum {
-            CHANGE_LISTENERS_PRIORITY,
+            CHANGE_KEY_LISTENERS_PRIORITY,
+            CHANGE_TOPIC_LISTENERS_PRIORITY,
             SEND_MESSAGE_PRIORITY
         };
 
 
-        advertising_mechanism(abstract_launcher& launcher);
+        topic_mechanism(abstract_launcher& launcher);
 
         /**
          * @brief Send a message
@@ -46,14 +47,18 @@ namespace rrc {
          * @param topic_key Name of the topic for the listener
          * @param callback Pointer to the callback that needs to be registered
          */
-        void add_listener(std::string topic_key,
-                          topic_callback callback,
-                          result_callback result = result_callback());
+        void add_topic_listener(std::string topic_key,
+                                topic_callback callback,
+                                result_callback result = result_callback());
 
         // TODO Tests and docs
-        void remove_listener(std::string topic_key,
-                             topic_callback callback,
-                             result_callback result = result_callback());
+        void remove_topic_listener(std::string topic_key,
+                                   topic_callback callback,
+                                   result_callback result = result_callback());
+
+        void add_key_listener(key_callback callback, result_callback result = result_callback());
+
+        void remove_key_listener(key_callback callback, result_callback result = result_callback());
 
         /**
          * @brief Returns set of avaliable topic names

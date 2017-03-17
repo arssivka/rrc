@@ -31,9 +31,9 @@ namespace rrc {
 
         finalizer_mechanism(abstract_launcher& launcher);
 
-        void add_finalize_callback(finalize_callback callback);
+        void add_finalize_callback(finalize_callback callback, result_callback result = result_callback());
 
-        void remove_finalize_callback(finalize_callback callback);
+        void remove_finalize_callback(finalize_callback callback, result_callback result = result_callback());
 
     };
 }

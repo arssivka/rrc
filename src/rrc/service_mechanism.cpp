@@ -27,7 +27,7 @@ rrc::service_mechanism::service_mechanism(rrc::abstract_launcher& launcher)
 void rrc::service_mechanism::add_service(std::string key,
                                          rrc::service_callback callback,
                                          rrc::result_callback result) {
-    mechanism::template enqueue_task<SERVICE_CHANGES_PRIORITY>(
+    mechanism::template enqueue_task<CHANGE_SERVICES_PRIORITY>(
             &base_type::add_service,
             std::move(key),
             std::move(callback),
@@ -38,7 +38,7 @@ void rrc::service_mechanism::add_service(std::string key,
 
 void rrc::service_mechanism::remove_service(rrc::service_callback callback,
                                             rrc::result_callback result) {
-    mechanism::template enqueue_task<SERVICE_CHANGES_PRIORITY>(
+    mechanism::template enqueue_task<CHANGE_SERVICES_PRIORITY>(
             &base_type::remove_service,
             std::move(callback),
             std::move(result)
@@ -60,4 +60,20 @@ void rrc::service_mechanism::call(const std::string& key,
 
 std::vector<std::string> rrc::service_mechanism::keys() const {
     return mechanism::call(std::mem_fn(&service_holder::keys));
+}
+
+void rrc::service_mechanism::add_key_listener(rrc::key_callback callback, rrc::result_callback result) {
+    mechanism::template enqueue_task<CHANGE_KEY_LISTENERS_PRIORITY>(
+            std::mem_fn(&base_type::add_key_listener),
+            std::move(callback),
+            std::move(result)
+    );
+}
+
+void rrc::service_mechanism::remove_key_listener(key_callback callback, rrc::result_callback result) {
+    mechanism::template enqueue_task<CHANGE_KEY_LISTENERS_PRIORITY>(
+            std::mem_fn(&base_type::remove_key_listener),
+            std::move(callback),
+            std::move(result)
+    );
 }

@@ -24,10 +24,11 @@
 #include "mechanism.h"
 
 namespace rrc {
-    class service_mechanism : protected mechanism<service_holder, 2> {
+    class service_mechanism : protected mechanism<service_holder, 3> {
     public:
         enum {
-            SERVICE_CHANGES_PRIORITY,
+            CHANGE_KEY_LISTENERS_PRIORITY,
+            CHANGE_SERVICES_PRIORITY,
             SERVICE_CALL_PRIORITY
         };
 
@@ -39,6 +40,10 @@ namespace rrc {
 
         void remove_service(service_callback callback,
                             result_callback result = result_callback());
+
+        void add_key_listener(key_callback callback, result_callback result = result_callback());
+
+        void remove_key_listener(key_callback callback, result_callback result = result_callback());
 
         void call(const std::string& key, shared_buffer input, service_result_callback listener);
 

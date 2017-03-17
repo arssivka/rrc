@@ -22,9 +22,10 @@
 
 #include <unordered_map>
 #include <algorithm>
-#include "status.h"
+#include "result_code.h"
 #include "shared_function.h"
 #include "callback_defines.h"
+#include "key_listener.h"
 
 namespace rrc {
     class service_holder {
@@ -38,12 +39,17 @@ namespace rrc {
         void remove_service(const service_callback& callback,
                             const result_callback& result = result_callback());
 
+        void add_key_listener(key_callback callback, const result_callback& result = result_callback());
+
+        void remove_key_listener(const key_callback& callback, const result_callback& result = result_callback());
+
         void call(const std::string& key, const shared_buffer input, service_result_callback listener);
 
         std::vector<std::string> keys() const;
 
     private:
         std::unordered_map<std::string, service_callback> m_service_hash;
+        key_listener m_key_listener;
     };
 }
 

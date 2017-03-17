@@ -14,30 +14,19 @@
  * limitations under the License.
  *
  *  @autor arssivka
- *  @date 2/20/17
+ *  @date 3/13/17
  */
 
 #pragma once
 
 
-#include "abstract_launcher.h"
-#include "topic_mechanism.h"
-#include "barrier.h"
-#include "shared_buffer.h"
-#include "concurrent_priority_queue.h"
-#include "concurrent_task_queue.h"
-#include "copy_on_write.h"
-#include "core.h"
-#include "core_base.h"
-#include "lockfree_launcher.h"
-#include "lockfree_task_queue.h"
-#include "mechanism.h"
-#include "non_copyable.h"
-#include "service_holder.h"
-#include "service_mechanism.h"
-#include "task_queue.h"
-#include "task_scheduler.h"
-#include "topic.h"
-#include "topic_holder.h"
-#include "result_code.h"
-#include "callback_defines.h"
+namespace rrc {
+    enum result_code {
+        RESULT_CODE_SUCCESS,
+        RESULT_CODE_FAIL,
+        RESULT_CODE_ERROR,
+        RESULT_CODE_BAD_KEY,
+        RESULT_CODE_KEY_ADDED,
+        RESULT_CODE_KEY_REMOVED
+    };
+}

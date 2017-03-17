@@ -17,15 +17,15 @@ protected:
         m_toli_esho_budet = false;
         m_message = shared_buffer("meow!");
         m_callback = service_callback(
-                [this](const shared_buffer& in, shared_buffer& out) -> status {
+                [this](const shared_buffer& in, shared_buffer& out) -> result_code {
             m_flage = true;
             out = in;
             out[0] = 'M';
-            return status::success;
+            return RESULT_CODE_SUCCESS;
         });
         m_listener = service_result_callback(
-                [this](status stat, const shared_buffer& msg) {
-                    m_toli_esho_budet = status::success == stat;
+                [this](result_code stat, const shared_buffer& msg) {
+                    m_toli_esho_budet = RESULT_CODE_SUCCESS == stat;
                     m_message = msg;
                     m_message[1] = 'E';
                 }

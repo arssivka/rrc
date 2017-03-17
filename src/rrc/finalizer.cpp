@@ -19,14 +19,25 @@
 
 
 #include <rrc/finalizer.h>
+#include <rrc/result_code.h>
 
 
-void rrc::finalizer::add_callback(finalize_callback callback_ptr) {
-    m_callback_list.push_front(callback_ptr);
+void rrc::finalizer::add_callback(finalize_callback callback, const result_callback& result) {
+    if (callback) {
+        m_callback_list.push_front(callback);
+        result(RESULT_CODE_SUCCESS);
+    } else {
+        result(RESULT_CODE_FAIL);
+    }
 }
 
-void rrc::finalizer::remove_callback(finalize_callback callback_ptr) {
-    m_callback_list.remove(callback_ptr);
+void rrc::finalizer::remove_callback(finalize_callback callback, const result_callback& result) {
+    if (callback) {
+        m_callback_list.remove(callback);
+        result(RESULT_CODE_SUCCESS);
+    } else {
+        result(RESULT_CODE_FAIL);
+    }
 }
 
 void rrc::finalizer::exec_and_clear() {

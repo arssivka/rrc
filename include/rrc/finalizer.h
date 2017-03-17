@@ -22,16 +22,16 @@
 #include <functional>
 #include <memory>
 #include <forward_list>
-#include "shared_function.h"
+#include "callback_defines.h"
 
 namespace rrc {
     typedef shared_function<void()> finalize_callback;
 
     class finalizer {
     public:
-        void add_callback(finalize_callback callback_ptr);
+        void add_callback(finalize_callback callback, const result_callback& result);
 
-        void remove_callback(finalize_callback callback_ptr);
+        void remove_callback(finalize_callback callback, const result_callback& result);
 
         void exec_and_clear();
     private:

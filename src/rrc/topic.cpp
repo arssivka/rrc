@@ -21,17 +21,21 @@
 
 
 void rrc::topic::add_listener(rrc::topic_callback callback, const rrc::result_callback& result) {
-    m_listeners_hash.emplace(std::move(callback));
-    if (result) result(status::success);
+    if (callback) {
+        m_listeners_hash.emplace(std::move(callback));
+        if (result) result(RESULT_CODE_SUCCESS);
+    } else if (result) {
+        result(RESULT_CODE_FAIL);
+    }
 }
 
 
 void rrc::topic::remove_listener(rrc::topic_callback callback, const rrc::result_callback& result) {
     auto it = m_listeners_hash.find(callback);
-    status stat = status::fail;
+    result_code stat = RESULT_CODE_FAIL;
     if (it != m_listeners_hash.end()) {
         m_listeners_hash.erase(it);
-        stat = status::success;
+        stat = RESULT_CODE_SUCCESS;
     }
     if (result) result(stat);
 }

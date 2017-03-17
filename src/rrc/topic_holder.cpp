@@ -21,23 +21,25 @@
 
 
 rrc::topic_holder::topic_holder() {
-    // TODO Check it!
     m_topic_hash.max_load_factor(0.8);
 }
 
 
-void rrc::topic_holder::add_listener(const std::string& topic_key, rrc::topic_callback callback,
+void rrc::topic_holder::add_topic_listener(const std::string& topic_key,
+                                     rrc::topic_callback callback,
                                      const rrc::result_callback& result) {
     auto it = m_topic_hash.find(topic_key);
     if (it == m_topic_hash.end()) {
         it = m_topic_hash.emplace(topic_key, topic()).first;
+        m_key_listener.notify(RESULT_CODE_KEY_ADDED, topic_key);
     }
     auto& topic = it->second;
     topic.add_listener(std::move(callback), result);
 }
 
 
-void rrc::topic_holder::remove_listener(const std::string& topic_key, const rrc::topic_callback& callback,
+void rrc::topic_holder::remove_topic_listener(const std::string& topic_key,
+                                        const rrc::topic_callback& callback,
                                         const rrc::result_callback& result) {
     auto it = m_topic_hash.find(topic_key);
     if (it != m_topic_hash.end()) {
@@ -45,15 +47,17 @@ void rrc::topic_holder::remove_listener(const std::string& topic_key, const rrc:
         topic.remove_listener(callback, result);
         if (!topic.has_listeners()) {
             m_topic_hash.erase(it);
+            m_key_listener.notify(RESULT_CODE_KEY_REMOVED, topic_key);
         }
     } else {
-        result(status::fail);
+        result(RESULT_CODE_FAIL);
     }
 
 }
 
 
-void rrc::topic_holder::send_message(const std::string& topic_key, const rrc::shared_buffer& msg) {
+void rrc::topic_holder::send_message(const std::string& topic_key,
+                                     const rrc::shared_buffer& msg) {
     auto it = m_topic_hash.find(topic_key);
     if (it != m_topic_hash.end()) {
         auto& topic = it->second;
@@ -69,4 +73,16 @@ std::vector<std::string> rrc::topic_holder::keys() const {
         keys.push_back(topic.first);
     }
     return keys;
+}
+
+
+void rrc::topic_holder::add_key_listener(rrc::key_callback callback,
+                                         const rrc::result_callback& result) {
+    m_key_listener.add_listener(std::move(callback), result);
+}
+
+
+void rrc::topic_holder::remove_key_listener(const rrc::key_callback& callback,
+                                            const rrc::result_callback& result) {
+    m_key_listener.remove_listener(callback, result);
 }

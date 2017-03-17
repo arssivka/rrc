@@ -38,10 +38,10 @@ protected:
 TEST_F(topic_holder_fixture, add_listener) {
     EXPECT_TRUE(m_callback1.unique());
     EXPECT_TRUE(m_callback2.unique());
-    m_holder.add_listener("topic!", m_callback1);
+    m_holder.add_topic_listener("topic!", m_callback1);
     EXPECT_FALSE(m_callback1.unique());
     EXPECT_TRUE(m_callback2.unique());
-    m_holder.add_listener("topic!", m_callback2);
+    m_holder.add_topic_listener("topic!", m_callback2);
     EXPECT_FALSE(m_callback1.unique());
     EXPECT_FALSE(m_callback2.unique());
 }
@@ -49,19 +49,19 @@ TEST_F(topic_holder_fixture, add_listener) {
 TEST_F(topic_holder_fixture, remove_listener) {
     EXPECT_TRUE(m_callback1.unique());
     EXPECT_TRUE(m_callback2.unique());
-    m_holder.add_listener("topic!", m_callback1);
-    m_holder.add_listener("topic!", m_callback2);
+    m_holder.add_topic_listener("topic!", m_callback1);
+    m_holder.add_topic_listener("topic!", m_callback2);
     EXPECT_FALSE(m_callback1.unique());
     EXPECT_FALSE(m_callback2.unique());
-    m_holder.remove_listener("topic!", m_callback1);
-    m_holder.remove_listener("topic!", m_callback2);
+    m_holder.remove_topic_listener("topic!", m_callback1);
+    m_holder.remove_topic_listener("topic!", m_callback2);
     EXPECT_TRUE(m_callback1.unique());
     EXPECT_TRUE(m_callback2.unique());
 }
 
 TEST_F(topic_holder_fixture, send_message) {
-    m_holder.add_listener("topic!", m_callback1);
-    m_holder.add_listener("topic!", m_callback2);
+    m_holder.add_topic_listener("topic!", m_callback1);
+    m_holder.add_topic_listener("topic!", m_callback2);
     EXPECT_FALSE(m_flag1);
     EXPECT_FALSE(m_flag2);
     m_holder.send_message("topic", m_message);
@@ -74,15 +74,15 @@ TEST_F(topic_holder_fixture, send_message) {
 
 TEST_F(topic_holder_fixture, keys) {
     EXPECT_TRUE(m_holder.keys().empty());
-    m_holder.add_listener("topic!", m_callback1);
-    m_holder.add_listener("topic!", m_callback2);
+    m_holder.add_topic_listener("topic!", m_callback1);
+    m_holder.add_topic_listener("topic!", m_callback2);
     EXPECT_EQ(m_holder.keys(), std::vector<std::string>{"topic!"});
-    m_holder.add_listener("topic", m_callback1);
+    m_holder.add_topic_listener("topic", m_callback1);
     std::vector<std::string> vector1{"topic", "topic!"};
     EXPECT_EQ(m_holder.keys(), vector1);
-    m_holder.remove_listener("topic!", m_callback1);
+    m_holder.remove_topic_listener("topic!", m_callback1);
     EXPECT_EQ(m_holder.keys(), vector1);
-    m_holder.remove_listener("topic!", m_callback2);
+    m_holder.remove_topic_listener("topic!", m_callback2);
     EXPECT_EQ(m_holder.keys(), std::vector<std::string>{"topic"});
 
 }

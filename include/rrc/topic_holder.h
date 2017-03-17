@@ -21,10 +21,8 @@
 
 
 #include <unordered_map>
-#include <set>
-#include <memory>
-#include <vector>
 #include "topic.h"
+#include "key_listener.h"
 
 namespace rrc {
     /**
@@ -34,14 +32,18 @@ namespace rrc {
     public:
         topic_holder();
 
-        void add_listener(const std::string& topic_key,
-                          topic_callback callback,
-                          const result_callback& result = result_callback());
+        void add_topic_listener(const std::string& topic_key,
+                                topic_callback callback,
+                                const result_callback& result = result_callback());
 
         // TODO: Docs
-        void remove_listener(const std::string& topic_key,
-                             const topic_callback& callback,
-                             const result_callback& result = result_callback());
+        void remove_topic_listener(const std::string& topic_key,
+                                   const topic_callback& callback,
+                                   const result_callback& result = result_callback());
+
+        void add_key_listener(key_callback callback, const result_callback& result = result_callback());
+
+        void remove_key_listener(const key_callback& callback, const result_callback& result = result_callback());
 
         void send_message(const std::string& topic_key, const shared_buffer& msg);
 
@@ -54,7 +56,7 @@ namespace rrc {
 
     private:
         std::unordered_map<std::string, topic> m_topic_hash;
-
+        key_listener m_key_listener;
     };
 }
 
