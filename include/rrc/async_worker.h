@@ -29,18 +29,26 @@ namespace rrc {
     template <class T>
     class async_worker : private non_copyable {
     public:
+        async_worker() : m_finished(true) {}
+
+        async_worker(async_worker&&) = default;
+
         async_worker(std::function<void(T&)> callback) : m_finished(false) {
-            m_worker = std::thread([this, callback_cap = std::move(callback)] {
-                T data;
-                while (this->wait_for_data(data)) {
-                    callback_cap(data);
-                }
-            });
+            this->start_thread();
+        }
+
+        async_worker& operator=(async_worker&&) = default;
+
+        async_worker& operator=(std::function<void(T&)> callback) {
+            this->stop_thread();
+            this->start_thread(callback);
         }
 
         void push(const T& data) {
             {
                 std::lock_guard<std::mutex> lock(m_queue_mut);
+                if(m_finished)
+                    throw std::runtime_error("enqueue on stopped async_worker");
                 m_queue.push(data);
             }
             m_queue_cv.notify_one();
@@ -49,26 +57,46 @@ namespace rrc {
         void push(T&& data) {
             {
                 std::lock_guard<std::mutex> lock(m_queue_mut);
+                if(m_finished)
+                    throw std::runtime_error("enqueue on stopped async_worker");
                 m_queue.push(std::move(data));
             }
             m_queue_cv.notify_one();
         }
 
         ~async_worker() {
-            {
-                std::lock_guard<std::mutex> lock(m_queue_mut);
-                m_finished = true;
-            }
-            m_queue_cv.notify_one();
-            m_worker.join();
+            this->stop_thread();
         }
 
     private:
+        void start_thread(std::function<void(T&)> callback) {
+            m_finished = false;
+            m_worker = std::thread([this, callback_cap = std::move(callback)] {
+                T data;
+                while (wait_for_data(data)) {
+                    callback_cap(data);
+                }
+            });
+        }
+
+        void stop_thread() {
+            bool finished = false;
+            {
+                std::lock_guard<std::mutex> lock(m_queue_mut);
+                finished = m_finished;
+                m_finished = true;
+            }
+            if (!finished) {
+                m_queue_cv.notify_one();
+                m_worker.join();
+            }
+        }
+
         bool wait_for_data(T& data) {
             std::unique_lock<std::mutex> lock(m_queue_mut, std::defer_lock);
             m_queue_cv.wait(lock, [this]{ return !m_queue.empty() || m_finished; });
-            if (m_finished) return false;
             data = std::move(m_queue.front());
+            if (m_finished && m_queue.empty()) return false;
             m_queue.pop();
             return true;
         }
