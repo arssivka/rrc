@@ -22,7 +22,6 @@
 #include "non_copyable.h"
 #include "abstract_launcher.h"
 #include "lockfree_task_queue.h"
-#include "concurrent_task_queue.h"
 #include <type_traits>
 
 namespace rrc {

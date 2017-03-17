@@ -20,6 +20,7 @@
 #pragma once
 
 
+#include <vector>
 #include <unordered_map>
 #include "topic.h"
 #include "key_listener.h"

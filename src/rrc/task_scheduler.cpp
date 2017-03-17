@@ -16,7 +16,7 @@
  *  @autor arssivka
  *  @date 2/24/17
  */
-#include "include/rrc/task_scheduler.h"
+#include <rrc/task_scheduler.h>
 
 void rrc::task_scheduler::enqueue(task_type task) {
     m_task_queue.enqueue(std::move(task));

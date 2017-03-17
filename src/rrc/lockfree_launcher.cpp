@@ -20,9 +20,6 @@
 #include <rrc/lockfree_launcher.h>
 
 
-
-
-
 rrc::lockfree_launcher::~lockfree_launcher() {}
 
 

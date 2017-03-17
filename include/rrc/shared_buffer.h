@@ -19,11 +19,8 @@
 #pragma once
 
 
-#include <vector>
-#include <algorithm>
 #include <ostream>
 #include "copy_on_write.h"
-#include "array_deleter.h"
 
 namespace rrc {
     class shared_buffer {

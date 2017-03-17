@@ -18,6 +18,7 @@
  */
 
 #include <rrc/service_holder.h>
+#include <algorithm>
 
 
 rrc::service_holder::service_holder() {

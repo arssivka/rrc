@@ -18,6 +18,8 @@
  */
 
 #include <rrc/shared_buffer.h>
+#include <rrc/array_deleter.h>
+#include <algorithm>
 
 
 rrc::shared_buffer::shared_buffer()

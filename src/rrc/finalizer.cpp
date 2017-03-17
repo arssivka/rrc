@@ -19,8 +19,6 @@
 
 
 #include <rrc/finalizer.h>
-#include <rrc/result_code.h>
-
 
 void rrc::finalizer::add_callback(finalize_callback callback, const result_callback& result) {
     if (callback) {

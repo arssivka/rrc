@@ -19,9 +19,7 @@
 #pragma once
 
 
-#include <queue>
 #include <chrono>
-#include <mutex>
 #include "lockfree_task_queue.h"
 #include "concurrent_priority_queue.h"
 #include "elem_less.h"

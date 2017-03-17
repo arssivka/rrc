@@ -21,7 +21,6 @@
 
 
 #include <unordered_set>
-#include "shared_function.h"
 #include "callback_defines.h"
 
 namespace rrc {

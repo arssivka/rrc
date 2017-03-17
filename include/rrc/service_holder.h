@@ -20,10 +20,8 @@
 #pragma once
 
 
+#include <vector>
 #include <unordered_map>
-#include <algorithm>
-#include "result_code.h"
-#include "shared_function.h"
 #include "callback_defines.h"
 #include "key_listener.h"
 

@@ -19,7 +19,6 @@
 #pragma once
 
 
-#include "shared_buffer.h"
 #include "core_base.h"
 #include "topic_mechanism.h"
 #include "service_mechanism.h"
