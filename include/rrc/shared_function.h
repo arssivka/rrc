@@ -47,6 +47,14 @@ namespace rrc {
 
         shared_function& operator=(shared_function&&) = default;
 
+        shared_function& operator=(const function_type& function)   {
+            m_functor_ptr = (function ? std::make_shared<function_type>(function) : nullptr);
+        }
+
+        shared_function& operator=(function_type&& function) {
+            m_functor_ptr = (function ? std::make_shared<function_type>(std::move(function)) : nullptr);
+        }
+
         template <class... Args>
         auto operator()(Args&&... args) const -> typename function_type::result_type {
             function_type& functor = *m_functor_ptr;
@@ -70,7 +78,7 @@ namespace rrc {
         }
 
         bool initialized() const noexcept {
-            return m_functor_ptr != nullptr && *m_functor_ptr;
+            return m_functor_ptr != nullptr;
         }
 
         operator bool() const noexcept {
