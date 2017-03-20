@@ -18,7 +18,6 @@
  */
 
 #include <rrc/shared_buffer.h>
-#include <rrc/array_deleter.h>
 #include <algorithm>
 
 
@@ -37,15 +36,6 @@ rrc::shared_buffer::shared_buffer(rrc::shared_buffer::size_type size, const rrc:
     m_data.reset(new value_type[size], array_deleter<value_type>());
     m_size = size;
     this->fill(val);
-}
-
-
-template <class InputIterator>
-rrc::shared_buffer::shared_buffer(InputIterator first, InputIterator last) {
-    size_t size = (size_t) std::distance(first, last);
-    m_data.reset(new value_type[size], array_deleter<value_type>());
-    m_size = size;
-    std::copy(first, last, m_data.get());
 }
 
 

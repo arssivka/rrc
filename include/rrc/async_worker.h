@@ -27,17 +27,25 @@
 
 namespace rrc {
     template <class T>
-    class async_worker : private non_copyable {
+    class async_worker
+            : private non_copyable {
     public:
-        async_worker() : m_finished(true) {}
+        async_worker()
+                : m_finished(true) {}
 
         async_worker(async_worker&&) = default;
 
-        async_worker(std::function<void(T&)> callback) : m_finished(false) {
+        async_worker(std::function<void(T&)> callback)
+                : m_finished(false) {
             this->start_thread();
         }
 
-        async_worker& operator=(async_worker&&) = default;
+        async_worker& operator=(async_worker&& rhs) {
+            m_worker = std::move(rhs.m_worker);
+            m_queue = std::move(rhs.m_queue);
+            m_finished = std::move(rhs.m_finished);
+
+        }
 
         async_worker& operator=(std::function<void(T&)> callback) {
             this->stop_thread();
@@ -47,7 +55,7 @@ namespace rrc {
         void push(const T& data) {
             {
                 std::lock_guard<std::mutex> lock(m_queue_mut);
-                if(m_finished)
+                if (m_finished)
                     throw std::runtime_error("enqueue on stopped async_worker");
                 m_queue.push(data);
             }
@@ -57,7 +65,7 @@ namespace rrc {
         void push(T&& data) {
             {
                 std::lock_guard<std::mutex> lock(m_queue_mut);
-                if(m_finished)
+                if (m_finished)
                     throw std::runtime_error("enqueue on stopped async_worker");
                 m_queue.push(std::move(data));
             }
@@ -67,6 +75,7 @@ namespace rrc {
         ~async_worker() {
             this->stop_thread();
         }
+
 
     private:
         void start_thread(std::function<void(T&)> callback) {
@@ -94,12 +103,13 @@ namespace rrc {
 
         bool wait_for_data(T& data) {
             std::unique_lock<std::mutex> lock(m_queue_mut, std::defer_lock);
-            m_queue_cv.wait(lock, [this]{ return !m_queue.empty() || m_finished; });
+            m_queue_cv.wait(lock, [this] { return !m_queue.empty() || m_finished; });
             data = std::move(m_queue.front());
             if (m_finished && m_queue.empty()) return false;
             m_queue.pop();
             return true;
         }
+
 
     private:
         std::thread m_worker;
