@@ -58,16 +58,6 @@ namespace rrc {
             return func(&m_base, std::forward<Args>(args)...);
         };
 
-//        template<class Func, class... Args>
-//        inline void exec(Func&& func, Args&& ... args) const {
-//            func(&m_base, std::forward<Args>(args)...);
-//        };
-//
-//        template<class Func, class... Args>
-//        inline void exec(Func&& func, Args&& ... args) {
-//            func(&m_base, std::forward<Args>(args)...);
-//        };
-
         inline void enqueue_changes() {
             if (m_changes_enqueued_flag.test_and_set(std::memory_order_acquire)) {
                 m_launcher.enqueue_sync_task([this] {
