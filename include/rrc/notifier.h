@@ -20,7 +20,6 @@
 
 
 #include <unordered_set>
-#include <dotconf.h>
 #include "callback_defines.h"
 
 namespace rrc {
