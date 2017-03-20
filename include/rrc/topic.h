@@ -51,6 +51,8 @@ namespace rrc {
          */
         bool has_listeners() const;
 
+        size_t listeners_count() const;
+
     private:
         std::unordered_set<topic_callback> m_listeners_hash;
     };

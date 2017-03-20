@@ -23,7 +23,7 @@
 #include <vector>
 #include <unordered_map>
 #include "topic.h"
-#include "key_listener.h"
+#include "notifier.h"
 
 namespace rrc {
     /**
@@ -42,22 +42,21 @@ namespace rrc {
                                    const topic_callback& callback,
                                    const result_callback& result = result_callback());
 
-        void add_key_listener(key_callback callback, const result_callback& result = result_callback());
+        void add_key_listener(key_callback callback,
+                              bool get_exits_keys = true,
+                              const result_callback& result = result_callback());
 
-        void remove_key_listener(const key_callback& callback, const result_callback& result = result_callback());
+        void remove_key_listener(const key_callback& callback,
+                                 const result_callback& result = result_callback());
 
         void send_message(const std::string& topic_key, const shared_buffer& msg);
 
-        /**
-         * @brief Returns set of the keys of registered topics
-         * @return Vector of the topics's keys
-         */
-        std::vector<std::string> keys() const;
-
+    private:
+        void send_keys(const rrc::key_callback& callback, rrc::result_code code) const;
 
     private:
         std::unordered_map<std::string, topic> m_topic_hash;
-        key_listener m_key_listener;
+        notifier<key_callback> m_key_notifier;
     };
 }
 

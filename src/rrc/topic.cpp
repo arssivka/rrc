@@ -51,3 +51,8 @@ void rrc::topic::send_message(const rrc::shared_buffer& msg) {
 bool rrc::topic::has_listeners() const {
     return !m_listeners_hash.empty();
 }
+
+
+size_t rrc::topic::listeners_count() const {
+    return m_listeners_hash.size();
+}
