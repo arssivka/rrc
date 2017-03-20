@@ -62,6 +62,7 @@ namespace rrc {
 
         void remove_key_listener(key_callback callback, result_callback result = result_callback());
 
+        size_t listeners_count(const std::string& topic_key) const;
     };
 }
 

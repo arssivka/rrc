@@ -30,31 +30,31 @@ protected:
 
 TEST_F(topic_fixture, has_listener) {
     topic tpc;
-    EXPECT_FALSE(tpc.has_listeners());
+    EXPECT_EQ(tpc.listeners_count(), 0u);
     tpc.add_listener(m_listener);
-    EXPECT_TRUE(tpc.has_listeners());
+    EXPECT_EQ(tpc.listeners_count(), 1u);
     tpc.add_listener(m_listener);
-    EXPECT_TRUE(tpc.has_listeners());
+    EXPECT_EQ(tpc.listeners_count(), 1u);
     tpc.remove_listener(m_listener);
-    EXPECT_FALSE(tpc.has_listeners());
+    EXPECT_EQ(tpc.listeners_count(), 0u);
 }
 
 
 TEST_F(topic_fixture, add_listener) {
     topic tpc;
-    EXPECT_FALSE(tpc.has_listeners());
+    EXPECT_EQ(tpc.listeners_count(), 0u);
     tpc.add_listener(m_listener);
-    EXPECT_TRUE(tpc.has_listeners());
+    EXPECT_EQ(tpc.listeners_count(), 1u);
 }
 
 
 TEST_F(topic_fixture, remove_listener) {
     topic tpc;
-    EXPECT_FALSE(tpc.has_listeners());
+    EXPECT_EQ(tpc.listeners_count(), 0u);
     tpc.add_listener(m_listener);
     tpc.add_listener(m_listener);
     tpc.remove_listener(m_listener);
-    EXPECT_FALSE(tpc.has_listeners());
+    EXPECT_EQ(tpc.listeners_count(), 0u);
 }
 
 

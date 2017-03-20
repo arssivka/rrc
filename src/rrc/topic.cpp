@@ -20,39 +20,38 @@
 #include <rrc/topic.h>
 
 
-void rrc::topic::add_listener(rrc::topic_callback callback, const rrc::result_callback& result) {
-    if (callback) {
-        m_listeners_hash.emplace(std::move(callback));
-        if (result) result(RESULT_CODE_SUCCESS);
-    } else if (result) {
-        result(RESULT_CODE_FAIL);
+bool rrc::topic::add_listener(rrc::topic_callback callback, const rrc::result_callback& result) {
+    if (m_notifier.add_listener(std::move(callback), result)) {
+        m_listeners_count.fetch_add(1);
+        return true;
     }
+    return false;
 }
 
 
-void rrc::topic::remove_listener(rrc::topic_callback callback, const rrc::result_callback& result) {
-    auto it = m_listeners_hash.find(callback);
-    result_code stat = RESULT_CODE_FAIL;
-    if (it != m_listeners_hash.end()) {
-        m_listeners_hash.erase(it);
-        stat = RESULT_CODE_SUCCESS;
+bool rrc::topic::remove_listener(rrc::topic_callback callback, const rrc::result_callback& result) {
+    if (m_notifier.remove_listener(std::move(callback), result)) {
+        m_listeners_count.fetch_sub(1);
+        return true;
     }
-    if (result) result(stat);
+    return false;
 }
 
 
 void rrc::topic::send_message(const rrc::shared_buffer& msg) {
-    for (auto&& listener : m_listeners_hash) {
-        listener(msg);
-    }
-}
-
-
-bool rrc::topic::has_listeners() const {
-    return !m_listeners_hash.empty();
+    m_notifier.notify(msg);
 }
 
 
 size_t rrc::topic::listeners_count() const {
-    return m_listeners_hash.size();
+    return m_listeners_count.load(std::memory_order_acquire);
 }
+
+rrc::topic::topic()
+        : m_listeners_count(0) {}
+
+rrc::topic::topic(const rrc::topic& rhs)
+        : m_notifier(rhs.m_notifier), m_listeners_count(m_notifier.size()) {}
+
+rrc::topic::topic(rrc::topic&& rhs)
+        : m_notifier(std::move(rhs.m_notifier)), m_listeners_count(m_notifier.size()) {}

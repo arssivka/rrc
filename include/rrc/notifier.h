@@ -19,7 +19,7 @@
 #pragma once
 
 
-#include <forward_list>
+#include <unordered_set>
 #include <dotconf.h>
 #include "callback_defines.h"
 
@@ -29,26 +29,27 @@ namespace rrc {
     public:
         typedef T callback_type;
 
+        notifier() {
+            m_listeners.max_load_factor(0.8);
+        }
+
         bool add_listener(callback_type callback, const rrc::result_callback& result) {
-            if (callback) {
-                m_listeners.push_front(callback);
-                if (result) result(RESULT_CODE_SUCCESS);
-                return true;
-            } else if (result) {
-                result(RESULT_CODE_FAIL);
+            result_code code = RESULT_CODE_FAIL;
+            if (callback && m_listeners.find(callback) == m_listeners.end()) {
+                m_listeners.emplace(callback);
+                code = RESULT_CODE_SUCCESS;
             }
-            return false;
+            if (result) result(code);
+            return code == RESULT_CODE_SUCCESS;
         }
 
         bool remove_listener(const callback_type& callback, const rrc::result_callback& result) {
             result_code code = RESULT_CODE_FAIL;
-            m_listeners.remove_if([&code, &callback](const key_callback& curr) -> bool {
-                if (callback == curr) {
-                    code = RESULT_CODE_SUCCESS;
-                    return true;
-                }
-                return false;
-            });
+            auto it = m_listeners.find(callback);
+            if (it != m_listeners.end()) {
+                m_listeners.erase(it);
+                code = RESULT_CODE_SUCCESS;
+            }
             if (result) result(code);
             return code == RESULT_CODE_SUCCESS;
         }
@@ -60,8 +61,12 @@ namespace rrc {
             }
         }
 
+        size_t size() const {
+            return m_listeners.size();
+        }
+
     private:
-        std::forward_list<callback_type> m_listeners;
+        std::unordered_set<callback_type> m_listeners;
     };
 }
 

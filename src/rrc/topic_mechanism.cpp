@@ -71,3 +71,8 @@ void rrc::topic_mechanism::remove_key_listener(rrc::key_callback callback, rrc::
             std::move(result)
     );
 }
+
+
+size_t rrc::topic_mechanism::listeners_count(const std::string& topic_key) const {
+    return mechanism::call(std::mem_fn(&base_type::listeners_count), std::ref(topic_key));
+}

@@ -51,6 +51,8 @@ namespace rrc {
 
         void send_message(const std::string& topic_key, const shared_buffer& msg);
 
+        size_t listeners_count(const std::string& topic_key) const;
+
     private:
         void send_keys(const rrc::key_callback& callback, rrc::result_code code) const;
 

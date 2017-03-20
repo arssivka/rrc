@@ -21,7 +21,9 @@
 
 
 #include <unordered_set>
+#include <atomic>
 #include "callback_defines.h"
+#include "notifier.h"
 
 namespace rrc {
     /**
@@ -30,14 +32,20 @@ namespace rrc {
 
     class topic {
     public:
+        topic();
+
+        topic(const topic& rhs);
+
+        topic(topic&& rhs);
+
         /**
          * @brief Register message callback
          * @param callback Pointer to callback to register
          */
-        void add_listener(topic_callback callback, const result_callback& result = result_callback());
+        bool add_listener(topic_callback callback, const result_callback& result = result_callback());
 
         // TODO: Docs
-        void remove_listener(topic_callback callback, const result_callback& result = result_callback());
+        bool remove_listener(topic_callback callback, const result_callback& result = result_callback());
 
         /**
          * @brief Sends the message
@@ -45,16 +53,11 @@ namespace rrc {
          */
         void send_message(const shared_buffer& msg);
 
-        /**
-         * @brief Checks if this topic has listeners
-         * @return True if topic has lesteners, otherwise false
-         */
-        bool has_listeners() const;
-
         size_t listeners_count() const;
 
     private:
-        std::unordered_set<topic_callback> m_listeners_hash;
+        notifier<topic_callback> m_notifier;
+        std::atomic<size_t> m_listeners_count;
     };
 }
 

@@ -6,7 +6,6 @@
 
 #include <gtest/gtest.h>
 #include <rrc/rrc.h>
-#include <flag_setter.h>
 
 using namespace rrc;
 
@@ -54,6 +53,7 @@ TEST_F(topic_holder_fixture, remove_listener) {
     EXPECT_FALSE(m_callback1.unique());
     EXPECT_FALSE(m_callback2.unique());
     m_holder.remove_topic_listener("topic!", m_callback1);
+    EXPECT_FALSE(m_callback2.unique());
     m_holder.remove_topic_listener("topic!", m_callback2);
     EXPECT_TRUE(m_callback1.unique());
     EXPECT_TRUE(m_callback2.unique());
