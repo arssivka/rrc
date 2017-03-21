@@ -83,7 +83,11 @@ namespace rrc {
                 queue.enqueue([&flag] {
                     flag = true;
                 });
-                while (!flag && queue.try_exec());
+                while (!flag) {
+                    if (!queue.try_exec()) {
+                        break;
+                    }
+                }
             }
         }
 
