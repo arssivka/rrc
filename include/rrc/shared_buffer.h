@@ -27,7 +27,7 @@
 namespace rrc {
     class shared_buffer {
     public:
-        typedef char value_type;
+        typedef uint8_t value_type;
         typedef value_type& reference;
         typedef const value_type& const_reference;
         typedef const value_type* iterator;
@@ -45,18 +45,27 @@ namespace rrc {
         explicit shared_buffer(size_type size, const value_type& val = value_type());
 
         template <class T>
-        shared_buffer(const T* ptr, size_t size) {
-            m_size = size * sizeof(typename std::decay<T>::type);
-            m_data.reset(new value_type[m_size], array_deleter<value_type>());
-            std::copy(ptr, ptr + size, m_data.get());
+        shared_buffer(T* ptr, size_t size,
+                      std::function<void(value_type*)> deleter = std::function<void(value_type*)>()) {
+            if (!deleter) {
+                m_size = size * sizeof(typename std::decay<T>::type);
+                m_data.reset(new value_type[m_size], array_deleter<value_type>());
+                std::copy(ptr, ptr + size, m_data.get());
+            } else {
+                m_size = size * sizeof(typename std::decay<T>::type);
+                m_data.reset((value_type*) ptr, std::move(deleter));
+            }
         }
 
-        template<class InputIterator>
-        shared_buffer(InputIterator first, InputIterator last) {
+        template <class InputIterator>
+        shared_buffer(InputIterator first, InputIterator last)
+                : shared_buffer() {
             const size_t size = (size_t) std::distance(first, last);
-            m_data.reset(new value_type[size], array_deleter<value_type>());
-            m_size = size;
-            std::copy(first, last, m_data.get());
+            if (size > 0) {
+                m_data.reset(new value_type[size], array_deleter<value_type>());
+                m_size = size;
+                std::copy(first, last, m_data.get());
+            }
         }
 
         shared_buffer(const shared_buffer& other) = default;

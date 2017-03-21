@@ -43,6 +43,7 @@
 #include "service_holder.h"
 #include "service_mechanism.h"
 #include "shared_buffer.h"
+#include "shared_buffer_pool.h"
 #include "shared_function.h"
 #include "task_queue.h"
 #include "task_scheduler.h"

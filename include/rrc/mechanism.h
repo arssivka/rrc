@@ -68,16 +68,21 @@ namespace rrc {
 
         void apply_changes() {
             m_changes_enqueued_flag.clear(std::memory_order_release);
+            bool need_enqueue = false;
             for (auto&& queue : m_local_queues) {
-                bool flag = false;
-                queue.enqueue([&flag] {
-                    flag = true;
-                });
-                while (!flag) {
+                bool finished = false;
+                for (int i = 0; i < 64; ++i) {
                     if (!queue.try_exec()) {
+                        finished = true;
                         break;
                     }
                 }
+                if (!finished) {
+                    need_enqueue = true;
+                }
+            }
+            if (need_enqueue) {
+                this->enqueue_changes();
             }
         }
 

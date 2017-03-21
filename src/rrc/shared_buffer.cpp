@@ -27,21 +27,15 @@ namespace rrc {
 
 
     rrc::shared_buffer::shared_buffer(const std::string& str)
-            : m_data(nullptr), m_size(str.size()) {
-        if (m_size != 0) {
-            m_data.reset(new value_type[str.size()], array_deleter<value_type>());
-            std::copy(str.cbegin(), str.cend(), m_data.get());
-            m_size = str.size();
-        }
-    }
+            : shared_buffer(str.begin(), str.end()) {}
 
 
     rrc::shared_buffer::shared_buffer(rrc::shared_buffer::size_type size,
                                       const rrc::shared_buffer::value_type& val)
-            :  m_data(nullptr), m_size(size) {
-        if (m_size != 0) {
+            :  shared_buffer() {
+        m_size = size;
+        if (m_size > 0) {
             m_data.reset(new value_type[size], array_deleter<value_type>());
-            m_size = size;
             this->fill(val);
         }
     }
@@ -63,7 +57,7 @@ namespace rrc {
 
     void rrc::shared_buffer::fill(const rrc::shared_buffer::value_type& value) {
         this->ensure_unique();
-        std::fill_n(m_data.get(), size(), value);
+        std::fill_n(m_data.get(), this->size(), value);
     }
 
 
@@ -133,7 +127,9 @@ namespace rrc {
 
 
     bool rrc::shared_buffer::operator==(const rrc::shared_buffer& rhs) const {
-        this->ensure_initialized();
+        if (m_data == nullptr || rhs.m_data == nullptr) {
+            return m_data.get() == rhs.m_data.get();
+        }
         return m_size == rhs.m_size && std::equal(this->cbegin(), this->cend(), rhs.cbegin());
     }
 
@@ -156,9 +152,11 @@ namespace rrc {
 
     void rrc::shared_buffer::ensure_initialized() const {
         if (!m_data) {
-            m_data.reset(new value_type());
-            *m_data = '\0';
-            m_size = 1;
+            if (m_size == 0) {
+                m_size = 1;
+            }
+            m_data.reset(new value_type[m_size], array_deleter<value_type>());
+            m_data.get()[m_size - 1] = '\0';
         }
     }
 
