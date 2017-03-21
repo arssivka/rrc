@@ -41,13 +41,17 @@ namespace rrc {
         void remove_service(service_callback callback,
                             result_callback result = result_callback());
 
-        void add_key_listener(key_callback callback, result_callback result = result_callback());
+        void add_key_listener(key_callback callback,
+                              bool get_exists_keys = true,
+                              result_callback result = result_callback());
 
-        void remove_key_listener(key_callback callback, result_callback result = result_callback());
+        void remove_key_listener(key_callback callback,
+                                 result_callback result = result_callback());
 
-        void call(const std::string& key, shared_buffer input, service_result_callback listener);
+        void call(const std::string& key,
+                  shared_buffer input,
+                  service_result_callback listener);
 
-        std::vector<std::string> keys() const;
     };
 }
 

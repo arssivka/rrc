@@ -23,7 +23,7 @@
 #include <vector>
 #include <unordered_map>
 #include "callback_defines.h"
-#include "key_listener.h"
+#include "notifier.h"
 
 namespace rrc {
     class service_holder {
@@ -37,17 +37,22 @@ namespace rrc {
         void remove_service(const service_callback& callback,
                             const result_callback& result = result_callback());
 
-        void add_key_listener(key_callback callback, const result_callback& result = result_callback());
+        void add_key_listener(key_callback callback,
+                              bool get_exists_keys = true,
+                              const result_callback& result = result_callback());
 
-        void remove_key_listener(const key_callback& callback, const result_callback& result = result_callback());
+        void remove_key_listener(const key_callback& callback,
+                                 const result_callback& result = result_callback());
 
-        void call(const std::string& key, const shared_buffer input, service_result_callback listener);
-
-        std::vector<std::string> keys() const;
+        void call(const std::string& key,
+                  const shared_buffer input,
+                  service_result_callback listener);
 
     private:
         std::unordered_map<std::string, service_callback> m_service_hash;
-        key_listener m_key_listener;
+        notifier<key_callback> m_key_notifier;
+
+        void send_keys(const key_callback& callback, result_code code) const;
     };
 }
 

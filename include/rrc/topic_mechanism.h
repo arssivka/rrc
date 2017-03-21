@@ -56,16 +56,13 @@ namespace rrc {
                                    topic_callback callback,
                                    result_callback result = result_callback());
 
-        void add_key_listener(key_callback callback, result_callback result = result_callback());
+        void add_key_listener(key_callback callback,
+                              bool get_exists_keys = true,
+                              result_callback result = result_callback());
 
         void remove_key_listener(key_callback callback, result_callback result = result_callback());
 
-        /**
-         * @brief Returns set of avaliable topic names
-         * @return Set of topic names
-         */
-        std::vector<std::string> keys() const;
-
+        size_t listeners_count(const std::string& topic_key) const;
     };
 }
 

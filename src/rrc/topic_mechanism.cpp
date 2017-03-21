@@ -55,14 +55,11 @@ void rrc::topic_mechanism::remove_topic_listener(std::string topic_key, rrc::top
 }
 
 
-std::vector<std::string> rrc::topic_mechanism::keys() const {
-    return mechanism::call(mem_fn(&base_type::keys));
-}
-
-void rrc::topic_mechanism::add_key_listener(rrc::key_callback callback, rrc::result_callback result) {
+void rrc::topic_mechanism::add_key_listener(key_callback callback, bool get_exists_keys, result_callback result) {
     mechanism::template enqueue_task<CHANGE_KEY_LISTENERS_PRIORITY>(
             std::mem_fn(&base_type::add_key_listener),
             std::move(callback),
+            get_exists_keys,
             std::move(result)
     );
 }
@@ -73,4 +70,9 @@ void rrc::topic_mechanism::remove_key_listener(rrc::key_callback callback, rrc::
             std::move(callback),
             std::move(result)
     );
+}
+
+
+size_t rrc::topic_mechanism::listeners_count(const std::string& topic_key) const {
+    return mechanism::call(std::mem_fn(&base_type::listeners_count), std::ref(topic_key));
 }
