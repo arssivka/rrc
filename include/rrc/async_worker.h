@@ -104,8 +104,8 @@ namespace rrc {
         bool wait_for_data(T& data) {
             std::unique_lock<std::mutex> lock(m_queue_mut);
             m_queue_cv.wait(lock, [this] { return !m_queue.empty() || m_finished; });
-            data = std::move(m_queue.front());
             if (m_finished && m_queue.empty()) return false;
+            data = std::move(m_queue.front());
             m_queue.pop();
             return true;
         }
