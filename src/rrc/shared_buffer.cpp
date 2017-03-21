@@ -167,7 +167,9 @@ void rrc::shared_buffer::ensure_unique() {
 
 namespace rrc {
     std::ostream& operator<<(std::ostream& os, const rrc::shared_buffer& buffer) {
-        os << buffer.data();
+        for (auto&& symb : buffer) {
+            os << symb;
+        }
         return os;
     }
 }
