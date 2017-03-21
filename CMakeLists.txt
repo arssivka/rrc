@@ -50,7 +50,9 @@ set(SRCS
         src/rrc/core_base.cpp
         src/rrc/topic_mechanism.cpp
         include/rrc/notifier.h
-        src/rrc/core.cpp)
+        src/rrc/core.cpp
+        src/rrc/shared_buffer_pool.cpp
+        include/rrc/shared_buffer_pool.h)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/defines.h.in"
         "${PROJECT_BINARY_DIR}/defines.h")

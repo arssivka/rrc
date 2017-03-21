@@ -20,6 +20,7 @@
 
 
 #include <ostream>
+#include <cstddef>
 #include "copy_on_write.h"
 #include "array_deleter.h"
 
@@ -101,6 +102,10 @@ namespace rrc {
         bool operator==(const std::string& rhs) const;
 
         bool operator!=(const std::string& rhs) const;
+
+        bool operator==(nullptr_t);
+
+        bool operator!=(nullptr_t);
 
         friend std::ostream& operator<<(std::ostream& os, const shared_buffer& buffer);
 
