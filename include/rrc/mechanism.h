@@ -29,6 +29,8 @@ namespace rrc {
     class mechanism : private non_copyable {
     protected:
         static constexpr size_t queues_count = N;
+        typedef std::function<void()> task_type;
+        typedef moodycamel::ConcurrentQueue<task_type> task_queue_type;
         typedef T base_type;
 
         template<class... Args>
@@ -69,10 +71,13 @@ namespace rrc {
         void apply_changes() {
             m_changes_enqueued_flag.clear(std::memory_order_release);
             bool need_enqueue = false;
+            task_type task;
             for (auto&& queue : m_local_queues) {
                 bool finished = false;
                 for (int i = 0; i < 64; ++i) {
-                    if (!queue.try_exec()) {
+                    if (queue.try_dequeue(task)) {
+                        task();
+                    } else {
                         finished = true;
                         break;
                     }
@@ -90,6 +95,6 @@ namespace rrc {
         base_type m_base;
         abstract_launcher& m_launcher;
         std::atomic_flag m_changes_enqueued_flag;
-        std::array<lockfree_task_queue, queues_count> m_local_queues;
+        std::array<task_queue_type, queues_count> m_local_queues;
     };
 }
