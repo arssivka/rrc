@@ -40,7 +40,7 @@ namespace rrc {
         }
 
         virtual bool try_dequeue(task_type& task) override {
-            return m_queue.try_dequeue(task);
+            return m_queue.try_dequeue_non_interleaved(task);
         }
 
         virtual void clean() override {

@@ -38,9 +38,11 @@ TEST(shared_buffer, equalty_operators) {
 
 TEST(shared_buffer, fill) {
     std::string string("AAAAA");
-    shared_buffer shared_buffer1(5);
-    shared_buffer1.fill('A');
-    EXPECT_TRUE(shared_buffer1 == string);
+    std::string string2(5, 'A');
+    shared_buffer string1(5);
+    string1.fill('A');
+    EXPECT_EQ(string1, string);
+    EXPECT_EQ(string2, string);
 }
 
 TEST(shared_buffer, size) {

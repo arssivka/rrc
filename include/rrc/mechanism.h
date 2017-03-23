@@ -58,16 +58,6 @@ namespace rrc {
             return func(&m_base, std::forward<Args>(args)...);
         };
 
-//        template<class Func, class... Args>
-//        inline void exec(Func&& func, Args&& ... args) const {
-//            func(&m_base, std::forward<Args>(args)...);
-//        };
-//
-//        template<class Func, class... Args>
-//        inline void exec(Func&& func, Args&& ... args) {
-//            func(&m_base, std::forward<Args>(args)...);
-//        };
-
         inline void enqueue_changes() {
             if (m_changes_enqueued_flag.test_and_set(std::memory_order_acquire)) {
                 m_launcher.enqueue_sync_task([this] {
@@ -78,12 +68,21 @@ namespace rrc {
 
         void apply_changes() {
             m_changes_enqueued_flag.clear(std::memory_order_release);
+            bool need_enqueue = false;
             for (auto&& queue : m_local_queues) {
-                bool flag = false;
-                queue.enqueue([&flag] {
-                    flag = true;
-                });
-                while (!flag && queue.try_exec());
+                bool finished = false;
+                for (int i = 0; i < 64; ++i) {
+                    if (!queue.try_exec()) {
+                        finished = true;
+                        break;
+                    }
+                }
+                if (!finished) {
+                    need_enqueue = true;
+                }
+            }
+            if (need_enqueue) {
+                this->enqueue_changes();
             }
         }
 

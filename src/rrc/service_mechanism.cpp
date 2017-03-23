@@ -58,14 +58,11 @@ void rrc::service_mechanism::call(const std::string& key,
 }
 
 
-std::vector<std::string> rrc::service_mechanism::keys() const {
-    return mechanism::call(std::mem_fn(&service_holder::keys));
-}
-
-void rrc::service_mechanism::add_key_listener(rrc::key_callback callback, rrc::result_callback result) {
+void rrc::service_mechanism::add_key_listener(key_callback callback, bool get_exists_keys, result_callback result) {
     mechanism::template enqueue_task<CHANGE_KEY_LISTENERS_PRIORITY>(
             std::mem_fn(&base_type::add_key_listener),
             std::move(callback),
+            get_exists_keys,
             std::move(result)
     );
 }

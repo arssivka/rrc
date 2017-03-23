@@ -32,7 +32,7 @@ void rrc::service_holder::add_service(const std::string& key,
     if (callback && m_service_hash.find(key) == m_service_hash.end()) {
         m_service_hash.emplace(key, std::move(callback));
         if (result) result(RESULT_CODE_SUCCESS);
-        m_key_listener.notify(RESULT_CODE_KEY_ADDED, key);
+        m_key_notifier.notify(RESULT_CODE_KEY_ADDED, key);
     } else if (result) {
         result(RESULT_CODE_FAIL);
     }
@@ -48,7 +48,7 @@ void rrc::service_holder::remove_service(const service_callback& callback,
     auto key = it->first;
     m_service_hash.erase(it);
     if (it != m_service_hash.end()) {
-        m_key_listener.notify(RESULT_CODE_KEY_REMOVED, key);
+        m_key_notifier.notify(RESULT_CODE_KEY_REMOVED, key);
         if (result) result(RESULT_CODE_SUCCESS);
     } else if (result) {
         result(RESULT_CODE_FAIL);
@@ -69,19 +69,19 @@ void rrc::service_holder::call(const std::string& key,
 }
 
 
-std::vector<std::string> rrc::service_holder::keys() const {
-    std::vector<std::string> keys;
-    keys.reserve(m_service_hash.size());
-    for (auto&& keyPair : m_service_hash) {
-        keys.push_back(keyPair.first);
+void rrc::service_holder::add_key_listener(key_callback callback, bool get_exists_keys, const result_callback& result) {
+    if (m_key_notifier.add_listener(callback, result) && get_exists_keys) {
+        this->send_keys(callback, RESULT_CODE_KEY_ADDED);
     }
-    return keys;
-}
-
-void rrc::service_holder::add_key_listener(rrc::key_callback callback, const rrc::result_callback& result) {
-    m_key_listener.add_listener(callback, result);
 }
 
 void rrc::service_holder::remove_key_listener(const rrc::key_callback& callback, const rrc::result_callback& result) {
-    m_key_listener.remove_listener(callback, result);
+    m_key_notifier.remove_listener(callback, result);
+}
+
+
+void rrc::service_holder::send_keys(const rrc::key_callback& callback, rrc::result_code code) const {
+    for (auto&& hash_pair : m_service_hash) {
+        callback(code, hash_pair.first);
+    }
 }

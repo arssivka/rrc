@@ -14,25 +14,34 @@
  * limitations under the License.
  *
  *  @autor arssivka
- *  @date 3/17/17
+ *  @date 3/21/17
  */
+
 #pragma once
 
 
-#include <forward_list>
-#include "callback_defines.h"
+#include <map>
+#include "shared_buffer.h"
+#include "non_copyable.h"
 
 namespace rrc {
-    class key_listener {
+    class shared_buffer_pool : private non_copyable {
     public:
-        void add_listener(rrc::key_callback callback, const rrc::result_callback& result);
+        shared_buffer_pool(size_t max_obj_count = 0);
 
-        void remove_listener(const rrc::key_callback& callback, const rrc::result_callback& result);
+        shared_buffer create(size_t size);
 
-        void notify(result_code code, const std::string& key);
+        void remove(shared_buffer buff);
+
+        size_t max_objects_count() const;
+
+        void set_max_objects_count(size_t max_objects_count);
 
     private:
-        std::forward_list<key_callback> m_key_listeners;
+        std::map<size_t, shared_buffer> m_buffer_map;
+        size_t m_max_obj_count;
+
     };
 }
+
 

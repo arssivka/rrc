@@ -70,11 +70,3 @@ TEST_F(service_holder_fixture, call) {
     EXPECT_TRUE(m_toli_esho_budet);
     EXPECT_EQ(m_message, "MEow!");
 }
-
-TEST_F(service_holder_fixture, keys) {
-    EXPECT_EQ(m_holder.keys(), std::vector<std::string>{});
-    m_holder.add_service("fuck", m_callback);
-    EXPECT_EQ(m_holder.keys(), std::vector<std::string>{"fuck"});
-    m_holder.remove_service(m_callback);
-    EXPECT_EQ(m_holder.keys(), std::vector<std::string>{});
-}
