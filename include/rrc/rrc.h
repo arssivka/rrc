@@ -50,3 +50,4 @@
 #include "topic.h"
 #include "topic_holder.h"
 #include "topic_mechanism.h"
+#include "topic_callbacks_protector.h"

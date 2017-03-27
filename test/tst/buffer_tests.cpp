@@ -50,9 +50,3 @@ TEST(shared_buffer, size) {
     shared_buffer shared_buffer1(string);
     EXPECT_EQ(string.size(), shared_buffer1.size());
 }
-
-TEST(shared_buffer) {
-
-}
-
-
