@@ -54,7 +54,10 @@ set(SRCS
         src/rrc/shared_buffer_pool.cpp
         include/rrc/shared_buffer_pool.h
         src/rrc/topic_callbacks_protector.cpp
-        include/rrc/topic_callbacks_protector.h include/rrc/node.h)
+        include/rrc/topic_callbacks_protector.h
+        include/rrc/node.h
+        src/rrc/enqueue_once.cpp
+        include/rrc/enqueue_once.h)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/defines.h.in"
         "${PROJECT_BINARY_DIR}/defines.h")
