@@ -21,7 +21,7 @@
 
 
 rrc::service_mechanism::service_mechanism(rrc::abstract_launcher& launcher)
-        : mechanism(launcher) {}
+        : mechanism(launcher, 64) {}
 
 
 void rrc::service_mechanism::add_service(std::string key,

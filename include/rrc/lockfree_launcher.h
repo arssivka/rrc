@@ -58,25 +58,15 @@ namespace rrc {
 
         virtual void finalize() override;
 
-        virtual void enqueue_user_task(task_queue::task_type task) override;
+        virtual void enqueue_task(task_queue::task_type task) override;
 
-        virtual void enqueue_user_task_at(std::chrono::steady_clock::time_point tp,
-                                          task_queue::task_type task) override;
+        virtual void enqueue_task_at(std::chrono::steady_clock::time_point tp,
+                                     task_queue::task_type task) override;
 
-        virtual void enqueue_user_task_for(std::chrono::steady_clock::duration duration,
-                                           task_queue::task_type task) override;
-
-        virtual void enqueue_sync_task(task_queue::task_type task) override;
-
-        virtual void enqueue_sync_task_at(std::chrono::steady_clock::time_point tp,
-                                          task_queue::task_type task) override;
-
-        virtual void enqueue_sync_task_for(std::chrono::steady_clock::duration duration,
-                                           task_queue::task_type task) override;
+        virtual void enqueue_task_for(std::chrono::steady_clock::duration duration,
+                                      task_queue::task_type task) override;
 
         virtual void enqueue_finalize_task(task_queue::task_type task) override;
-
-        virtual bool is_multithreading() const override;
 
     private:
         bool exec_current_tasks(task_scheduler& scheduler);
@@ -85,8 +75,7 @@ namespace rrc {
         std::atomic<bool> m_finished;
         std::chrono::steady_clock::duration m_sleep_duration;
         lockfree_task_queue m_finalize_queue;
-        task_scheduler m_user_scheduler;
-        task_scheduler m_sync_scheduler;
+        task_scheduler m_scheduler;
 
     };
 }

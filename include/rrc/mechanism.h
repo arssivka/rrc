@@ -21,7 +21,7 @@
 
 #include "non_copyable.h"
 #include "abstract_launcher.h"
-#include "lockfree_task_queue.h"
+#include <concurrentqueue.h>
 #include <type_traits>
 
 namespace rrc {
@@ -32,10 +32,11 @@ namespace rrc {
         typedef T base_type;
 
         template<class... Args>
-        mechanism(abstract_launcher& launcher, Args&& ... args)
+        mechanism(abstract_launcher& launcher, size_t max_iter_count, Args&& ... args)
                 : m_base(std::forward<Args>(args)...),
                   m_launcher(launcher),
-                  m_changes_enqueued_flag(ATOMIC_FLAG_INIT) {}
+                  m_changes_enqueued_flag(ATOMIC_FLAG_INIT),
+                  m_max_iter_count(max_iter_count) {}
 
         template<size_t I, class Func, class... Args>
         inline void enqueue_task(Func&& func, Args&& ... args) {
@@ -60,7 +61,7 @@ namespace rrc {
 
         inline void enqueue_changes() {
             if (m_changes_enqueued_flag.test_and_set(std::memory_order_acquire)) {
-                m_launcher.enqueue_sync_task([this] {
+                m_launcher.enqueue_task([this] {
                     this->apply_changes();
                 });
             }
@@ -69,12 +70,15 @@ namespace rrc {
         void apply_changes() {
             m_changes_enqueued_flag.clear(std::memory_order_release);
             bool need_enqueue = false;
+            std::function<void()> task;
             for (auto&& queue : m_local_queues) {
                 bool finished = false;
-                for (int i = 0; i < 64; ++i) {
-                    if (!queue.try_exec()) {
+                for (size_t i = 0; i < m_max_iter_count; ++i) {
+                    if (!queue.try_dequeue(task)) {
                         finished = true;
                         break;
+                    } else {
+                        task();
                     }
                 }
                 if (!finished) {
@@ -86,10 +90,22 @@ namespace rrc {
             }
         }
 
+        inline size_t max_iter_count() const noexcept {
+            return m_max_iter_count;
+        }
+
+        inline void set_max_iter_count(size_t max_iter_count) noexcept {
+            m_max_iter_count = max_iter_count;
+        }
+
     private:
+        typedef moodycamel::ConcurrentQueue<std::function<void()>> queue_type;
+
         base_type m_base;
         abstract_launcher& m_launcher;
         std::atomic_flag m_changes_enqueued_flag;
-        std::array<lockfree_task_queue, queues_count> m_local_queues;
+        std::array<queue_type, queues_count> m_local_queues;
+        size_t m_max_iter_count;
+
     };
 }

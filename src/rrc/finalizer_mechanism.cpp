@@ -21,7 +21,7 @@
 
 
 rrc::finalizer_mechanism::finalizer_mechanism(rrc::abstract_launcher& launcher)
-        : mechanism<finalizer, 1>(launcher) {
+        : mechanism<finalizer, 1>(launcher, 64) {
     launcher.enqueue_finalize_task([this] {
         this->apply_changes();
         this->call(std::mem_fn(&finalizer::exec_and_clear));

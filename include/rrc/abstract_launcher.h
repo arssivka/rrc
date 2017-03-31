@@ -46,21 +46,13 @@ namespace rrc {
          */
         virtual void stop() = 0;
 
-        virtual void enqueue_user_task(task_queue::task_type task) = 0;
+        virtual void enqueue_task(task_queue::task_type task) = 0;
 
-        virtual void enqueue_user_task_at(std::chrono::steady_clock::time_point tp, task_queue::task_type task) = 0;
+        virtual void enqueue_task_at(std::chrono::steady_clock::time_point tp, task_queue::task_type task) = 0;
 
-        virtual void enqueue_user_task_for(std::chrono::steady_clock::duration duration, task_queue::task_type task) = 0;
-
-        virtual void enqueue_sync_task(task_queue::task_type task) = 0;
-
-        virtual void enqueue_sync_task_at(std::chrono::steady_clock::time_point tp, task_queue::task_type task) = 0;
-
-        virtual void enqueue_sync_task_for(std::chrono::steady_clock::duration duration, task_queue::task_type task) = 0;
+        virtual void enqueue_task_for(std::chrono::steady_clock::duration duration, task_queue::task_type task) = 0;
 
         virtual void enqueue_finalize_task(task_queue::task_type task) = 0;
-
-        virtual bool is_multithreading() const = 0;
 
         virtual void finalize() = 0;
 

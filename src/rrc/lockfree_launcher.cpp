@@ -36,11 +36,7 @@ int rrc::lockfree_launcher::run() {
 
 
 bool rrc::lockfree_launcher::step() {
-    task_scheduler::task_type task;
-    bool executed = false;
-    executed |= this->exec_current_tasks(m_sync_scheduler);
-    executed |= this->exec_current_tasks(m_user_scheduler);
-    return executed;
+    return this->exec_current_tasks(m_scheduler);;
 }
 
 
@@ -54,47 +50,25 @@ void rrc::lockfree_launcher::finalize() {
 }
 
 
-void rrc::lockfree_launcher::enqueue_user_task(rrc::task_queue::task_type task) {
-    m_user_scheduler.enqueue(std::move(task));
+void rrc::lockfree_launcher::enqueue_task(rrc::task_queue::task_type task) {
+    m_scheduler.enqueue(std::move(task));
 }
 
 
-void rrc::lockfree_launcher::enqueue_user_task_at(std::chrono::steady_clock::time_point tp,
+void rrc::lockfree_launcher::enqueue_task_at(std::chrono::steady_clock::time_point tp,
                                              rrc::task_queue::task_type task) {
-    m_user_scheduler.enqueue(tp, std::move(task));
+    m_scheduler.enqueue(tp, std::move(task));
 }
 
 
-void rrc::lockfree_launcher::enqueue_user_task_for(std::chrono::steady_clock::duration duration,
-                                                   rrc::task_queue::task_type task) {
-    m_user_scheduler.enqueue(std::chrono::steady_clock::now() + duration, std::move(task));
-}
-
-
-void rrc::lockfree_launcher::enqueue_sync_task(rrc::task_queue::task_type task) {
-    m_sync_scheduler.enqueue(std::move(task));
-}
-
-
-void rrc::lockfree_launcher::enqueue_sync_task_at(std::chrono::steady_clock::time_point tp,
-                                                  rrc::task_queue::task_type task) {
-    m_sync_scheduler.enqueue(tp, std::move(task));
-}
-
-
-void rrc::lockfree_launcher::enqueue_sync_task_for(std::chrono::steady_clock::duration duration,
-                                                   rrc::task_queue::task_type task) {
-    m_sync_scheduler.enqueue(std::chrono::steady_clock::now() + duration, std::move(task));
+void rrc::lockfree_launcher::enqueue_task_for(std::chrono::steady_clock::duration duration,
+                                              rrc::task_queue::task_type task) {
+    m_scheduler.enqueue(std::chrono::steady_clock::now() + duration, std::move(task));
 }
 
 
 void rrc::lockfree_launcher::enqueue_finalize_task(rrc::task_queue::task_type task) {
     m_finalize_queue.enqueue(std::move(task));
-}
-
-
-bool rrc::lockfree_launcher::is_multithreading() const {
-    return false;
 }
 
 

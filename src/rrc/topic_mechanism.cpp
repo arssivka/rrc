@@ -21,7 +21,7 @@
 
 
 rrc::topic_mechanism::topic_mechanism(rrc::abstract_launcher& launcher)
-        : mechanism(launcher) {}
+        : mechanism(launcher, 64) {}
 
 
 void rrc::topic_mechanism::send_message(std::string topic_key, rrc::shared_buffer message) {

@@ -187,4 +187,9 @@ namespace rrc {
     bool shared_buffer::operator!=(nullptr_t) {
         return !(*this == nullptr);
     }
+
+
+    bool shared_buffer::unique() const {
+        return m_data.unique();
+    }
 }

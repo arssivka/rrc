@@ -33,22 +33,20 @@ namespace rrc {
 
         template <class Func, class... Args>
         void enqueue_task(Func&& func, Args... args) {
-            m_launcher.enqueue_user_task(std::bind(std::forward<Func>, std::forward<Args>(args)...));
+            m_launcher.enqueue_task(std::bind(std::forward<Func>, std::forward<Args>(args)...));
         };
 
         template <class Func, class... Args>
         void enqueue_task_at(std::chrono::steady_clock::time_point tp,
                              Func&& func, Args... args) {
-            m_launcher.enqueue_user_task_at(tp, std::bind(std::forward<Func>, std::forward<Args>(args)...));
+            m_launcher.enqueue_task_at(tp, std::bind(std::forward<Func>, std::forward<Args>(args)...));
         };
 
         template <class Func, class... Args>
         void enqueue_task_for(std::chrono::steady_clock::duration duration,
                               Func&& func, Args... args) {
-            m_launcher.enqueue_user_task_for(duration, std::bind(std::forward<Func>, std::forward<Args>(args)...));
+            m_launcher.enqueue_task_for(duration, std::bind(std::forward<Func>, std::forward<Args>(args)...));
         };
-
-        bool is_multithreaded() const;
 
         void stop();
 

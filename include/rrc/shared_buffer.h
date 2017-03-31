@@ -116,6 +116,8 @@ namespace rrc {
 
         bool operator!=(nullptr_t);
 
+        bool unique() const;
+
         friend std::ostream& operator<<(std::ostream& os, const shared_buffer& buffer);
 
     private:

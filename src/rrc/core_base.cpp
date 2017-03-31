@@ -31,11 +31,6 @@ const std::vector<std::string>& rrc::core_base::args() const noexcept {
 }
 
 
-bool rrc::core_base::is_multithreaded() const {
-    return m_launcher.is_multithreading();
-}
-
-
 void rrc::core_base::stop() {
     m_launcher.stop();
 }
