@@ -120,3 +120,11 @@ void rrc::executor::set_loop_min_duration(const std::chrono::steady_clock::durat
     std::lock_guard<std::mutex> lock(m_mut);
     m_loop_min_dur = loop_min_dur;
 }
+
+
+bool rrc::executor::clean_nodes() {
+    if (m_start_flag) return false;
+    // TODO Change allocator
+    m_node_queue = std::queue<node*>();
+    return true;
+}

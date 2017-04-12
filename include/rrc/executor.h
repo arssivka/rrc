@@ -40,6 +40,8 @@ namespace rrc {
 
         void add_node(node* node_ptr);
 
+        bool clean_nodes();
+
         void start();
 
         void stop();
