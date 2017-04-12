@@ -14,7 +14,6 @@ find_package(Boost REQUIRED)
 find_package(Threads)
 
 set(SRC
-        src/rrc/main.cpp
         src/rrc/node.cpp
         include/rrc/node.h
         src/rrc/sender.cpp
@@ -37,14 +36,17 @@ set(SRC
         src/rrc/environment.cpp
         include/rrc/environment.h)
 
-add_executable(serializer ${SRC})
-target_link_libraries(serializer
-        ${Boost_LIBRARIES}
-        ${CMAKE_THREAD_LIBS_INIT})
-target_include_directories(serializer PUBLIC
+add_library(rrc STATIC ${SRC})
+target_include_directories(rrc PUBLIC
         include
         ${Boost_INCLUDE_DIRS})
+target_link_libraries(rrc PUBLIC
+        ${Boost_LIBRARIES}
+        ${CMAKE_THREAD_LIBS_INIT})
 
 if (UNIX)
-    target_link_libraries(serializer dl)
+    target_link_libraries(rrc PUBLIC dl)
 endif (UNIX)
+
+add_executable(rrc_exec src/rrc/main.cpp )
+target_link_libraries(rrc_exec rrc)
