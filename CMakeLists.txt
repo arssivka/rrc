@@ -33,7 +33,9 @@ set(SRC
         src/rrc/connector.cpp
         include/rrc/connector.h
         src/rrc/controller.cpp
-        include/rrc/controller.h)
+        include/rrc/controller.h
+        src/rrc/environment.cpp
+        include/rrc/environment.h)
 
 add_executable(serializer ${SRC})
 target_link_libraries(serializer
