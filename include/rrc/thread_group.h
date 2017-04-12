@@ -30,6 +30,8 @@ namespace rrc {
 
         void add_thread(std::thread&& thread);
 
+        bool joinable() const noexcept;
+
         void join_all();
 
         size_t size() const noexcept;

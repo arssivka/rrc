@@ -37,3 +37,11 @@ void rrc::thread_group::join_all() {
 size_t rrc::thread_group::size() const noexcept {
     return m_threads.size();
 }
+
+
+bool rrc::thread_group::joinable() const {
+    for (auto&& thread : m_threads) {
+        if (thread.joinable()) return true;
+    }
+    return false;
+}
