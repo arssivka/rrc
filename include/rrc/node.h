@@ -1,96 +1,55 @@
 /**
  *  @autor arssivka
- *  @date 3/31/17
+ *  @date 4/8/17
  */
 
 #pragma once
 
 
-#include <concurrentqueue.h>
-#include "abstract_launcher.h"
+#include "defines.h"
+#include <string>
+#include <unordered_map>
 
 namespace rrc {
-    template <size_t N>
-    class node {
+    class sender;
+    class receiver;
+
+    class RRC_EXPORT node {
+        node(const node&) = delete;
+
+        node& operator=(const node&) = delete;
+
     public:
-        constexpr static size_t queues_count = N;
+        node() = default;
 
-        node(abstract_launcher& launcher, size_t max_iter_count = 64)
-                : m_launcher(launcher),
-                  m_changes_enqueued_flag(ATOMIC_FLAG_INIT),
-                  m_max_iter_count(max_iter_count) {}
+        node(node&&) = default;
 
+        node& operator=(node&&) = default;
 
-    protected:
-        template <class... Args>
-        inline void enqueue_task(size_t queue_num,
-                                 const std::function<void()>& task,
-                                 Args&&... args) {
-            m_local_queues[queue_num].enqueue(
-                    std::move(task),
-                    std::forward<Args>(args)...
-            );
-            this->enqueue_changes();
-        };
+        virtual void on_init();
 
-        template <class Func, class... Args>
-        inline void enqueue_task_at(std::chrono::steady_clock::time_point tp,
-                             Func&& func, Args... args) {
-            m_launcher.enqueue_task_at(tp, std::bind(std::forward<Func>, std::forward<Args>(args)...));
-        };
+        virtual void on_start();
 
-        template <class Func, class... Args>
-        inline void enqueue_task_for(std::chrono::steady_clock::duration duration,
-                              Func&& func, Args... args) {
-            m_launcher.enqueue_task_for(duration, std::bind(std::forward<Func>, std::forward<Args>(args)...));
-        };
+        virtual void on_finish();
 
-        inline void enqueue_changes() {
-            if (m_changes_enqueued_flag.test_and_set(std::memory_order_acquire)) {
-                m_launcher.enqueue_task([this] {
-                    this->apply_changes();
-                });
-            }
-        }
+        virtual void on_process();
 
-        void apply_changes() {
-            m_changes_enqueued_flag.clear(std::memory_order_release);
-            bool need_enqueue = false;
-            std::function<void()> task;
-            for (auto&& queue : m_local_queues) {
-                bool finished = false;
-                for (size_t i = 0; i < m_max_iter_count; ++i) {
-                    if (!queue.try_dequeue(task)) {
-                        finished = true;
-                        break;
-                    } else {
-                        task();
-                    }
-                }
-                if (!finished) {
-                    need_enqueue = true;
-                }
-            }
-            if (need_enqueue) {
-                this->enqueue_changes();
-            }
-        }
+        virtual ~node();
 
-        inline size_t max_iter_count() const noexcept {
-            return m_max_iter_count;
-        }
+        void add_sender(const std::string& key,
+                        sender* sender_ptr);
 
-        inline void set_max_iter_count(size_t max_iter_count) noexcept {
-            m_max_iter_count = max_iter_count;
-        }
+        void add_receiver(const std::string& key,
+                          receiver* receiver_ptr);
+
+        sender* find_sender(const std::string& key) const noexcept;
+
+        receiver* find_receiver(const std::string& key) const noexcept;
 
     private:
-        typedef moodycamel::ConcurrentQueue<std::function<void()>> queue_type;
-
-        abstract_launcher& m_launcher;
-        std::array<queue_type, queues_count> m_local_queues;
-        std::atomic_flag m_changes_enqueued_flag;
-        size_t m_max_iter_count;
-
+        std::unordered_map<std::string, sender*> m_senders_hash;
+        std::unordered_map<std::string, receiver*> m_receivers_hash;
     };
 }
+
+
