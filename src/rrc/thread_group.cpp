@@ -17,6 +17,7 @@
  *  @date 4/9/17
  */
 
+#include <algorithm>
 #include "rrc/thread_group.h"
 
 rrc::thread_group::thread_group(size_t reserve) {
@@ -39,9 +40,19 @@ size_t rrc::thread_group::size() const noexcept {
 }
 
 
-bool rrc::thread_group::joinable() const {
+bool rrc::thread_group::joinable() const noexcept {
     for (auto&& thread : m_threads) {
         if (thread.joinable()) return true;
     }
     return false;
+}
+
+
+void rrc::thread_group::reserve(size_t size) {
+    m_threads.reserve(size);
+}
+
+
+size_t rrc::thread_group::capacity() const noexcept {
+    return m_threads.capacity();
 }

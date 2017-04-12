@@ -34,22 +34,21 @@ namespace rrc {
         executor(size_t num_of_threads,
                       std::chrono::steady_clock::duration loop_min_dur = std::chrono::seconds(0));
 
+        size_t num_of_threads() const;
+
+        void set_num_of_threads(size_t num_of_threads);
+
         void add_node(node* node_ptr);
 
-        void start() {
-            {
-                std::lock_guard<std::mutex> lock(m_mut);
-                m_stop_flag = false;
-            }
-            m_node_cv.notify_all();
-        }
+        void start();
 
-        void stop() {
-            {
-                std::lock_guard<std::mutex> lock(m_mut);
-                m_stop_flag = true;
-            }
-        }
+        void stop();
+
+        bool started() const;
+
+        const std::chrono::steady_clock::duration& loop_min_duration() const;
+
+        void set_loop_min_duration(const std::chrono::steady_clock::duration& loop_min_dur);
 
         executor(const executor&) = delete;
 
@@ -58,13 +57,13 @@ namespace rrc {
         ~executor();
 
     private:
-        std::mutex m_mut;
+        mutable std::mutex m_mut;
         std::condition_variable m_node_cv;
         std::queue<node*> m_node_queue;
         thread_group m_workers;
-        std::chrono::steady_clock::duration m_loop_min_duration;
-        bool m_finished_flag;
-        bool m_stop_flag;
+        size_t m_num_of_threads;
+        bool m_start_flag;
+        std::chrono::steady_clock::duration m_loop_min_dur;
     };
 }
 

@@ -28,6 +28,11 @@ namespace rrc {
     public:
         thread_group(size_t reserve = 1);
 
+        template <class Func>
+        void create_thread(Func&& func) {
+            m_threads.emplace_back(std::forward<Func>(func));
+        }
+
         void add_thread(std::thread&& thread);
 
         bool joinable() const noexcept;
@@ -35,6 +40,10 @@ namespace rrc {
         void join_all();
 
         size_t size() const noexcept;
+
+        void reserve(size_t size);
+
+        size_t capacity() const noexcept;
 
     private:
         std::vector<std::thread> m_threads;
