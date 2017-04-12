@@ -21,46 +21,76 @@
 
 
 #include <string>
+#include <map>
 #include <unordered_map>
-#include <forward_list>
+#include <vector>
+#include <set>
 
 namespace rrc {
     class node;
     class executor;
 
+    struct communication_connection {
+        std::string src_node;
+        std::string sender;
+        std::string dst_node;
+        std::string receiver;
+    };
+
+    struct execution_connection {
+        std::string node;
+        std::string worker;
+    };
+
     class connector {
     public:
         connector();
 
-        void finish();
+        std::vector<communication_connection> apply_communication_connections();
 
-        connector& add_node(const std::string& name, node* node_ptr);
+        std::vector<execution_connection> apply_execution_connections();
 
-        connector& add_executor(const std::string& name, executor* exec_ptr);
+        bool add_node(const std::string& name,
+                      node* node_ptr);
 
-        connector& connect_sender(const std::string& node_name,
-                                  const std::string& sender_name,
-                                  const std::string& topic_name);
+        bool remove_node(const std::string& name);
 
-        connector& connect_receiver(const std::string& node_name,
-                                    const std::string& receiver_name,
-                                    const std::string& topic_name);
+        bool add_executor(const std::string& name,
+                          executor* exec_ptr);
 
-        connector& connect(const std::string& src_node_name,
-                           const std::string& sender_name,
-                           const std::string& dst_node_name,
-                           const std::string& receiver_name);
+        bool remove_executor(const std::string& name);
 
-        connector& attach_node(const std::string& node_name,
-                               const std::string& exec_name);
+        void clear_nodes() noexcept;
+
+        void clear_executors() noexcept;
+
+        void connect_sender(const std::string& node_name,
+                            const std::string& sender_name,
+                            const std::string& topic_name);
+
+        void connect_receiver(const std::string& node_name,
+                              const std::string& receiver_name,
+                              const std::string& topic_name);
+
+        void direct_connect(const std::string& src_node_name,
+                            const std::string& sender_name,
+                            const std::string& dst_node_name,
+                            const std::string& receiver_name);
+
+        void attach_node(const std::string& node_name,
+                         const std::string& exec_name);
+
+        void clear_connections() noexcept;
+
+        void clear() noexcept;
 
     private:
         std::unordered_map<std::string, node*> m_node_hash;
         std::unordered_map<std::string, executor*> m_executor_hash;
-        std::forward_list<std::tuple<std::string, std::string, std::string>> m_output_connections;
-        std::forward_list<std::tuple<std::string, std::string, std::string>> m_input_connections;
-        std::forward_list<std::tuple<std::string, std::string, std::string, std::string>> m_connections;
-        std::forward_list<std::tuple<std::string, std::string>> m_executor_connections;
+        std::multimap<std::string, std::pair<std::string, std::string>> m_output_connections;
+        std::multimap<std::string, std::pair<std::string, std::string>> m_input_connections;
+        std::set<std::tuple<std::string, std::string, std::string, std::string>> m_connections;
+        std::map<std::string, std::string> m_executor_connections;
     };
 }
 

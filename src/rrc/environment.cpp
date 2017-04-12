@@ -18,3 +18,19 @@
  */
 
 #include "rrc/environment.h"
+
+
+rrc::environment::environment(int argc, char** argv)
+        : m_argc(argc), m_argv(argv) {
+
+}
+
+
+int rrc::environment::argc() const {
+    return m_argc;
+}
+
+
+const char** rrc::environment::argv() const {
+    return (const char**) m_argv;
+}

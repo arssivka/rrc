@@ -23,9 +23,16 @@
 namespace rrc {
     class environment {
     public:
+        environment(int argc, char** argv);
+
+        int argc() const;
+
+        const char** argv() const;
+
 
     private:
-
+        int m_argc;
+        char** m_argv;
     };
 }
 
