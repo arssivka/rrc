@@ -20,20 +20,20 @@
 #include "rrc/executor.h"
 #include "rrc/node.h"
 
-
 rrc::executor::executor(size_t num_of_threads,
                         std::chrono::steady_clock::duration loop_min_dur)
-        : m_num_of_threads(num_of_threads != 0 ? num_of_threads : 1),
-          m_workers(num_of_threads),
+        : m_workers(num_of_threads),
+          m_num_of_threads(num_of_threads != 0 ? num_of_threads : 1),
           m_start_flag(false),
           m_loop_min_dur(loop_min_dur) {}
 
 
 void rrc::executor::add_node(rrc::node* node_ptr) {
-    if (node_ptr == nullptr) return;
-    {
+    if (node_ptr != nullptr) {
         std::lock_guard<std::mutex> lock(m_mut);
         m_node_queue.push(node_ptr);
+    } else {
+        return;
     }
     m_node_cv.notify_one();
 }

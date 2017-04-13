@@ -17,12 +17,17 @@
  *  @date 4/11/17
  */
 
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/xml_parser.hpp>
+#include <boost/algorithm/string.hpp>
+#include <boost/program_options.hpp>
 #include <memory>
 #include <forward_list>
-#include <boost/property_tree/json_parser.hpp>
-#include <rrc/node.h>
-#include <rrc/shared_library.h>
+#include <rrc/node_factory.h>
 #include <rrc/executor.h>
+#include <rrc/connector.h>
+#include <rrc/sender.h>
+#include <rrc/receiver.h>
 #include <iostream>
 #include <map>
 #include <regex>
@@ -38,36 +43,79 @@ bool read_config(std::string filename, boost::property_tree::ptree& prop) {
     return true;
 }
 
-bool check_name(const std::string& name) {
+
+bool is_name_valid(const std::string& name) {
     return std::regex_match(name, std::regex("[a-zA-Z_]([a-zA-Z0-9_])*"));
 }
 
 
 int main(int argc, char** argv) {
-    using namespace boost::property_tree;
+    namespace pt = boost::property_tree;
+    namespace po = boost::program_options;
 
-    std::forward_list<std::unique_ptr<rrc::node>> nodes;
-    std::forward_list<rrc::shared_library> libs;
-    std::forward_list<rrc::executor> launchers;
+    int d_level;
+    std::vector<std::string> config_files;
 
+    rrc::node_factory factory;
 
-    {
-        ptree prop;
-        if (!read_config((argc > 1) ? argv[2] : "config.json", prop)) {
-            std::cerr << "Can't read config file" << std::endl;
-            return 1;
-        }
+    po::options_description desc("Allowed options:");
+    desc.add_options()
+            ("help,h", "show this text")
+            ("debug,d", "set debug level (0-3)")
+            ("config,c", po::value<std::vector<std::string>>(&config_files), "configuration files")
+            ("cmd", "enable command line");
+    po::variables_map vm;
+    po::store(po::parse_command_line(argc, argv, desc), vm);
+    po::notify(vm);
 
-        auto prop_nodes = prop.get_child_optional("nodes");
-        auto prop_threads = prop.get_child_optional("threads");
-
-        std::map<std::string, rrc::node*> node_dict;
-        std::multimap<std::string, rrc::sender*> output_dict;
-        std::multimap<std::string, rrc::receiver*> inputs_dict;
-
-        bool fail = false;
-
-
+    if (vm.count("help")) {
+        std::cout << desc << std::endl;
+        return EXIT_SUCCESS;
     }
+
+    pt::ptree prop;
+    bool fail = false;
+    bool cmd = vm.count("cmd") > 0;
+
+    if (!config_files.empty()) {
+        for (auto&& file : config_files) {
+            boost::trim(file);
+            std::ifstream in(file);
+            if (!in) {
+                fail = true;
+                std::cout << "ERROR: Can't open " << file << " config file!" << std::endl;
+                in.close();
+                continue;
+            }
+            try {
+                if (boost::iends_with(file, ".json")) {
+                    pt::read_json(in, prop);
+                } else if (boost::iends_with(file, ".xml")) {
+                    pt::read_xml(in, prop);
+                } else {
+                    fail = true;
+                    std::cout << "ERROR: Unknown format of " << file << " file!" << std::endl;
+                }
+            } catch (pt::file_parser_error& e) {
+                fail = true;
+                std::cout << "ERROR: Error occurs during parsing " << file << " file"
+                          << " in " << e.line() << " line: " << e.message() << std::endl;
+            }
+            in.close();
+        }
+    } else if (cmd) {
+        std::cout << "ERROR: Config files don't specified!" << std::endl;
+        fail = true;
+    }
+
+    if (fail) {
+        std::cout << desc << std::endl;
+        return EXIT_FAILURE;
+    }
+
+    for (auto&& prop_entry : prop) {
+        const std::string& type = prop_entry.first;
+    }
+
     return 0;
 }

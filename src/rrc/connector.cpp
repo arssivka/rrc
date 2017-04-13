@@ -45,13 +45,12 @@ std::vector<rrc::communication_connection> rrc::connector::apply_communication_c
         if (receiver_ptr == nullptr) {
             auto range = m_output_connections.equal_range(topic_name);
             std::for_each(range.first, range.second, [&](const auto& pair) {
-                communication_connection conn = {
+                failed_connections.emplace_back(
                         pair.second.first,
                         pair.second.second,
                         node_name,
                         receiver_name
-                };
-                failed_connections.push_back(std::move(conn));
+                );
             });
             continue;
         }
@@ -80,8 +79,8 @@ std::vector<rrc::communication_connection> rrc::connector::apply_communication_c
                 failed_connections.emplace_back(
                         node_name,
                         sender_name,
-                        pair.first,
-                        pair.second
+                        pair.second.first,
+                        pair.second.second
                 );
             });
             continue;
@@ -103,11 +102,15 @@ std::vector<rrc::communication_connection> rrc::connector::apply_communication_c
 
         auto node_it = m_node_hash.find(src_node_name);
         if (node_it == m_node_hash.end()) {
-            failed_connections.emplace_back(
+            communication_connection conn = {
                     src_node_name,
                     sender_name,
                     dst_node_name,
                     receiver_name
+            };
+
+            failed_connections.emplace_back(
+
             );
             continue;
         }
@@ -191,8 +194,7 @@ bool rrc::connector::add_node(const std::string& name,
 void rrc::connector::connect_sender(const std::string& node_name,
                                     const std::string& sender_name,
                                     const std::string& topic_name) {
-
-    m_output_connections.emplace(node_name, sender_name, topic_name);
+    m_output_connections.emplace(node_name, std::make_pair(sender_name, topic_name));
 }
 
 
@@ -200,7 +202,7 @@ void rrc::connector::connect_receiver(const std::string& node_name,
                                       const std::string& receiver_name,
                                       const std::string& topic_name) {
 
-    m_input_connections.emplace(node_name, receiver_name, topic_name);
+    m_input_connections.emplace(node_name, std::make_pair(receiver_name, topic_name));
 }
 
 

@@ -26,12 +26,15 @@ rrc::shared_library::shared_library(const std::string& filename)
         : m_handle_ptr(dlopen(filename.c_str(), RTLD_LAZY)) {}
 
 
-rrc::shared_library::~shared_library() {
-    if (this->loaded()) {
-        dlclose(m_handle_ptr);
-    }
+void rrc::shared_library::open(const std::string& filename) {
+    this->close();
+    m_handle_ptr = dlopen(filename.c_str(), RTLD_LAZY);
 }
 
+
+void rrc::shared_library::close() {
+    if (m_handle_ptr != nullptr) dlclose(m_handle_ptr);
+}
 
 #endif
 
@@ -42,4 +45,9 @@ bool rrc::shared_library::loaded() const noexcept {
 
 rrc::shared_library::operator bool() const noexcept {
     return this->loaded();
+}
+
+
+rrc::shared_library::~shared_library() {
+    this->close();
 }

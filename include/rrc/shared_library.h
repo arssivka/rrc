@@ -47,9 +47,14 @@ namespace rrc {
 
         operator bool() const noexcept;
 
+    private:
+        void open(const std::string& filename);
+
+        void close();
+
 #if defined(RRC_UNIX)
     public:
-        template <class T>
+        template <class T = void>
         T* get_symbol(const std::string& sym) const noexcept {
             if (m_handle_ptr == nullptr) return nullptr;
             T* ptr = (T*) dlsym(m_handle_ptr, sym.c_str());

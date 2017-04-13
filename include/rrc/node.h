@@ -63,6 +63,7 @@ namespace rrc {
     private:
         std::unordered_map<std::string, sender*> m_senders_hash;
         std::unordered_map<std::string, receiver*> m_receivers_hash;
+
     };
 }
 

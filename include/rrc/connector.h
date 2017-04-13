@@ -25,22 +25,12 @@
 #include <unordered_map>
 #include <vector>
 #include <set>
+#include "communication_connection.h"
+#include "execution_connection.h"
 
 namespace rrc {
     class node;
     class executor;
-
-    struct communication_connection {
-        std::string src_node;
-        std::string sender;
-        std::string dst_node;
-        std::string receiver;
-    };
-
-    struct execution_connection {
-        std::string node;
-        std::string worker;
-    };
 
     class connector {
     public:

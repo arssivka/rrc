@@ -14,27 +14,31 @@
  *  limitations under the License.
  *
  *  @autor arssivka
- *  @date 4/10/17
+ *  @date 4/13/17
  */
 
-#pragma once
+#include "rrc/execution_connection.h"
 
 
-#include <string>
-
-#if defined(__linux__) || \
-        defined(__linux)   || \
-        defined(linux)     || \
-        defined(__APPLE__)
-    #define RRC_EXPORT
-    #define RRC_UNIX
-#elif defined(_WIN32)
-    #define RRC_EXPORT __declspec(dllexport)
-    #define RRC_WIN32
-#else
-    #warning "Unknown target platform"
-#endif
-
-#define RRC_ENTRY_FUNCTION "rrcmain"
+rrc::execution_connection::execution_connection(const std::string& node, const std::string& worker)
+        : m_node(node), m_worker(worker) {}
 
 
+const std::string& rrc::execution_connection::node() const {
+    return m_node;
+}
+
+
+void rrc::execution_connection::set_node(const std::string& node) {
+    m_node = node;
+}
+
+
+const std::string& rrc::execution_connection::worker() const {
+    return m_worker;
+}
+
+
+void rrc::execution_connection::set_worker(const std::string& worker) {
+    m_worker = worker;
+}

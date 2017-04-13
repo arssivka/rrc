@@ -14,25 +14,36 @@
  *  limitations under the License.
  *
  *  @autor arssivka
- *  @date 4/12/17
+ *  @date 4/13/17
  */
 
 #pragma once
 
 
+#include <string>
+#include <unordered_map>
+#include "shared_library.h"
+
 namespace rrc {
-    class environment {
+    class node;
+    
+    class node_factory {
     public:
-        environment(int argc, char** argv);
+        node_factory() = default;
 
-        int argc() const;
+        node_factory(const node_factory&) = delete;
 
-        const char** argv() const;
+        node_factory& operator=(const node_factory&) = delete;
 
+        bool load(const std::string& filename);
+        
+        bool unload(const std::string& filename) noexcept;
+        
+        rrc::node* create(const std::string& filename, const std::string& symbol, const std::string& property_file);
 
     private:
-        int m_argc;
-        char** m_argv;
+        std::unordered_map<std::string, shared_library> m_libs_hash;
+
     };
 }
 

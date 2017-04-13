@@ -10,7 +10,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 add_subdirectory(lib)
 add_subdirectory(test)
 
-find_package(Boost REQUIRED)
+find_package(Boost COMPONENTS program_options REQUIRED)
 find_package(Threads)
 
 set(SRC
@@ -31,10 +31,13 @@ set(SRC
         include/rrc/topic.h
         src/rrc/connector.cpp
         include/rrc/connector.h
-        src/rrc/controller.cpp
-        include/rrc/controller.h
-        src/rrc/environment.cpp
-        include/rrc/environment.h)
+        src/rrc/node_factory.cpp
+        include/rrc/node_factory.h
+        src/rrc/communication_connection.cpp
+        include/rrc/communication_connection.h
+        src/rrc/execution_connection.cpp
+        include/rrc/execution_connection.h
+        include/rrc/preferences.h)
 
 add_library(rrc STATIC ${SRC})
 target_include_directories(rrc PUBLIC

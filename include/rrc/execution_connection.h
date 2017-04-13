@@ -14,23 +14,33 @@
  *  limitations under the License.
  *
  *  @autor arssivka
- *  @date 4/12/17
+ *  @date 4/13/17
  */
 
-#include "rrc/environment.h"
+#pragma once
 
 
-rrc::environment::environment(int argc, char** argv)
-        : m_argc(argc), m_argv(argv) {
+#include <string>
 
+namespace rrc {
+    class execution_connection {
+    public:
+        execution_connection() = default;
+
+        execution_connection(const std::string& node, const std::string& worker);
+
+        const std::string& node() const;
+
+        void set_node(const std::string& node);
+
+        const std::string& worker() const;
+
+        void set_worker(const std::string& worker);
+
+    private:
+        std::string m_node;
+        std::string m_worker;
+    };
 }
 
 
-int rrc::environment::argc() const {
-    return m_argc;
-}
-
-
-const char** rrc::environment::argv() const {
-    return (const char**) m_argv;
-}
