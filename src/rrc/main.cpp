@@ -24,6 +24,7 @@
 #include <memory>
 #include <forward_list>
 #include <rrc/node_factory.h>
+#include <rrc/node.h>
 #include <rrc/executor.h>
 #include <rrc/connector.h>
 #include <rrc/sender.h>
@@ -53,7 +54,6 @@ int main(int argc, char** argv) {
     namespace pt = boost::property_tree;
     namespace po = boost::program_options;
 
-    int d_level;
     std::vector<std::string> config_files;
 
     rrc::node_factory factory;
@@ -107,14 +107,39 @@ int main(int argc, char** argv) {
         std::cout << "ERROR: Config files don't specified!" << std::endl;
         fail = true;
     }
+    vm.clear();
 
     if (fail) {
         std::cout << desc << std::endl;
         return EXIT_FAILURE;
     }
 
+    std::unordered_map<std::string, std::unique_ptr<rrc::node>> node_hash;
+    std::unordered_map<std::string, std::unique_ptr<rrc::executor>> node_executor;
+
+    rrc::connector connector;
     for (auto&& prop_entry : prop) {
-        const std::string& type = prop_entry.first;
+        std::string str = prop_entry.first;
+        boost::to_lower(str);
+        boost::trim(str);
+        if (str == "node") {
+            const pt::ptree& node_prop = prop_entry.second;
+            auto name = node_prop.get_optional<std::string>("name");
+            auto path = node_prop.get_optional<std::string>("path");
+            auto function = node_prop.get_optional<std::string>("function");
+            auto config = node_prop.get_optional<std::string>("config");
+            auto connections_prop = node_prop.get_child_optional("connections");
+
+        } else if (str == "worker") {
+            const pt::ptree& worker_prop = prop_entry.second;
+            auto name = worker_prop.get_optional<std::string>("name");
+            size_t num_threads = worker_prop.get<size_t>("num_threads", 1);
+            auto nodes_prop = worker_prop.get_child_optional("nodes");
+        } else {
+            fail = true;
+            std::cout << "ERROR: Unknown section in configs: " << str << std::endl;
+        }
+
     }
 
     return 0;
