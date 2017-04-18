@@ -13,12 +13,12 @@ namespace rrc {
     public:
         topic_callbacks_protector(rrc::core& core);
 
-        void insert(std::pair<std::string, topic_callback>&& named_callback);
+        void insert(std::string topic_key, rrc::topic_callback callback);
 
-        void insert_and_register(std::pair<std::string, topic_callback>&& named_callback,
-                                 result_callback result = result_callback());
+        void insert_and_register(std::string topic_key, rrc::topic_callback callback,
+                                 rrc::result_callback result = result_callback());
 
-        void remove_and_unregister(std::string &name, result_callback result = result_callback());
+        void remove_and_unregister(const std::string& name, result_callback result = result_callback());
 
         void remove_and_unregister_all(result_callback result = result_callback());
 
