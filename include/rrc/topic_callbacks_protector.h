@@ -22,7 +22,7 @@ namespace rrc {
 
         void remove_and_unregister_all(result_callback result = result_callback());
 
-        void remove_listeners(std::string& name);
+        void remove_listeners(const std::string& name);
 
         void remove_listener(const topic_callback& listener);
 

@@ -12,12 +12,8 @@ void rrc::topic_callbacks_protector::insert(std::string topic_key,
                         std::move(callback));
 }
 
-void rrc::topic_callbacks_protector::remove_listeners(std::string& name) {
-    for(auto it = m_callbacks.begin(); it != m_callbacks.end(); ++it) {
-        if(it->first == name) {
-            it = m_callbacks.erase(it);
-        }
-    }
+void rrc::topic_callbacks_protector::remove_listeners(const std::string& name) {
+    m_callbacks.erase(name);
 }
 
 void rrc::topic_callbacks_protector::remove_listener(const rrc::topic_callback& listener) {
@@ -39,12 +35,11 @@ void rrc::topic_callbacks_protector::insert_and_register(std::string topic_key,
 
 void rrc::topic_callbacks_protector::remove_and_unregister(const std::string& name,
                                                            rrc::result_callback result) {
-    for(auto it = m_callbacks.begin(); it != m_callbacks.end(); ++it) {
-        if(it->first == name) {
-            m_core.topics().remove_topic_listener(it->first, it->second, result);
-            it = m_callbacks.erase(it);
-        }
+    auto range = m_callbacks.equal_range(name);
+    for(auto it = range.first; it != range.second; ++it) {
+        m_core.topics().remove_topic_listener(it->first, it->second, result);
     }
+    m_callbacks.erase(range.first, range.second);
 }
 
 void rrc::topic_callbacks_protector::remove_and_unregister_all(rrc::result_callback result) {
