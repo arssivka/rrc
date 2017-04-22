@@ -22,8 +22,7 @@
 rrc::core::core(rrc::abstract_launcher& launcher, int argc, char** argv)
         : core_base(launcher, argc, argv),
           m_topic_mechanism(launcher),
-          m_service_mechanism(launcher),
-          m_finalizer_mechanism(launcher) {}
+          m_service_mechanism(launcher) {}
 
 const rrc::topic_mechanism& rrc::core::topics() const {
     return m_topic_mechanism;
@@ -33,9 +32,6 @@ const rrc::service_mechanism& rrc::core::services() const {
     return m_service_mechanism;
 }
 
-const rrc::finalizer_mechanism& rrc::core::finalizers() const {
-    return m_finalizer_mechanism;
-}
 
 rrc::topic_mechanism& rrc::core::topics() {
     return m_topic_mechanism;
@@ -43,8 +39,4 @@ rrc::topic_mechanism& rrc::core::topics() {
 
 rrc::service_mechanism& rrc::core::services() {
     return m_service_mechanism;
-}
-
-rrc::finalizer_mechanism& rrc::core::finalizers() {
-    return m_finalizer_mechanism;
 }

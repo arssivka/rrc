@@ -24,7 +24,7 @@
 #include "mechanism.h"
 
 namespace rrc {
-    class service_mechanism : protected mechanism<service_holder, 3> {
+    class service_mechanism : protected mechanism<service_holder, 3, 128> {
     public:
         enum {
             CHANGE_KEY_LISTENERS_PRIORITY,

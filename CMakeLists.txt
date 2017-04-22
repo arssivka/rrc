@@ -32,9 +32,6 @@ set(SRCS
         include/rrc/barrier.h
         include/rrc/concurrent_priority_queue.h
         include/rrc/shared_buffer.h
-        include/rrc/finalizer.h
-        src/rrc/finalizer.cpp
-        include/rrc/finalizer_mechanism.h
         include/rrc/elem_less.h
         include/rrc/result_code.h
         include/rrc/shared_function.h
@@ -46,13 +43,13 @@ set(SRCS
         src/rrc/topic_holder.cpp
         src/rrc/service_mechanism.cpp
         src/rrc/service_holder.cpp
-        src/rrc/finalizer_mechanism.cpp
         src/rrc/core_base.cpp
         src/rrc/topic_mechanism.cpp
         include/rrc/notifier.h
         src/rrc/core.cpp
         src/rrc/shared_buffer_pool.cpp
-        include/rrc/shared_buffer_pool.h)
+        include/rrc/shared_buffer_pool.h
+        include/rrc/function.h)
 
 configure_file("${PROJECT_SOURCE_DIR}/template/defines.h.in"
         "${PROJECT_BINARY_DIR}/defines.h")

@@ -22,7 +22,6 @@
 #include "core_base.h"
 #include "topic_mechanism.h"
 #include "service_mechanism.h"
-#include "finalizer_mechanism.h"
 
 namespace rrc {
     class core : public core_base {
@@ -33,18 +32,13 @@ namespace rrc {
 
         const service_mechanism& services() const;
 
-        const finalizer_mechanism& finalizers() const;
-
         topic_mechanism& topics();
 
         service_mechanism& services();
 
-        finalizer_mechanism& finalizers();
-
     private:
         topic_mechanism m_topic_mechanism;
         service_mechanism m_service_mechanism;
-        finalizer_mechanism m_finalizer_mechanism;
     };
 }
 

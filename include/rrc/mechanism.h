@@ -22,14 +22,15 @@
 #include "non_copyable.h"
 #include "abstract_launcher.h"
 #include "lockfree_task_queue.h"
+#include "function.h"
 #include <type_traits>
 
 namespace rrc {
-    template<class T, size_t N>
+    template<class T, size_t N, size_t FuncSize = 256>
     class mechanism : private non_copyable {
     protected:
         static constexpr size_t queues_count = N;
-        typedef std::function<void()> task_type;
+        typedef rrc::function<void(), FuncSize> task_type;
         typedef moodycamel::ConcurrentQueue<task_type> task_queue_type;
         typedef T base_type;
 
@@ -37,7 +38,8 @@ namespace rrc {
         mechanism(abstract_launcher& launcher, Args&& ... args)
                 : m_base(std::forward<Args>(args)...),
                   m_launcher(launcher),
-                  m_changes_enqueued_flag(ATOMIC_FLAG_INIT) {}
+                  m_changes_enqueued_flag(ATOMIC_FLAG_INIT),
+                  m_exec_vector(64) {}
 
         template<size_t I, class Func, class... Args>
         inline void enqueue_task(Func&& func, Args&& ... args) {
@@ -71,18 +73,15 @@ namespace rrc {
         void apply_changes() {
             m_changes_enqueued_flag.clear(std::memory_order_release);
             bool need_enqueue = false;
-            task_type task;
+            size_t dequeued;
             for (auto&& queue : m_local_queues) {
-                bool finished = false;
-                for (int i = 0; i < 64; ++i) {
-                    if (queue.try_dequeue(task)) {
-                        task();
-                    } else {
-                        finished = true;
-                        break;
-                    }
+                dequeued = queue.try_dequeue_bulk(m_exec_vector.begin(),
+                                                  m_exec_vector.size());
+                for (size_t i = 0; i < dequeued; ++i) {
+                    m_exec_vector[i]();
                 }
-                if (!finished) {
+
+                if (dequeued == m_exec_vector.size()) {
                     need_enqueue = true;
                 }
             }
@@ -96,5 +95,6 @@ namespace rrc {
         abstract_launcher& m_launcher;
         std::atomic_flag m_changes_enqueued_flag;
         std::array<task_queue_type, queues_count> m_local_queues;
+        std::vector<task_type> m_exec_vector;
     };
 }
