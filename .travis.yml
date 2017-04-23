@@ -35,4 +35,4 @@ compiler:
   - gcc
 
 after_success:
-  - if [ "$COVERAGE" = "ON" ]; coveralls --exclude lib --exclude test --gcov-options '\-lp'; fi
+  - if [ "$COVERAGE" = "ON" ]; then coveralls --exclude lib --exclude test --exclude git --gcov-options '\-lp'; fi
