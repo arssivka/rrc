@@ -30,9 +30,10 @@ script:
   - cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCOVERAGE=$COVERAGE -DBUILD_TEST=ON ..
   - make
   - valgrind --error-exitcode=1 --leak-check=full ./test/tests
+  - cd ..
 
 compiler:
   - gcc
 
 after_success:
-  - if [ "$COVERAGE" = "ON" ]; then coveralls --exclude lib --exclude test --exclude git --gcov-options '\-lp'; fi
+  - if [ "$COVERAGE" = "ON" ]; then coveralls --exclude lib --exclude test --exclude git --exclude build --gcov-options '\-lp'; fi
