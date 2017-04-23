@@ -18,7 +18,7 @@ env:
     - BUILD_TYPE=Release  COVERAGE=OFF
 
 before_install:
-  - if [ "$COVERAGE" = "ON" ]; pip install --user cpp-coveralls; fi
+  - if [ "$COVERAGE" = "ON" ]; then pip install --user cpp-coveralls; fi
 
 install:
     - if [ "$CXX" = "g++" ]; then export CXX="g++-5" CC="gcc-5"; fi
