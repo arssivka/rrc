@@ -51,7 +51,8 @@ configure_file("${PROJECT_SOURCE_DIR}/template/defines.h.in"
                "${PROJECT_BINARY_DIR}/defines.h")
 
 if(${COVERAGE})
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -fprofile-arcs -ftest-coverage")
+    set(CMAKE_C_FLAGS   "${CMAKE_CXX_FLAGS} -g -O0 -fprofile-arcs -ftest-coverage --coverage")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -O0 -fprofile-arcs -ftest-coverage --coverage")
 endif()
 
 add_library(rrc ${SRCS})
