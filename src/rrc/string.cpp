@@ -36,7 +36,8 @@ namespace rrc {
             : string() {
         m_size = size;
         if (m_size > 0) {
-            m_data.reset(new value_type[size], std::default_delete<value_type[]>());
+            m_data.reset(new value_type[size],
+                         std::default_delete<value_type[]>());
             iterator beg = m_data.get();
             iterator end = m_data.get() + m_size;
             std::fill(beg, end, val);
@@ -55,52 +56,52 @@ namespace rrc {
     }
 
 
-    const rrc::string::value_type* rrc::string::data() const {
+    const rrc::string::value_type* rrc::string::data() const noexcept {
         return m_data.get();
     }
 
 
-    rrc::string::const_iterator rrc::string::begin() const {
+    rrc::string::const_iterator rrc::string::begin() const noexcept {
         return const_iterator(m_data.get());
     }
 
 
-    rrc::string::const_iterator rrc::string::end() const {
+    rrc::string::const_iterator rrc::string::end() const noexcept {
         return const_iterator(m_data.get() + this->size());
     }
 
 
-    rrc::string::const_reverse_iterator rrc::string::rbegin() const {
+    rrc::string::const_reverse_iterator rrc::string::rbegin() const noexcept {
         return const_reverse_iterator(end());
     }
 
 
-    rrc::string::const_reverse_iterator rrc::string::rend() const {
+    rrc::string::const_reverse_iterator rrc::string::rend() const noexcept {
         return const_reverse_iterator(begin());
     }
 
 
-    rrc::string::const_iterator rrc::string::cbegin() const {
+    rrc::string::const_iterator rrc::string::cbegin() const noexcept {
         return const_iterator(m_data.get());
     }
 
 
-    rrc::string::const_iterator rrc::string::cend() const {
+    rrc::string::const_iterator rrc::string::cend() const noexcept {
         return const_iterator(m_data.get() + this->size());
     }
 
 
-    rrc::string::const_reverse_iterator rrc::string::crbegin() const {
+    rrc::string::const_reverse_iterator rrc::string::crbegin() const noexcept {
         return const_reverse_iterator(end());
     }
 
 
-    rrc::string::const_reverse_iterator rrc::string::crend() const {
+    rrc::string::const_reverse_iterator rrc::string::crend() const noexcept {
         return const_reverse_iterator(begin());
     }
 
 
-    bool rrc::string::operator==(const rrc::string& rhs) const {
+    bool rrc::string::operator==(const rrc::string& rhs) const noexcept {
         if (m_data == nullptr || rhs.m_data == nullptr) {
             return m_data.get() == rhs.m_data.get();
         }
@@ -108,17 +109,18 @@ namespace rrc {
     }
 
 
-    bool rrc::string::operator!=(const rrc::string& rhs) const {
+    bool rrc::string::operator!=(const rrc::string& rhs) const noexcept {
         return !(*this == rhs);
     }
 
 
-    bool rrc::string::operator==(const std::string& rhs) const {
-        return m_size == rhs.size() && std::equal(m_data.get(), m_data.get() + m_size, rhs.begin());
+    bool rrc::string::operator==(const std::string& rhs) const noexcept {
+        return m_size == rhs.size() &&
+                std::equal(m_data.get(), m_data.get() + m_size, rhs.begin());
     }
 
 
-    bool rrc::string::operator!=(const std::string& rhs) const {
+    bool rrc::string::operator!=(const std::string& rhs) const noexcept {
         return !(*this == rhs);
     }
 
@@ -132,12 +134,12 @@ namespace rrc {
     }
 
 
-    bool string::operator==(nullptr_t) {
+    bool string::operator==(nullptr_t) noexcept {
         return m_data == nullptr;
     }
 
 
-    bool string::operator!=(nullptr_t) {
+    bool string::operator!=(nullptr_t) noexcept {
         return !(*this == nullptr);
     }
 
@@ -160,5 +162,9 @@ namespace rrc {
         std::copy(beg, end, out);
 
         return res;
+    }
+
+    bool string::is(const string& other) const noexcept {
+        return m_data.get() == other.m_data.get();
     }
 }

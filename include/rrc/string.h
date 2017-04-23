@@ -85,35 +85,37 @@ namespace rrc {
 
         size_type size() const noexcept;
 
-        const value_type* data() const;
+        const value_type* data() const noexcept;
 
-        const_iterator begin() const;
+        const_iterator begin() const noexcept;
 
-        const_iterator end() const;
+        const_iterator end() const noexcept;
 
-        const_reverse_iterator rbegin() const;
+        const_reverse_iterator rbegin() const noexcept;
 
-        const_reverse_iterator rend() const;
+        const_reverse_iterator rend() const noexcept;
 
-        const_iterator cbegin() const;
+        const_iterator cbegin() const noexcept;
 
-        const_iterator cend() const;
+        const_iterator cend() const noexcept;
 
-        const_reverse_iterator crbegin() const;
+        const_reverse_iterator crbegin() const noexcept;
 
-        const_reverse_iterator crend() const;
+        const_reverse_iterator crend() const noexcept;
 
-        bool operator==(const string& rhs) const;
+        bool is(const string& other) const noexcept;
 
-        bool operator!=(const string& rhs) const;
+        bool operator==(const string& rhs) const noexcept;
 
-        bool operator==(const std::string& rhs) const;
+        bool operator!=(const string& rhs) const noexcept;
 
-        bool operator!=(const std::string& rhs) const;
+        bool operator==(const std::string& rhs) const noexcept;
 
-        bool operator==(nullptr_t);
+        bool operator!=(const std::string& rhs) const noexcept;
 
-        bool operator!=(nullptr_t);
+        bool operator==(nullptr_t) noexcept;
+
+        bool operator!=(nullptr_t) noexcept;
 
         string operator+(const string& str) const;
 
