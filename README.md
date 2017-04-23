@@ -1,6 +1,6 @@
 # RRC
 
-[![Build Status](https://travis-ci.org/arssivka/rrc.svg?branch=develop)](https://travis-ci.org/arssivka/rrc)
+[![Build Status](https://travis-ci.org/arssivka/rrc.svg?branch=master)](https://travis-ci.org/arssivka/rrc) [![Coverage Status](https://coveralls.io/repos/github/arssivka/rrc/badge.svg?branch=master)](https://coveralls.io/github/arssivka/rrc?branch=master)
 
 RRC(Register Run Comminucate) - is an asynchronous modular system, that developes as a c++ library that must simplify the developing of async systems.
 
