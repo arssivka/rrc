@@ -51,7 +51,7 @@ namespace rrc {
          * @brief Sends the message
          * @param message Pointer to message that needs to be sent
          */
-        void send_message(const shared_buffer& msg);
+        void send_message(const string& msg);
 
         size_t listeners_count() const;
 

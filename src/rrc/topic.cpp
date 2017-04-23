@@ -38,7 +38,7 @@ bool rrc::topic::remove_listener(rrc::topic_callback callback, const rrc::result
 }
 
 
-void rrc::topic::send_message(const rrc::shared_buffer& msg) {
+void rrc::topic::send_message(const rrc::string& msg) {
     m_notifier.notify(msg);
 }
 

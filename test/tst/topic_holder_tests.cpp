@@ -14,11 +14,11 @@ protected:
     void SetUp() override {
         m_flag1 = false;
         m_flag2 = false;
-        m_message = shared_buffer("flaceh");
-        m_callback1 = topic_callback([this](const shared_buffer& msg) {
+        m_message = string("flaceh");
+        m_callback1 = topic_callback([this](const string& msg) {
             m_flag1 = msg == m_message;
         });
-        m_callback2 = topic_callback([this](const shared_buffer& msg) {
+        m_callback2 = topic_callback([this](const string& msg) {
             m_flag2 = msg == m_message;
         });
     }
@@ -27,7 +27,7 @@ protected:
 protected:
     bool m_flag1;
     bool m_flag2;
-    shared_buffer m_message;
+    string m_message;
     topic_callback m_callback1;
     topic_callback m_callback2;
     topic_holder m_holder;

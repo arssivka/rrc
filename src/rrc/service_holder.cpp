@@ -57,12 +57,12 @@ void rrc::service_holder::remove_service(const service_callback& callback,
 
 
 void rrc::service_holder::call(const std::string& key,
-                               const shared_buffer input,
+                               const string input,
                                service_result_callback listener) {
     auto it = m_service_hash.find(key);
     if (it != m_service_hash.end()) {
         auto& callback = it->second;
-        shared_buffer output;
+        string output;
         result_code result = callback(std::move(input), output);
         listener(result, output);
     }

@@ -24,7 +24,7 @@ rrc::topic_mechanism::topic_mechanism(rrc::abstract_launcher& launcher)
         : mechanism(launcher) {}
 
 
-void rrc::topic_mechanism::send_message(std::string topic_key, rrc::shared_buffer message) {
+void rrc::topic_mechanism::send_message(std::string topic_key, rrc::string message) {
     mechanism::template enqueue_task<SEND_MESSAGE_PRIORITY>(
             std::mem_fn(&base_type::send_message),
             std::move(topic_key),

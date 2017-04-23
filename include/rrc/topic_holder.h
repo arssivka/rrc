@@ -49,7 +49,7 @@ namespace rrc {
         void remove_key_listener(const key_callback& callback,
                                  const result_callback& result = result_callback());
 
-        void send_message(const std::string& topic_key, const shared_buffer& msg);
+        void send_message(const std::string& topic_key, const string& msg);
 
         size_t listeners_count(const std::string& topic_key) const;
 

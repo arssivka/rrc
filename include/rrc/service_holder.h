@@ -45,7 +45,7 @@ namespace rrc {
                                  const result_callback& result = result_callback());
 
         void call(const std::string& key,
-                  const shared_buffer input,
+                  const string input,
                   service_result_callback listener);
 
     private:

@@ -47,7 +47,7 @@ void rrc::service_mechanism::remove_service(rrc::service_callback callback,
 
 
 void rrc::service_mechanism::call(const std::string& key,
-                                  rrc::shared_buffer input,
+                                  rrc::string input,
                                   rrc::service_result_callback listener) {
     mechanism::template enqueue_task<SERVICE_CALL_PRIORITY>(
             &base_type::call,

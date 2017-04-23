@@ -12,7 +12,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(SRCS
         include/rrc/abstract_launcher.h
         include/rrc/non_copyable.h
-        include/rrc/copy_on_write.h
         include/rrc/topic_holder.h
         include/rrc/topic.h
         src/rrc/lockfree_launcher.cpp
@@ -31,14 +30,13 @@ set(SRCS
         include/rrc/core_base.h
         include/rrc/barrier.h
         include/rrc/concurrent_priority_queue.h
-        include/rrc/shared_buffer.h
+        include/rrc/string.h
         include/rrc/elem_less.h
         include/rrc/result_code.h
         include/rrc/shared_function.h
         include/rrc/async_worker.h
         include/rrc/callback_defines.h
-        include/rrc/array_deleter.h
-        src/rrc/shared_buffer.cpp
+        src/rrc/string.cpp
         src/rrc/topic.cpp
         src/rrc/topic_holder.cpp
         src/rrc/service_mechanism.cpp

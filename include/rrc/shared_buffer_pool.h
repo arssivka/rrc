@@ -21,7 +21,7 @@
 
 
 #include <map>
-#include "shared_buffer.h"
+#include "string.h"
 #include "non_copyable.h"
 
 namespace rrc {
@@ -29,16 +29,16 @@ namespace rrc {
     public:
         shared_buffer_pool(size_t max_obj_count = 0);
 
-        shared_buffer create(size_t size);
+        string create(size_t size);
 
-        void remove(shared_buffer buff);
+        void remove(string buff);
 
         size_t max_objects_count() const;
 
         void set_max_objects_count(size_t max_objects_count);
 
     private:
-        std::map<size_t, shared_buffer> m_buffer_map;
+        std::map<size_t, string> m_buffer_map;
         size_t m_max_obj_count;
 
     };

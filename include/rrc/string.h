@@ -21,70 +21,69 @@
 
 #include <ostream>
 #include <cstddef>
-#include "copy_on_write.h"
-#include "array_deleter.h"
+#include <functional>
+#include <memory>
 
 namespace rrc {
-    class shared_buffer {
+    class string {
     public:
-        typedef uint8_t value_type;
+        typedef char value_type;
         typedef value_type& reference;
         typedef const value_type& const_reference;
-        typedef const value_type* iterator;
+        typedef value_type* iterator;
         typedef const value_type* const_iterator;
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
         typedef std::reverse_iterator<const_iterator> reverse_iterator;
         typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
-        typedef size_t site_type;
+        typedef std::function<void(value_type*)> deleter_type;
 
-        shared_buffer();
+        string() noexcept;
 
-        explicit shared_buffer(const std::string& str);
+        explicit string(const std::string& str);
 
-        explicit shared_buffer(size_type size, const value_type& val = value_type());
+        explicit string(size_type size, const value_type& val = value_type());
 
-        template <class T>
-        shared_buffer(T* ptr, size_t size,
-                      std::function<void(value_type*)> deleter = std::function<void(value_type*)>()) {
-            if (!deleter) {
-                m_size = size * sizeof(typename std::decay<T>::type);
-                m_data.reset(new value_type[m_size], array_deleter<value_type>());
-                std::copy(ptr, ptr + size, m_data.get());
-            } else {
-                m_size = size * sizeof(typename std::decay<T>::type);
-                m_data.reset((value_type*) ptr, std::move(deleter));
-            }
+
+        template<class T>
+        static string use_buffer(T* ptr, size_t size,
+                                 deleter_type deleter = std::default_delete<value_type[]>()) {
+            string str;
+            str.m_size = sizeof(T) * size;
+            str.m_data.reset((value_type*) ptr, std::move(deleter));
+            return str;
         }
 
-        template <class InputIterator>
-        shared_buffer(InputIterator first, InputIterator last)
-                : shared_buffer() {
+
+        template<class T>
+        string(T* ptr, size_t size) {
+            m_size = size * sizeof(typename std::decay<T>::type);
+            m_data.reset(new value_type[m_size], std::default_delete<value_type[]>());
+            std::copy(ptr, ptr + size, m_data.get());
+        }
+
+        template<class InputIterator>
+        string(InputIterator first, InputIterator last)
+                : string() {
             const size_t size = (size_t) std::distance(first, last);
             if (size > 0) {
-                m_data.reset(new value_type[size], array_deleter<value_type>());
+                m_data.reset(new value_type[size], std::default_delete<value_type[]>());
                 m_size = size;
                 std::copy(first, last, m_data.get());
             }
         }
 
-        shared_buffer(const shared_buffer& other) = default;
+        string(const string& other) = default;
 
-        shared_buffer(shared_buffer&& other) = default;
+        string(string&& other) = default;
 
-        shared_buffer& operator=(const shared_buffer&) = default;
+        string& operator=(const string&) = default;
 
-        shared_buffer& operator=(shared_buffer&&) = default;
+        string& operator=(string&&) = default;
 
-        reference operator[](size_type n);
-
-        const_reference operator[](size_type n) const;
-
-        void fill(const value_type& value);
+        value_type operator[](size_type n) const;
 
         size_type size() const noexcept;
-
-        value_type* data();
 
         const value_type* data() const;
 
@@ -104,9 +103,9 @@ namespace rrc {
 
         const_reverse_iterator crend() const;
 
-        bool operator==(const shared_buffer& rhs) const;
+        bool operator==(const string& rhs) const;
 
-        bool operator!=(const shared_buffer& rhs) const;
+        bool operator!=(const string& rhs) const;
 
         bool operator==(const std::string& rhs) const;
 
@@ -116,16 +115,12 @@ namespace rrc {
 
         bool operator!=(nullptr_t);
 
-        friend std::ostream& operator<<(std::ostream& os, const shared_buffer& buffer);
+        string operator+(const string& str) const;
+
+        friend std::ostream& operator<<(std::ostream& os, const string& buffer);
 
     private:
-        void ensure_initialized() const;
-
-        void ensure_unique();
-
-
-    private:
-        mutable std::shared_ptr<value_type> m_data;
-        mutable size_t m_size;
+        std::shared_ptr<value_type> m_data;
+        size_t m_size;
     };
 }

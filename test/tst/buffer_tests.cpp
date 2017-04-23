@@ -9,46 +9,37 @@
 using namespace rrc;
 
 TEST(shared_buffer, operator_square_brackets) {
-    std::string string("catdog");
-    shared_buffer shared_buffer1(string);
-    EXPECT_EQ(string[0], shared_buffer1[0]);
-    EXPECT_EQ(string[1], shared_buffer1[1]);
-    EXPECT_EQ(string[2], shared_buffer1[2]);
-    EXPECT_EQ(string[3], shared_buffer1[3]);
-    EXPECT_EQ(string[4], shared_buffer1[4]);
-    EXPECT_EQ(string[5], shared_buffer1[5]);
+    std::string str("catdog");
+    string shared_buffer1(str);
+    EXPECT_EQ(str[0], shared_buffer1[0]);
+    EXPECT_EQ(str[1], shared_buffer1[1]);
+    EXPECT_EQ(str[2], shared_buffer1[2]);
+    EXPECT_EQ(str[3], shared_buffer1[3]);
+    EXPECT_EQ(str[4], shared_buffer1[4]);
+    EXPECT_EQ(str[5], shared_buffer1[5]);
 }
 
 TEST(shared_buffer, equalty_operators) {
-    std::string string("cat");
-    std::string string1("cat");
-    std::string string2("dog");
-    shared_buffer shared_buffer1(string);
-    shared_buffer shared_buffer2(string1);
-    shared_buffer shared_buffer3(string2);
-    EXPECT_EQ(string == string1, shared_buffer1 == shared_buffer2);
-    EXPECT_EQ(string == string2, shared_buffer1 == shared_buffer3);
-    EXPECT_EQ(string != string1, shared_buffer1 != shared_buffer2);
-    EXPECT_EQ(string != string2, shared_buffer1 != shared_buffer3);
-    EXPECT_TRUE(shared_buffer1 == string1);
-    EXPECT_FALSE(shared_buffer1 == string2);
-    EXPECT_TRUE(shared_buffer1 != string2);
-    EXPECT_FALSE(shared_buffer1 != string1);
-}
-
-TEST(shared_buffer, fill) {
-    std::string string("AAAAA");
-    std::string string2(5, 'A');
-    shared_buffer string1(5);
-    string1.fill('A');
-    EXPECT_EQ(string1, string);
-    EXPECT_EQ(string2, string);
+    std::string str("cat");
+    std::string str1("cat");
+    std::string str2("dog");
+    string shared_buffer1(str);
+    string shared_buffer2(str1);
+    string shared_buffer3(str2);
+    EXPECT_EQ(str == str1, shared_buffer1 == shared_buffer2);
+    EXPECT_EQ(str == str2, shared_buffer1 == shared_buffer3);
+    EXPECT_EQ(str != str1, shared_buffer1 != shared_buffer2);
+    EXPECT_EQ(str != str2, shared_buffer1 != shared_buffer3);
+    EXPECT_TRUE(shared_buffer1 == str1);
+    EXPECT_FALSE(shared_buffer1 == str2);
+    EXPECT_TRUE(shared_buffer1 != str2);
+    EXPECT_FALSE(shared_buffer1 != str1);
 }
 
 TEST(shared_buffer, size) {
-    std::string string("ups");
-    shared_buffer shared_buffer1(string);
-    EXPECT_EQ(string.size(), shared_buffer1.size());
+    std::string str("ups");
+    string shared_buffer1(str);
+    EXPECT_EQ(str.size(), shared_buffer1.size());
 }
 
 

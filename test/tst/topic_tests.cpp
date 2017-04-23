@@ -13,16 +13,16 @@ class topic_fixture
 protected:
     void SetUp() override {
         m_send_flag = false;
-        m_test_message = shared_buffer("meow!");
-        m_listener = topic_callback([this](const shared_buffer& message) {
+        m_test_message = string("meow!");
+        m_listener = topic_callback([this](const string& message) {
             m_last_message = message;
             m_send_flag = true;
         });
     }
 
 protected:
-    shared_buffer m_test_message;
-    shared_buffer m_last_message;
+    string m_test_message;
+    string m_last_message;
     bool m_send_flag;
     topic_callback m_listener;
 

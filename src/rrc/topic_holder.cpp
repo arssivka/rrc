@@ -65,7 +65,7 @@ void rrc::topic_holder::remove_topic_listener(const std::string& topic_key,
 
 
 void rrc::topic_holder::send_message(const std::string& topic_key,
-                                     const rrc::shared_buffer& msg) {
+                                     const rrc::string& msg) {
     auto it = m_topic_hash.find(topic_key);
     if (it != m_topic_hash.end()) {
         auto& topic = it->second;

@@ -40,7 +40,7 @@ namespace rrc {
          * @param topic_key Name of the topic for the message
          * @param message Pointer to the message, that needs to be sent
          */
-        void send_message(std::string topic_key, shared_buffer message);
+        void send_message(std::string topic_key, string message);
 
         /**
          * @brief Registers listener

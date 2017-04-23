@@ -24,19 +24,19 @@ rrc::shared_buffer_pool::shared_buffer_pool(size_t max_obj_count)
         : m_max_obj_count(max_obj_count) {}
 
 
-rrc::shared_buffer rrc::shared_buffer_pool::create(size_t size) {
-    if (size == 0) return shared_buffer();
+rrc::string rrc::shared_buffer_pool::create(size_t size) {
+    if (size == 0) return string();
     auto it = m_buffer_map.upper_bound(size);
     if (it != m_buffer_map.end()) {
-        shared_buffer buff = std::move(it->second);
+        string buff = std::move(it->second);
         m_buffer_map.erase(it);
         return buff;
     }
-    return shared_buffer(size);
+    return string(size);
 }
 
 
-void rrc::shared_buffer_pool::remove(rrc::shared_buffer buff) {
+void rrc::shared_buffer_pool::remove(rrc::string buff) {
     if (buff == nullptr) return;
     if (m_max_obj_count == 0 ||
         (m_buffer_map.size() >= m_max_obj_count &&

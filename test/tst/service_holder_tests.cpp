@@ -15,19 +15,17 @@ protected:
     virtual void SetUp() override {
         m_flage = false;
         m_toli_esho_budet = false;
-        m_message = shared_buffer("meow!");
+        m_message = string("meow!");
         m_callback = service_callback(
-                [this](const shared_buffer& in, shared_buffer& out) -> result_code {
+                [this](const string& in, string& out) -> result_code {
             m_flage = true;
-            out = in;
-            out[0] = 'M';
+            out = rrc::string("Meow");
             return RESULT_CODE_SUCCESS;
         });
         m_listener = service_result_callback(
-                [this](result_code stat, const shared_buffer& msg) {
-                    m_toli_esho_budet = RESULT_CODE_SUCCESS == stat;
-                    m_message = msg;
-                    m_message[1] = 'E';
+                [this](result_code stat, const string& msg) {
+                    m_toli_esho_budet = (RESULT_CODE_SUCCESS == stat);
+                    m_message = rrc::string("MEow");
                 }
         );
     }
@@ -41,7 +39,7 @@ protected:
     bool m_toli_esho_budet;
     service_callback m_callback;
     service_result_callback m_listener;
-    shared_buffer m_message;
+    string m_message;
     service_holder m_holder;
 };
 
@@ -68,5 +66,5 @@ TEST_F(service_holder_fixture, call) {
     m_holder.call("fuck", m_message, m_listener);
     EXPECT_TRUE(m_flage);
     EXPECT_TRUE(m_toli_esho_budet);
-    EXPECT_EQ(m_message, "MEow!");
+    EXPECT_EQ(m_message, "MEow");
 }

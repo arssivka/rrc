@@ -49,7 +49,7 @@ namespace rrc {
                                  result_callback result = result_callback());
 
         void call(const std::string& key,
-                  shared_buffer input,
+                  string input,
                   service_result_callback listener);
 
     };
