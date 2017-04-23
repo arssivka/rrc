@@ -22,7 +22,6 @@
 
 #include "abstract_launcher.h"
 #include "async_worker.h"
-#include "barrier.h"
 #include "callback_defines.h"
 #include "concurrent_priority_queue.h"
 #include "concurrent_task_queue.h"

@@ -28,7 +28,6 @@ set(SRCS
         include/rrc/task_scheduler.h
         include/rrc/task_queue.h
         include/rrc/core_base.h
-        include/rrc/barrier.h
         include/rrc/concurrent_priority_queue.h
         include/rrc/string.h
         include/rrc/elem_less.h
