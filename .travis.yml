@@ -27,7 +27,7 @@ install:
 script:
   - mkdir build
   - cd build
-  - cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCOVERAGE=$COVERAGE -DBUILD_TESTS=ON ..
+  - cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCOVERAGE=$COVERAGE -DBUILD_TEST=ON ..
   - make
   - valgrind --error-exitcode=1 --leak-check=full ./test/tests
 
