@@ -45,7 +45,7 @@ set(SRCS
         src/rrc/topic_mechanism.cpp
         include/rrc/notifier.h
         src/rrc/core.cpp
-        include/rrc/function.h)
+        )
 
 configure_file("${PROJECT_SOURCE_DIR}/template/defines.h.in"
         "${PROJECT_BINARY_DIR}/defines.h")

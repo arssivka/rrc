@@ -22,15 +22,14 @@
 #include "non_copyable.h"
 #include "abstract_launcher.h"
 #include "lockfree_task_queue.h"
-#include "function.h"
 #include <type_traits>
 
 namespace rrc {
-    template<class T, size_t N, size_t FuncSize = 256>
+    template<class T, size_t N>
     class mechanism : private non_copyable {
     protected:
         static constexpr size_t queues_count = N;
-        typedef rrc::function<void(), FuncSize> task_type;
+        typedef std::function<void()> task_type;
         typedef moodycamel::ConcurrentQueue<task_type> task_queue_type;
         typedef T base_type;
 
