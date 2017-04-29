@@ -5,7 +5,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
-option(RRC_BUILD_TEST "Build tests." OFF)
+option(RRC_BUILD_TESTS "Build tests." OFF)
 
 add_subdirectory(lib)
 
@@ -55,6 +55,6 @@ add_library(rrc ${SRCS})
 target_link_libraries(rrc concurrentqueue)
 target_include_directories(rrc PUBLIC include)
 
-if(BUILD_TEST)
+if(RRC_BUILD_TESTS)
     add_subdirectory(test)
 endif()
