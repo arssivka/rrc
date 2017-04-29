@@ -23,7 +23,7 @@ env:
 script:
   - mkdir build
   - cd build
-  - cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE ..
+  - cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DRRC_BUILD_TEST=ON ..
   - make
   - cd test
   - valgrind --error-exitcode=1 --leak-check=full ./tests
