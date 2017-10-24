@@ -7,20 +7,9 @@ RRC(Register Run Comminucate) - is an asynchronous modular system, that develope
 It consists of mechanisms, that allows to create a one-threaded or multi-threaded systems, that represented as a set of seperate modules and provide communications between them.
 
 
-##The library is currently under developing
+Development of the library has been discontinued. I don't have enough time and resources to develop all my ideas. Basic mechanisms of synchronization was implemented, but usability leaves much to be desired. Main problem is the development an elegant and lightweight way to store and share data between modules both within single process and through network without external librariy dependencies.
 
-**We are now working on:**
+Last realization of the library is completely asynchonous and lock-free. All modules are divided into tasks like in boost::asio. Communication between modules is done by providing API for passing data in searelized way with using zero-copy deserialization algorithms. 
 
-* Core architecture:
-	* Synchronization mechanisms
-	* Mechanisms for concurrency
-	* Thread-safe, thread pool based Scheduller
-	* Publisher/topic/subscriber
-	* Services(request/response mechanism)
-	* Settings system
-* Set of default additional modules
-	* Shared libs loader(*.so ,*.dll)
-	* Network
-	* Python wrapper(nagrebator)
-	* Logger (log4cpp)
+In [this repo](https://github.com/arssivka/masters-work) you can read the paper about this library.
  
